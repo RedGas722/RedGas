@@ -1,4 +1,5 @@
 @import "tailwindcss";
+
 *{
   margin: 0;
   padding: 0;
@@ -21,6 +22,8 @@
   --primary-color: #21f2e7;
   --primary-color: #21f2e7;
 }
+
 .circle_one{
   background: radial-gradient(top left, );
 }
+
