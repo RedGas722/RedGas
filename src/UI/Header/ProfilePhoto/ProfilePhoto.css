@@ -1,0 +1,4 @@
+#photo > div > a{
+    display: flex;
+    justify-content: end;
+}

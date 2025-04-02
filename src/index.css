@@ -1,0 +1,57 @@
+@import "tailwindcss";
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --circle-one: #21f2e7;
+  --primary-color: #2196f3;
+  --primary-color: #212cf2;
+  --primary-color: #2196f3;
+  --primary-color: #95f221;
+  --primary-color: #f22195;
+  --primary-color: #21f2e7;
+  --primary-color: #21f2e7;
+  --primary-color: #21f2e7;
+  --primary-color: #21f2e7;
+  --primary-color: #21f2e7;
+  --primary-color: #21f2e7;
+  --primary-color: #21f2e7;
+  --primary-color: #21f2e7;
+}
+#root{
+  background: url('https://wallpapers.com/images/high/aesthetic-youtube-cityscape-vhs-glitch-w0dscemq7hpwfqhq.webp') no-repeat center center fixed;
+  background-size: contain;
+}
+
+.circle_one {
+  background: radial-gradient(top left, );
+}
+.cards_shadow{
+  filter: drop-shadow(5px 2px 4px  black);
+}
+
+@layer utilities {
+  .bg-glass {
+    background-color: rgb(255, 255, 255, 0.3);
+  }
+  .bg-glass-1{
+    backdrop-filter: blur(4px);
+  }
+
+  .clip-path-triangle {
+
+    clip-path: polygon(0% 0%, 0 100%, 40% 100%, 59% 82%, 100% 82%, 100% 0);
+
+  }
+
+  .clip-path-triangle-inverse {
+
+    clip-path: polygon(100% 100%, 0 100%, 25% 68%, 100% 68%);
+
+  }
+
+}

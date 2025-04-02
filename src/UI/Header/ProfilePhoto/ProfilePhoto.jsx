@@ -5,7 +5,7 @@ import './ProfilePhoto.css'
 
 export const ProfilePhoto = () => {
     return (
-        <div >
+        <div id='photo' >
             <LinksNav route="" child={<img src={reactimg} alt="React Logo" />} />
         </div>
     )
