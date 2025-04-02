@@ -1,0 +1,17 @@
+:root{
+    /* --Circle #1 - big size*/
+    --color-1_circle-1:#2396F3 ;
+    --color-2_circle-1:#2161F2 ;
+    --color-3_circle-1:#212CF2 ;
+    --color-4_circle-1:#4921F2 ;
+    --color-5_circle-1:#7D21F2 ;
+    --color-6_circle-1:#B221F2 ;
+    /* --Circle #2 - medium size*/
+    --color-1_circle-2:#E621F2 ;
+    --color-2_circle-2:#9E4CF2 ;
+    --color-3_circle-2:#2196F3 ;
+    /* --Circle #3 - litle size*/
+    --color-1_circle-3:#21F2E7 ;
+    --color-2_circle-3:#2196F3 ;
+    --color-3_circle-3:#212CF2 ;
+}
