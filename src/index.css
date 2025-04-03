@@ -7,38 +7,49 @@
 }
 
 :root {
-  --circle-one: #21f2e7;
-  --primary-color: #2196f3;
-  --primary-color: #212cf2;
-  --primary-color: #2196f3;
-  --primary-color: #95f221;
-  --primary-color: #f22195;
-  --primary-color: #21f2e7;
-  --primary-color: #21f2e7;
-  --primary-color: #21f2e7;
-  --primary-color: #21f2e7;
-  --primary-color: #21f2e7;
-  --primary-color: #21f2e7;
-  --primary-color: #21f2e7;
-  --primary-color: #21f2e7;
+  /* -----------------Circles color-Beggin */
+  /* --Circle #1 - big size*/
+  --color-1_circle-1: #2396F3;
+  --color-2_circle-1: #2161F2;
+  --color-3_circle-1: #212CF2;
+  --color-4_circle-1: #4921F2;
+  --color-5_circle-1: #7D21F2;
+  --color-6_circle-1: #B221F2;
+  /* --Circle #2 - medium size*/
+  --color-1_circle-2: #E621F2;
+  --color-2_circle-2: #9E4CF2;
+  --color-3_circle-2: #2196F3;
+  /* --Circle #3 - litle size*/
+  --color-1_circle-3: #21F2E7;
+  --color-2_circle-3: #2196F3;
+  --color-3_circle-3: #212CF2;
+  /* Circles color-end----------------- */
+  --Bacground-body:#001746;
 }
-#root{
-  background: url('https://wallpapers.com/images/high/aesthetic-youtube-cityscape-vhs-glitch-w0dscemq7hpwfqhq.webp') no-repeat center center fixed;
-  background-size: contain;
+
+body {
+  background: var(--Bacground-body);
+  background-size: cover;
+}
+
+#root {
+  padding: 0 80px;
 }
 
 .circle_one {
   background: radial-gradient(top left, );
 }
-.cards_shadow{
-  filter: drop-shadow(5px 2px 4px  black);
+
+.cards_shadow {
+  filter: drop-shadow(5px 2px 4px black);
 }
 
 @layer utilities {
   .bg-glass {
     background-color: rgb(255, 255, 255, 0.3);
   }
-  .bg-glass-1{
+
+  .bg-glass-1 {
     backdrop-filter: blur(4px);
   }
 

@@ -3,7 +3,7 @@ import Navs from "../../UI/Header/Nav/Nav";
 import ProfilePhoto from "../../UI/Header/ProfilePhoto/ProfilePhoto";
 export const Header = () => {
     return (
-        <div className="grid grid-cols-3 items-center  w-screen">
+        <div className="grid grid-cols-3 items-center w-[100%]">
             <SearchBarr />
             <Navs />
             <ProfilePhoto />
