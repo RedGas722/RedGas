@@ -23,8 +23,12 @@
   --color-1_circle-3: #21F2E7;
   --color-2_circle-3: #2196F3;
   --color-3_circle-3: #212CF2;
-  /* Circles color-end----------------- */
+  /* Circles color-end----------------- Body-color-beggin */
   --Bacground-body:#001746;
+  /* Body-color-end----------------- Font-Nav*/
+  --Font-Nav:#FDBC50;
+  
+  
 }
 
 body {
@@ -36,9 +40,9 @@ body {
   padding: 0 80px;
 }
 
-.circle_one {
-  background: radial-gradient(top left, );
-}
+/* .circle_one {  
+  background: radial-gradient(top left );
+} */
 
 .cards_shadow {
   filter: drop-shadow(5px 2px 4px black);

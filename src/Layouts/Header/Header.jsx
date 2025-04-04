@@ -1,9 +1,10 @@
 import SearchBarr from "../../UI/Header/SearchBarr/SearchBarr";
 import Navs from "../../UI/Header/Nav/Nav";
 import ProfilePhoto from "../../UI/Header/ProfilePhoto/ProfilePhoto";
+import './Header.css'
 export const Header = () => {
     return (
-        <div className="grid grid-cols-3 items-center w-[100%]">
+        <div id="Header" className="items-center w-[100%]">
             <SearchBarr />
             <Navs />
             <ProfilePhoto />
