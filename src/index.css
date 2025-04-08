@@ -7,6 +7,8 @@
 }
 
 :root {
+  --glass-bacground: rgba(255, 255, 255, 0.1);
+  --glass-bacground-blur: blur(4px);
   /* -----------------Circles color-Beggin */
   /* --Circle #1 - big size*/
   --color-1_circle-1: #2396F3;
@@ -30,33 +32,30 @@
   
   
 }
-
-body {
-  background: var(--Bacground-body);
-  background-size: cover;
-}
-
-#root {
+#root{
   padding: 0 80px;
 }
-
-/* .circle_one {  
-  background: radial-gradient(top left );
-} */
-
+body {
+  background: var(--Bacground-body) /*url('https://wallpapers.com/images/high/black-red-4k-uhd-fantasy-elephant-olunymyrz6zoxv18.webp')*/;
+  background-size: cover;
+}
 .cards_shadow {
   filter: drop-shadow(5px 2px 4px black);
 }
 
 @layer utilities {
   .bg-glass {
-    background-color: rgb(255, 255, 255, 0.3);
+    background-color: var(--glass-bacground);
   }
-
+  
   .bg-glass-1 {
-    backdrop-filter: blur(4px);
+    backdrop-filter: var(--glass-bacground-blur);
+  }  
+  
+  .bg-glass-total{
+    background-color: var(--glass-bacground);
+    backdrop-filter: var(--glass-bacground-blur);
   }
-
   .clip-path-triangle {
 
     clip-path: polygon(0% 0%, 0 100%, 40% 100%, 59% 82%, 100% 82%, 100% 0);
