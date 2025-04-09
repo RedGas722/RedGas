@@ -6,6 +6,7 @@
     filter: blur(10px);
     z-index: -10;
     left: 30%;
+    bottom: 0 ;
     animation: circle-1 15s linear 0s infinite normal none;
 }
 #circle-2 {
@@ -24,7 +25,7 @@
     filter: blur(10px);
     z-index: -10;
     right: 80px;
-    top: 200px;
+    top: 400px;
     animation: circle-1 15s linear 0s infinite normal none;
 }
 

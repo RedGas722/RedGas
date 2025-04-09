@@ -7,8 +7,8 @@
 }
 
 :root {
-  --glass-bacground: rgba(255, 255, 255, 0.1);
-  --glass-bacground-blur: blur(15px);
+  --glass-bacground: rgba(255, 255, 255, 0.055);
+  --glass-bacground-blur: blur(30px);
   /* -----------------Circles color-Beggin */
   /* --Circle #1 - big size*/
   --color-1_circle-1: #2395f3a4;

@@ -5,7 +5,7 @@ export const Circles = () => {
         <>
             <div id="circle-1" className='w-[500px] h-[500px] fixed'></div>
             <div id="circle-2" className='w-[300px] h-[300px] fixed'></div>
-            <div id="circle-3" className='w-[150px] h-[150px] fixed'></div>
+            <div id="circle-3" className='w-[200px] h-[200px] fixed'></div>
         </>
     )
 }
