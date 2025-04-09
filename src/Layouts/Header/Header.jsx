@@ -4,7 +4,7 @@ import ProfilePhoto from "../../UI/Header/ProfilePhoto/ProfilePhoto";
 import './Header.css'
 export const Header = () => {
     return (
-        <div id="Header" className="items-center w-[100%] h-[100px] bg-glass-total rounded-b-[30px]">
+        <div id="Header" className="items-center w-[100%] h-fit bg-glass-total rounded-b-[30px]">
             <SearchBarr />
             <Navs />
             <ProfilePhoto />

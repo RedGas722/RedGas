@@ -1,17 +1,39 @@
-:root{
-    /* --Circle #1 - big size*/
-    --color-1_circle-1:#2396F3 ;
-    --color-2_circle-1:#2161F2 ;
-    --color-3_circle-1:#212CF2 ;
-    --color-4_circle-1:#4921F2 ;
-    --color-5_circle-1:#7D21F2 ;
-    --color-6_circle-1:#B221F2 ;
-    /* --Circle #2 - medium size*/
-    --color-1_circle-2:#E621F2 ;
-    --color-2_circle-2:#9E4CF2 ;
-    --color-3_circle-2:#2196F3 ;
-    /* --Circle #3 - litle size*/
-    --color-1_circle-3:#21F2E7 ;
-    --color-2_circle-3:#2196F3 ;
-    --color-3_circle-3:#212CF2 ;
+#circle-1 {
+    background: radial-gradient(at left top, var(--color-1_circle-1),
+            var(--color-2_circle-1), var(--color-3_circle-1),
+            var(--color-4_circle-1), var(--color-5_circle-1), var(--color-6_circle-1));
+    border-radius: 50%;
+    filter: blur(10px);
+    z-index: -10;
+    left: 30%;
+    animation: circle-1 15s linear 0s infinite normal none;
+}
+#circle-2 {
+    background: radial-gradient(at left top, var(--color-1_circle-2),
+            var(--color-2_circle-2), var(--color-3_circle-2));
+    border-radius: 50%;
+    filter: blur(10px);
+    z-index: -10;
+    top: 100px;
+    animation: circle-1 15s linear 0s infinite normal none;
+}
+#circle-3 {
+    background: radial-gradient(at left top, var(--color-1_circle-3),
+            var(--color-2_circle-3), var(--color-3_circle-3));
+    border-radius: 50%;
+    filter: blur(10px);
+    z-index: -10;
+    right: 80px;
+    top: 200px;
+    animation: circle-1 15s linear 0s infinite normal none;
+}
+
+@keyframes circle-1 {
+    0% {
+        transform: rotate(0);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }

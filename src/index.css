@@ -8,23 +8,23 @@
 
 :root {
   --glass-bacground: rgba(255, 255, 255, 0.1);
-  --glass-bacground-blur: blur(4px);
+  --glass-bacground-blur: blur(15px);
   /* -----------------Circles color-Beggin */
   /* --Circle #1 - big size*/
-  --color-1_circle-1: #2396F3;
-  --color-2_circle-1: #2161F2;
-  --color-3_circle-1: #212CF2;
-  --color-4_circle-1: #4921F2;
-  --color-5_circle-1: #7D21F2;
-  --color-6_circle-1: #B221F2;
+  --color-1_circle-1: #2395f3a4;
+  --color-2_circle-1: #2161F2a4;
+  --color-3_circle-1: #212CF2a4;
+  --color-4_circle-1: #4921F2a4;
+  --color-5_circle-1: #7D21F2a4;
+  --color-6_circle-1: #B221F2a4;
   /* --Circle #2 - medium size*/
-  --color-1_circle-2: #E621F2;
-  --color-2_circle-2: #9E4CF2;
-  --color-3_circle-2: #2196F3;
+  --color-1_circle-2: #E621F2a4;
+  --color-2_circle-2: #9E4CF2a4;
+  --color-3_circle-2: #2196F3a4;
   /* --Circle #3 - litle size*/
-  --color-1_circle-3: #21F2E7;
-  --color-2_circle-3: #2196F3;
-  --color-3_circle-3: #212CF2;
+  --color-1_circle-3: #21F2E7a4;
+  --color-2_circle-3: #2196F3a4;
+  --color-3_circle-3: #212CF2a4;
   /* Circles color-end----------------- Body-color-beggin */
   --Bacground-body:#001746;
   /* Body-color-end----------------- Font-Nav*/
