@@ -1,10 +1,11 @@
 import './PrincipalSect.css'
+import Logo from '../../assets/Images/red_gas.webp'
 
 export const PrincipalSect = () => {
     return (
-        <section id='Principal' className='w-[100%] bg-glass-total rounded-[18px]'>
-                <img src="../src/assets/Images/red_gas.webp" alt="RedGas Logo" className='w-[200px] flex'/>
-                <div className='text-[20px]'>
+        <section id='Principal' className='w-[100%] bg-glass-total shadow_box rounded-[18px] text-white flex flex-col gap-[20px] justify-center items-center '>
+                <img src={Logo} alt="RedGas Logo" id='Logo' />
+                <div className='text-[20px] flex flex-col gap-[50px]'>
                     <div className='flex flex-col items-center justify-center text-center'>
                         <p className='max-w-[810px]'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi eligendi eius, doloribus voluptas error accusantium in dignissimos, ipsam architecto labore rerum vel cum natus repellat esse beatae nostrum. Ratione, recusandae?</p>
                     </div>
