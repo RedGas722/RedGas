@@ -4,6 +4,7 @@ import './index.css'
 // import Cards from "./UI/Cards/Cards" 
 import PrincipalSect from "./Layouts/PrincipalSect/PrincipalSect"
 import ProductCategory from "./Layouts/ProductCategory/ProductCategory"
+import ShopCart from "./UI/ShopCart/ShopCart"
 
 export function App() {
 	return (
@@ -13,6 +14,7 @@ export function App() {
 			<ProductCategory />
 			{/* <Cards /> */}
 			<Animations />
+			<ShopCart />
 		</div>
 	)
 }

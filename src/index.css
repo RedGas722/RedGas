@@ -70,7 +70,23 @@ body {
     clip-path: polygon(100% 100%, 0 100%, 25% 68%, 100% 68%);
 
   }
-
+  .clip-path-shop-cart {
+    clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
+    width: 120px;
+    height: 30px;
+    box-shadow: inset 0px 4px 6px rgba(0, 0, 0, 0.3);
+    background-color: var(--glass-bacground);
+    backdrop-filter: var(--glass-bacground-blur);
+    padding: 5px 0 0 0;
+  }
+  .clip-path-shop-cart2{
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    right: 50%;
+    transform: translate(-50%, 0%);
+    z-index: 1000;
+  }
 }
 @media screen and (max-width: 768px) {
   #root{
