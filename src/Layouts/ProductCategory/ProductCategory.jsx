@@ -1,18 +1,20 @@
 import React from "react"
 import PrpoductCatergories from "../../UI/PrpoductCatergories/PrpoductCatergories"
+import './ProductCategory.css'
 import { faWater } from '@fortawesome/free-solid-svg-icons'
+import { faWrench } from '@fortawesome/free-solid-svg-icons';
+import { faGear } from '@fortawesome/free-solid-svg-icons';
+import { faShower } from '@fortawesome/free-solid-svg-icons';
 
 
 export const ProductCategory = () => {
 	return(
-        <>
-            <section className="flex justify-between flex-wrap items-center gap-[20px]">
-                <PrpoductCatergories imgCategory={faWater} nameCategory="Category 1" />
-                <PrpoductCatergories imgCategory="/img/Category2.png" nameCategory="Category 2" />
-                <PrpoductCatergories imgCategory="/img/Category3.png" nameCategory="Category 3" />
-                <PrpoductCatergories imgCategory="/img/Category4.png" nameCategory="Category 4" />
+            <section className="cardCategoryContainer " >
+                <PrpoductCatergories imgCategory={faWater} nameCategory="Calentadores" />
+                <PrpoductCatergories imgCategory={faWrench} nameCategory="Herramientas" />
+                <PrpoductCatergories imgCategory={faGear} nameCategory="Repuestos" />
+                <PrpoductCatergories imgCategory={faShower} nameCategory="Accesorios" />
             </section>
-        </>
     ) 
 }
 export default ProductCategory
