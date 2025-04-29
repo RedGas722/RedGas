@@ -2,16 +2,18 @@ import Animations from "./Animations/Animations"
 import Header from "./Layouts/Header/Header"
 import './index.css'
 // import Cards from "./UI/Cards/Cards" 
-import PrincipalSect from "./Layouts/PrincipalSect/PrincipalSect"
+import Hero from "./Layouts/Hero/Hero"
 import ProductCategory from "./Layouts/ProductCategory/ProductCategory"
+import OffersSect from "./Layouts/OffersSect/OffersSect"
 import ShopCart from "./UI/ShopCart/ShopCart"
 
 export function App() {
 	return (
 		<div className="flex flex-col gap-[80px]">
 			<Header />
-			<PrincipalSect />
+			<Hero />
 			<ProductCategory />
+			<OffersSect />
 			{/* <Cards /> */}
 			<Animations />
 			<ShopCart />

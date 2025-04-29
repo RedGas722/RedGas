@@ -1,0 +1,13 @@
+#divTitle{
+    padding-left: clamp(0.5rem, 1vw, 2rem);
+}
+.titleCatt,.iconCatt {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: clamp(48px, 2vw, 5rem);
+    filter: drop-shadow(3px 3px 5px rgba(0, 0, 0, 0.658));
+    font-weight: 600;
+    color: white;
+}

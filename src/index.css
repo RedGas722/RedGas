@@ -39,9 +39,6 @@ body {
   background: var(--Bacground-body);
   background-size: cover;
 }
-.cards_shadow {
-  filter: drop-shadow(3px 3px 5px black);
-}
 
 @layer utilities {
   .bg-glass {
@@ -54,6 +51,10 @@ body {
   
   .bg-glass-total{
     background-color: var(--glass-bacground);
+    backdrop-filter: var(--glass-bacground-blur);
+  }
+  .bg-glass-total1{
+    background-color: rgba(255, 255, 255, 0.048);
     backdrop-filter: var(--glass-bacground-blur);
   }
   .shadow_box{
