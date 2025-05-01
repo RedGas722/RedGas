@@ -1,10 +1,11 @@
-import Animations from "./Animations/Animations"
-import Header from "./Layouts/Header/Header"
 import './index.css'
-// import Cards from "./UI/Cards/Cards" 
+import Header from "./Layouts/Header/Header"
 import PrincipalSect from "./Layouts/PrincipalSect/PrincipalSect"
 import ProductCategory from "./Layouts/ProductCategory/ProductCategory"
+import Animations from "./Animations/Animations"
+import OffersSect from './Layouts/OffersSect/OffersSect'
 import ShopCart from "./UI/ShopCart/ShopCart"
+// import Cards from "./UI/Cards/Cards" 
 
 export function App() {
 	return (
@@ -13,6 +14,7 @@ export function App() {
 			<PrincipalSect />
 			<ProductCategory />
 			{/* <Cards /> */}
+			<OffersSect />
 			<Animations />
 			<ShopCart />
 		</div>

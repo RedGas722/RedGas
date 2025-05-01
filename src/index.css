@@ -7,7 +7,7 @@
 }
 
 :root {
-  --glass-bacground: rgba(255, 255, 255, 0.010);
+  --glass-bacground: rgba(255, 255, 255, 0.012);
   --glass-bacground-blur: blur(30px);
   /* -----------------Circles color-Beggin */
   /* --Circle #1 - big size*/
@@ -39,10 +39,6 @@ body {
   background: var(--Bacground-body);
   background-size: cover;
 }
-.cards_shadow {
-  filter: drop-shadow(3px 3px 5px black);
-}
-
 @layer utilities {
   .bg-glass {
     background-color: var(--glass-bacground);
@@ -60,15 +56,10 @@ body {
     box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);
   }
   .clip-path-triangle {
-
     clip-path: polygon(0% 0%, 0 100%, 40% 100%, 59% 82%, 100% 82%, 100% 0);
-
   }
-
   .clip-path-triangle-inverse {
-
     clip-path: polygon(100% 100%, 0 100%, 25% 68%, 100% 68%);
-
   }
   .clip-path-shop-cart {
     clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
