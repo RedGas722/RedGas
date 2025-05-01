@@ -52,6 +52,10 @@ body {
     background-color: var(--glass-bacground);
     backdrop-filter: var(--glass-bacground-blur);
   }
+  .bg-glass-total1{
+    background-color: rgba(255, 255, 255, 0.048);
+    backdrop-filter: var(--glass-bacground-blur);
+  }
   .shadow_box{
     box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);
   }

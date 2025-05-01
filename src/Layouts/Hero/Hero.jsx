@@ -1,7 +1,7 @@
-import './PrincipalSect.css'
+import './Hero.css'
 import Logo from '../../assets/Images/red_gas.webp'
 
-export const PrincipalSect = () => {
+export const Hero = () => {
     return (
         <section id='Principal' className='w-[100%] bg-glass-total shadow_box rounded-[18px] text-white flex flex-col gap-[20px] justify-center items-center '>
                 <img src={Logo} alt="RedGas Logo" id='Logo' />
@@ -17,4 +17,4 @@ export const PrincipalSect = () => {
         </section>
     )
 }
-export default PrincipalSect
+export default Hero

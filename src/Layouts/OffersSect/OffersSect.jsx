@@ -1,15 +1,15 @@
 import React from 'react'
-import Card from '../../UI/Cards/Cards'
+import { faDollarSign } from '@fortawesome/free-solid-svg-icons';
+import SectCategory from '../../UI/TitleSectCategory/TitleSectCategory';
+import Cards from '../../UI/Cards/Cards';
 
 
 export const OffersSect = () => {
-  const onChange = (index) => {
-    console.log(`Carousel changed to slide ${index}`);
-  };
-
-  return (
-    
-        <Card />
-  )
+    return (
+        <>
+            <SectCategory imgCategory={faDollarSign} nameCategory="Oferta" className='flex flex-row-reverse justify-end items-center'/>
+                <Cards />
+        </>
+    )
 }
 export default OffersSect

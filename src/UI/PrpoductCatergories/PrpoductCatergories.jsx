@@ -1,6 +1,6 @@
-import React from "react";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import './PrpoductCatergories.css';
+import React from "react"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import './PrpoductCatergories.css'
 
 export const PrpoductCatergories = ({imgCategory, nameCategory, className}) => {
 	return(
@@ -9,5 +9,5 @@ export const PrpoductCatergories = ({imgCategory, nameCategory, className}) => {
             <h3 className="text-2xl text-white font-semibold">{nameCategory}</h3>
         </div>
     ) 
-};
-export default PrpoductCatergories;
+}
+export default PrpoductCatergories

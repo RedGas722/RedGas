@@ -1,9 +1,10 @@
 import './index.css'
 import Header from "./Layouts/Header/Header"
-import PrincipalSect from "./Layouts/PrincipalSect/PrincipalSect"
+import './index.css'
+// import Cards from "./UI/Cards/Cards" 
+import Hero from "./Layouts/Hero/Hero"
 import ProductCategory from "./Layouts/ProductCategory/ProductCategory"
-import Animations from "./Animations/Animations"
-import OffersSect from './Layouts/OffersSect/OffersSect'
+import OffersSect from "./Layouts/OffersSect/OffersSect"
 import ShopCart from "./UI/ShopCart/ShopCart"
 // import Cards from "./UI/Cards/Cards" 
 
@@ -11,8 +12,9 @@ export function App() {
 	return (
 		<div className="flex flex-col gap-[80px]">
 			<Header />
-			<PrincipalSect />
+			<Hero />
 			<ProductCategory />
+			<OffersSect />
 			{/* <Cards /> */}
 			<OffersSect />
 			<Animations />
