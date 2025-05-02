@@ -12,7 +12,7 @@ const AnimatedDots = () => {
 
 		const dots = [];
 		const dotCount = 100;
-		const dotRadius = 1;
+		const dotRadius = .8;
 		const fadeSpeed = 0.008;
 
 		for (let i = 0; i < dotCount; i++) {

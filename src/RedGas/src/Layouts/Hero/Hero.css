@@ -1,0 +1,19 @@
+#filepath: c:\Users\asusi\OneDrive\Escritorio\RedGas\src\Layouts\Hero\Hero.css
+# Hero Section Styles
+
+#Principal {
+    padding: 15px;
+}
+
+#Logo {
+    width: clamp(200px, 15vw, 250px);
+}
+
+.text-container {
+    text-align: center;
+    color: white;
+}
+
+.text-container p {
+    margin: 10px 0;
+}

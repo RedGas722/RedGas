@@ -1,0 +1,21 @@
+/* filepath: c:\Users\asusi\OneDrive\Escritorio\RedGas\src\Layouts\Heaters\HeatersSect.css */
+.sectionHeaters {
+    padding: 20px;
+    background-color: var(--glass-bacground);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.titleHeaters {
+    font-size: 2rem;
+    color: var(--Font-Nav);
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.cardContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}

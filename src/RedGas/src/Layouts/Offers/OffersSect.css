@@ -1,0 +1,12 @@
+/* filepath: c:\Users\asusi\OneDrive\Escritorio\RedGas\src\Layouts\Offers\OffersSect.css */
+.flex {
+    display: flex;
+}
+
+.flex-col {
+    flex-direction: column;
+}
+
+.gap-[20px] {
+    gap: 20px;
+}

@@ -4,21 +4,23 @@ import './index.css'
 // import Cards from "./UI/Cards/Cards" 
 import Hero from "./Layouts/Hero/Hero"
 import ProductCategory from "./Layouts/ProductCategory/ProductCategory"
-import OffersSect from "./Layouts/OffersSect/OffersSect"
-import ShopCart from "./UI/ShopCart/ShopCart"
-// import Cards from "./UI/Cards/Cards" 
+import OffersSect from "./Layouts/Offers/Offers"
+import HeatersSect from "./Layouts/Heaters/Heaters"
+// import ShopCart from "./UI/ShopCart/ShopCart"
+import Animations from "./Animations/Animations"
+import ToolsSect from './Layouts/Tools/Tools'
 
 export function App() {
 	return (
-		<div className="flex flex-col gap-[80px]">
+		<div className="flex flex-col gap-[80px]" >
 			<Header />
 			<Hero />
 			<ProductCategory />
 			<OffersSect />
-			{/* <Cards /> */}
-			<OffersSect />
+			<HeatersSect />
+			<ToolsSect />
 			<Animations />
-			<ShopCart />
+			{/* <ShopCart /> */}
 		</div>
 	)
 }
