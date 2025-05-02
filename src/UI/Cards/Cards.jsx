@@ -50,7 +50,7 @@ export const Cards = ({ uniqueId }) => {
                     </SwiperSlide>
                 ))}
             </Swiper>
-            <div className="relative flex flex-col justify-center items-center w-screen text-white">
+            <div className="relative flex flex-col justify-center items-center w-[100%] text-white">
                 <div className="flex justify-center items-center gap-[20px]">
                     <div className={`swiper-button-prev-${uniqueId} cursor-pointer`}>
                         <FontAwesomeIcon icon={faArrowLeft} className="faArrowLeft text-[30px]" />
