@@ -12,6 +12,7 @@ export const Cards = ({ uniqueId }) => {
         <section id={`CardSect-${uniqueId}`} className="flex flex-col h-fit w-[100%]">
             <Swiper
                 modules={[Navigation]}
+				loop={true}
                 autoplay={{ delay: 2000 }}
                 pagination={{ clickable: true }}
                 navigation={{
