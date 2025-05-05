@@ -21,7 +21,7 @@ export const Register = () => {
 
     return (
         <div className="w-full">
-            <Circles styleC1="left-[80%] bottom-[500px]" styleC2="top-[100px]" styleC3="top-[400px] right-[80px]" />
+            <Circles styleC1="left-[50%] bottom-[0px]" styleC2="right-[54%] top-[120px]" styleC3="top-[400px] right-[80px]" />
             <div className="divForm shadow_box_RL bg-glass-total rounded-3xl flex flex-col items-center w-fit justify-self-center gap-[40px]">
                 <h1 className="text-center text-white text-4xl">¡Bienvenido!</h1>
                 <form className="flex flex-col gap-[15px] justify-center items-center text-start w-fit">
