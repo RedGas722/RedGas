@@ -1,5 +1,5 @@
 import React from "react"
-import PrpoductCatergories from "../../UI/PrpoductCatergories/PrpoductCatergories"
+import PrpoductCatergories from "../../../UI/PrpoductCatergories/PrpoductCatergories"
 import './ProductCategory.css'
 import { faWater } from '@fortawesome/free-solid-svg-icons'
 import { faWrench } from '@fortawesome/free-solid-svg-icons';

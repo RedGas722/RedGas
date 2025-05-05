@@ -6,7 +6,7 @@ export const Animations = () => {
 	return (
 		<>
 			<AnimatedDots />
-			<Circles />
+			<Circles styleC1="left-[30%] bottom-0" styleC2="top-[100px]" styleC3="top-[400px] right-[80px]" />
 		</>
 	);
 };

@@ -1,0 +1,6 @@
+#Principal{
+    padding: 15px;
+}
+#Logo{
+    width: clamp(200px, 15vw, 250px);
+}

@@ -1,25 +1,21 @@
 import './index.css'
 import Header from "./Layouts/Header/Header"
 import './index.css'
-// import Cards from "./UI/Cards/Cards" 
-import Hero from "./Layouts/Hero/Hero"
-import ProductCategory from "./Layouts/ProductCategory/ProductCategory"
-import OffersSect from "./Layouts/Offers/Offers"
-import HeatersSect from "./Layouts/Heaters/Heaters"
 // import ShopCart from "./UI/ShopCart/ShopCart"
 import Animations from "./Animations/Animations"
-import ToolsSect from './Layouts/Tools/Tools'
+import MainPage from './Pages/MainPage/MainPage'
+import Register from './Pages/Register/Register'
+import { Routes, Route } from 'react-router-dom'
 
 export function App() {
 	return (
 		<div className="flex flex-col gap-[80px]" >
 			<Header />
-			<Hero />
-			<ProductCategory />
-			<OffersSect />
-			<HeatersSect />
-			<ToolsSect />
 			<Animations />
+			<Routes>
+				<Route path='/Register' element={<Register />} />
+				<Route path='/' element={<MainPage />} />
+			</Routes>
 			{/* <ShopCart /> */}
 		</div>
 	)

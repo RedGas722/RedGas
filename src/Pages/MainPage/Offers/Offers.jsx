@@ -1,7 +1,7 @@
 import React from 'react';
 import { faDollarSign } from '@fortawesome/free-solid-svg-icons';
-import SectCategory from '../../UI/TitleSectCategory/TitleSectCategory';
-import CardsOffers from '../../UI/Cards/CardsOffers/CardsOffers';
+import SectCategory from '../../../UI/TitleSectCategory/TitleSectCategory';
+import CardsOffers from '../../../UI/Cards/CardsOffers/CardsOffers';
 
 export const OffersSect = () => {
     return (

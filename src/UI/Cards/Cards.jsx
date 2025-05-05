@@ -15,10 +15,10 @@ import {
 export const Cards = ({ uniqueId, imgContent, titleCatt, brandCatt, Price }) => {
     const [processedImg, setProcessedImg] = useState(null);
     const [loading, setLoading] = useState(false);
-    const [file, setFile] = useState(null); // Para imagen local
-    const [localPreview, setLocalPreview] = useState(null); // Vista previa
+    const [file, setFile] = useState(null);
+    const [localPreview, setLocalPreview] = useState(null);
 
-    const API_KEY = "n9dFEVqC5NAYYcGQMRbqz9V8"; // ⚠️ Solo para pruebas
+    const API_KEY = "n9dFEVqC5NAYYcGQMRbqz9V8"; 
 
     function dividirConComaCada3Caracteres(cadena) {
         let resultado = "";
