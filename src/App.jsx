@@ -13,8 +13,8 @@ export function App() {
 			<Header />
 			<Animations />
 			<Routes>
-				<Route path='/Register' element={<Register />} />
 				<Route path='/' element={<MainPage />} />
+				<Route path='/Register' element={<Register />} />
 			</Routes>
 			{/* <ShopCart /> */}
 		</div>
