@@ -1,0 +1,34 @@
+.input[type="checkbox"] {
+    display: none;
+}
+
+
+/* Style for the custom checkbox */
+.custom-checkbox {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    border: 1px solid white;
+    border-radius: 4px;
+    position: relative;
+    cursor: pointer;
+}
+
+/* Style for the custom checkmark */
+.custom-checkbox::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 50%;
+    transform: translate(50%, -50%);
+    width: 9px;
+    height: 9px;
+    background-color: white;
+    border-radius: 2px;
+    opacity: 0;
+}
+
+/* Show the checkmark when checkbox is checked */
+.input[type="checkbox"]:checked+.custom-checkbox::after {
+    opacity: 1;
+}

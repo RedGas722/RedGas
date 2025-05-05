@@ -1,6 +1,71 @@
+import { useState } from "react"
+import './Login.css'
+import { Buttons } from "../../UI/Login_Register/Buttons"
+import { Text } from "../../UI/Login_Register/Text"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons"
 
 export const Login = () => {
+    const [showPassword, setShowPassword] = useState(false)
+
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword)
+    }
+
     return (
-        <div>Login</div>
-    )
-}
+        <section className="w-full">
+            <div className="divForm shadow_box_RL bg-glass-total rounded-3xl flex flex-col items-center w-fit justify-self-center gap-[40px]">
+                <h1 className="text-center text-white text-4xl">¡Bienvenido de nuevo!</h1>
+                <form className="flex flex-col gap-[15px] justify-center items-center text-start w-full">
+                    {/* E-mail */}
+                    <label htmlFor="Email" className="text-white text-2xl w-full">
+                        Correo electrónico
+                    </label>
+                    <input
+                        type="email"
+                        placeholder="example@gmail.com"
+                        id="Email"
+                        className="border-t-0 border-b-[1px] w-full placeholder:text-gray-400 text-gray-200 border-gray-300 outline-0"
+                    />
+                    {/* Password */}
+                    <label htmlFor="password" className="text-white text-2xl w-full">
+                        Contraseña
+                    </label>
+                    <div className="relative w-full">
+                        <input
+                            type={showPassword ? "text" : "password"}
+                            placeholder={showPassword ? "Contraseña" : "**********"}
+                            id="password"
+                            className="border-t-0 border-b-[1px] w-full placeholder:text-gray-400 text-gray-200 border-gray-300 outline-0"
+                        />
+                        <FontAwesomeIcon
+                            icon={showPassword ? faEyeSlash : faEye}
+                            className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 cursor-pointer"
+                            onClick={togglePasswordVisibility}
+                        />
+                    </div>
+                </form>
+                <section className="flex gap-[5px] items-center justify-between w-full">
+                    <label className="flex gap-[5px] items-center justify-center cursor-pointer text-white">
+                        <label className="flex items-center justify-center">
+                            <input type="checkbox" className="input" />
+                            <span class="custom-checkbox"></span>
+                        </label>
+                        <div>
+                            <p>Recordarme</p>
+                        </div>
+                    </label>
+                    <div className="text-[#18BBFC]">
+                        <p>Olvidaste tu contraseña?</p>
+                    </div>
+                </section>
+                <div className="flex flex-col items-center justify-center">
+                    <Buttons nameButton="Iniciar" />
+                    <Text Have="No tienes cuenta?" GoTo="Regístrate aquí" nav='/Register' />
+                </div>
+            </div>
+        </section>
+    );
+};
+
+export default Login;
