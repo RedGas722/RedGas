@@ -2,7 +2,6 @@ import './index.css'
 import { Routes, Route } from 'react-router-dom'
 // import ShopCart from "./UI/ShopCart/ShopCart"
 import { Animations } from "./Animations/Animations"
-import { Header } from "./Layouts/Header/Header"
 import { MainPage } from './Pages/MainPage/MainPage'
 import { Register } from './Pages/Register/Register'
 import { Login } from './Pages/Login/Login'
@@ -11,7 +10,6 @@ import { ForgotPassword } from './Pages/ForgotPassword/ForgotPassword'
 export function App() {
 	return (
 		<div className="flex flex-col gap-[80px]" >
-			<Header />
 			<Animations />
 			<Routes>
 				<Route path='/' element={<MainPage />} />

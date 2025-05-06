@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons"
 import './Login.css'
 import { Buttons } from "../../UI/Login_Register/Buttons"
+import { HeadLR } from '../../UI/Login_Register/HeadLR/HeadLR'
 import { Text } from "../../UI/Login_Register/Text"
 import { Circles } from "../../Animations/ColorCircles/Circles"
 
@@ -15,7 +16,8 @@ export const Login = () => {
     }
 
     return (
-        <section className="w-full">
+        <section className="sectionLogin w-full gap-[40px] h-dvh ">
+            <HeadLR />
             <Circles styleC1="right-[50%] bottom-[0px]" styleC2="left-[54%] top-[120px]" styleC3="top-[400px] left-[80px]" />
             <div className="divForm shadow_box_RL bg-glass-total rounded-3xl flex flex-col items-center w-fit justify-self-center gap-[40px]">
                 <h1 className="text-center text-white text-4xl">¡Bienvenido de nuevo!</h1>
