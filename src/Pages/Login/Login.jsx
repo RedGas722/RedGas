@@ -22,7 +22,7 @@ export const Login = () => {
             <div className="divForm shadow_box_RL bg-glass-total rounded-3xl flex flex-col items-center w-fit justify-self-center gap-[40px]">
                 <h1 className="text-center text-white text-4xl">¡Bienvenido de nuevo!</h1>
                 <form className="flex flex-col gap-[15px] justify-center items-center text-start w-full">
-                    {/* E-mail */}
+                    E-mail
                     <label htmlFor="Email" className="text-white text-2xl w-full">
                         Correo electrónico
                     </label>

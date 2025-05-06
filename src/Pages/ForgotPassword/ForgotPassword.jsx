@@ -1,4 +1,4 @@
-import React from 'react'
+import { NavLink } from "react-router-dom"
 import { Circles } from "../../Animations/ColorCircles/Circles"
 import { Buttons } from '../../UI/Login_Register/Buttons'
 import { HeadLR } from '../../UI/Login_Register/HeadLR/HeadLR'
@@ -23,7 +23,9 @@ export const ForgotPassword = () => {
                         className="border-t-0 border-b-[1px] w-full placeholder:text-gray-400 text-gray-200 border-gray-300 outline-0"
                     />
                 </form>
-                <Buttons nameButton="Enviar" />
+                <NavLink to='/Login/ForgotPassword/Recovery'>
+                    <Buttons nameButton="Enviar" />
+                </NavLink>
             </div>
         </div>
     )

@@ -6,6 +6,7 @@ import { MainPage } from './Pages/MainPage/MainPage'
 import { Register } from './Pages/Register/Register'
 import { Login } from './Pages/Login/Login'
 import { ForgotPassword } from './Pages/ForgotPassword/ForgotPassword'
+import { RecoveryPassword } from './Pages/RecoveryPassword/RecoveryPassword'
 
 export function App() {
 	return (
@@ -16,6 +17,7 @@ export function App() {
 				<Route path='/Register' element={<Register />} />
 				<Route path='/Login' element={<Login />} />
 				<Route path='/Login/ForgotPassword' element={<ForgotPassword />} />
+				<Route path='/Login/ForgotPassword/Recovery' element={<RecoveryPassword />} />
 			</Routes>
 			{/* <ShopCart /> */}
 		</div>
