@@ -1,10 +1,11 @@
 import { useState } from "react"
+import { Link } from "react-router-dom"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons"
 import './Login.css'
 import { Buttons } from "../../UI/Login_Register/Buttons"
 import { Text } from "../../UI/Login_Register/Text"
-import Circles from "../../Animations/ColorCircles/Circles"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons"
+import { Circles } from "../../Animations/ColorCircles/Circles"
 
 export const Login = () => {
     const [showPassword, setShowPassword] = useState(false)
@@ -58,7 +59,11 @@ export const Login = () => {
                         </div>
                     </label>
                     <div className="text-[#18BBFC]">
-                        <p>Olvidaste tu contraseña?</p>
+                        <Link to="/Login/ForgotPassword">
+                            <button className="cursor-pointer">
+                                <p>Olvidaste tu contraseña?</p>
+                            </button>
+                        </Link>
                     </div>
                 </section>
                 <div className="flex flex-col items-center justify-center">

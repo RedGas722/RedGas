@@ -1,12 +1,12 @@
 import './index.css'
-import Header from "./Layouts/Header/Header"
-import './index.css'
-// import ShopCart from "./UI/ShopCart/ShopCart"
-import Animations from "./Animations/Animations"
-import MainPage from './Pages/MainPage/MainPage'
-import Register from './Pages/Register/Register'
-import Login from './Pages/Login/Login'
 import { Routes, Route } from 'react-router-dom'
+// import ShopCart from "./UI/ShopCart/ShopCart"
+import { Animations } from "./Animations/Animations"
+import { Header } from "./Layouts/Header/Header"
+import { MainPage } from './Pages/MainPage/MainPage'
+import { Register } from './Pages/Register/Register'
+import { Login } from './Pages/Login/Login'
+import { ForgotPassword } from './Pages/ForgotPassword/ForgotPassword'
 
 export function App() {
 	return (
@@ -17,6 +17,7 @@ export function App() {
 				<Route path='/' element={<MainPage />} />
 				<Route path='/Register' element={<Register />} />
 				<Route path='/Login' element={<Login />} />
+				<Route path='/Login/ForgotPassword' element={<ForgotPassword />} />
 			</Routes>
 			{/* <ShopCart /> */}
 		</div>

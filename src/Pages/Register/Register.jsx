@@ -1,11 +1,11 @@
 import { useState } from "react"
 import { Inputs } from "../../UI/Login_Register/Inputs"
 import { Buttons } from "../../UI/Login_Register/Buttons"
-import "./Register.css"
 import { Text } from "../../UI/Login_Register/Text"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons"
-import Circles from "../../Animations/ColorCircles/Circles"
+import { Circles } from "../../Animations/ColorCircles/Circles"
+import "./Register.css"
 
 export const Register = () => {
     const [showPassword, setShowPassword] = useState(false);
