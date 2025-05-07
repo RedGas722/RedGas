@@ -4,7 +4,12 @@ import { Buttons } from '../../UI/Login_Register/Buttons'
 import { HeadLR } from '../../UI/Login_Register/HeadLR/HeadLR'
 import './ForgotPassword.css'
 
+URL = 'http://localhost:10101/ClienteEmail'
+
 export const ForgotPassword = () => {
+
+    
+
     return (
         <div className='sectionForgot w-full gap-[40px] h-dvh '>
             <HeadLR />
