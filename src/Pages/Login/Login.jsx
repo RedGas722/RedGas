@@ -40,7 +40,7 @@ export const Login = () => {
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword)
     }
-    
+
     return (
         <section className="sectionLogin w-full gap-[40px] h-dvh ">
             <HeadLR />
@@ -100,9 +100,7 @@ export const Login = () => {
                         </div>
                     </section>
                     <div className="flex flex-col items-center justify-center">
-                        {/* <link to='/' > */}
                         <Buttons type="submit" nameButton="Iniciar" />
-                        {/* </link> */}
                         <Text Have="No tienes cuenta?" GoTo="Regístrate aquí" nav='/Register' />
                     </div>
                 </form>
