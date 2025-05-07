@@ -2,6 +2,9 @@
     display: none;
 }
 
+.form{
+    padding: 10px;
+}
 
 /* Style for the custom checkbox */
 .custom-checkbox {
