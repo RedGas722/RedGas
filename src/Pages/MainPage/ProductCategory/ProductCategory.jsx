@@ -9,7 +9,7 @@ import { faShower } from '@fortawesome/free-solid-svg-icons';
 
 export const ProductCategory = () => {
 	return(
-            <section className="cardCategoryContainer " >
+            <section id="ProductCategory" className="cardCategoryContainer">
                 <PrpoductCatergories imgCategory={faWater} nameCategory="Calentadores" />
                 <PrpoductCatergories imgCategory={faWrench} nameCategory="Herramientas" />
                 <PrpoductCatergories imgCategory={faGear} nameCategory="Repuestos" />

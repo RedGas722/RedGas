@@ -1,0 +1,6 @@
+/* Nav.css */
+#HomeLink.active,
+#HomeLink.force-active {
+    color: var(--Font-Nav);
+    font-weight: bold;
+}

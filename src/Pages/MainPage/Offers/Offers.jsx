@@ -5,7 +5,7 @@ import CardsOffers from '../../../UI/Cards/CardsOffers/CardsOffers';
 
 export const OffersSect = () => {
     return (
-        <section className='flex flex-col gap-[20px]'>
+        <section id="OffersSect" className="flex flex-col gap-[20px]">
             <SectCategory iconCategory={faDollarSign} nameCategory="Oferta" className='flex flex-row-reverse justify-end items-center' />
             <CardsOffers uniqueId="offers"  titleCatt="Oferta" Price="999999" brandCatt="Oka"/>
         </section>

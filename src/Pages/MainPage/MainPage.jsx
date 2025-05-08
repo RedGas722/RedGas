@@ -5,10 +5,10 @@ import { OffersSect } from "./Offers/Offers"
 import { HeatersSect } from "./Heaters/Heaters"
 import { ToolsSect } from './Tools/Tools'
 import { Circles } from "../../Animations/ColorCircles/Circles"
-import { useNavigate } from "react-router-dom"
+// import { useNavigate } from "react-router-dom"
 
 export const MainPage = () => {
-    const navigate = useNavigate()
+    // const navigate = useNavigate()
     
     return (
         <>

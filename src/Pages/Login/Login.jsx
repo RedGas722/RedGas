@@ -32,7 +32,7 @@ export const Login = () => {
             setMensaje('Inicio de sesión exitoso');
             navigate('/');
         } catch (err) {
-            setMensaje('Error al iniciar sesión');
+            setMensaje(err);
         }
 
     }
