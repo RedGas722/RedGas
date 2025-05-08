@@ -28,7 +28,7 @@ export const Register = () => {
         e.preventDefault();
         try {
             console.log('registrando...');
-            console.log({ nombre, apellido, correo, telefono, direccion, contrasena });
+            
             const res = await fetch(URL, {
                method: 'POST',
                headers: { 'Content-Type': 'application/json' },
