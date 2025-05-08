@@ -3,10 +3,9 @@ import { HeadLR } from '../../UI/Login_Register/HeadLR/HeadLR'
 import { Buttons } from '../../UI/Login_Register/Buttons'
 import emailjs from '@emailjs/browser'
 import { useState } from "react"
-
 import './ForgotPassword.css'
 
-const URL = 'http://localhost:10101/ClienteEmai'
+const URL = 'http://localhost:10101/ClienteEmail'
 
 export const ForgotPassword = () => {
 
@@ -20,7 +19,6 @@ export const ForgotPassword = () => {
         const templateId = 'template_fwkby0l'
         const publicKey = 'CHG9oYaCrFayF0g8y'
 
-        // hemos recibido su solicitud de cambio de contraseña, haga click en el siguiente enlace:
         try {
             const res = await fetch(URL, {
                 method: 'POST',
@@ -31,11 +29,11 @@ export const ForgotPassword = () => {
             const data = await res.json();
 
             const templateParams = {
-                to_email: correo,
+                to_email: data.correo,
                 company: 'RED-GAS',
                 user: data.name || 'Usuario',
                 message: 'Hemos recibido su solicitud de cambio de contraseña, haga click en el siguiente enlace:',
-                link: 'http://localhost:5173/Login/ForgotPassword/Recovery'
+                link: 'http://localhost:5173/Login/ForgotPassword/Recovery/' + data.token,
             }
 
             emailjs.send(serviceId, templateId, templateParams, publicKey)
@@ -55,9 +53,8 @@ export const ForgotPassword = () => {
                 });
 
         } catch (err) {
-            console.log('Error al enviar el correo', err.text);
             setMensaje('El correo no esta registrador')
-            alertSendForm(422, mensaje); 
+            alertSendForm(400, mensaje); 
         }
 
 
@@ -78,7 +75,7 @@ export const ForgotPassword = () => {
 
         setTimeout(() => {
             alert.style.display = 'none'
-        }, 2000);
+        }, 3000);
 
     }
     return (

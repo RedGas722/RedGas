@@ -59,6 +59,7 @@ export const Login = () => {
                             id="Email"
                             className="border-t-0 border-b-[1px] w-full placeholder:text-gray-400 text-gray-200 border-gray-300 outline-0"
                             value={correo} onChange={e => setCorreo(e.target.value)}
+                            required
                         />
                     </div>
                     {/* Password */}
@@ -73,6 +74,7 @@ export const Login = () => {
                                 id="password"
                                 className="border-t-0 border-b-[1px] w-full placeholder:text-gray-400 text-gray-200 border-gray-300 outline-0"
                                 value={contrasena} onChange={e => setContrasena(e.target.value)}
+                                required
                             />
                             <FontAwesomeIcon
                                 icon={showPassword ? faEyeSlash : faEye}
