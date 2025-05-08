@@ -1,5 +1,4 @@
 import { useState } from "react"
-import { Inputs } from "../../UI/Login_Register/Inputs"
 import { Buttons } from "../../UI/Login_Register/Buttons"
 import { Text } from "../../UI/Login_Register/Text"
 import { HeadLR } from '../../UI/Login_Register/HeadLR/HeadLR'
@@ -7,6 +6,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons"
 import { Circles } from "../../Animations/ColorCircles/Circles"
 import "./Register.css"
+import { useNavigate } from "react-router-dom";
+
 
 const URL = 'http://localhost:10101/ClienteRegister';
 
@@ -17,26 +18,34 @@ export const Register = () => {
     const [nombre, setNombre] = useState('');
     const [correo, setCorreo] = useState('');
     const [apellido, setApellido] = useState('');
+    const [direccion, setDireccion] = useState('');
     const [telefono, setTelefono] = useState('');
     const [contrasena, setContrasena] = useState('');
     const [mensaje, setMensaje] = useState('');
+    const navigate = useNavigate(); 
 
     const handleRegister = async (e) => {
         e.preventDefault();
         try {
             console.log('registrando...');
-   
+            console.log({ nombre, apellido, correo, telefono, direccion, contrasena });
             const res = await fetch(URL, {
                method: 'POST',
                headers: { 'Content-Type': 'application/json' },
-               body: JSON.stringify({ nombre_cliente: nombre + apellido, correo_cliente: correo, telefono_cliente: telefono, contraseña_cliente: contrasena }),
+               body: JSON.stringify({ 
+                nombre_cliente: nombre + ' ' + apellido,
+                correo_cliente: correo,
+                telefono_cliente: telefono,
+                direccion_cliente: direccion,
+                contraseña_cliente: contrasena}),
             });
    
             if (!res.ok) throw new Error('Credenciales inválidas');
             const data = await res.json();
             setMensaje(`registro exitoso. Token: ${data.token}`);
+            navigate('/login')
          } catch (err) {
-            setMensaje('Error al registrar');
+            setMensaje('Error al registrar' + err.message);
          }
     }
 
@@ -58,17 +67,29 @@ export const Register = () => {
                     {/* Name, LastName */}
                     <div className="flex gap-[15px]">
                         <div className="flex flex-col">
-                            <Inputs For="Name" NameIn="Nombre" Place="" 
+                            <label htmlFor="Name" className='text-white text-2xl w-full'>Nombre</label>
+                            <input 
+                            type="text"
+                            id="Name"
+                            className="border-t-0 border-b-[1px] w-full placeholder:text-gray-400 text-gray-200 border-gray-300 outline-0"
                             value={nombre}
                             onChange={e => setNombre(e.target.value)}/>
                         </div>
                         <div className="flex flex-col">
-                            <Inputs For="lastName" NameIn="Apellido" Place="" 
+                            <label htmlFor="LastName" className='text-white text-2xl w-full'>Apellido</label>
+                            <input type="text"
+                            id="LastName"
+                            className="border-t-0 border-b-[1px] w-full placeholder:text-gray-400 text-gray-200 border-gray-300 outline-0"
                             value={apellido}
                             onChange={e => setApellido(e.target.value)}/>
                         </div>
                     </div>
-                    <Inputs For="Number" NameIn="Teléfono" Place="3*********" 
+                    <label htmlFor="Phone" className='text-white text-2xl w-full'>Telefono</label>
+                    <input 
+                    type="text"
+                    placeholder="3*********"
+                    id="Phone"
+                    className="border-t-0 border-b-[1px] w-full placeholder:text-gray-400 text-gray-200 border-gray-300 outline-0"
                     value={telefono}
                     onChange={e => setTelefono(e.target.value)}/>
                     {/* E-mail */}

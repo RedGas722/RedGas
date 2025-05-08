@@ -20,7 +20,6 @@ export const Login = () => {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-
         try {
             const res = await fetch(URL, {
                 method: 'POST',
