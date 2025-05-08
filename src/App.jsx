@@ -1,6 +1,6 @@
 import './index.css'
 import { Routes, Route } from 'react-router-dom'
-// import ShopCart from "./UI/ShopCart/ShopCart"
+import ShopCart from "./UI/ShopCart/ShopCart"
 import { Animations } from "./Animations/Animations"
 import { MainPage } from './Pages/MainPage/MainPage'
 import { Register } from './Pages/Register/Register'
@@ -19,7 +19,7 @@ export function App() {
 				<Route path='/Login/ForgotPassword' element={<ForgotPassword />} />
 				<Route path='/Login/ForgotPassword/Recovery' element={<RecoveryPassword />} />
 			</Routes>
-			{/* <ShopCart /> */}
+			<ShopCart />
 		</div>
 	)
 }
