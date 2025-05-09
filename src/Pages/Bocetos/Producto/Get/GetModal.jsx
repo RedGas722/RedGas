@@ -75,7 +75,7 @@ export const GetModal = ({ onClose }) => {
             <p><strong>Nombre:</strong> {mensaje.data.nombre_producto}</p>
             <p><strong>Precio:</strong> {mensaje.data.precio_producto}</p>
             <p><strong>Descripción:</strong> {mensaje.data.descripcion_producto}</p>
-            <p><strong>Stock:</strong> {mensaje.data.stock || 'Sin dirección'}</p>
+            <p><strong>Stock:</strong> {mensaje.data.stock}</p>
             {mensaje.data.imagen && (
             <img
                 src={`data:image/jpeg;base64,${mensaje.data.imagen}`}
