@@ -7,14 +7,14 @@ import { Register } from './Pages/Register/Register'
 import { Login } from './Pages/Login/Login'
 import { ForgotPassword } from './Pages/ForgotPassword/ForgotPassword'
 import { RecoveryPassword } from './Pages/RecoveryPassword/RecoveryPassword'
-import { ProductoBackOffice } from './Pages/Bocetos/Producto/ProductoBack'
+import { TecnicoBackOffice } from './Pages/Bocetos/Tecnico/TecnicoBack'
 
 export function App() {
 	return (
 		<div className="flex flex-col gap-[80px]" >
 			<Animations />
 			<Routes>
-				<Route path='/' element={<ProductoBackOffice />} />
+				<Route path='/' element={<TecnicoBackOffice />} />
 				<Route path='/Register' element={<Register />} />
 				<Route path='/Login' element={<Login />} />
 				<Route path='/Login/ForgotPassword' element={<ForgotPassword />} />

@@ -16,9 +16,7 @@ export const GetModal = ({ onClose }) => {
       });
   
       if (!res.ok) throw new Error('Credenciales inválidas');
-      const data = await res.json();
-      console.log('Respuesta del servidor: ', data); 
-  
+      const data = await res.json();  
       if (data.data) {
         const producto = data.data;
   
