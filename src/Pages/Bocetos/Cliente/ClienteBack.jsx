@@ -14,7 +14,7 @@ export const ClienteBackOffice = () => {
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-100 gap-4">
-
+      <h1>Cliente BACK-OFFICE</h1>
       <button
         onClick={() => setShowRegisterModal(true)}
         className="bg-green-500 text-white px-4 py-2 rounded"
@@ -39,16 +39,16 @@ export const ClienteBackOffice = () => {
         <RegisterModal onClose={() => setShowRegisterModal(false)} />
       )}  
 
+      {showGetModal && (
+        <GetModal onClose={() => setShowGetModal(false)} />
+      )}
+
       {showUpdateModal && (
         <UpdateModal onClose={() => setShowUpdateModal(false)} />
       )}
 
       {showDeleteModal && (
         <DeleteModal onClose={() => setShowDeleteModal(false)} />
-      )}
-
-      {showGetModal && (
-        <GetModal onClose={() => setShowGetModal(false)} />
       )}
     </div>
   );

@@ -1,6 +1,9 @@
 // Delete.jsx
 import React, { useState } from 'react';
-import { RegisterModal } from './Register/Register';
+import { RegisterModal } from './Register/RegisterModal';
+import { GetModal } from './Get/GetModal';
+import { UpdateModal } from './Update/UpdateModal';
+import { DeleteModal } from './Delete/DeleteModal';
 
 
 export const ProductoBackOffice = () => {
@@ -12,13 +15,13 @@ export const ProductoBackOffice = () => {
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-100 gap-4">
-
+      <h1>Producto BACK-OFFICE</h1>
       <button
         onClick={() => setShowRegisterModal(true)}
         className="bg-green-500 text-white px-4 py-2 rounded"
       >Registrar</button>
 
-      {/* <button
+      <button
         onClick={() => setShowGetModal(true)}
         className="bg-blue-500 text-white px-4 py-2 rounded"
       >Consultar</button>
@@ -31,23 +34,23 @@ export const ProductoBackOffice = () => {
       <button
         onClick={() => setShowDeleteModal(true)}
         className="bg-red-500 text-white px-4 py-2 rounded"
-      >Eliminar</button> */}
+      >Eliminar</button>
 
       {showRegisterModal && (
         <RegisterModal onClose={() => setShowRegisterModal(false)} />
       )}  
 
-      {/* {showUpdateModal && (
+      {showGetModal && (
+        <GetModal onClose={() => setShowGetModal(false)} />
+      )}
+
+      {showUpdateModal && (
         <UpdateModal onClose={() => setShowUpdateModal(false)} />
       )}
 
       {showDeleteModal && (
         <DeleteModal onClose={() => setShowDeleteModal(false)} />
       )}
-
-      {showGetModal && (
-        <GetModal onClose={() => setShowGetModal(false)} />
-      )} */}
     </div>
   );
 };

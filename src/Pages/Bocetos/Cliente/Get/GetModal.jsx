@@ -17,7 +17,6 @@ export const GetModal = ({ onClose }) => {
       if (!res.ok) throw new Error('Credenciales inválidas');
       const data = await res.json();
 
-        console.log(data); // <-- esto
         setMensaje(data);
     } catch (err) {
       setMensaje({ error: 'Error al consultar: ' + err.message });

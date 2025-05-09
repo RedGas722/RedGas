@@ -5,10 +5,10 @@ export const RegisterModal = ({ onClose }) => {
     const [precio, setPrecio] = useState('');
     const [descripcion, setDescripcion] = useState('');
     const [stock, setStock] = useState('');
-    const [imagen, setImagen] = useState(null);  // Cambiar a null para aceptar archivos
+    const [imagen, setImagen] = useState(null);  
     const [mensaje, setMensaje] = useState('');
 
-    const URL = 'http://localhost:10101/ProductoRegister'; // Cambia esta URL si es necesario
+    const URL = 'http://localhost:10101/ProductoRegister'; 
 
     const handleRegister = async (e) => {
         e.preventDefault();
