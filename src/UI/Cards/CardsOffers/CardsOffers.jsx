@@ -50,11 +50,11 @@ export const Cards = ({ uniqueId, imgContent, titleCatt, brandCatt, Price }) => 
                     },
                 }}
                 id={`cardContainer-${uniqueId}`}
-                className="w-[100%] flex justify-center items-center"
+                className="w-[100%] flex justify-center justify-self-center items-center"
             >
                 {cards.map((_, index) => (
                     <SwiperSlide key={index} id={`CardSect-${uniqueId}`}>
-                        <div className="flex justify-center items-center w-fit">
+                        <div className="flex justify-center justify-self-center items-center w-fit">
                             <div id="cc" className="shadow_box rounded-[20px] w-fit relative">
                                 <div className="cards_shadow clip-path-triangle h-[480px] text-white bg-glass-total rounded-[20px] w-[300px]">
                                     <div className="flex justify-center items-center gap-[8px]">
