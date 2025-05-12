@@ -1,21 +1,21 @@
-import { SearchBarr } from "../../UI/Header/SearchBarr/SearchBarr";
-import { Navs } from "../../UI/Header/Nav/Nav";
-import { ProfilePhoto } from "../../UI/Header/ProfilePhoto/ProfilePhoto";
-import { useState, useEffect } from 'react';
+import { SearchBarr } from "../../UI/Header/SearchBarr/SearchBarr"
+import { Navs } from "../../UI/Header/Nav/Nav"
+import { ProfilePhoto } from "../../UI/Header/ProfilePhoto/ProfilePhoto"
+import { useState, useEffect } from 'react'
 import './Header.css'
 
 export const Header = () => {
 
-    const [scrolled, setScrolled] = useState(false);
+    const [scrolled, setScrolled] = useState(false)
 
     useEffect(() => {
         const handleScroll = () => {
-            setScrolled(window.scrollY > 50);
-        };
+            setScrolled(window.scrollY > 50)
+        }
 
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
+        window.addEventListener('scroll', handleScroll)
+        return () => window.removeEventListener('scroll', handleScroll)
+    }, [])
 
     return (
         <div id="Header" className={`Header items-center w-[100%] h-fit sticky top-0 z-[10000] ${scrolled ? 'scrolled' : ''}`} >
@@ -27,4 +27,4 @@ export const Header = () => {
     )
 }
 
-export default Header;
+export default Header

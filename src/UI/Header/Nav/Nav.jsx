@@ -1,6 +1,6 @@
 import './Nav.css'
-import { Link } from 'react-scroll'
 import { NavLink } from 'react-router-dom'
+import { Link } from 'react-scroll'
 import { useEffect, useState } from "react"
 
 export const Navs = () => {
@@ -15,7 +15,7 @@ export const Navs = () => {
         }`
 
     return (
-        <div className="flex gap-[10%] flex-wrap text-center justify-center text-[20px] items-center">
+        <div className="flex gap-[6%] flex-wrap text-center justify-center text-[20px] items-center">
             <Link
                 to="Hero"
                 smooth={true}
@@ -61,8 +61,8 @@ export const Navs = () => {
             >
                 Técnicos
             </Link>
-            <NavLink to='/Admin' >
-            pp
+            <NavLink to="/Admin">
+                Admin
             </NavLink>
         </div>
     )

@@ -1,16 +1,54 @@
 import { useState } from "react"
-import { Inputs } from "../../UI/Login_Register/Inputs"
 import { Buttons } from "../../UI/Login_Register/Buttons"
 import { Text } from "../../UI/Login_Register/Text"
 import { HeadLR } from '../../UI/Login_Register/HeadLR/HeadLR'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons"
 import { Circles } from "../../Animations/ColorCircles/Circles"
+import { AnimatedDots } from "../../Animations/AnimatedDots/AnimatedDots"
 import "./Register.css"
+import { useNavigate } from "react-router-dom";
+
+
+const URL = 'http://localhost:10101/ClienteRegister';
 
 export const Register = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+    const [nombre, setNombre] = useState('');
+    const [correo, setCorreo] = useState('');
+    const [apellido, setApellido] = useState('');
+    const [direccion, setDireccion] = useState('');
+    const [telefono, setTelefono] = useState('');
+    const [contrasena, setContrasena] = useState('');
+    const [mensaje, setMensaje] = useState('');
+    const navigate = useNavigate(); 
+
+    const handleRegister = async (e) => {
+        e.preventDefault();
+        try {
+            console.log('registrando...');
+            
+            const res = await fetch(URL, {
+               method: 'POST',
+               headers: { 'Content-Type': 'application/json' },
+               body: JSON.stringify({ 
+                nombre_cliente: nombre + ' ' + apellido,
+                correo_cliente: correo,
+                telefono_cliente: telefono,
+                direccion_cliente: direccion,
+                contraseña_cliente: contrasena}),
+            });
+   
+            if (!res.ok) throw new Error('Credenciales inválidas');
+            const data = await res.json();
+            setMensaje(`registro exitoso. Token: ${data.token}`);
+            navigate('/login')
+         } catch (err) {
+            setMensaje('Error al registrar' + err.message);
+         }
+    }
 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
@@ -23,22 +61,41 @@ export const Register = () => {
     return (
         <div className="sectionRegister w-full gap-[40px] h-dvh ">
             <HeadLR />
+            <AnimatedDots />
             <Circles styleC1="left-[50%] bottom-[0px]" styleC2="right-[54%] top-[120px]" styleC3="top-[400px] right-[80px]" />
             <div className="divForm shadow_box_RL bg-glass-total rounded-3xl flex flex-col items-center w-fit justify-self-center gap-[40px]">
                 <h1 className="text-center text-white text-4xl">¡Bienvenido!</h1>
-                <form className="flex flex-col gap-[15px] justify-center items-center text-start w-fit">
+                <form className="flex flex-col gap-[15px] justify-center items-center text-start w-fit" onSubmit={handleRegister}>
                     {/* Name, LastName */}
                     <div className="flex gap-[15px]">
                         <div className="flex flex-col">
-                            <Inputs For="Name" NameIn="Nombre" Place="" />
+                            <label htmlFor="Name" className='text-white text-2xl w-full'>Nombre</label>
+                            <input 
+                            type="text"
+                            id="Name"
+                            className="border-t-0 border-b-[1px] w-full placeholder:text-gray-400 text-gray-200 border-gray-300 outline-0"
+                            value={nombre}
+                            onChange={e => setNombre(e.target.value)}/>
                         </div>
                         <div className="flex flex-col">
-                            <Inputs For="lastName" NameIn="Apellido" Place="" />
+                            <label htmlFor="LastName" className='text-white text-2xl w-full'>Apellido</label>
+                            <input type="text"
+                            id="LastName"
+                            className="border-t-0 border-b-[1px] w-full placeholder:text-gray-400 text-gray-200 border-gray-300 outline-0"
+                            value={apellido}
+                            onChange={e => setApellido(e.target.value)}/>
                         </div>
                     </div>
-                    <Inputs For="Number" NameIn="Teléfono" Place="3*********" />
+                    <label htmlFor="Phone" className='text-white text-2xl w-full'>Telefono</label>
+                    <input 
+                    type="text"
+                    placeholder="3*********"
+                    id="Phone"
+                    className="border-t-0 border-b-[1px] w-full placeholder:text-gray-400 text-gray-200 border-gray-300 outline-0"
+                    value={telefono}
+                    onChange={e => setTelefono(e.target.value)}/>
                     {/* E-mail */}
-                    <label htmlFor="Email" className="text-white text-2xl w-full">
+                    <label htmlFor="Email" className="text-white text-2xl w-full" >
                         Correo electrónico
                     </label>
                     <input
@@ -46,6 +103,8 @@ export const Register = () => {
                         placeholder="example@gmail.com"
                         id="Email"
                         className="border-t-0 border-b-[1px] w-full placeholder:text-gray-400 text-gray-200 border-gray-300 outline-0"
+                        value={correo} 
+                        onChange={e => setCorreo(e.target.value)}
                     />
                     {/* Password */}
                     <label htmlFor="password" className="text-white text-2xl w-full">
@@ -57,6 +116,8 @@ export const Register = () => {
                             placeholder={showPassword ? "Contraseña" : "**********"}
                             id="password"
                             className="border-t-0 border-b-[1px] w-full placeholder:text-gray-400 text-gray-200 border-gray-300 outline-0"
+                            value={contrasena}
+                            onChange={e => setContrasena(e.target.value)}
                         />
                         <FontAwesomeIcon
                             icon={showPassword ? faEyeSlash : faEye}
@@ -81,11 +142,12 @@ export const Register = () => {
                             onClick={toggleConfirmPasswordVisibility}
                         />
                     </div>
-                </form>
-                <div className="flex flex-col items-center ">
-                    <Buttons nameButton="Register" />
+                    <div className="flex flex-col items-center">
+                    <Buttons nameButton="Register"/>
                     <Text Have="Tienes cuenta?" GoTo="Inicia sesión aquí" nav='/Login' />
                 </div>
+                </form>
+                <p>{mensaje}</p>
             </div>
         </div>
     );
