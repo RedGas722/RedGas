@@ -77,7 +77,7 @@ export const GetModal = ({ onClose }) => {
             <img
                 src={`data:image/jpeg;base64,${mensaje.data.imagen}`}
                 alt="Tecnico"
-                className="mt-2 w-full w-fit h-fit rounded shadow"
+                className="mt-2 w-fit h-fit rounded shadow"
             />
             )}
         </div>
