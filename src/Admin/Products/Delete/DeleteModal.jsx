@@ -19,6 +19,7 @@ export const DeleteModal = ({ onClose }) => {
       if (!res.ok) throw new Error('Credenciales inválidas');
       const data = await res.json();
       setMensaje('Eliminación exitosa');
+      console.log('Completado!');
     } catch (err) {
       setMensaje('Error al eliminar: ' + err.message);
     }

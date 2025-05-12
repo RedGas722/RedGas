@@ -9,6 +9,7 @@ export const GetModal = ({ onClose }) => {
   const handleGet = async (e) => {
     e.preventDefault();
     try {
+      console.log('Consultando...');
       const res = await fetch(`${URL}?correo_cliente=${encodeURIComponent(correo)}`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
@@ -17,6 +18,7 @@ export const GetModal = ({ onClose }) => {
       if (!res.ok) throw new Error('Credenciales inválidas');
       const data = await res.json();
         setMensaje(data);
+        console.log('Completado!');
     } catch (err) {
       setMensaje({ error: 'Error al consultar: ' + err.message });
     }

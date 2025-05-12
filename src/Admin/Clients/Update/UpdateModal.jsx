@@ -17,7 +17,6 @@ export const UpdateModal = ({ onClose }) => {
 		e.preventDefault();
 		try {
 			console.log('actualizando...');
-
 			const res = await fetch(URL, {
 				method: 'PUT',
 				headers: { 'Content-Type': 'application/json' },
@@ -34,6 +33,7 @@ export const UpdateModal = ({ onClose }) => {
 			if (!res.ok) throw new Error('Credenciales inválidas');
 			const data = await res.json();
 			setMensaje('actualizacion exitosa.');
+			console.log('Completado!');
 		} catch (err) {
 			setMensaje('Error al actualizar' + err.message);
 		}

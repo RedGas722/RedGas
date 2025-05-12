@@ -10,6 +10,7 @@ export const GetModal = ({ onClose }) => {
   const handleGet = async (e) => {
     e.preventDefault();
     try {
+      console.log('Consultando...');
       const res = await fetch(`${URL}?nombre_producto=${encodeURIComponent(nombre)}`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
@@ -26,6 +27,7 @@ export const GetModal = ({ onClose }) => {
         }
   
         setMensaje({ ...data, data: producto });
+        console.log('Completado!');
       }
     } catch (err) {
       console.error(err);

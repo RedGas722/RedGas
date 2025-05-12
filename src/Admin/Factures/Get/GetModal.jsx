@@ -9,6 +9,7 @@ export const GetModal = ({ onClose }) => {
   const handleGet = async (e) => {
     e.preventDefault();
     try {
+      console.log('Consultando...');
       const res = await fetch(`${URL}?id_factura=${encodeURIComponent(IDfactura)}`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
@@ -16,8 +17,8 @@ export const GetModal = ({ onClose }) => {
 
       if (!res.ok) throw new Error('Credenciales inválidas');
       const data = await res.json();
-      console.log('Respuesta de la API:', data);
         setMensaje(data);
+        console.log('Completado!');
     } catch (err) {
       setMensaje({ error: 'Error al consultar: ' + err.message });
     }

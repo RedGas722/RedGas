@@ -36,6 +36,7 @@ export const RegisterModal = ({ onClose }) => {
             if (!res.ok) throw new Error('Error al registrar producto');
             const data = await res.json();
             setMensaje('Producto registrado exitosamente.');
+            console.log('Completado!');
         } catch (err) {
             console.log('Error al registrar producto: ', err);  
             setMensaje('Error al registrar: ' + err.message);

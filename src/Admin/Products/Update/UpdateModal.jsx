@@ -36,6 +36,7 @@ export const UpdateModal = ({ onClose }) => {
       if (!res.ok) throw new Error('Error al actualizar el producto');
       await res.json();
       setMensaje('Actualización exitosa');
+      console.log('Completado!');
     } catch (err) {
       console.error('Error al actualizar:', err);
       setMensaje('Error al actualizar: ' + err.message);
