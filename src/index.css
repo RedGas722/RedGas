@@ -26,63 +26,90 @@
   --color-2_circle-3: #2196F3a4;
   --color-3_circle-3: #212CF2a4;
   /* Circles color-end----------------- Body-color-beggin */
-  --Bacground-body:#001746;
+  --Bacground-body: #001746;
   /* Body-color-end----------------- Font-Nav*/
-  --Font-Nav:#FDBC50;
-  
-  
+  --Font-Nav: #FDBC50;
+  /* ADMIN */
+  --background-color: #dedede;
 }
-#root{
-  padding: 0 80px;
-}
+
 body {
   background: var(--Bacground-body);
   background-size: cover;
 }
+
 @layer utilities {
   .bg-glass {
     background-color: var(--glass-bacground);
   }
-  
+
   .bg-glass-1 {
     backdrop-filter: var(--glass-bacground-blur);
-  }  
-  
-  .bg-glass-total{
+  }
+
+  .bg-glass-total {
     background-color: var(--glass-bacground);
     backdrop-filter: var(--glass-bacground-blur);
   }
-  .bg-glass-total1{
+
+  .bg-glass-total1 {
     background-color: rgba(255, 255, 255, 0.048);
     backdrop-filter: var(--glass-bacground-blur);
   }
-  .shadow_box{
+
+  .shadow_box {
     box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);
   }
+
+  .shadow_box_RL {
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
+  }
+
   .clip-path-triangle {
     clip-path: polygon(0% 0%, 0 100%, 40% 100%, 59% 82%, 100% 82%, 100% 0);
   }
+
   .clip-path-triangle-inverse {
     clip-path: polygon(100% 100%, 0 100%, 25% 68%, 100% 68%);
   }
+
   .clip-path-shop-cart {
-    clip-path: polygon(0 0, 60% 0, 100% 100%, 0% 100%);
+    clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
     width: 120px;
     height: 30px;
-    box-shadow: inset 0px 4px 6px rgba(0, 0, 0, 0.3);
+    box-shadow: inset 0px 1px 80px rgba(255, 255, 255, 0.3);
     background-color: var(--glass-bacground);
     backdrop-filter: var(--glass-bacground-blur);
     padding: 5px 0 0 0;
   }
-  .clip-path-shop-cart2{
+
+  .clip-path-shop-cart2 {
     position: fixed;
     bottom: 0;
-    left: 0;
+    left: 50%;
+    right: 50%;
+    transform: translate(-50%, 0%);
     z-index: 1000;
   }
-}
-@media screen and (max-width: 768px) {
-  #root{
-    padding: 0 20px;
+  /* ADMIN */
+  .NeoContainer_inset_TL {
+      background: var(--background-color);
+      border-radius: 20px;
+      box-shadow: inset -9.91px -9.91px 15px #CACACA, inset 9.91px 9.91px 15px #F2F2F2;
+  }
+  .NeoContainer_outset_TL {
+      background: var(--background-color);
+      border-radius: 20px;
+      box-shadow: 9.91px 9.91px 15px #CACACA, -9.91px -9.91px 15px #F2F2F2;
+  }
+  .NeoContainer_outset_BR {
+      background: var(--background-color);
+      border-radius: 20px;
+      box-shadow: -9.91px -9.91px 15px #CACACA, 9.91px 9.91px 15px #F2F2F2;
+  }
+  .NeoContainer_inset_BR {
+      background: var(--background-color);
+      border-radius: 20px;
+      box-shadow: inset 9.91px 9.91px 15px #CACACA, -9.91px -9.91px 15px #F2F2F2;
   }
 }

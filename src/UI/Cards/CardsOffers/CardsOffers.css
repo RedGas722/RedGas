@@ -1,0 +1,17 @@
+#CardSect {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 100%;
+    min-width: 300px;
+    gap: clamp(3rem, 2vw, 20px);
+}
+#cardContainer{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#cc{
+    width: 300px;
+}

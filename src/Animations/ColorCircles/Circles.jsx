@@ -1,11 +1,11 @@
 import './Circles.css'
 
-export const Circles = () => {
+export const Circles = ({ styleC1, styleC2, styleC3 }) => {
     return (
         <>
-            <div id="circle-1" className='w-[500px] h-[500px] fixed'></div>
-            <div id="circle-2" className='w-[300px] h-[300px] fixed'></div>
-            <div id="circle-3" className='w-[200px] h-[200px] fixed'></div>
+            <div id="circle-1" className={styleC1}></div>
+            <div id="circle-2" className={styleC2}></div>
+            <div id="circle-3" className={styleC3}></div>
         </>
     )
 }

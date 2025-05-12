@@ -5,8 +5,9 @@
     border-radius: 50%;
     filter: blur(10px);
     z-index: -10;
-    left: 30%;
-    bottom: 0 ;
+    width: 500px;
+    height: 500px;
+    position: fixed;
     animation: circle-1 15s linear 0s infinite normal none;
 }
 #circle-2 {
@@ -15,7 +16,9 @@
     border-radius: 50%;
     filter: blur(10px);
     z-index: -10;
-    top: 100px;
+    width: 300px;
+    height: 300px;
+    position: fixed;
     animation: circle-1 15s linear 0s infinite normal none;
 }
 #circle-3 {
@@ -24,8 +27,9 @@
     border-radius: 50%;
     filter: blur(10px);
     z-index: -10;
-    right: 80px;
-    top: 400px;
+    width: 200px;
+    height: 200px;
+    position: fixed;
     animation: circle-1 15s linear 0s infinite normal none;
 }
 
