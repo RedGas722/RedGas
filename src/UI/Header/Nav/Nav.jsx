@@ -1,5 +1,6 @@
 import './Nav.css'
 import { Link } from 'react-scroll'
+import { NavLink } from 'react-router-dom'
 import { useEffect, useState } from "react"
 
 export const Navs = () => {
@@ -60,6 +61,9 @@ export const Navs = () => {
             >
                 Técnicos
             </Link>
+            <NavLink to='/Admin' >
+            pp
+            </NavLink>
         </div>
     )
 }
