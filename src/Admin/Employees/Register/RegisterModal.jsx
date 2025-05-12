@@ -9,7 +9,7 @@ export const RegisterModal = ({ onClose }) => {
     const [contrasena, setContrasena] = useState('');
     const [mensaje, setMensaje] = useState('');
 
-  const URL = 'http://localhost:10101/ClienteRegister';
+  const URL = 'http://localhost:10101/EmpleadoRegister';
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -20,11 +20,11 @@ export const RegisterModal = ({ onClose }) => {
            method: 'POST',
            headers: { 'Content-Type': 'application/json' },
            body: JSON.stringify({ 
-            nombre_cliente: nombre + ' ' + apellido,
-            correo_cliente: correo,
-            telefono_cliente: telefono,
-            direccion_cliente: direccion,
-            contraseña_cliente: contrasena}),
+            nombre_empleado: nombre + ' ' + apellido,
+            correo_empleado: correo,
+            telefono_empleado: telefono,
+            direccion_empleado: direccion,
+            contraseña_empleado: contrasena}),
         });
 
         if (!res.ok) throw new Error('Credenciales inválidas');
@@ -37,10 +37,10 @@ export const RegisterModal = ({ onClose }) => {
 
   const handleCancel = () => {
     setNombre('');
-    setApellido('');
     setCorreo('');
-    setTelefono('');
+    setApellido('');
     setDireccion('');
+    setTelefono('');
     setContrasena('');
     setMensaje('');
   };
@@ -53,7 +53,7 @@ export const RegisterModal = ({ onClose }) => {
           onClick={onClose}
         >✕</button>
 
-        <h2 className="text-xl font-bold text-center">Registrar Cliente</h2>
+        <h2 className="text-xl font-bold text-center">Registrar Empleado</h2>
 
         <input
           type="text"

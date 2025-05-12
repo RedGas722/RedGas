@@ -20,6 +20,9 @@ export const AdminApp = () => {
                 <NavLink to="/Admin/Products" className="p-4 hover:font-bold">
                     Productos
                 </NavLink>
+                <NavLink to="/Admin/Factures" className="p-4 hover:font-bold">
+                    Facturas
+                </NavLink>
             </section>
             <section className="SectionSIde w-[80%] h-full">
                 <Outlet />

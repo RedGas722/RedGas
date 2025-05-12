@@ -13,9 +13,10 @@ import { AdminApp } from './Admin/AdminApp'
 // import { Technicians } from './Admin/Technicians/Technicians'
 import { Technicians } from './Admin/Technicians/Technicians'
 import { ClientsBack } from './Admin/Clients/ClientsBack'
-import { Employees } from './Admin/Employees/Employees'
 // import { Products } from './Admin/Products/Products'
-import { ProductBack } from './Pages/Bocetos/Producto/ProductoBack'
+import { ProductBack } from './Admin/Products/ProductBack'
+import { EmployeesBack } from './Admin/Employees/EmployeesBack'
+import { FacturesBack } from './Admin/Factures/FacturesBack'
 
 export function App() {
     return (
@@ -33,8 +34,9 @@ export function App() {
                         <Route path='Technicians' element={<Technicians />} />
                         <Route path='TechniciansBack' element={<TechniciansBack />} />
                         <Route path="Clients" element={<ClientsBack />} />
-                        <Route path="Employees" element={<Employees />} />
+                        <Route path="Employees" element={<EmployeesBack />} />
                         <Route path="Products" element={<ProductBack />} />
+						<Route path="Factures" element={<FacturesBack />} />
                     </Route>
                 </Routes>
             </div>

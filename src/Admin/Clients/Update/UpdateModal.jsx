@@ -64,14 +64,14 @@ export const UpdateModal = ({ onClose }) => {
 
 				<input
 					type="text"
-					placeholder="Nombre"
+					placeholder="Nuevo Nombre"
 					value={nombre}
 					onChange={(e) => setNombre(e.target.value)}
 					className="border rounded p-2"
 				/>
 				<input
 					type="text"
-					placeholder="Apellido"
+					placeholder="Nuevo Apellido"
 					value={apellido}
 					onChange={(e) => setApellido(e.target.value)}
 					className="border rounded p-2"
@@ -85,21 +85,21 @@ export const UpdateModal = ({ onClose }) => {
 				/>
 				<input
 					type="text"
-					placeholder="Telefono"
+					placeholder="Nuevo Telefono"
 					value={telefono}
 					onChange={(e) => setTelefono(e.target.value)}
 					className="border rounded p-2"
 				/>
 				<input
 					type="text"
-					placeholder="Direccion"
+					placeholder="Nuevo Direccion"
 					value={direccion}
 					onChange={(e) => setDireccion(e.target.value)}
 					className="border rounded p-2"
 				/>
 				<input
 					type="password"
-					placeholder="Contraseña"
+					placeholder="Nuevo Contraseña"
 					value={contrasena}
 					onChange={(e) => setContrasena(e.target.value)}
 					className="border rounded p-2"

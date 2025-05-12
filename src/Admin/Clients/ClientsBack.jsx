@@ -1,7 +1,6 @@
-// Delete.jsx
 import { useState } from 'react'
 import { DeleteModal } from './Delete/DeleteModal'
-import { GetModal } from './Get/GetModal' // Asegúrate de crear este componente también
+import { GetModal } from './Get/GetModal' 
 import { RegisterModal } from './Register/RegisterModal'
 import { UpdateModal } from './Update/UpdateModal'
 
@@ -53,4 +52,4 @@ export const ClientsBack = () => {
 		</div>
 	)
 }
-export default ClientsBack
+export default ClientsBack;
