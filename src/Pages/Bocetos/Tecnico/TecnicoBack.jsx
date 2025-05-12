@@ -2,15 +2,16 @@
 import React, { useState } from 'react';
 import { RegisterModal } from './Register/RegisterModal';
 import { GetModal } from './Get/GetModal';
-// import { UpdateModal } from './Update/UpdateModal';
-// import { DeleteModal } from './Delete/DeleteModal';
+import { DeleteModal } from './Delete/DeleteModal';
+import { UpdateModal } from './Update/UpdateModal';
+
 
 
 export const TecnicoBackOffice = () => {
-//   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showGetModal, setShowGetModal] = useState(false);
   const [showRegisterModal, setShowRegisterModal] = useState(false);
-//   const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
 
 
   return (
@@ -25,7 +26,7 @@ export const TecnicoBackOffice = () => {
         onClick={() => setShowGetModal(true)}
         className="bg-blue-500 text-white px-4 py-2 rounded"
       >Consultar</button>
-{/* 
+
       <button
         onClick={() => setShowUpdateModal(true)}
         className="bg-yellow-500 text-white px-4 py-2 rounded"
@@ -34,7 +35,7 @@ export const TecnicoBackOffice = () => {
       <button
         onClick={() => setShowDeleteModal(true)}
         className="bg-red-500 text-white px-4 py-2 rounded"
-      >Eliminar</button> */}
+      >Eliminar</button>
 
       {showRegisterModal && (
         <RegisterModal onClose={() => setShowRegisterModal(false)} />
@@ -44,13 +45,13 @@ export const TecnicoBackOffice = () => {
         <GetModal onClose={() => setShowGetModal(false)} />
       )}
 
-      {/* {showUpdateModal && (
+      {showUpdateModal && (
         <UpdateModal onClose={() => setShowUpdateModal(false)} />
       )}
 
       {showDeleteModal && (
         <DeleteModal onClose={() => setShowDeleteModal(false)} />
-      )} */}
+      )}
     </div>
   );
 };

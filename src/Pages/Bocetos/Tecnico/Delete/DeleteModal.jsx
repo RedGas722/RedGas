@@ -1,23 +1,32 @@
 import React, { useState } from 'react';
 
-const URL = 'http://localhost:10101/ProductoDelete';
+const URL = 'http://localhost:10101/TecnicoDelete';
 
 export const DeleteModal = ({ onClose }) => {
-  const [nombre, setNombre] = useState('');
+  const [correo, setCorreo] = useState('');
   const [mensaje, setMensaje] = useState('');
 
   const handleDelete = async (e) => {
     e.preventDefault();
+
+    if (!correo.trim()) {
+      setMensaje('Por favor, ingrese un correo válido.');
+      return;
+    }
+
     try {
       console.log('Eliminando...');
-      const res = await fetch(`${URL}?nombre_producto=${encodeURIComponent(nombre)}`, {
+      const res = await fetch(`${URL}?correo_tecnico=${encodeURIComponent(correo)}`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
       });
-      
 
-      if (!res.ok) throw new Error('Credenciales inválidas');
-      await res.json();
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.message || 'Error desconocido del servidor');
+      }
+
+      await res.json(); // Procesa la respuesta sin asignarla a una variable innecesaria.
       setMensaje('Eliminación exitosa');
     } catch (err) {
       setMensaje('Error al eliminar: ' + err.message);
@@ -25,7 +34,7 @@ export const DeleteModal = ({ onClose }) => {
   };
 
   const handleCancel = () => {
-    setNombre('');
+    setCorreo('');
     setMensaje('');
   };
 
@@ -37,13 +46,13 @@ export const DeleteModal = ({ onClose }) => {
           onClick={onClose}
         >✕</button>
 
-        <h2 className="text-xl font-bold text-center">Eliminación de producto</h2>
+        <h2 className="text-xl font-bold text-center">Eliminación de Tecnico</h2>
 
         <input
           type="text"
-          placeholder="Nombre Producto..."
-          value={nombre}
-          onChange={(e) => setNombre(e.target.value)}
+          placeholder="Correo Tecnico..."
+          value={correo}
+          onChange={(e) => setCorreo(e.target.value)}
           className="border rounded p-2"
         />
 
