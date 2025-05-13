@@ -5,7 +5,7 @@ import emailjs from '@emailjs/browser'
 import { useState } from "react"
 import './ForgotPassword.css'
 
-// const URL = 'http://localhost:10101/ClienteEmail'
+const URL = 'http://localhost:10101/ClienteEmail'
 
 export const ForgotPassword = () => {
 
@@ -27,13 +27,14 @@ export const ForgotPassword = () => {
             });
 
         const data = await res.json();
-
+            console.log(data);
+            
         const templateParams = {
-            to_email: data.correo,
+            to_email: correo,
             company: 'RED-GAS',
             user: data.name || 'Usuario',
             message: 'Hemos recibido su solicitud de cambio de contraseña, haga click en el siguiente enlace:',
-            link: 'http://localhost:5173/Login/ForgotPassword/Recovery/',
+            link: `http://localhost:5173/Login/ForgotPassword/Recovery/${data.token}`,
         }
 
         emailjs.send(serviceId, templateId, templateParams, publicKey)

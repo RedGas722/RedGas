@@ -17,7 +17,7 @@ export function App() {
 				<Route path='/Register' element={<Register />} />
 				<Route path='/Login' element={<Login />} />
 				<Route path='/Login/ForgotPassword' element={<ForgotPassword />} />
-				<Route path='/Login/ForgotPassword/Recovery' element={<RecoveryPassword />} />
+				<Route path='/Login/ForgotPassword/Recovery/:token' element={<RecoveryPassword />} />
 			</Routes>
 			{/* <ShopCart /> */}
 		</div>
