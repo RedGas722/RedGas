@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import { RegisterModal } from './Register/RegisterModal'
 import { GetModal } from './Get/GetModal'
+import { ButtonBack } from '../UI/ButtonBack/ButtonBack'
 // import { UpdateModal } from './Update/UpdateModal'
 // import { DeleteModal } from './Delete/DeleteModal'
 
@@ -17,14 +18,8 @@ export const TechniciansBack = () => {
     <div className="p-[20px_0_0_20px] flex items-start gap-[20px] justify-start h-screen">
       <div className='flex items-center gap-[20px] justify-center'>
         <h1 className='font-bold text-[20px]'>Técnicos: Regitro / Consulta</h1>
-        <button
-          onClick={() => setShowRegisterModal(true)}
-          className="BTN NeoContainer_outset_BR text-green-500"
-        >Registrar</button>
-        <button
-          onClick={() => setShowGetModal(true)}
-          className="BTN NeoContainer_outset_BR text-red-500"
-        >Consultar</button>
+        <ButtonBack ClickMod={() => setShowRegisterModal(true)} Child='Registrar' />
+        <ButtonBack ClickMod={() => setShowGetModal(true)} Child='Consultar' />  
       </div>
       {/* 
       <button

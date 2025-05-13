@@ -7,7 +7,7 @@ import { Register } from './Pages/Register/Register'
 import { Login } from './Pages/Login/Login'
 import { ForgotPassword } from './Pages/ForgotPassword/ForgotPassword'
 import { RecoveryPassword } from './Pages/RecoveryPassword/RecoveryPassword'
-import { TechniciansBack } from './Pages/Bocetos/Tecnico/TechniciansBack'
+import { TechniciansBack } from './Admin/Technicians/TechniciansBack'
 // -Import Admin-
 import { AdminApp } from './Admin/AdminApp'
 // import { Technicians } from './Admin/Technicians/Technicians'
