@@ -1,24 +1,20 @@
-// Delete.jsx
 import React, { useState } from 'react';
 import { RegisterModal } from './Register/RegisterModal';
-import { UpdateModal } from './Update/UpdateModal';
-import { DeleteModal } from './Delete/DeleteModal';
 import { GetModal } from './Get/GetModal';
+import { DeleteModal } from './Delete/DeleteModal';
+import { UpdateModal } from './Update/UpdateModal';
 import ButtonBack from '../UI/ButtonBack/ButtonBack';
 
-
-
-export const ServicesBack = () => {
+export const AdminsBack= () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showGetModal, setShowGetModal] = useState(false);
   const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
 
-
   return (
     <div className="p-[20px_0_0_20px] flex items-start gap-[20px] justify-start h-screen">
       <div className='flex items-center gap-[20px] justify-center'>
-        <h1 className='font-bold text-[20px]'>Servicio BACK-OFFICE</h1>
+        <h1 className='font-bold text-[20px]'>Admin BACK-OFFICE</h1>
         <ButtonBack ClickMod={() => setShowRegisterModal(true)} Child='Registrar' />
         <ButtonBack ClickMod={() => setShowGetModal(true)} Child='Consultar' />
         <ButtonBack ClickMod={() => setShowUpdateModal(true)} Child='Actualizar' />
