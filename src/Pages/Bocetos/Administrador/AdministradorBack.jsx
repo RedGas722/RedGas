@@ -1,13 +1,11 @@
 // Delete.jsx
 import React, { useState } from 'react';
-import { RegisterModal } from '../Servicio/Register/RegisterModal';
-import { GetModal } from '../Servicio/Get/GetModal';
-import { DeleteModal } from '../Servicio/Delete/DeleteModal';
-import { UpdateModal } from '../Servicio/Update/UpdateModal';
+import { DeleteModal } from './Delete/DeleteModal';
+import { GetModal } from '../Administrador/Get/GetModal'; // Asegúrate de crear este componente también
+import { RegisterModal } from '../Administrador/Register/RegisterModal';
+import { UpdateModal } from '../Administrador/Update/UpdateModal';
 
-
-
-export const ServicioBackOffice = () => {
+export const AdministradorBackOffice = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showGetModal, setShowGetModal] = useState(false);
   const [showRegisterModal, setShowRegisterModal] = useState(false);
@@ -16,7 +14,7 @@ export const ServicioBackOffice = () => {
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-100 gap-4">
-      <h1>Servicio BACK-OFFICE</h1>
+      <h1>Administrador BACK-OFFICE</h1>
       <button
         onClick={() => setShowRegisterModal(true)}
         className="bg-green-500 text-white px-4 py-2 rounded"

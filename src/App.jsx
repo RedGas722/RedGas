@@ -9,13 +9,14 @@ import { ForgotPassword } from './Pages/ForgotPassword/ForgotPassword'
 import { RecoveryPassword } from './Pages/RecoveryPassword/RecoveryPassword'
 import { TecnicoBackOffice } from './Pages/Bocetos/Tecnico/TecnicoBack'
 import { ServicioBackOffice } from './Pages/Bocetos/Servicio/ServicioBack'
+import { AdministradorBackOffice } from './Pages/Bocetos/Administrador/AdministradorBack'
 
 export function App() {
 	return (
 		<div className="flex flex-col gap-[80px]" >
 			<Animations />
 			<Routes>
-				<Route path='/' element={<ServicioBackOffice />} />
+				<Route path='/' element={<AdministradorBackOffice />} />
 				<Route path='/Register' element={<Register />} />
 				<Route path='/Login' element={<Login />} />
 				<Route path='/Login/ForgotPassword' element={<ForgotPassword />} />

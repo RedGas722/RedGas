@@ -30,7 +30,7 @@ export const UpdateModal = ({ onClose }) => {
         });
 
         if (!res.ok) throw new Error('Credenciales inválidas');
-        const data = await res.json();
+        await res.json();
         setMensaje('actualizacion exitosa.');
      } catch (err) {
         setMensaje('Error al actualizar' + err.message);
