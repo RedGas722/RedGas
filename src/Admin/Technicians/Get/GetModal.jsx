@@ -3,31 +3,40 @@ import React, { useState } from 'react';
 export const GetModal = ({ onClose }) => {
   const [correo, setCorreo] = useState('');
   const [mensaje, setMensaje] = useState(null);
+  const [imagenURL, setImagenURL] = useState(null); // Estado para la URL de la imagen
 
-  const URL = 'http://localhost:10101/AdminGet';
+  const URL = 'http://localhost:10101/TecnicoGet';
 
   const handleGet = async (e) => {
     e.preventDefault();
     try {
-      console.log(`Fetching: ${URL}?correo_admin=${encodeURIComponent(correo)}`); // Log the GET request
-      const res = await fetch(`${URL}?correo_admin=${encodeURIComponent(correo)}`, {
+      const res = await fetch(`${URL}?correo_tecnico=${encodeURIComponent(correo)}`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
       });
-
+  
       if (!res.ok) throw new Error('Credenciales inválidas');
-      const data = await res.json();
-      console.log('Response:', data); // Log the response
-      setMensaje(data);
+      const data = await res.json();  
+      if (data.data) {
+        const tecnico = data.data;
+  
+        if (tecnico.imagen) {
+          const imagenBase64 = tecnico.imagen;
+          setImagenURL(`data:image/jpeg;base64,${imagenBase64}`);
+        }
+  
+        setMensaje({ ...data, data: tecnico });
+      }
     } catch (err) {
-      console.error('Error:', err.message); // Log the error
+      console.error(err);
       setMensaje({ error: 'Error al consultar: ' + err.message });
     }
-  };
+  };    
 
   const handleCancel = () => {
     setCorreo('');
-    setMensaje('');
+    setMensaje(null);
+    setImagenURL(null); 
   };
 
   return (
@@ -38,11 +47,11 @@ export const GetModal = ({ onClose }) => {
           onClick={onClose}
         >✕</button>
 
-        <h2 className="text-xl font-bold text-center">Consultar Administrador</h2>
+        <h2 className="text-xl font-bold text-center">Consultar Tecnico</h2>
 
         <input
-          type="email"
-          placeholder="Correo del administrador"
+          type="text"
+          placeholder="Correo del tecnico"
           value={correo}
           onChange={(e) => setCorreo(e.target.value)}
           className="border rounded p-2"
@@ -59,11 +68,18 @@ export const GetModal = ({ onClose }) => {
           >Consultar</button>
         </div>
 
-        {mensaje && mensaje.data && mensaje.data.length > 0 && (
+        {mensaje && mensaje.data && (
         <div className="bg-gray-100 p-3 rounded mt-2 text-sm">
-            <p><strong>Nombre:</strong> {mensaje.data[0].nombre_admin}</p>
-            <p><strong>Correo:</strong> {mensaje.data[0].correo_admin}</p>
-            <p><strong>Teléfono:</strong> {mensaje.data[0].telefono_admin}</p>
+            <p><strong>Nombre:</strong> {mensaje.data.nombre_tecnico}</p>
+            <p><strong>telefono:</strong> {mensaje.data.telefono_tecnico}</p>
+            <p><strong>Correo:</strong> {mensaje.data.correo_tecnico}</p>            
+            {mensaje.data.imagen && (
+            <img
+                src={`data:image/jpeg;base64,${mensaje.data.imagen}`}
+                alt="Tecnico"
+                className="mt-2 w-fit h-fit rounded shadow"
+            />
+            )}
         </div>
         )}
       </div>

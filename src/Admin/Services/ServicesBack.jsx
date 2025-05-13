@@ -4,6 +4,7 @@ import { RegisterModal } from './Register/RegisterModal';
 import { UpdateModal } from './Update/UpdateModal';
 import { DeleteModal } from './Delete/DeleteModal';
 import { GetModal } from './Get/GetModal';
+import ButtonBack from '../UI/ButtonBack/ButtonBack';
 
 
 
@@ -15,27 +16,14 @@ export const ServicesBack = () => {
 
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gray-100 gap-4">
-      <h1>Servicios BACK-OFFICE</h1>
-      <button
-        onClick={() => setShowRegisterModal(true)}
-        className="bg-green-500 text-white px-4 py-2 rounded"
-      >Registrar</button>
-
-      <button
-        onClick={() => setShowGetModal(true)}
-        className="bg-blue-500 text-white px-4 py-2 rounded"
-      >Consultar</button>
-
-      <button
-        onClick={() => setShowUpdateModal(true)}
-        className="bg-yellow-500 text-white px-4 py-2 rounded"
-      >Actualizar</button>
-
-      <button
-        onClick={() => setShowDeleteModal(true)}
-        className="bg-red-500 text-white px-4 py-2 rounded"
-      >Eliminar</button>
+    <div className="p-[20px_0_0_20px] flex items-start gap-[20px] justify-start h-screen">
+      <div className='flex items-center gap-[20px] justify-center'>
+        <h1 className='font-bold text-[20px]'>Servicio BACK-OFFICE</h1>
+        <ButtonBack ClickMod={() => setShowRegisterModal(true)} Child='Registrar' />
+        <ButtonBack ClickMod={() => setShowGetModal(true)} Child='Consultar' />
+        <ButtonBack ClickMod={() => setShowUpdateModal(true)} Child='Actualizar' />
+        <ButtonBack ClickMod={() => setShowDeleteModal(true)} Child='Eliminar' />
+      </div>
 
       {showRegisterModal && (
         <RegisterModal onClose={() => setShowRegisterModal(false)} />

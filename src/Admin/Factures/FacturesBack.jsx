@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { RegisterModal } from './Register/RegisterModal'
 import { GetModal } from './Get/GetModal'
 import { UpdateModal } from './Update/UpdateModal'
+import { ButtonBack } from '../UI/ButtonBack/ButtonBack'
 
 export const FacturesBack = () => {
     const [showGetModal, setShowGetModal] = useState(false)
@@ -13,20 +14,9 @@ export const FacturesBack = () => {
         <div className="p-[20px_0_0_20px] flex items-start gap-[20px] justify-start h-screen">
             <div className='flex items-center gap-[20px] justify-center'>
                 <h1 className='font-bold text-[20px]'>Factura BACK-OFFICE</h1>
-                <button
-                    onClick={() => setShowRegisterModal(true)}
-                    className="BTN NeoContainer_outset_BR text-green-500"
-                >Registrar</button>
-
-                <button
-                    onClick={() => setShowGetModal(true)}
-                    className="BTN NeoContainer_outset_BR text-blue-500"
-                >Consultar</button>
-
-                <button
-                    onClick={() => setShowUpdateModal(true)}
-                    className="BTN NeoContainer_outset_BR text-yellow-500"
-                >Actualizar</button>
+                <ButtonBack ClickMod={() => setShowRegisterModal(true)} Child='Registrar' />
+                <ButtonBack ClickMod={() => setShowGetModal(true)} Child='Consultar' />
+                <ButtonBack ClickMod={() => setShowUpdateModal(true)} Child='Actualizar' />
             </div>
 
             {showRegisterModal && (
