@@ -1,22 +1,21 @@
 import React, { useState } from 'react';
 
-const URL = 'http://localhost:10101/ClienteDelete';
+const URL = 'http://localhost:10101/ContratoDelete';
 
 export const DeleteModal = ({ onClose }) => {
-  const [correo, setCorreo] = useState('');
+  const [idContrato, setIdContrato] = useState('');
   const [mensaje, setMensaje] = useState('');
 
   const handleDelete = async (e) => {
     e.preventDefault();
     try {
       console.log('Eliminando...');
-      const res = await fetch(`${URL}?correo_cliente=${encodeURIComponent(correo)}`, {
+      const res = await fetch(`${URL}?id_empleado=${encodeURIComponent(idContrato)}`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
       });
-      
 
-      if (!res.ok) throw new Error('Credenciales inválidas');
+      if (!res.ok) throw new Error('Error al eliminar el contrato');
       await res.json();
       setMensaje('Eliminación exitosa');
       console.log('Completado!');
@@ -26,7 +25,7 @@ export const DeleteModal = ({ onClose }) => {
   };
 
   const handleCancel = () => {
-    setCorreo('');
+    setIdContrato('');
     setMensaje('');
   };
 
@@ -38,13 +37,13 @@ export const DeleteModal = ({ onClose }) => {
           onClick={onClose}
         >✕</button>
 
-        <h2 className="text-xl font-bold text-center">Eliminación de cliente</h2>
+        <h2 className="text-xl font-bold text-center">Eliminación de contrato</h2>
 
         <input
-          type="email"
-          placeholder="Email Cliente..."
-          value={correo}
-          onChange={(e) => setCorreo(e.target.value)}
+          type="number"
+          placeholder="ID del contrato..."
+          value={idContrato}
+          onChange={(e) => setIdContrato(e.target.value)}
           className="border rounded p-2"
         />
 
