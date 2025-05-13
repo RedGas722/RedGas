@@ -2,14 +2,9 @@ import React, { useState } from 'react';
 
 export const RegisterModal = ({ onClose }) => {
     const [nombre, setNombre] = useState('');
-    const [correo, setCorreo] = useState('');
-    const [apellido, setApellido] = useState('');
-    const [direccion, setDireccion] = useState('');
-    const [telefono, setTelefono] = useState('');
-    const [contrasena, setContrasena] = useState('');
     const [mensaje, setMensaje] = useState('');
 
-  const URL = 'http://localhost:10101/ClienteRegister';
+  const URL = 'http://localhost:10101/CategoriaRegister';
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -20,15 +15,11 @@ export const RegisterModal = ({ onClose }) => {
            method: 'POST',
            headers: { 'Content-Type': 'application/json' },
            body: JSON.stringify({ 
-            nombre_cliente: nombre + ' ' + apellido,
-            correo_cliente: correo,
-            telefono_cliente: telefono,
-            direccion_cliente: direccion,
-            contraseña_cliente: contrasena}),
+            nombre_categoria: nombre}),
         });
 
         if (!res.ok) throw new Error('Credenciales inválidas');
-        await res.json();
+        const data = await res.json();
         setMensaje('registro exitoso.');
         console.log('Completado!');
      } catch (err) {
@@ -38,11 +29,6 @@ export const RegisterModal = ({ onClose }) => {
 
   const handleCancel = () => {
     setNombre('');
-    setApellido('');
-    setCorreo('');
-    setTelefono('');
-    setDireccion('');
-    setContrasena('');
     setMensaje('');
   };
 
@@ -54,48 +40,13 @@ export const RegisterModal = ({ onClose }) => {
           onClick={onClose}
         >✕</button>
 
-        <h2 className="text-xl font-bold text-center">Registrar Cliente</h2>
+        <h2 className="text-xl font-bold text-center">Registrar Categoria</h2>
 
         <input
           type="text"
-          placeholder="Nombre"
+          placeholder="Nombre de categoria"
           value={nombre}
           onChange={(e) => setNombre(e.target.value)}
-          className="border rounded p-2"
-        />
-        <input
-          type="text"
-          placeholder="Apellido"
-          value={apellido}
-          onChange={(e) => setApellido(e.target.value)}
-          className="border rounded p-2"
-        />
-        <input
-          type="email"
-          placeholder="Correo"
-          value={correo}
-          onChange={(e) => setCorreo(e.target.value)}
-          className="border rounded p-2"
-        />
-        <input
-          type="text"
-          placeholder="Telefono"
-          value={telefono}
-          onChange={(e) => setTelefono(e.target.value)}
-          className="border rounded p-2"
-        />
-        <input
-          type="text"
-          placeholder="Direccion"
-          value={direccion}
-          onChange={(e) => setDireccion(e.target.value)}
-          className="border rounded p-2"
-        />
-        <input
-          type="password"
-          placeholder="Contraseña"
-          value={contrasena}
-          onChange={(e) => setContrasena(e.target.value)}
           className="border rounded p-2"
         />
 

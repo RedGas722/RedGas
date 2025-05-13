@@ -49,7 +49,7 @@ export const RegisterModal = ({ onClose }) => {
         setPrecio('');
         setDescripcion('');
         setStock('');
-        setImagen(null); // Limpiar el archivo
+        setImagen(null); 
         setMensaje('');
     };
 

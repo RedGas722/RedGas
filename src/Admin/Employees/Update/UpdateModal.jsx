@@ -42,6 +42,12 @@ export const UpdateModal = ({ onClose }) => {
 
     const handleCancel = () => {
         setCorreo('');
+        setApellido('');
+        setNombre('');
+        setTelefono('');
+        setDireccion('');
+        setContrasena('');
+        setNuevoCorreo('');
         setMensaje('');
     };
 

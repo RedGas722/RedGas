@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 
 export const GetModal = ({ onClose }) => {
-  const [IDfactura, setIDfactura] = useState('');
+  const [nombre, setNombre] = useState('');
   const [mensaje, setMensaje] = useState(null);
 
-  const URL = 'http://localhost:10101/FacturaGet';
+  const URL = 'http://localhost:10101/CategoriaGet';
 
   const handleGet = async (e) => {
     e.preventDefault();
     try {
       console.log('Consultando...');
-      const res = await fetch(`${URL}?id_factura=${encodeURIComponent(IDfactura)}`, {
+      const res = await fetch(`${URL}?nombre_categoria=${encodeURIComponent(nombre)}`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
       });
@@ -25,7 +25,7 @@ export const GetModal = ({ onClose }) => {
   };
 
   const handleCancel = () => {
-    setIDfactura('');
+    setNombre('');
     setMensaje('');
   };
 
@@ -37,13 +37,13 @@ export const GetModal = ({ onClose }) => {
           onClick={onClose}
         >✕</button>
 
-        <h2 className="text-xl font-bold text-center">Consultar Cliente</h2>
+        <h2 className="text-xl font-bold text-center">Consultar Categoria</h2>
 
         <input
-          type="number"
-          placeholder="ID de la factura"
-          value={IDfactura}
-          onChange={(e) => setIDfactura(e.target.value)}
+          type="text"
+          placeholder="Nombre de categoria"
+          value={nombre}
+          onChange={(e) => setNombre(e.target.value)}
           className="border rounded p-2"
         />
 
@@ -60,12 +60,8 @@ export const GetModal = ({ onClose }) => {
 
         {mensaje && mensaje.data && mensaje.data.length > 0 && (
         <div className="bg-gray-100 p-3 rounded mt-2 text-sm">
-            <p><strong>id_factura:</strong> {mensaje.data[0].id_factura}</p>
-            <p><strong>id_cliente:</strong> {mensaje.data[0].id_cliente}</p>
-            <p><strong>id_empleado:</strong> {mensaje.data[0].id_empleado}</p>
-            <p><strong>fecha_factura:</strong> {mensaje.data[0].fecha_factura}</p>
-            <p><strong>estado_factura:</strong> {mensaje.data[0].estado_factura}</p>
-            <p><strong>total:</strong> {mensaje.data[0].total}</p>
+            <p><strong>ID:</strong> {mensaje.data[0].id_categoria}</p>
+            <p><strong>Nombre:</strong> {mensaje.data[0].nombre_categoria}</p>
         </div>
         )}
       </div>

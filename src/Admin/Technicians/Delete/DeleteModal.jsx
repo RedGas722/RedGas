@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const URL = 'http://localhost:10101/ClienteDelete';
+const URL = 'http://localhost:10101/TecnicoDelete';
 
 export const DeleteModal = ({ onClose }) => {
   const [correo, setCorreo] = useState('');
@@ -8,18 +8,26 @@ export const DeleteModal = ({ onClose }) => {
 
   const handleDelete = async (e) => {
     e.preventDefault();
+
+    if (!correo.trim()) {
+      setMensaje('Por favor, ingrese un correo válido.');
+      return;
+    }
+
     try {
       console.log('Eliminando...');
-      const res = await fetch(`${URL}?correo_cliente=${encodeURIComponent(correo)}`, {
+      const res = await fetch(`${URL}?correo_tecnico=${encodeURIComponent(correo)}`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
       });
-      
 
-      if (!res.ok) throw new Error('Credenciales inválidas');
-      const data = await res.json();
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.message || 'Error desconocido del servidor');
+      }
+
+      await res.json(); // Procesa la respuesta sin asignarla a una variable innecesaria.
       setMensaje('Eliminación exitosa');
-      console.log('Completado!');
     } catch (err) {
       setMensaje('Error al eliminar: ' + err.message);
     }
@@ -38,11 +46,11 @@ export const DeleteModal = ({ onClose }) => {
           onClick={onClose}
         >✕</button>
 
-        <h2 className="text-xl font-bold text-center">Eliminación de cliente</h2>
+        <h2 className="text-xl font-bold text-center">Eliminación de Tecnico</h2>
 
         <input
-          type="email"
-          placeholder="Email Cliente..."
+          type="text"
+          placeholder="Correo Tecnico..."
           value={correo}
           onChange={(e) => setCorreo(e.target.value)}
           className="border rounded p-2"

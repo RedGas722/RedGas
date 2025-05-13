@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 
-const URL = 'http://localhost:10101/ClienteDelete';
+const URL = 'http://localhost:10101/CategoriaDelete';
 
 export const DeleteModal = ({ onClose }) => {
-  const [correo, setCorreo] = useState('');
+  const [nombre, setNombre] = useState('');
   const [mensaje, setMensaje] = useState('');
 
   const handleDelete = async (e) => {
     e.preventDefault();
     try {
       console.log('Eliminando...');
-      const res = await fetch(`${URL}?correo_cliente=${encodeURIComponent(correo)}`, {
+      const res = await fetch(`${URL}?nombre_categoria=${encodeURIComponent(nombre)}`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
       });
@@ -26,7 +26,7 @@ export const DeleteModal = ({ onClose }) => {
   };
 
   const handleCancel = () => {
-    setCorreo('');
+    setNombre('');
     setMensaje('');
   };
 
@@ -38,13 +38,13 @@ export const DeleteModal = ({ onClose }) => {
           onClick={onClose}
         >✕</button>
 
-        <h2 className="text-xl font-bold text-center">Eliminación de cliente</h2>
+        <h2 className="text-xl font-bold text-center">Eliminación de categoria</h2>
 
         <input
-          type="email"
-          placeholder="Email Cliente..."
-          value={correo}
-          onChange={(e) => setCorreo(e.target.value)}
+          type="text"
+          placeholder="Nombre de categoria"
+          value={nombre}
+          onChange={(e) => setNombre(e.target.value)}
           className="border rounded p-2"
         />
 
