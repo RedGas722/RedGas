@@ -7,7 +7,6 @@ export const AdminApp = () => {
         <div className="Admin p-[2%_0_2%_1%] w-dvw h-dvh flex flex-row bg-[var(--background-color)] items-center justify-center">
             <section id="sideBarr" className="h-full gap-[20px] justify-center flex flex-col w-[20%] NeoContainer_inset_TL">
                 <ButtonSide to='/Admin/Technicians' children='Técnicos' />
-                <ButtonSide to='/Admin/TechniciansBack' children='Técnicos Back' />
                 <ButtonSide to='/Admin/Clients' children='Clientes' />
                 <ButtonSide to='/Admin/Employees' children='Empleados' />
                 <ButtonSide to='/Admin/Products' children='Productos' />

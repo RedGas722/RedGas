@@ -9,9 +9,8 @@ import { ForgotPassword } from './Pages/ForgotPassword/ForgotPassword'
 import { RecoveryPassword } from './Pages/RecoveryPassword/RecoveryPassword'
 // -Import Admin-
 import { AdminApp } from './Admin/AdminApp'
-// import { Technicians } from './Admin/Technicians/Technicians'
+// -Imports Backs-
 import { ClientsBack } from './Admin/Clients/ClientsBack'
-// import { Products } from './Admin/Products/Products'
 import { ProductBack } from './Admin/Products/ProductBack'
 import { EmployeesBack } from './Admin/Employees/EmployeesBack'
 import { FacturesBack } from './Admin/Factures/FacturesBack'
