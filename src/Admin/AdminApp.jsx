@@ -13,6 +13,7 @@ export const AdminApp = () => {
                 <ButtonSide to='/Admin/Products' children='Productos' />
                 <ButtonSide to='/Admin/Factures' children='Facturas' />
                 <ButtonSide to='/Admin/Categories' children='Categorias' />
+                <ButtonSide to='/Admin/Services' children='Services' />
             </section>
             <section className="SectionSIde w-[80%] h-full">
                 <Outlet />

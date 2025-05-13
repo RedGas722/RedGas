@@ -1,32 +1,30 @@
 import React, { useState } from 'react';
 
-const URL = 'http://localhost:10101/ProductoDelete';
+const URL = 'http://localhost:10101/ServicioDelete';
 
 export const DeleteModal = ({ onClose }) => {
-  const [nombre, setNombre] = useState('');
+  const [nombreServicio, setNombreServicio] = useState('');
   const [mensaje, setMensaje] = useState('');
 
   const handleDelete = async (e) => {
     e.preventDefault();
     try {
       console.log('Eliminando...');
-      const res = await fetch(`${URL}?nombre_producto=${encodeURIComponent(nombre)}`, {
+      const res = await fetch(`${URL}?nombre_servicio=${encodeURIComponent(nombreServicio)}`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
       });
-      
 
-      if (!res.ok) throw new Error('Credenciales inválidas');
+      if (!res.ok) throw new Error('Error al eliminar el servicio');
       await res.json();
       setMensaje('Eliminación exitosa');
-      console.log('Completado!');
     } catch (err) {
       setMensaje('Error al eliminar: ' + err.message);
     }
   };
 
   const handleCancel = () => {
-    setNombre('');
+    setNombreServicio('');
     setMensaje('');
   };
 
@@ -38,13 +36,13 @@ export const DeleteModal = ({ onClose }) => {
           onClick={onClose}
         >✕</button>
 
-        <h2 className="text-xl font-bold text-center">Eliminación de producto</h2>
+        <h2 className="text-xl font-bold text-center">Eliminación de servicio</h2>
 
         <input
           type="text"
-          placeholder="Nombre Producto..."
-          value={nombre}
-          onChange={(e) => setNombre(e.target.value)}
+          placeholder="Nombre del Servicio..."
+          value={nombreServicio}
+          onChange={(e) => setNombreServicio(e.target.value)}
           className="border rounded p-2"
         />
 

@@ -28,7 +28,7 @@ export const RegisterModal = ({ onClose }) => {
         });
 
         if (!res.ok) throw new Error('Credenciales inválidas');
-        const data = await res.json();
+        await res.json();
         setMensaje('registro exitoso.');
         console.log('Completado!');
      } catch (err) {
