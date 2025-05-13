@@ -1,40 +1,43 @@
 import React, { useState } from 'react';
 
-export const RegisterModal = ({ onClose }) => {
+export const UpdateModal = ({ onClose }) => {
     const [nombre, setNombre] = useState('');
+    const [nuevoCorreo, setNuevoCorreo] = useState('');
     const [correo, setCorreo] = useState('');
     const [telefono, setTelefono] = useState('');
     const [contrasena, setContrasena] = useState('');
     const [mensaje, setMensaje] = useState('');
 
-    const URL = 'http://localhost:10101/AdminRegister';
+    const URL = 'http://localhost:10101/AdminUpdate';
 
-    const handleRegister = async (e) => {
+    const handleUpdate = async (e) => {
         e.preventDefault();
         try {
-            console.log('Registrando administrador...');
+            console.log('Actualizando administrador...');
 
             const res = await fetch(URL, {
-                method: 'POST',
+                method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ 
                     nombre_admin: nombre,
-                    correo_admin: correo,
+                    new_correo_admin: nuevoCorreo,
                     telefono_admin: telefono,
-                    contraseña_admin: contrasena
+                    contraseña_admin: contrasena,
+                    correo_admin: correo
                 }),
             });
 
-            if (!res.ok) throw new Error('Error en el registro');
+            if (!res.ok) throw new Error('Error al actualizar el administrador');
             await res.json();
-            setMensaje('Registro exitoso.');
+            setMensaje('Actualización exitosa.');
         } catch (err) {
-            setMensaje('Error al registrar: ' + err.message);
+            setMensaje('Error al actualizar: ' + err.message);
         }
     };
 
     const handleCancel = () => {
         setNombre('');
+        setNuevoCorreo('');
         setCorreo('');
         setTelefono('');
         setContrasena('');
@@ -49,20 +52,29 @@ export const RegisterModal = ({ onClose }) => {
                     onClick={onClose}
                 >✕</button>
 
-                <h2 className="text-xl font-bold text-center">Registrar Administrador</h2>
+                <h2 className="text-xl font-bold text-center">Actualizar Administrador</h2>
+                
+                    <input
+                    type="email"
+                    placeholder="Correo actual"
+                    value={correo}
+                    onChange={(e) => setCorreo(e.target.value)}
+                    className="border rounded p-2"
+                />
 
                 <input
                     type="text"
-                    placeholder="Nombre"
+                    placeholder="Nombre del administrador"
                     value={nombre}
                     onChange={(e) => setNombre(e.target.value)}
                     className="border rounded p-2"
                 />
+            
                 <input
                     type="email"
-                    placeholder="Correo"
-                    value={correo}
-                    onChange={(e) => setCorreo(e.target.value)}
+                    placeholder="Nuevo correo"
+                    value={nuevoCorreo}
+                    onChange={(e) => setNuevoCorreo(e.target.value)}
                     className="border rounded p-2"
                 />
                 <input
@@ -86,9 +98,9 @@ export const RegisterModal = ({ onClose }) => {
                         className="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded"
                     >Cancelar</button>
                     <button
-                        onClick={handleRegister}
-                        className="bg-green-500 hover:bg-red-600 text-white px-4 py-2 rounded"
-                    >Registrar</button>
+                        onClick={handleUpdate}
+                        className="bg-yellow-500 hover:bg-red-600 text-white px-4 py-2 rounded"
+                    >Actualizar</button>
                 </div>
 
                 {mensaje && (<p className="text-center text-green-600 font-semibold">{mensaje}</p>)}

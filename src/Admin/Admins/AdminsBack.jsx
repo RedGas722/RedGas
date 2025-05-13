@@ -1,13 +1,10 @@
-// Delete.jsx
 import React, { useState } from 'react';
 import { RegisterModal } from './Register/RegisterModal';
 import { GetModal } from './Get/GetModal';
 import { DeleteModal } from './Delete/DeleteModal';
 import { UpdateModal } from './Update/UpdateModal';
 
-
-export const TechniciansBack = () => {
-
+export const AdminsBack= () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showGetModal, setShowGetModal] = useState(false);
   const [showRegisterModal, setShowRegisterModal] = useState(false);
@@ -15,7 +12,7 @@ export const TechniciansBack = () => {
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-100 gap-4">
-      <h1>Tecnico BACK-OFFICE</h1>
+      <h1>Administrador BACK-OFFICE</h1>
       <button
         onClick={() => setShowRegisterModal(true)}
         className="bg-green-500 text-white px-4 py-2 rounded"
