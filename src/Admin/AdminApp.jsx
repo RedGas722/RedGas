@@ -12,6 +12,7 @@ export const AdminApp = () => {
                 <ButtonSide to='/Admin/Employees' children='Empleados' />
                 <ButtonSide to='/Admin/Products' children='Productos' />
                 <ButtonSide to='/Admin/Factures' children='Facturas' />
+                <ButtonSide to='/Admin/Categories' children='Categorias' />
             </section>
             <section className="SectionSIde w-[80%] h-full">
                 <Outlet />

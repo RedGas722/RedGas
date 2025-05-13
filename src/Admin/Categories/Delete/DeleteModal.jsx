@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const URL = 'http://localhost:10101/ProductoDelete';
+const URL = 'http://localhost:10101/CategoriaDelete';
 
 export const DeleteModal = ({ onClose }) => {
   const [nombre, setNombre] = useState('');
@@ -10,7 +10,7 @@ export const DeleteModal = ({ onClose }) => {
     e.preventDefault();
     try {
       console.log('Eliminando...');
-      const res = await fetch(`${URL}?nombre_producto=${encodeURIComponent(nombre)}`, {
+      const res = await fetch(`${URL}?nombre_categoria=${encodeURIComponent(nombre)}`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
       });
@@ -38,11 +38,11 @@ export const DeleteModal = ({ onClose }) => {
           onClick={onClose}
         >✕</button>
 
-        <h2 className="text-xl font-bold text-center">Eliminación de producto</h2>
+        <h2 className="text-xl font-bold text-center">Eliminación de categoria</h2>
 
         <input
           type="text"
-          placeholder="Nombre Producto..."
+          placeholder="Nombre de categoria"
           value={nombre}
           onChange={(e) => setNombre(e.target.value)}
           className="border rounded p-2"

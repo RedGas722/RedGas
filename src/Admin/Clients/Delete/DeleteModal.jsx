@@ -41,7 +41,7 @@ export const DeleteModal = ({ onClose }) => {
         <h2 className="text-xl font-bold text-center">Eliminación de cliente</h2>
 
         <input
-          type="text"
+          type="email"
           placeholder="Email Cliente..."
           value={correo}
           onChange={(e) => setCorreo(e.target.value)}
