@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { Circles } from "../../Animations/ColorCircles/Circles"
+import { AnimatedDots } from "../../Animations/AnimatedDots/AnimatedDots"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons"
 import { Buttons } from "../../UI/Login_Register/Buttons"
@@ -17,6 +18,7 @@ export const RecoveryPassword = () => {
 
     return (
         <section className="w-full gap-[40px] h-dvh flex justify-center items-center">
+            <AnimatedDots />
             <Circles styleC1="right-[50%] bottom-[0px]" styleC2="left-[54%] top-[120px]" styleC3="top-[400px] left-[80px]" />
             <div className="divForm shadow_box_RL bg-glass-total rounded-3xl flex flex-col w-fit items-center justify-self-center gap-[40px]">
                 <h1 className="text-center text-white text-4xl">¡Recuperación Contraseña!</h1>

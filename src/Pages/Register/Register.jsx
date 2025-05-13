@@ -5,6 +5,7 @@ import { HeadLR } from '../../UI/Login_Register/HeadLR/HeadLR'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons"
 import { Circles } from "../../Animations/ColorCircles/Circles"
+import { AnimatedDots } from "../../Animations/AnimatedDots/AnimatedDots"
 import "./Register.css"
 import { useNavigate } from "react-router-dom";
 
@@ -60,6 +61,7 @@ export const Register = () => {
     return (
         <div className="sectionRegister w-full gap-[40px] h-dvh ">
             <HeadLR />
+            <AnimatedDots />
             <Circles styleC1="left-[50%] bottom-[0px]" styleC2="right-[54%] top-[120px]" styleC3="top-[400px] right-[80px]" />
             <div className="divForm shadow_box_RL bg-glass-total rounded-3xl flex flex-col items-center w-fit justify-self-center gap-[40px]">
                 <h1 className="text-center text-white text-4xl">¡Bienvenido!</h1>

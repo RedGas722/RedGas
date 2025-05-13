@@ -2,7 +2,7 @@
 
 * {
   margin: 0;
-  padding: 0;
+  /* padding: 0; */
   box-sizing: border-box;
 }
 
@@ -29,10 +29,8 @@
   --Bacground-body: #001746;
   /* Body-color-end----------------- Font-Nav*/
   --Font-Nav: #FDBC50;
-}
-
-#root {
-  padding: 0 80px 40px 80px;
+  /* ADMIN */
+  --background-color: #dedede;
 }
 
 body {
@@ -93,10 +91,29 @@ body {
     transform: translate(-50%, 0%);
     z-index: 1000;
   }
-}
 
-@media screen and (max-width: 768px) {
-  #root {
-    padding: 0 20px 20px 20px;
+  /* ADMIN */
+  .NeoContainer_inset_TL {
+    background: var(--background-color);
+    border-radius: 20px;
+    box-shadow: inset -9.91px -9.91px 15px #CACACA, inset 9.91px 9.91px 15px #F2F2F2;
+  }
+
+  .NeoContainer_outset_TL {
+    background: var(--background-color);
+    border-radius: 20px;
+    box-shadow: 9.91px 9.91px 15px #CACACA, -9.91px -9.91px 15px #F2F2F2;
+  }
+
+  .NeoContainer_outset_BR {
+    background: var(--background-color);
+    border-radius: 20px;
+    box-shadow: -9.91px -9.91px 15px #CACACA, 9.91px 9.91px 15px #F2F2F2;
+  }
+
+  .NeoContainer_inset_BR {
+    background: var(--background-color);
+    border-radius: 20px;
+    box-shadow: inset 9.91px 9.91px 15px #CACACA, -9.91px -9.91px 15px #F2F2F2;
   }
 }

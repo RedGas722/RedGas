@@ -1,0 +1,19 @@
+.Points {
+    -webkit-text-stroke: .5px black;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.Info {
+    padding: 10px 25px 10px 0;
+}
+
+.BTN {
+    padding: 5px 20px;
+    transition: all .3s ease;
+}
+
+.BTN:active {
+    background: var(--background-color);
+    border-radius: 20px;
+    box-shadow: inset -9.91px -9.91px 15px #CACACA, inset 9.91px 9.91px 15px #F2F2F2;
+}
