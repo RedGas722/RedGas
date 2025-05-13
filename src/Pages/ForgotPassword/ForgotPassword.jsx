@@ -5,7 +5,7 @@ import emailjs from '@emailjs/browser'
 import { useState } from "react"
 import './ForgotPassword.css'
 
-const URL = 'http://localhost:10101/ClienteEmail'
+// const URL = 'http://localhost:10101/ClienteEmail'
 
 export const ForgotPassword = () => {
 
@@ -17,7 +17,7 @@ export const ForgotPassword = () => {
 
         const serviceId = 'service_82gyxy6'
         const templateId = 'template_fwkby0l'
-        const publicKey = 'CHG9oYaCrFayF0g8y'
+        const publicKey = 'SHHYhi-xHJeCovrBP'
 
         try {
             const res = await fetch(URL, {
@@ -26,31 +26,26 @@ export const ForgotPassword = () => {
                 body: JSON.stringify({ correo_cliente: correo }),
             });
 
-            const data = await res.json();
+        const data = await res.json();
 
-            const templateParams = {
-                to_email: data.correo,
-                company: 'RED-GAS',
-                user: data.name || 'Usuario',
-                message: 'Hemos recibido su solicitud de cambio de contraseña, haga click en el siguiente enlace:',
-                link: 'http://localhost:5173/Login/ForgotPassword/Recovery/' + data.token,
-            }
+        const templateParams = {
+            to_email: data.correo,
+            company: 'RED-GAS',
+            user: data.name || 'Usuario',
+            message: 'Hemos recibido su solicitud de cambio de contraseña, haga click en el siguiente enlace:',
+            link: 'http://localhost:5173/Login/ForgotPassword/Recovery/',
+        }
 
-            emailjs.send(serviceId, templateId, templateParams, publicKey)
-                .then((result) => {
-                    console.log('Correo enviado exitosamente', response.status, response.text);
-                    
-                    let status = result.status
+        emailjs.send(serviceId, templateId, templateParams, publicKey)
+            .then((result) => {
+                console.log('Correo enviado exitosamente', result.status, result.text);
 
-                    setMensaje('Correo de recuperación enviado')
-
-                    alertSendForm(status, mensaje)
-                })  
-                .catch((error) => {
-                    console.log('Error al enviar el correo', error.text);
-                    setMensaje('Error al enviar el correo')
-                    alertSendForm(400, mensaje); 
-                });
+                alertSendForm(result.status, 'Correo de recuperación enviado');
+            })
+            .catch((error) => {
+                console.log('Error al enviar el correo', error.text);
+                alertSendForm(400, 'Error al enviar el correo');
+            });
 
         } catch (err) {
             setMensaje('El correo no esta registrador')
@@ -75,7 +70,7 @@ export const ForgotPassword = () => {
 
         setTimeout(() => {
             alert.style.display = 'none'
-        }, 3000);
+        }, 4000);
 
     }
     return (
