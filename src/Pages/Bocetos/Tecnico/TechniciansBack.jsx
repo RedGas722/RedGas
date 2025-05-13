@@ -7,25 +7,26 @@ import { GetModal } from './Get/GetModal'
 
 
 export const TechniciansBack = () => {
-//   const [showDeleteModal, setShowDeleteModal] = useState(false)
+  //   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [showGetModal, setShowGetModal] = useState(false)
   const [showRegisterModal, setShowRegisterModal] = useState(false)
-//   const [showUpdateModal, setShowUpdateModal] = useState(false)
+  //   const [showUpdateModal, setShowUpdateModal] = useState(false)
 
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
-      <h1>Tecnico BACK-OFFICE</h1>
-      <button
-        onClick={() => setShowRegisterModal(true)}
-        className="bg-green-500 text-white px-4 py-2 rounded"
-      >Registrar</button>
-
-      <button
-        onClick={() => setShowGetModal(true)}
-        className="bg-blue-500 text-white px-4 py-2 rounded"
-      >Consultar</button>
-{/* 
+    <div className="p-[20px_0_0_20px] flex items-start gap-[20px] justify-start h-screen">
+      <div className='flex items-center gap-[20px] justify-center'>
+        <h1 className='font-bold text-[20px]'>Técnicos: Regitro / Consulta</h1>
+        <button
+          onClick={() => setShowRegisterModal(true)}
+          className="BTN NeoContainer_outset_BR text-green-500"
+        >Registrar</button>
+        <button
+          onClick={() => setShowGetModal(true)}
+          className="BTN NeoContainer_outset_BR text-red-500"
+        >Consultar</button>
+      </div>
+      {/* 
       <button
         onClick={() => setShowUpdateModal(true)}
         className="bg-yellow-500 text-white px-4 py-2 rounded"
@@ -38,7 +39,7 @@ export const TechniciansBack = () => {
 
       {showRegisterModal && (
         <RegisterModal onClose={() => setShowRegisterModal(false)} />
-      )}  
+      )}
 
       {showGetModal && (
         <GetModal onClose={() => setShowGetModal(false)} />

@@ -14,31 +14,33 @@ export const ProductBack = () => {
 
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen gap-4">
-      <h1>Producto BACK-OFFICE</h1>
-      <button
-        onClick={() => setShowRegisterModal(true)}
-        className="bg-green-500 text-white px-4 py-2 rounded"
-      >Registrar</button>
+    <div className="p-[20px_0_0_20px] flex items-start gap-[20px] justify-start h-screen">
+      <div className='flex items-center gap-[20px] justify-center'>
+        <h1 className='font-bold text-[20px]'>Producto BACK-OFFICE</h1>
+        <button
+          onClick={() => setShowRegisterModal(true)}
+          className="BTN NeoContainer_outset_BR text-green-500"
+        >Registrar</button>
 
-      <button
-        onClick={() => setShowGetModal(true)}
-        className="bg-blue-500 text-white px-4 py-2 rounded"
-      >Consultar</button>
+        <button
+          onClick={() => setShowGetModal(true)}
+          className="BTN NeoContainer_outset_BR text-blue-500"
+        >Consultar</button>
 
-      <button
-        onClick={() => setShowUpdateModal(true)}
-        className="bg-yellow-500 text-white px-4 py-2 rounded"
-      >Actualizar</button>
+        <button
+          onClick={() => setShowUpdateModal(true)}
+          className="BTN NeoContainer_outset_BR text-yellow-500"
+        >Actualizar</button>
 
-      <button
-        onClick={() => setShowDeleteModal(true)}
-        className="bg-red-500 text-white px-4 py-2 rounded"
-      >Eliminar</button>
+        <button
+          onClick={() => setShowDeleteModal(true)}
+          className="BTN NeoContainer_outset_BR text-red-500"
+        >Eliminar</button>
+      </div>
 
       {showRegisterModal && (
         <RegisterModal onClose={() => setShowRegisterModal(false)} />
-      )}  
+      )}
 
       {showGetModal && (
         <GetModal onClose={() => setShowGetModal(false)} />

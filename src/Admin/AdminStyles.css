@@ -1,6 +1,9 @@
-.Admin{
-    padding: 0 0 0 1%;
-}
+/* .Admin{
+    padding: 2% 0 2% 1%;
+} */
 .SectionSIde{
     overflow-y: scroll;
+}
+#sideBarr{
+    padding: 0 30px;
 }
