@@ -1,6 +1,7 @@
 import { Circles } from '../../Animations/ColorCircles/Circles'
 import { HeadLR } from '../../UI/Login_Register/HeadLR/HeadLR'
 import { Buttons } from '../../UI/Login_Register/Buttons'
+import { Link } from "react-router-dom"
 import { jwtDecode } from 'jwt-decode'
 import emailjs from '@emailjs/browser'
 import { useState } from "react"
@@ -53,7 +54,7 @@ export const ForgotPassword = () => {
                         console.log('Error al enviar el correo', error.text);
                         alertSendForm(400, 'Error al enviar el correo');
                     });
-            }else {
+            } else {
                 alertSendForm(410, 'Error al enviar el correo');
             }
 
@@ -88,22 +89,31 @@ export const ForgotPassword = () => {
             <HeadLR />
             <Circles styleC1="left-[54%] top-[100px]" styleC2="right-[58%] bottom-[120px]" styleC3="top-[50px] left-[80px]" />
             <div id='divAlert'></div>
-            <div className="divForm shadow_box_RL bg-glass-total rounded-3xl flex flex-col justify-self-center items-center h-fit w-fit gap-[40px]">
+            <div className=" form shadow_box_RL bg-glass-total rounded-3xl flex flex-col justify-self-center items-center h-fit w-fit gap-[30px]">
                 <h1 className="text-center text-white text-4xl">¡Recuperar contraseña!</h1>
-                <form className="flex flex-col gap-[15px] justify-center items-center text-start w-full" onSubmit={handleForgotPassword} >
+                <form className=" flex flex-col gap-[35px] justify-center items-center text-start w-full" onSubmit={handleForgotPassword} >
                     {/* E-mail */}
-                    <label htmlFor="Email" className="text-white text-2xl w-full">
-                        Correo electrónico
-                    </label>
-                    <input
-                        type="email"
-                        placeholder="example@gmail.com"
-                        id="Email"
-                        className="border-t-0 border-b-[1px] w-full placeholder:text-gray-400 text-gray-200 border-gray-300 outline-0"
-                        onChange={e => setCorreo(e.target.value)}
-                        required
-                    />
-                    <Buttons type='submit' nameButton="Enviar" />
+                    <div className='flex flex-col gap-[10px] justify-center items-center text-start w-full'>
+                        <label htmlFor="Email" className="text-white text-2xl w-full">
+                            Correo electrónico
+                        </label>
+                        <input
+                            type="email"
+                            placeholder="example@gmail.com"
+                            id="Email"
+                            className="border-t-0 border-b-[1px] w-full placeholder:text-gray-400 text-gray-200 border-gray-300 outline-0"
+                            onChange={e => setCorreo(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div className='flex flex-col gap-[10px] justify-center items-center text-start w-full'>
+                        <Buttons type='submit' nameButton="Enviar" />
+                        <Link to="/Login/">
+                            <button className="cursor-pointer text-[#18BBFC]">
+                                <p>¿Quieres volver al Login?</p>
+                            </button>
+                        </Link>
+                    </div>
                 </form>
                 <div className="text-white text-2xl w-full text-center">
                 </div>
