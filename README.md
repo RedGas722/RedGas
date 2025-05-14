@@ -4,3 +4,4 @@ npm install @fortawesome/react-fontawesome @fortawesome/free-solid-svg-icons @fo
 npm install swiper
 npm install react-router-dom
 npm install tailwindcss @tailwindcss/vite
+npm install jwt-decode

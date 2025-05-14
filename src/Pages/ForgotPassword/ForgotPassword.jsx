@@ -1,6 +1,7 @@
 import { Circles } from '../../Animations/ColorCircles/Circles'
 import { HeadLR } from '../../UI/Login_Register/HeadLR/HeadLR'
 import { Buttons } from '../../UI/Login_Register/Buttons'
+import { jwtDecode } from 'jwt-decode'
 import emailjs from '@emailjs/browser'
 import { useState } from "react"
 import './ForgotPassword.css'
@@ -26,31 +27,39 @@ export const ForgotPassword = () => {
                 body: JSON.stringify({ correo_cliente: correo }),
             });
 
-        const data = await res.json();
-            console.log(data);
-            
-        const templateParams = {
-            to_email: correo,
-            company: 'RED-GAS',
-            user: data.name || 'Usuario',
-            message: 'Hemos recibido su solicitud de cambio de contraseña, haga click en el siguiente enlace:',
-            link: `http://localhost:5173/Login/ForgotPassword/Recovery/${data.token}`,
-        }
+            const data = await res.json()
+            const token = data.token
 
-        emailjs.send(serviceId, templateId, templateParams, publicKey)
-            .then((result) => {
-                console.log('Correo enviado exitosamente', result.status, result.text);
+            if (token) {
+                const decoded = jwtDecode(token)
+                const user = decoded.name
 
-                alertSendForm(result.status, 'Correo de recuperación enviado');
-            })
-            .catch((error) => {
-                console.log('Error al enviar el correo', error.text);
-                alertSendForm(400, 'Error al enviar el correo');
-            });
+                console.log('Nombre:', user)
+
+                const templateParams = {
+                    to_email: correo,
+                    company: 'RED-GAS',
+                    user: user || 'Usuario',
+                    message: 'Hemos recibido su solicitud de cambio de contraseña, haga click en el siguiente enlace:',
+                    link: `http://localhost:5173/Login/ForgotPassword/Recovery/${token}`,
+                }
+
+                emailjs.send(serviceId, templateId, templateParams, publicKey)
+                    .then((result) => {
+                        console.log('Correo enviado exitosamente', result.status, result.text);
+
+                        alertSendForm(result.status, 'Correo de recuperación enviado');
+                    })
+                    .catch((error) => {
+                        console.log('Error al enviar el correo', error.text);
+                        alertSendForm(400, 'Error al enviar el correo');
+                    });
+            }else {
+                alertSendForm(410, 'Error al enviar el correo');
+            }
 
         } catch (err) {
-            setMensaje('El correo no esta registrador')
-            alertSendForm(400, mensaje); 
+            alertSendForm(400, 'El correo no esta registrador');
         }
 
 
