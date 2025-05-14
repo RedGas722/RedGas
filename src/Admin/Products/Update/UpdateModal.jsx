@@ -213,9 +213,13 @@ export const UpdateModal = ({ onClose }) => {
             />
             {errores.stock && <p className="text-red-600 text-sm">{errores.stock}</p>}
             {imagenActual && (
-              <div className="mt-2">
+              <div className="mt-2 flex flex-col items-center">
                 <p>Imagen Actual:</p>
-                <img src={imagenActual} alt="Producto" className="w-full h-auto rounded shadow mt-2" />
+                <img
+                  src={imagenActual}
+                  alt="Producto"
+                  className="w-[200px] h-[200px] object-cover rounded shadow mt-2"
+                />
               </div>
             )}
             <label className="mt-2">Seleccionar Nueva Imagen:</label>
