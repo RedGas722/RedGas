@@ -76,12 +76,12 @@ export const RegisterModal = ({ onClose }) => {
                 >✕</button>
 
                 <h2 className="text-xl font-bold text-center">Registrar Tecnico</h2>
-                <Inputs type='1' Place='Nombre del Tecnico' Value={nombre} onChange={(e) => setNombre(e.target.value)} />
-                <Inputs type='1' Place='Apellido del Tecnico' Value={apellido} onChange={(e) => setApellido(e.target.value)} />
-                <Inputs type='2' Place='Correo del Tecnico' Value={correo} onChange={(e) => setCorreo(e.target.value)} />
-                <Inputs type='6' Place='Telefono del Tecnico' Value={telefono} onChange={(e) => setTelefono(e.target.value)} />
-                <Inputs type='3' Place='Contraseña del Tecnico' Value={contrasena} onChange={(e) => setContrasena(e.target.value)} />
-                <Inputs type='4' Place='Imagen del Tecnico' Value={imagen} onChange={handleImageChange} />
+                <Inputs Type='1' Place='Nombre del Tecnico' Value={nombre} onChange={(e) => setNombre(e.target.value)} />
+                <Inputs Type='1' Place='Apellido del Tecnico' Value={apellido} onChange={(e) => setApellido(e.target.value)} />
+                <Inputs Type='2' Place='Correo del Tecnico' Value={correo} onChange={(e) => setCorreo(e.target.value)} />
+                <Inputs Type='6' Place='Telefono del Tecnico' Value={telefono} onChange={(e) => setTelefono(e.target.value)} />
+                <Inputs Type='3' Place='Contraseña del Tecnico' Value={contrasena} onChange={(e) => setContrasena(e.target.value)} />
+                <Inputs Type='4' Place='Imagen del Tecnico' Value={imagen} onChange={handleImageChange} />
                 
                 <div className="flex justify-between gap-2">
                     <button

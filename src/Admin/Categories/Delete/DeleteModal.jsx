@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Inputs } from '../../UI/Inputs/Inputs'
 
 const URL = 'http://localhost:10101/CategoriaDelete';
 
@@ -39,14 +40,7 @@ export const DeleteModal = ({ onClose }) => {
         >✕</button>
 
         <h2 className="text-xl font-bold text-center">Eliminación de categoria</h2>
-
-        <input
-          type="text"
-          placeholder="Nombre de categoria"
-          value={nombre}
-          onChange={(e) => setNombre(e.target.value)}
-          className="border rounded p-2"
-        />
+        <Inputs Type='1' Place='Nombre de la categoria' Value={nombre} onChange={(e) => setNombre(e.target.value)} />
 
         <div className="flex justify-between gap-2">
           <button

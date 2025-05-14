@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Inputs } from '../../UI/Inputs/Inputs'
 
 export const GetModal = ({ onClose }) => {
   const [IDfactura, setIDfactura] = useState('');
@@ -37,15 +38,8 @@ export const GetModal = ({ onClose }) => {
           onClick={onClose}
         >✕</button>
 
-        <h2 className="text-xl font-bold text-center">Consultar Cliente</h2>
-
-        <input
-          type="number"
-          placeholder="ID de la factura"
-          value={IDfactura}
-          onChange={(e) => setIDfactura(e.target.value)}
-          className="border rounded p-2"
-        />
+        <h2 className="text-xl font-bold text-center">Consultar Factura</h2>
+        <Inputs Type='5' Place='ID de la factura' Value={IDfactura} onChange={(e) => setIDfactura(e.target.value)} />
 
         <div className="flex justify-between gap-2">
           <button

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Inputs } from '../../UI/Inputs/Inputs'
 
 export const UpdateModal = ({ onClose }) => {
 
@@ -44,21 +45,8 @@ export const UpdateModal = ({ onClose }) => {
                 >✕</button>
 
                 <h2 className="text-xl font-bold text-center">Actualizar Categoria</h2>
-
-                <input
-                    type="text"
-                    placeholder="Nombre de la categoria a cambiar"
-                    value={nombre}
-                    onChange={(e) => setNombre(e.target.value)}
-                    className="border rounded p-2"
-                />
-                <input
-                    type="text"
-                    placeholder="Nuevo Nombre"
-                    value={nuevoNombre}
-                    onChange={(e) => setNuevoNombre(e.target.value)}
-                    className="border rounded p-2"
-                />
+                <Inputs Type='1' Place='Nombre de la categoria' Value={nombre} onChange={(e) => setNombre(e.target.value)} />
+                <Inputs Type='1' Place='Nuevo Nombre del Producto' Value={nuevoNombre} onChange={(e) => setNuevoNombre(e.target.value)} />
 
                 <div className="flex justify-between gap-2">
                     <button

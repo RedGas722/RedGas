@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Inputs } from '../../UI/Inputs/Inputs'
 
 export const RegisterModal = ({ onClose }) => {
     const [IDcliente, setIDcliente] = useState('');
@@ -46,29 +47,10 @@ export const RegisterModal = ({ onClose }) => {
           onClick={onClose}
         >✕</button>
 
-        <h2 className="text-xl font-bold text-center">Registrar Empleado</h2>
-
-        <input
-          type="number"
-          placeholder="Id del cliente"
-          value={IDcliente}
-          onChange={(e) => setIDcliente(e.target.value)}
-          className="border rounded p-2"
-        />
-        <input
-          type="number"
-          placeholder="Id del empleado"
-          value={IDempleado}
-          onChange={(e) => setIDempleado(e.target.value)}
-          className="border rounded p-2"
-        />
-        <input
-          type="date"
-          placeholder="fecha de la factura"
-          value={fecha}
-          onChange={(e) => setFecha(e.target.value)}
-          className="border rounded p-2"
-        />
+        <h2 className="text-xl font-bold text-center">Registrar Factura</h2>
+        <Inputs Type='5' Place='ID del cliente' Value={IDcliente} onChange={(e) => setIDcliente(e.target.value)} />
+        <Inputs Type='5' Place='ID del empleado' Value={IDempleado} onChange={(e) => setIDempleado(e.target.value)} />
+        <Inputs Type='7' Place='Fecha de la factura' Value={fecha} onChange={(e) => setFecha(e.target.value)} />
 
 <div className="flex justify-between gap-2">
           <button

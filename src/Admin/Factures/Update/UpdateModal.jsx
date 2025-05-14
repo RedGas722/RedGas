@@ -1,9 +1,10 @@
 import { useState } from 'react';
+import { Inputs } from '../../UI/Inputs/Inputs'
 
 export const UpdateModal = ({ onClose }) => {
 
     const [estadoFactura, setEstadoFactura] = useState('inactiva');
-    const [idFactura, setIDfactura] = useState('');
+    const [IDfactura, setIDfactura] = useState('');
     const [mensaje, setMensaje] = useState('');
 
     const URL = 'http://localhost:10101/FacturaUpdate';
@@ -17,7 +18,7 @@ export const UpdateModal = ({ onClose }) => {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    id_factura: idFactura,
+                    id_factura: IDfactura,
                     estado_factura: estadoFactura
                 }),
             });
@@ -45,15 +46,8 @@ export const UpdateModal = ({ onClose }) => {
                     onClick={onClose}
                 >✕</button>
 
-                <h2 className="text-xl font-bold text-center">Actualizar Cliente</h2>
-
-                <input
-                    type="number"
-                    placeholder="id de la factura"
-                    value={idFactura}
-                    onChange={(e) => setIDfactura(e.target.value)}
-                    className="border rounded p-2"
-                />
+                <h2 className="text-xl font-bold text-center">Actualizar Factura</h2>
+                <Inputs Type='5' Place='ID de la factura' Value={IDfactura} onChange={(e) => setIDfactura(e.target.value)} />
 
                 <select
                 value={estadoFactura}

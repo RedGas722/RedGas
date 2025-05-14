@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Inputs } from '../../UI/Inputs/Inputs'
 
 export const RegisterModal = ({ onClose }) => {
   const [nombre, setNombre] = useState('');
@@ -83,58 +84,16 @@ export const RegisterModal = ({ onClose }) => {
         >✕</button>
 
         <h2 className="text-xl font-bold text-center">Registrar Cliente</h2>
-
-        <input
-          type="text"
-          placeholder="Nombre"
-          value={nombre}
-          onChange={(e) => setNombre(e.target.value)}
-          className="border rounded p-2"
-        />
+        <Inputs Type='1' Place='Nombre del Cliente' Value={nombre} onChange={(e) => setNombre(e.target.value)} />
         {errores.nombre && <p className="text-red-600 text-sm">{errores.nombre}</p>}
-
-        <input
-          type="text"
-          placeholder="Apellido"
-          value={apellido}
-          onChange={(e) => setApellido(e.target.value)}
-          className="border rounded p-2"
-        />
+        <Inputs Type='1' Place='Apellido del Cliente' Value={apellido} onChange={(e) => setApellido(e.target.value)} />
         {errores.apellido && <p className="text-red-600 text-sm">{errores.apellido}</p>}
-
-        <input
-          type="email"
-          placeholder="Correo"
-          value={correo}
-          onChange={(e) => setCorreo(e.target.value)}
-          className="border rounded p-2"
-        />
+        <Inputs Type='2' Place='Correo del Cliente' Value={correo} onChange={(e) => setCorreo(e.target.value)} />
         {errores.correo && <p className="text-red-600 text-sm">{errores.correo}</p>}
-
-        <input
-          type="text"
-          placeholder="Telefono"
-          value={telefono}
-          onChange={(e) => setTelefono(e.target.value)}
-          className="border rounded p-2"
-        />
+        <Inputs Type='6' Place='Telefono del Cliente' Value={telefono} onChange={(e) => setTelefono(e.target.value)} />
         {errores.telefono && <p className="text-red-600 text-sm">{errores.telefono}</p>}
-
-        <input
-          type="text"
-          placeholder="Direccion"
-          value={direccion}
-          onChange={(e) => setDireccion(e.target.value)}
-          className="border rounded p-2"
-        />
-
-        <input
-          type="password"
-          placeholder="Contraseña"
-          value={contrasena}
-          onChange={(e) => setContrasena(e.target.value)}
-          className="border rounded p-2"
-        />
+        <Inputs Type='1' Place='Direccion del Cliente' Value={direccion} onChange={(e) => setDireccion(e.target.value)} />
+        <Inputs Type='3' Place='Contraseña del Cliente' Value={contrasena} onChange={(e) => setContrasena(e.target.value)} />
         {errores.contrasena && <p className="text-red-600 text-sm">{errores.contrasena}</p>}
 
         <div className="flex justify-between gap-2">
