@@ -4,6 +4,7 @@ import { Circles } from "../../Animations/ColorCircles/Circles"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons"
 import { Buttons } from "../../UI/Login_Register/Buttons"
+import { useNavigate } from "react-router-dom"
 import './RecoveryPassword.css'
 
 const URL = 'http://localhost:10101/ClienteChangePassword'
@@ -13,7 +14,9 @@ export const RecoveryPassword = () => {
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
-    const { token } = useParams()
+    const {token} = useParams()
+    const navigate = useNavigate()
+    
 
     const handleChangePassword = async (e) => {
         e.preventDefault()
@@ -25,13 +28,14 @@ export const RecoveryPassword = () => {
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${token}`,
-                        body: JSON.stringify({ contraseña_cliente: password })
                     },
+                    body: JSON.stringify({ contraseña_cliente: password })
                 });
 
-                const data = await res.json();
-                console.log(data);
                 alertSendForm(200, 'Contraseña cambiada con éxito')
+                setTimeout(() => {
+                    navigate('/Login')
+                }, 2000);
             }
             catch (err) {
                 console.log(err)
@@ -57,9 +61,8 @@ export const RecoveryPassword = () => {
 
         setTimeout(() => {
             alert.style.display = 'none'
-        }, 4000);
+        }, 2000);
     }
-
 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword)
@@ -71,7 +74,7 @@ export const RecoveryPassword = () => {
     return (
         <section className="w-full gap-[40px] h-dvh flex justify-center items-center">
             <Circles styleC1="right-[50%] bottom-[0px]" styleC2="left-[54%] top-[120px]" styleC3="top-[400px] left-[80px]" />
-            <div id='divAlert'></div>
+            <div id='divAlert' />
             <div className="divForm shadow_box_RL bg-glass-total rounded-3xl flex flex-col w-fit items-center justify-self-center gap-[40px]">
                 <h1 className="text-center text-white text-4xl">¡Recuperación Contraseña!</h1>
                 <form className=" form flex flex-col gap-[15px] text-start w-full" onSubmit={handleChangePassword}>

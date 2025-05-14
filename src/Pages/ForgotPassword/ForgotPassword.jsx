@@ -11,7 +11,6 @@ const URL = 'http://localhost:10101/ClienteEmail'
 export const ForgotPassword = () => {
 
     const [correo, setCorreo] = useState('')
-    const [mensaje, setMensaje] = useState('')
 
     const handleForgotPassword = async (e) => {
         e.preventDefault();
@@ -32,7 +31,7 @@ export const ForgotPassword = () => {
 
             if (token) {
                 const decoded = jwtDecode(token)
-                const user = decoded.name
+                const user = decoded.data.name
 
                 console.log('Nombre:', user)
 
