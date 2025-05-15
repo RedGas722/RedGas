@@ -4,3 +4,5 @@ npm install swiper
 npm install react-router-dom
 npm install react-scroll
 npm install tailwindcss @tailwindcss/vite
+npm install @emailjs/browser
+npm install jwt-decode

@@ -2,7 +2,7 @@
     display: none;
 }
 
-.form{
+.form {
     padding: 10px;
 }
 
@@ -40,4 +40,19 @@
     display: grid;
     place-items: center;
     grid-template-rows: 100px 50dvh;
+}
+
+
+#divAlert {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    font-size: clamp(3rem, 1vw, 1rem);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    height: 20%;
+    z-index: -10;
 }
