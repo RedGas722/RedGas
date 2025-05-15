@@ -6,3 +6,4 @@ npm install react-scroll
 npm install tailwindcss @tailwindcss/vite
 npm install @emailjs/browser
 npm install jwt-decode
+npm install sweetalert2 sweetalert2-react-content

@@ -1,17 +1,18 @@
-import { useParams } from 'react-router-dom'
-import { useState } from 'react'
-import { Circles } from "../../Animations/ColorCircles/Circles"
 import { AnimatedDots } from "../../Animations/AnimatedDots/AnimatedDots"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { Circles } from "../../Animations/ColorCircles/Circles"
 import { Buttons } from "../../UI/Login_Register/Buttons"
 import { useNavigate } from "react-router-dom"
+import { useParams } from 'react-router-dom'
+import { useState } from 'react'
+import withReactContent from 'sweetalert2-react-content';
+import Swal from 'sweetalert2';
 import './RecoveryPassword.css'
 
 const URL = 'http://localhost:10101/ClienteChangePassword'
 
 export const RecoveryPassword = () => {
-    const [formClicked, setFormClicked] = useState(false)
     const [showPassword, setShowPassword] = useState(false)
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)
     const [password, setPassword] = useState('')
@@ -34,32 +35,124 @@ export const RecoveryPassword = () => {
                     body: JSON.stringify({ contraseña_cliente: password })
                 });
 
-                alertSendForm(200, 'Contraseña cambiada con éxito')
+                Swal.fire({
+                    title: 'Procesando...',
+                    text: message || 'Estamos procesando tu solicitud.',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    },
+                })
+
+                alertSendForm(200, 'Contraseña cambiada con éxito', 'Hemos cambiado tu contraseña con éxito. Ahora puedes iniciar sesión con tu nueva contraseña.')
                 setTimeout(() => {
                     navigate('/Login')
                 }, 2000);
             }
             catch (err) {
-                console.log(err)
-                alertSendForm(400, 'Error al cambiar la contraseña')
+                alertSendForm(502, 'Error al cambiar la contraseña', 'Ocurrió un error al cambiar la contraseña. Por favor, intenta nuevamente más tarde.')
             }
         } else {
-            alertSendForm(400, 'Las contraseñas no coinciden')
+            alertSendForm(401, 'Las contraseñas no coinciden', '')
         }
     }
 
-    const alertSendForm = (status, mensaje) => {
-        const alert = document.getElementById('divAlert')
+    const alertSendForm = (status, title, message) => {
 
-        if (status === 200) {
-            alert.style.color = '#68ff00'
-            alert.textContent = `✅ ${mensaje}`
-        } else {
-            alert.style.color = '#ff004a'
-            alert.textContent = `❌ ${mensaje}`
+        const MySwal = withReactContent(Swal);
+        const passwordInput = document.getElementById('password')
+        const confirmPasswordInput = document.getElementById('passwordConfirm')
+
+        switch (status) {
+            case 200:
+                MySwal.fire({
+                    icon: 'success',
+                    title: title || 'Clave cambiada',
+                    text: message || 'Hemos cambiado tu contraseña con éxito.',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    allowEnterKey: false,
+                    showConfirmButton: true,
+                    confirmButtonText: 'volver al login',
+                })
+                    .then((result) => {
+                        if (result.isConfirmed) {
+                            navigate('/')
+                            passwordInput.value = ''
+                            confirmPasswordInput.value = ''
+                        }
+                    })
+                break;
+
+            case 401:
+                MySwal.fire({
+                    html: `
+                            <div style="display: flex; align-items: center;">
+                            <div style="font-size: 30px; color: #3498db; margin-right: 15px;">
+                                ℹ️
+                            </div>
+                            <div style="text-align: left;">
+                                <h3 style="margin: 0; font-size: 16px; font-weight: 600; color: #2c3e50;">
+                                ${title}
+                                </h3>
+                            </div>
+                            </div>
+                        `,
+                    showConfirmButton: false,
+                    position: 'top-end',
+                    width: '350px',
+                    timer: 2000,
+                    timerProgressBar: true,
+                    background: '#ffffff',
+                });
+
+                break;
+
+            case 502:
+                MySwal.fire({
+                    icon: 'error',
+                    title: title || 'Ocurrió un error',
+                    text: message || 'No pudimos completar tu solicitud. Intenta de nuevo más tarde.',
+                    showConfirmButton: true,
+                    confirmButtonText: 'Cerrar',
+                    timer: 9000
+                })
+                    .then((result) => {
+                        if (result.isConfirmed) {
+                            navigate('/')
+                            passwordInput.value = ''
+                            confirmPasswordInput.value = ''
+                        }
+                    })
+                break;
+
+            default:
+                MySwal.fire({
+                    icon: 'error',
+                    title: title || 'Error inesperado',
+                    text: message || 'No se pudo procesar tu solicitud. Intenta nuevamente más tarde.',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    allowEnterKey: false,
+                    showConfirmButton: true,
+                    confirmButtonText: 'Cerrar',
+                    timer: 9000
+                })
+                    .then((result) => {
+                        if (result.isConfirmed) {
+                            navigate('/')
+                            passwordInput.value = ''
+                            confirmPasswordInput.value = ''
+                        }
+                    })
+                break;
+
         }
     }
-
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword)
     }
@@ -72,11 +165,8 @@ export const RecoveryPassword = () => {
         <section className="w-full gap-[40px] h-dvh flex justify-center items-center">
             <AnimatedDots />
             <Circles styleC1="right-[50%] bottom-[0px]" styleC2="left-[54%] top-[120px]" styleC3="top-[400px] left-[80px]" />
-            <div id='divAlert' />
-            <div>
-                <h1 className='text-center text-4xl'>{formClicked ? alertSendForm() : ''}</h1>
-            </div>
-            <div className={`divForm shadow_box_RL bg-glass-total rounded-3xl flex flex-col w-fit items-center justify-self-center gap-[40px] ${formClicked ? 'hidden' : ''}`}>
+
+            <div className='divForm shadow_box_RL bg-glass-total rounded-3xl flex flex-col w-fit items-center justify-self-center gap-[40px]'>
                 <h1 className="text-center text-white text-4xl">¡Recuperación Contraseña!</h1>
                 <form className=" form flex flex-col gap-[15px] text-start w-full" onSubmit={handleChangePassword}>
                     {/* Password */}
@@ -117,7 +207,7 @@ export const RecoveryPassword = () => {
                             onClick={toggleConfirmPasswordVisibility}
                         />
                     </div>
-                    <Buttons Type='submit' nameButton="Enviar" Onclick={() => setFormClicked(true)} />
+                    <Buttons Type='submit' nameButton="Enviar" />
                 </form>
             </div>
         </section>
