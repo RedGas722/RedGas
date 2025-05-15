@@ -26,6 +26,7 @@ export const RecoveryPassword = () => {
 
         if (password == confirmPassword) {
             try {
+                alertSendForm('wait', 'Cambiando contraseña...')
                 const res = await fetch(URL, {
                     method: 'PUT',
                     headers: {
@@ -34,24 +35,10 @@ export const RecoveryPassword = () => {
                     },
                     body: JSON.stringify({ contraseña_cliente: password })
                 });
-
-                Swal.fire({
-                    title: 'Procesando...',
-                    text: message || 'Estamos procesando tu solicitud.',
-                    allowOutsideClick: false,
-                    allowEscapeKey: false,
-                    showConfirmButton: false,
-                    timer: 3000,
-                    timerProgressBar: true,
-                    didOpen: () => {
-                        Swal.showLoading();
-                    },
-                })
+                
 
                 alertSendForm(200, 'Contraseña cambiada con éxito', 'Hemos cambiado tu contraseña con éxito. Ahora puedes iniciar sesión con tu nueva contraseña.')
-                setTimeout(() => {
-                    navigate('/Login')
-                }, 2000);
+            
             }
             catch (err) {
                 alertSendForm(502, 'Error al cambiar la contraseña', 'Ocurrió un error al cambiar la contraseña. Por favor, intenta nuevamente más tarde.')
@@ -68,6 +55,21 @@ export const RecoveryPassword = () => {
         const confirmPasswordInput = document.getElementById('passwordConfirm')
 
         switch (status) {
+            case 'wait':
+                Swal.fire({
+                    title: 'Procesando...',
+                    text: message || 'Estamos procesando tu solicitud.',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    },
+                });
+                break;
+
             case 200:
                 MySwal.fire({
                     icon: 'success',
