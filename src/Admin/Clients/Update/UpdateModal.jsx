@@ -119,8 +119,12 @@ export const UpdateModal = ({ onClose }) => {
 
 				<h2 className="text-xl font-bold text-center">Actualizar Cliente</h2>
 
-				<Inputs Type='2' Place='Correo del cliente' Value={correo} onChange={(e) => setCorreo(e.target.value)} />
-				{errores.correo && <p className="text-red-600 text-sm">{errores.correo}</p>}
+				{!editando && (
+				<>
+					<Inputs Type="2" Place="Correo del cliente" Value={correo} onChange={(e) => setCorreo(e.target.value)} />
+					{errores.correo && (<p className="text-red-600 text-sm">{errores.correo}</p>)}
+				</>
+				)}
 
 				{/* Botón buscar si aún no se editará */}
 				{!editando && (
