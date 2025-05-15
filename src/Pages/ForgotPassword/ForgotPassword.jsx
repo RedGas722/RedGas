@@ -111,9 +111,7 @@ export const ForgotPassword = () => {
                     </div>
                     <div className='flex flex-col gap-[10px] justify-center items-center text-start w-full'>
                         {/* ⬇️------------------------QUITARRRRRRRRRRRRRRR--------------------------------------- ⬇️*/}
-                        <NavLink to={"/Login/ForgotPassword/Recovery"}>
                             <Buttons type='submit' nameButton="Enviar" />
-                        </NavLink>
                         {/* ^------------------------QUITARRRRRRRRRRRRRRR--------------------------------------^ */}
                         <Link to="/Login/">
                             <button className="cursor-pointer text-[#18BBFC]">
