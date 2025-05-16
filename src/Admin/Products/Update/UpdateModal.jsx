@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Inputs } from '../../UI/Inputs/Inputs';
 
-export const UpdateModal = ({ onClose }) => {
+export const UpdateModal = ({ onClose, setRefrescar }) => {
   const [nombreProducto, setNombreProducto] = useState('');
   const [producto, setProducto] = useState(null); 
   const [mensaje, setMensaje] = useState('');
@@ -9,6 +9,7 @@ export const UpdateModal = ({ onClose }) => {
   const [editando, setEditando] = useState(false);
   const [imagenNueva, setImagenNueva] = useState(null); 
   const [imagenActual, setImagenActual] = useState(null); 
+  let nombreBusqueda = nombreProducto;
 
   const URL_GET = 'http://localhost:10101/ProductoGet';
   const URL_UPDATE = 'http://localhost:10101/ProductoUpdateNI'; // Ruta para actualizar datos sin imagen
@@ -26,18 +27,16 @@ export const UpdateModal = ({ onClose }) => {
     return errores;
   };
 
-  // Función para buscar el producto
   const handleBuscar = async () => {
     setMensaje('');
     setErrores({});
-
     if (!nombreProducto.trim()) {
       setErrores({ nombreProducto: 'El nombre del producto es obligatorio' });
       return;
     }
 
     try {
-      const res = await fetch(`${URL_GET}?nombre_producto=${encodeURIComponent(nombreProducto)}`);
+      const res = await fetch(`${URL_GET}?nombre_producto=${encodeURIComponent(nombreBusqueda)}`);
       if (!res.ok) throw new Error('Producto no encontrado');
 
       const data = await res.json();
@@ -51,10 +50,9 @@ export const UpdateModal = ({ onClose }) => {
         stock: data.data.stock,
       });
 
-      // Cargar imagen actual desde base64
       if (data.data.imagen) {
-        setImagenActual(`data:image/jpeg;base64,${data.data.imagen}`); 
-        setImagenNueva(null); 
+        setImagenActual(`data:image/jpeg;base64,${data.data.imagen}`);
+        setImagenNueva(null);
       }
 
       setEditando(true);
@@ -62,6 +60,7 @@ export const UpdateModal = ({ onClose }) => {
       setMensaje('Error al buscar producto: ' + err.message);
     }
   };
+
 
   // Función para actualizar el producto
   const handleActualizar = async () => {
@@ -96,6 +95,7 @@ export const UpdateModal = ({ onClose }) => {
       }
 
       setMensaje('Producto e imagen actualizados exitosamente.');
+      nombreBusqueda = producto.nuevoNombre
     } catch (err) {
       setMensaje('Error al actualizar: ' + err.message);
     }
@@ -124,9 +124,14 @@ export const UpdateModal = ({ onClose }) => {
       }
 
       setMensaje('Producto actualizado exitosamente.');
-      } catch (err) {
+      nombreBusqueda = producto.nuevoNombre
+    } catch (err) {
         setMensaje('Error al actualizar: ' + err.message);
       }
+      await handleBuscar();
+      if (setRefrescar) setRefrescar(true);
+      // setEditando(false)
+      // setNombreProducto('')
     }
   };
 

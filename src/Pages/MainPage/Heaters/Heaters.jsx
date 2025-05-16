@@ -12,7 +12,7 @@ export const HeatersSect = () => {
         const res = await fetch('http://localhost:10101/ProductoGetAll'); 
         if (!res.ok) throw new Error('Error al obtener productos');
         const data = await res.json();
-        setCalentadores(data.data || []); // data.data depende de cómo tu API responda
+        setCalentadores(data.data || []); 
       } catch (error) {
         console.error(error);
       }

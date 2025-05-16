@@ -38,6 +38,11 @@ export const GetModal = ({ onClose }) => {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
       });
+      if (res.status === 404) {
+        setMensaje({ error: 'Producto no encontrado.' });
+        setImagenURL(null);
+        return;
+      }
 
       const data = await res.json();
 
@@ -57,6 +62,8 @@ export const GetModal = ({ onClose }) => {
 
       if (producto.imagen) {
         setImagenURL(`data:image/jpeg;base64,${producto.imagen}`);
+      } else {
+        setImagenURL(null);
       }
 
       setMensaje({ ...data, data: producto });
@@ -64,9 +71,9 @@ export const GetModal = ({ onClose }) => {
     } catch (err) {
       console.error(err);
       setMensaje({ error: 'Error al consultar: ' + err.message });
+      setImagenURL(null);
     }
   };
-
   const handleCancel = () => {
     setNombre('');
     setMensaje(null);

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Inputs } from '../../UI/Inputs/Inputs';
 
-export const RegisterModal = ({ onClose }) => {
+export const RegisterModal = ({ onClose, onProductoRegistrado, setRefrescar }) => {
   const [nombre, setNombre] = useState('');
   const [precio, setPrecio] = useState('');
   const [descripcion, setDescripcion] = useState('');
@@ -10,7 +10,8 @@ export const RegisterModal = ({ onClose }) => {
   const [mensaje, setMensaje] = useState('');
   const [errores, setErrores] = useState({});
 
-  const URL = 'http://localhost:10101/ProductoRegister';
+  const URL_REGISTER = 'http://localhost:10101/ProductoRegister';
+  const URL_GET = 'http://localhost:10101/ProductoGet';
 
   const validarCampos = () => {
     const errores = {};
@@ -59,32 +60,60 @@ export const RegisterModal = ({ onClose }) => {
 
     if (Object.keys(erroresValidados).length > 0) {
       setErrores(erroresValidados);
+      setMensaje('');
       return;
     }
 
     setErrores({});
-    const formData = new FormData();
-    formData.append('nombre_producto', nombre);
-    formData.append('precio_producto', parseFloat(precio));
-    formData.append('descripcion_producto', descripcion);
-    formData.append('stock', parseInt(stock));
-    formData.append('imagen', imagen);
+    setMensaje('');
 
     try {
-      const res = await fetch(URL, {
+      // Verificar si ya existe un producto con ese nombre
+      const resCheck = await fetch(`${URL_GET}?nombre_producto=${encodeURIComponent(nombre)}`);
+      if (resCheck.ok) {
+        const dataCheck = await resCheck.json();
+        if (dataCheck?.data?.length > 0) {
+          setMensaje('Ya existe un producto con ese nombre.');
+          return;
+        }
+      }
+
+      const formData = new FormData();
+      formData.append('nombre_producto', nombre);
+      formData.append('precio_producto', parseFloat(precio));
+      formData.append('descripcion_producto', descripcion);
+      formData.append('stock', parseInt(stock));
+      formData.append('imagen', imagen);
+
+      const resRegister = await fetch(URL_REGISTER, {
         method: 'POST',
         body: formData,
       });
 
-      if (!res.ok) {
-        const errorData = await res.json();
-        setMensaje('Error al registrar: ' + (errorData?.errors?.[0]?.msg || 'Datos inválidos'));
+      if (!resRegister.ok) {
+        if (resRegister.status === 500) {
+          setMensaje('Error: Ya existe un producto con ese nombre.');
+        } else {
+          const errorData = await resRegister.json();
+          setMensaje('Error al registrar: ' + (errorData?.errors?.[0]?.msg || 'Datos inválidos.'));
+        }
         return;
       }
 
-      await res.json();
+      // Intentar obtener el producto recién creado, pero si da 404, continuar sin error
+      const resNuevo = await fetch(`${URL_GET}?nombre_producto=${encodeURIComponent(nombre)}`);
+      if (resNuevo.ok) {
+        const dataNuevo = await resNuevo.json();
+        if (onProductoRegistrado && dataNuevo?.data?.length > 0) {
+          onProductoRegistrado(dataNuevo.data[0]);
+        }
+      } else if (resNuevo.status === 404) {
+        console.warn('Producto registrado, pero no se pudo obtener con GET (404).');
+      } else {
+        console.warn('Error inesperado al obtener el producto:', resNuevo.status);
+      }
       setMensaje('Producto registrado exitosamente.');
-      console.log('Completado!');
+      if (setRefrescar) setRefrescar(true); 
     } catch (err) {
       setMensaje('Error al registrar: ' + err.message);
     }
@@ -111,14 +140,16 @@ export const RegisterModal = ({ onClose }) => {
         <button
           className="absolute top-2 right-3 text-gray-600 text-lg"
           onClick={onClose}
-        >✕</button>
+        >
+          ✕
+        </button>
 
         <h2 className="text-xl font-bold text-center">Registrar Producto</h2>
 
-        <Inputs Type='1' Place='Nombre del Producto' Value={nombre} onChange={(e) => setNombre(e.target.value)} />
+        <Inputs Type="1" Place="Nombre del Producto" Value={nombre} onChange={(e) => setNombre(e.target.value)} />
         {errores.nombre && <p className="text-red-600 text-sm">{errores.nombre}</p>}
 
-        <Inputs Type='5' Place='Precio del Producto' Value={precio} onChange={(e) => setPrecio(e.target.value)} />
+        <Inputs Type="5" Place="Precio del Producto" Value={precio} onChange={(e) => setPrecio(e.target.value)} />
         {errores.precio && <p className="text-red-600 text-sm">{errores.precio}</p>}
 
         <textarea
@@ -129,21 +160,25 @@ export const RegisterModal = ({ onClose }) => {
         />
         {errores.descripcion && <p className="text-red-600 text-sm">{errores.descripcion}</p>}
 
-        <Inputs Type='5' Place='Stock' Value={stock} onChange={(e) => setStock(e.target.value)} />
+        <Inputs Type="5" Place="Stock" Value={stock} onChange={(e) => setStock(e.target.value)} />
         {errores.stock && <p className="text-red-600 text-sm">{errores.stock}</p>}
 
-        <Inputs Type='4' Place='Imagen del Producto' onChange={handleImageChange} />
+        <Inputs Type="4" Place="Imagen del Producto" onChange={handleImageChange} />
         {errores.imagen && <p className="text-red-600 text-sm">{errores.imagen}</p>}
 
         <div className="flex justify-between gap-2">
           <button
             onClick={handleCancel}
             className="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded"
-          >Cancelar</button>
+          >
+            Cancelar
+          </button>
           <button
             onClick={handleRegister}
             className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
-          >Registrar</button>
+          >
+            Registrar
+          </button>
         </div>
 
         {mensaje && (
