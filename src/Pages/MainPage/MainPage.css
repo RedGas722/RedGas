@@ -1,0 +1,9 @@
+.MainPageContainer {
+    padding: 0 80px 40px 80px;
+}
+
+@media screen and (max-width: 768px) {
+    .MainPageContainer {
+        padding: 0 20px 20px 20px;
+    }
+}

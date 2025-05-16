@@ -1,0 +1,9 @@
+.divForm {
+    padding: 30px 15px 15px 15px;
+}
+
+.sectionRegister {
+    display: grid;
+    place-items: center;
+    grid-template-rows: 100px 70dvh;
+}

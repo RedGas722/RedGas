@@ -1,0 +1,7 @@
+.cardCategoryContainer{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: clamp(20px, 2vw, 40px);
+}
