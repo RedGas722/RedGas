@@ -56,7 +56,6 @@ export const RecoveryPassword = () => {
                 }
             }
             catch (err) {
-                console.log(err);
                 alertSendForm(502, 'Error al cambiar la contraseña', 'Ocurrió un error al cambiar la contraseña. Por favor, intenta nuevamente más tarde.')
             }
         } else {

@@ -37,8 +37,9 @@ export const Login = () => {
             if (token) {
                 const decoded = jwtDecode(token)
                 const user = decoded.data.name
-                
+
                 alertSendForm(200, 'Inicio de sesión exitoso', 'Bienvenido de nuevo'+` ${user || 'Usuario'}`)
+                localStorage.setItem('token', token)
                 setTimeout(() => {
                     navigate('/');
                 }, 4000);
