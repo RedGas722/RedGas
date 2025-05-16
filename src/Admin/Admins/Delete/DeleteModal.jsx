@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Inputs } from '../../UI/Inputs/Inputs';
 
 const URL = 'http://localhost:10101/AdminDelete';
 
@@ -38,12 +39,11 @@ export const DeleteModal = ({ onClose }) => {
 
         <h2 className="text-xl font-bold text-center">Eliminación de Administrador</h2>
 
-        <input
-          type="email"
-          placeholder="Correo del Administrador..."
-          value={correoAdmin}
+        <Inputs
+          Type="2"
+          Place="Correo del Administrador..."
+          Value={correoAdmin}
           onChange={(e) => setCorreoAdmin(e.target.value)}
-          className="border rounded p-2"
         />
 
         <div className="flex justify-between gap-2">
