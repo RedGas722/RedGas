@@ -1,0 +1,20 @@
+/* .Admin{
+    padding: 2% 0 2% 1%;
+} */
+.SectionSIde{
+    overflow-y: scroll;
+}
+#sideBarr{
+    padding: 0 30px;
+}
+.BTN {
+    padding: 5px 20px;
+    cursor: pointer;
+    transition: all .3s ease;
+}
+
+.BTN:active {
+    background: var(--background-color);
+    border-radius: 20px;
+    box-shadow: inset -9.91px -9.91px 15px #CACACA, inset 9.91px 9.91px 15px #F2F2F2;
+}
