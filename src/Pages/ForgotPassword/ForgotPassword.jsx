@@ -60,7 +60,7 @@ export const ForgotPassword = () => {
                 alertSendForm(410, 'Error al enviar el correo');
             }
 
-        } catch (err) {
+        } catch {
             alertSendForm(400, 'El correo no esta registrador');
         }
 
