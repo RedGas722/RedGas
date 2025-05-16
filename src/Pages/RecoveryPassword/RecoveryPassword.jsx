@@ -1,13 +1,64 @@
-import { useState } from "react"
+import { useParams } from 'react-router-dom'
+import { useState } from 'react'
 import { Circles } from "../../Animations/ColorCircles/Circles"
 import { AnimatedDots } from "../../Animations/AnimatedDots/AnimatedDots"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons"
 import { Buttons } from "../../UI/Login_Register/Buttons"
+import { useNavigate } from "react-router-dom"
+import './RecoveryPassword.css'
+
+const URL = 'http://localhost:10101/ClienteChangePassword'
 
 export const RecoveryPassword = () => {
+    const [formClicked, setFormClicked] = useState(false)
     const [showPassword, setShowPassword] = useState(false)
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+    const [password, setPassword] = useState('')
+    const [confirmPassword, setConfirmPassword] = useState('')
+    const { token } = useParams()
+    const navigate = useNavigate()
+
+
+    const handleChangePassword = async (e) => {
+        e.preventDefault()
+
+        if (password == confirmPassword) {
+            try {
+                const res = await fetch(URL, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`,
+                    },
+                    body: JSON.stringify({ contraseña_cliente: password })
+                });
+
+                alertSendForm(200, 'Contraseña cambiada con éxito')
+                setTimeout(() => {
+                    navigate('/Login')
+                }, 2000);
+            }
+            catch (err) {
+                console.log(err)
+                alertSendForm(400, 'Error al cambiar la contraseña')
+            }
+        } else {
+            alertSendForm(400, 'Las contraseñas no coinciden')
+        }
+    }
+
+    const alertSendForm = (status, mensaje) => {
+        const alert = document.getElementById('divAlert')
+
+        if (status === 200) {
+            alert.style.color = '#68ff00'
+            alert.textContent = `✅ ${mensaje}`
+        } else {
+            alert.style.color = '#ff004a'
+            alert.textContent = `❌ ${mensaje}`
+        }
+    }
 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword)
@@ -16,13 +67,18 @@ export const RecoveryPassword = () => {
         setShowConfirmPassword(!showConfirmPassword)
     };
 
+
     return (
         <section className="w-full gap-[40px] h-dvh flex justify-center items-center">
             <AnimatedDots />
             <Circles styleC1="right-[50%] bottom-[0px]" styleC2="left-[54%] top-[120px]" styleC3="top-[400px] left-[80px]" />
-            <div className="divForm shadow_box_RL bg-glass-total rounded-3xl flex flex-col w-fit items-center justify-self-center gap-[40px]">
+            <div id='divAlert' />
+            <div>
+                <h1 className='text-center text-4xl'>{formClicked ? alertSendForm() : ''}</h1>
+            </div>
+            <div className={`divForm shadow_box_RL bg-glass-total rounded-3xl flex flex-col w-fit items-center justify-self-center gap-[40px] ${formClicked ? 'hidden' : ''}`}>
                 <h1 className="text-center text-white text-4xl">¡Recuperación Contraseña!</h1>
-                <form className="flex flex-col gap-[15px] text-start w-full">
+                <form className=" form flex flex-col gap-[15px] text-start w-full" onSubmit={handleChangePassword}>
                     {/* Password */}
                     <label htmlFor="password" className="text-white text-2xl w-full">
                         Contraseña
@@ -33,6 +89,8 @@ export const RecoveryPassword = () => {
                             placeholder={showPassword ? "Contraseña" : "**********"}
                             id="password"
                             className="border-t-0 border-b-[1px] w-full placeholder:text-gray-400 text-gray-200 border-gray-300 outline-0"
+                            value={password} onChange={e => setPassword(e.target.value)}
+                            required
                         />
                         <FontAwesomeIcon
                             icon={showPassword ? faEyeSlash : faEye}
@@ -50,6 +108,8 @@ export const RecoveryPassword = () => {
                             placeholder={showConfirmPassword ? "Confirmar" : "*********"}
                             id="passwordConfirm"
                             className="border-t-0 border-b-[1px] w-full placeholder:text-gray-400 text-gray-200 border-gray-300 outline-0"
+                            value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)}
+                            required
                         />
                         <FontAwesomeIcon
                             icon={showConfirmPassword ? faEyeSlash : faEye}
@@ -57,8 +117,8 @@ export const RecoveryPassword = () => {
                             onClick={toggleConfirmPasswordVisibility}
                         />
                     </div>
+                    <Buttons Type='submit' nameButton="Enviar" Onclick={() => setFormClicked(true)} />
                 </form>
-                <Buttons nameButton="Enviar" />
             </div>
         </section>
     )
