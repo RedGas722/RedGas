@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Inputs } from '../../UI/Inputs/Inputs';
 
 export const RegisterModal = ({ onClose }) => {
     const [nombreServicio, setNombreServicio] = useState('');
@@ -48,12 +49,11 @@ export const RegisterModal = ({ onClose }) => {
 
                 <h2 className="text-xl font-bold text-center">Registrar Servicio</h2>
 
-                <input
-                    type="text"
-                    placeholder="Nombre del Servicio"
-                    value={nombreServicio}
+                <Inputs
+                    Type="1"
+                    Place="Nombre del Servicio"
+                    Value={nombreServicio}
                     onChange={(e) => setNombreServicio(e.target.value)}
-                    className="border rounded p-2"
                 />
                 <textarea
                     placeholder="Descripción del Servicio"
@@ -61,12 +61,11 @@ export const RegisterModal = ({ onClose }) => {
                     onChange={(e) => setDescripcionServicio(e.target.value)}
                     className="border rounded p-2"
                 />
-                <input
-                    type="number"
-                    placeholder="Precio del Servicio"
-                    value={precioServicio}
+                <Inputs
+                    Type="5"
+                    Place="Precio del Servicio"
+                    Value={precioServicio}
                     onChange={(e) => setPrecioServicio(e.target.value)}
-                    className="border rounded p-2"
                 />
 
                 <div className="flex justify-between gap-2">
