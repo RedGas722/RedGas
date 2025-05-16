@@ -24,9 +24,9 @@ export const RecoveryPassword = () => {
     const handleChangePassword = async (e) => {
         e.preventDefault()
 
+        // alertSendForm('wait', 'Cambiando contraseña...')
         if (password == confirmPassword) {
             try {
-                alertSendForm('wait', 'Cambiando contraseña...')
                 const res = await fetch(URL, {
                     method: 'PUT',
                     headers: {
@@ -35,12 +35,28 @@ export const RecoveryPassword = () => {
                     },
                     body: JSON.stringify({ contraseña_cliente: password })
                 });
-                
 
-                alertSendForm(200, 'Contraseña cambiada con éxito', 'Hemos cambiado tu contraseña con éxito. Ahora puedes iniciar sesión con tu nueva contraseña.')
-            
+                const data = await res.json()
+
+
+                if (data.status !== 'Unauthorized') {
+                    if (data.errors && Array.isArray(data.errors) && data.errors.length > 0) {
+                        const mensaje = data.errors[0].msg;
+
+                        if (mensaje === 'Invalid value') {
+                            alertSendForm(401, 'La contraseña no cumple con los requisitos de seguridad', '');
+                        } else {
+                            alertSendForm(401, mensaje, '');
+                        }
+                    } else {
+                        alertSendForm(200, 'Contraseña cambiada con éxito', 'Hemos cambiado tu contraseña con éxito. Ahora puedes iniciar sesión con tu nueva contraseña.');
+                    }
+                } else {
+                    alertSendForm(502, 'TOKEN EXPIRADO', 'El token de recuperación ha expirado o es inválido. Por favor, solicita un nuevo enlace de recuperación.')
+                }
             }
             catch (err) {
+                console.log(err);
                 alertSendForm(502, 'Error al cambiar la contraseña', 'Ocurrió un error al cambiar la contraseña. Por favor, intenta nuevamente más tarde.')
             }
         } else {
@@ -83,7 +99,7 @@ export const RecoveryPassword = () => {
                 })
                     .then((result) => {
                         if (result.isConfirmed) {
-                            navigate('/')
+                            navigate('/Login')
                             passwordInput.value = ''
                             confirmPasswordInput.value = ''
                         }
@@ -119,12 +135,19 @@ export const RecoveryPassword = () => {
                     icon: 'error',
                     title: title || 'Ocurrió un error',
                     text: message || 'No pudimos completar tu solicitud. Intenta de nuevo más tarde.',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    allowEnterKey: false,
                     showConfirmButton: true,
                     confirmButtonText: 'Cerrar',
                     timer: 9000
                 })
                     .then((result) => {
-                        if (result.isConfirmed) {
+                        if (result.isConfirmed && title === 'TOKEN EXPIRADO') {
+                            navigate('/Login/ForgotPassword')
+                            passwordInput.value = ''
+                            confirmPasswordInput.value = ''
+                        } else if (result.isConfirmed) {
                             navigate('/')
                             passwordInput.value = ''
                             confirmPasswordInput.value = ''
@@ -167,49 +190,55 @@ export const RecoveryPassword = () => {
         <section className="w-full gap-[40px] h-dvh flex justify-center items-center">
             <AnimatedDots />
             <Circles styleC1="right-[50%] bottom-[0px]" styleC2="left-[54%] top-[120px]" styleC3="top-[400px] left-[80px]" />
-
-            <div className='divForm shadow_box_RL bg-glass-total rounded-3xl flex flex-col w-fit items-center justify-self-center gap-[40px]'>
+            <div className='divForm shadow_box_RL bg-glass-total rounded-3xl flex flex-col w-fit items-center justify-self-center gap-[20px]'>
                 <h1 className="text-center text-white text-4xl">¡Recuperación Contraseña!</h1>
                 <form className=" form flex flex-col gap-[15px] text-start w-full" onSubmit={handleChangePassword}>
-                    {/* Password */}
-                    <label htmlFor="password" className="text-white text-2xl w-full">
-                        Contraseña
-                    </label>
-                    <div className="relative w-full">
-                        <input
-                            type={showPassword ? "text" : "password"}
-                            placeholder={showPassword ? "Contraseña" : "**********"}
-                            id="password"
-                            className="border-t-0 border-b-[1px] w-full placeholder:text-gray-400 text-gray-200 border-gray-300 outline-0"
-                            value={password} onChange={e => setPassword(e.target.value)}
-                            required
-                        />
-                        <FontAwesomeIcon
-                            icon={showPassword ? faEyeSlash : faEye}
-                            className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 cursor-pointer"
-                            onClick={togglePasswordVisibility}
-                        />
+                    <div className="w-full">
+                        {/* Password */}
+                        <label htmlFor="password" className="text-white text-2xl w-full">
+                            Contraseña
+                        </label>
+                        <div className="relative w-full">
+                            <input
+                                type={showPassword ? "text" : "password"}
+                                placeholder={showPassword ? "Contraseña" : "**********"}
+                                id="password"
+                                className="border-t-0 border-b-[1px] w-full placeholder:text-gray-400 text-gray-200 border-gray-300 outline-0"
+                                value={password} onChange={e => setPassword(e.target.value)}
+                                required
+                            />
+                            <FontAwesomeIcon
+                                icon={showPassword ? faEyeSlash : faEye}
+                                className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 cursor-pointer"
+                                onClick={togglePasswordVisibility}
+                            />
+                        </div>
+                        <p className="text-amber-300 text-x1l">min 8 - max 15 carateres</p>
                     </div>
-                    {/* Confirm Password */}
-                    <label htmlFor="passwordConfirm" className="text-white text-2xl w-full">
-                        Confirmar contraseña
-                    </label>
-                    <div className="relative w-full">
-                        <input
-                            type={showConfirmPassword ? "text" : "password"}
-                            placeholder={showConfirmPassword ? "Confirmar" : "*********"}
-                            id="passwordConfirm"
-                            className="border-t-0 border-b-[1px] w-full placeholder:text-gray-400 text-gray-200 border-gray-300 outline-0"
-                            value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)}
-                            required
-                        />
-                        <FontAwesomeIcon
-                            icon={showConfirmPassword ? faEyeSlash : faEye}
-                            className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 cursor-pointer"
-                            onClick={toggleConfirmPasswordVisibility}
-                        />
+                    <div className="w-full">
+                        {/* Confirm Password */}
+                        <label htmlFor="passwordConfirm" className="text-white text-2xl w-full">
+                            Confirmar contraseña
+                        </label>
+                        <div className="relative w-full">
+                            <input
+                                type={showConfirmPassword ? "text" : "password"}
+                                placeholder={showConfirmPassword ? "Confirmar" : "*********"}
+                                id="passwordConfirm"
+                                className="border-t-0 border-b-[1px] w-full placeholder:text-gray-400 text-gray-200 border-gray-300 outline-0"
+                                value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)}
+                                required
+                            />
+                            <FontAwesomeIcon
+                                icon={showConfirmPassword ? faEyeSlash : faEye}
+                                className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 cursor-pointer"
+                                onClick={toggleConfirmPasswordVisibility}
+                            />
+                        </div>
                     </div>
-                    <Buttons Type='submit' nameButton="Enviar" />
+                    <div className="btnSumit">
+                        <Buttons Type='submit' nameButton="Enviar" />
+                    </div>
                 </form>
             </div>
         </section>
