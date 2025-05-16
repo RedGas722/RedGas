@@ -34,8 +34,6 @@ export const UpdateModal = ({ onClose }) => {
         } catch (err) {
             setMensaje('Error al actualizar: ' + err.message);
         }
-        //////////////////////////
-        //////////////////
     };
 
     const handleCancel = () => {

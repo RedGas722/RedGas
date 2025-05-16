@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Inputs } from '../../UI/Inputs/Inputs';
 
 export const RegisterModal = ({ onClose }) => {
     const [fechaContrato, setFechaContrato] = useState('');
@@ -29,7 +30,16 @@ export const RegisterModal = ({ onClose }) => {
            }),
         });
 
-        if (!res.ok) throw new Error('Error en el registro');
+        if (!res.ok) {
+          let errorMsg = 'Error en el registro';
+          try {
+            const errorData = await res.json();
+            if (errorData && errorData.message) errorMsg = errorData.message;
+          } catch {
+            // No se pudo extraer el mensaje del backend
+          }
+          throw new Error(errorMsg);
+        }
         await res.json();
         setMensaje('Registro exitoso.');
         console.log('Completado!');
@@ -58,47 +68,41 @@ export const RegisterModal = ({ onClose }) => {
 
         <h2 className="text-xl font-bold text-center">Registrar Contrato</h2>
 
-        <input
-          type="date"
-          placeholder="Fecha del contrato"
-          value={fechaContrato}
+        <Inputs
+          Type="7"
+          Place="Fecha del contrato"
+          Value={fechaContrato}
           onChange={(e) => setFechaContrato(e.target.value)}
-          className="border rounded p-2"
         />
-        <input
-          type="text"
-          placeholder="Duración del contrato"
-          value={duracionContrato}
+        <Inputs
+          Type="1"
+          Place="Duración del contrato"
+          Value={duracionContrato}
           onChange={(e) => setDuracionContrato(e.target.value)}
-          className="border rounded p-2"
         />
-        <input
-          type="text"
-          placeholder="Tipo de contrato"
-          value={tipoContrato}
+        <Inputs
+          Type="1"
+          Place="Tipo de contrato"
+          Value={tipoContrato}
           onChange={(e) => setTipoContrato(e.target.value)}
-          className="border rounded p-2"
         />
-        <input
-          type="number"
-          placeholder="Salario"
-          value={salario}
+        <Inputs
+          Type="5"
+          Place="Salario"
+          Value={salario}
           onChange={(e) => setSalario(e.target.value)}
-          className="border rounded p-2"
         />
-        <input
-          type="number"
-          placeholder="ID del administrador"
-          value={idAdmin}
+        <Inputs
+          Type="5"
+          Place="ID del administrador"
+          Value={idAdmin}
           onChange={(e) => setIdAdmin(e.target.value)}
-          className="border rounded p-2"
         />
-        <input
-          type="number"
-          placeholder="ID del empleado"
-          value={idEmpleado}
+        <Inputs
+          Type="5"
+          Place="ID del empleado"
+          Value={idEmpleado}
           onChange={(e) => setIdEmpleado(e.target.value)}
-          className="border rounded p-2"
         />
 
 <div className="flex justify-between gap-2">

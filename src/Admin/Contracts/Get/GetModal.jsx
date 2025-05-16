@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Inputs } from '../../UI/Inputs/Inputs';
 
 export const GetModal = ({ onClose }) => {
   const [IDempleado, setIDempleado] = useState('');
@@ -39,12 +40,11 @@ export const GetModal = ({ onClose }) => {
 
         <h2 className="text-xl font-bold text-center">Consultar Contrato</h2>
 
-        <input
-          type="number"
-          placeholder="ID del contrato"
-          value={IDempleado}
+        <Inputs
+          Type="5"
+          Place="ID del empleado"
+          Value={IDempleado}
           onChange={(e) => setIDempleado(e.target.value)}
-          className="border rounded p-2"
         />
 
         <div className="flex justify-between gap-2">
