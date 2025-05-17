@@ -21,10 +21,10 @@ export const Navs = () => {
                 smooth={true}
                 duration={500}
                 id="HomeLink"
-                className={getLinkClass("Header")}
+                className={getLinkClass("Hero")}
                 activeClass="!text-[var(--Font-Nav)] font-bold"
                 spy={true}
-                onSetActive={() => setActive("Header")}
+                onSetActive={() => setActive("Hero")}
             >
                 Inicio
             </Link>

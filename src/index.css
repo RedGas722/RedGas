@@ -30,7 +30,7 @@
   /* Body-color-end----------------- Font-Nav*/
   --Font-Nav: #FDBC50;
   /* ADMIN */
-  --background-color: #dedede;
+  --background-color: #EEF0F4;
 }
 
 body {
@@ -96,24 +96,24 @@ body {
   .NeoContainer_inset_TL {
     background: var(--background-color);
     border-radius: 20px;
-    box-shadow: inset -9.91px -9.91px 15px #CACACA, inset 9.91px 9.91px 15px #F2F2F2;
+    box-shadow: inset -9.91px -9.91px 15px #d4d6d9, inset 9.91px 9.91px 15px #ffffff;
   }
 
   .NeoContainer_outset_TL {
     background: var(--background-color);
     border-radius: 20px;
-    box-shadow: 9.91px 9.91px 15px #CACACA, -9.91px -9.91px 15px #F2F2F2;
+    box-shadow: 9.91px 9.91px 15px #d4d6d9, -9.91px -9.91px 15px #ffffff;
   }
 
   .NeoContainer_outset_BR {
     background: var(--background-color);
     border-radius: 20px;
-    box-shadow: -9.91px -9.91px 15px #CACACA, 9.91px 9.91px 15px #F2F2F2;
+    box-shadow: -9.91px -9.91px 15px #d4d6d9, 9.91px 9.91px 15px #ffffff;
   }
 
   .NeoContainer_inset_BR {
     background: var(--background-color);
     border-radius: 20px;
-    box-shadow: inset 9.91px 9.91px 15px #CACACA, -9.91px -9.91px 15px #F2F2F2;
+    box-shadow: inset 9.91px 9.91px 15px #d4d6d9, -9.91px -9.91px 15px #F2F2F2;
   }
 }

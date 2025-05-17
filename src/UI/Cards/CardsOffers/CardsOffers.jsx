@@ -50,7 +50,7 @@ export const Cards = ({ uniqueId, imgContent, titleCatt, brandCatt, Price }) => 
                     },
                 }}
                 id={`cardContainer-${uniqueId}`}
-                className="w-[100%] flex justify-center justify-self-center items-center"
+                className="w-[100%] flex justify-center h-[500px] justify-self-center items-center"
             >
                 {cards.map((_, index) => (
                     <SwiperSlide key={index} id={`CardSect-${uniqueId}`}>
