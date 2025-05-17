@@ -1,7 +1,5 @@
-import { AnimatedDots } from "../../Animations/AnimatedDots/AnimatedDots"
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { Circles } from "../../Animations/ColorCircles/Circles"
 import { Buttons } from "../../UI/Login_Register/Buttons"
 import { useNavigate } from "react-router-dom"
 import { useParams } from 'react-router-dom'
@@ -187,8 +185,6 @@ export const RecoveryPassword = () => {
 
     return (
         <section className="w-full gap-[40px] h-dvh flex justify-center items-center">
-            <AnimatedDots />
-            <Circles styleC1="right-[50%] bottom-[0px]" styleC2="left-[54%] top-[120px]" styleC3="top-[400px] left-[80px]" />
             <div className='divForm shadow_box_RL bg-glass-total rounded-3xl flex flex-col w-fit items-center justify-self-center gap-[20px]'>
                 <h1 className="text-center text-white text-4xl">¡Recuperación Contraseña!</h1>
                 <form className=" form flex flex-col gap-[15px] text-start w-full" onSubmit={handleChangePassword}>

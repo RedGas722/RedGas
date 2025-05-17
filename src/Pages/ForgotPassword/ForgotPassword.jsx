@@ -1,5 +1,3 @@
-import { AnimatedDots } from "../../Animations/AnimatedDots/AnimatedDots"
-import { Circles } from '../../Animations/ColorCircles/Circles'
 import { HeadLR } from '../../UI/Login_Register/HeadLR/HeadLR'
 import { Buttons } from '../../UI/Login_Register/Buttons'
 import { Link, useNavigate } from "react-router-dom"
@@ -200,8 +198,6 @@ export const ForgotPassword = () => {
 
         <div className='sectionForgot w-full gap-[40px] h-dvh '>
             <HeadLR />
-            <AnimatedDots />
-            <Circles styleC1="left-[54%] top-[100px]" styleC2="right-[58%] bottom-[120px]" styleC3="top-[50px] left-[80px]" />
             <div className=" form shadow_box_RL bg-glass-total rounded-3xl flex flex-col justify-self-center items-center h-fit w-fit gap-[30px]">
                 <h1 className="text-center text-white text-4xl">¡Recuperar contraseña!</h1>
                 <form className=" flex flex-col gap-[35px] justify-center items-center text-start w-full" onSubmit={handleForgotPassword} >

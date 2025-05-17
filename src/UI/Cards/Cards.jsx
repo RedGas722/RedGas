@@ -6,7 +6,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faArrowRight,
     faArrowLeft,
-    faHandPointUp,
     faCartShopping,
 }
     from '@fortawesome/free-solid-svg-icons';
@@ -49,8 +48,8 @@ export const Cards = ({ uniqueId, imgContent, titleCatt, Price, brandCatt }) => 
             >
                 {cards.map((_, index) => (
                     <SwiperSlide key={index} id={`CardSect-${uniqueId}`}>
-                        <div className="flex justify-center justify-self-center h-[450px] p-[0_0_5px_0] items-center w-fit">
-                            <div className="card">
+                        <div className="flex justify-center justify-self-center h-fit p-[25px_0_25px_0] items-center w-fit">
+                            <div className="card NeoSubContainer_outset_TL">
                                 <div className="card-img">
                                     <div className="img"> <img
                                         src={imgContent}
@@ -65,7 +64,9 @@ export const Cards = ({ uniqueId, imgContent, titleCatt, Price, brandCatt }) => 
                                 <div className="card-subtitle">Product description. Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
                                 <hr className="card-divider" />
                                 <div className="card-footer">
-                                    <div className="card-price"><span>$</span> {dividirConComaCada3Caracteres((Price || 0).toString())} </div>
+                                    <div className="card-price">
+                                        <span>$</span> {dividirConComaCada3Caracteres((Price || 0).toString())}
+                                    </div>
                                     <button className="card-btn hover:text-[#ffff]">
                                         <FontAwesomeIcon icon={faCartShopping} />
                                     </button>
@@ -75,17 +76,15 @@ export const Cards = ({ uniqueId, imgContent, titleCatt, Price, brandCatt }) => 
                     </SwiperSlide>
                 ))}
             </Swiper>
-
-            <div className="relative flex flex-col justify-center items-center w-[100%] text-white">
+            <div className="flex flex-col justify-center items-center self-center w-fit p-[10px] NeoSubContainer_outset_TL text-[var(--main-color)]">
                 <div className="flex justify-center items-center gap-[20px]">
-                    <button className={`swiper-button-prev-${uniqueId} cursor-pointer`}>
+                    <button className={`arrow NeoSubContainer_outset_TL p-[7px] swiper-button-prev-${uniqueId} cursor-pointer`}>
                         <FontAwesomeIcon icon={faArrowLeft} className="faArrowLeft text-[30px]" />
                     </button>
-                    <button className={`swiper-button-next-${uniqueId} cursor-pointer`}>
+                    <button className={`arrow NeoSubContainer_outset_TL p-[7px] swiper-button-next-${uniqueId} cursor-pointer`}>
                         <FontAwesomeIcon icon={faArrowRight} className="faArrowRight text-[30px]" />
                     </button>
                 </div>
-                <FontAwesomeIcon icon={faHandPointUp} className="faHandPointUp text-[20px]" />
             </div>
         </section>
     );

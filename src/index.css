@@ -2,15 +2,15 @@
 
 * {
   margin: 0;
-  /* padding: 0; */
+  font-family: Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   box-sizing: border-box;
+  transition: all 0.3s ease;
 }
 
 :root {
-  --font-color: #323232;
-  --font-color-sub: #666;
   --bg-color: #fff;
   --main-color: #323232;
+  --main-color-sub: #666;
   --main-focus: #2d8cf0;
   --Bacground-body: #e0e2e5;
   /* Body-color-end----------------- Font-Nav*/
@@ -37,10 +37,31 @@ body {
     box-shadow: 9.91px 9.91px 15px #CACACA, -9.91px -9.91px 15px #F2F2F2;
   }
 
+  .NeoSubContainer_outset_TL {
+    background: var(--background-color);
+    border-radius: 20px;
+    box-shadow: 9.91px 9.91px 15px #CCCED0, -9.91px -9.91px 15px #F4F6FA;
+  }
+  .NeoSubContainer_inset_TL {
+    background: var(--background-color);
+    border-radius: 20px;
+    box-shadow: inset -9.91px -9.91px 15px #CCCED0, 9.91px 9.91px 15px #F4F6FA;
+  }
+  .NeoSubContainer_inset_TOTAL {
+    background: var(--background-color);
+    border-radius: 20px;
+    box-shadow: inset -4px -4px 8px #CCCED0, inset 4px 4px 8px #F4F6FA;
+  }
+
   .NeoContainer_outset_BR {
     background: var(--background-color);
     border-radius: 20px;
     box-shadow: -9.91px -9.91px 15px #CACACA, 9.91px 9.91px 15px #F2F2F2;
+  }
+  .NeoSubContainer_inset_BR {
+    background: var(--background-color);
+    border-radius: 20px;
+    box-shadow: inset 9.91px 9.91px 15px #CACACA, -9.91px -9.91px 15px #F2F2F2;
   }
 
   .NeoContainer_inset_BR {
