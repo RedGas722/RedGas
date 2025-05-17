@@ -22,7 +22,6 @@ import { AdminsBack } from './Admin/Admins/AdminsBack'
 export function App() {
     return (
         <>
-
             <div className="flex flex-col gap-[80px]" >
                 <Routes>
                     <Route path="/" element={<MainPage />} />
@@ -41,6 +40,8 @@ export function App() {
                         <Route path="Services" element={<ServicesBack />} />
 						<Route path="Admins" element={<AdminsBack />} />
                     </Route>
+                    {/* SHOP */}
+                    r
                 </Routes>
             </div>
         </>
