@@ -3,9 +3,9 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRight, faArrowLeft, faHandPointUp, faCartShopping, faTag } from '@fortawesome/free-solid-svg-icons';
+import { faArrowRight, faArrowLeft, faHandPointUp, faCartShopping } from '@fortawesome/free-solid-svg-icons';
 
-export const Cards = ({ uniqueId, imgContent, titleCatt, brandCatt, Price }) => {
+export const Cards = ({ uniqueId, imgContent, titleCatt, brandCatt, afterPrice, beforePrice }) => {
 
     function dividirConComaCada3Caracteres(cadena) {
         let resultado = "";
@@ -50,30 +50,39 @@ export const Cards = ({ uniqueId, imgContent, titleCatt, brandCatt, Price }) => 
                     },
                 }}
                 id={`cardContainer-${uniqueId}`}
-                className="w-[100%] flex justify-center h-[500px] justify-self-center items-center"
+                className="w-[100%] flex justify-center justify-self-center items-center"
             >
                 {cards.map((_, index) => (
                     <SwiperSlide key={index} id={`CardSect-${uniqueId}`}>
-                        <div className="flex justify-center justify-self-center items-center w-fit">
-                            <div id="cc" className="shadow_box rounded-[20px] w-fit relative">
-                                <div className="cards_shadow clip-path-triangle h-[480px] text-white bg-glass-total rounded-[20px] w-[300px]">
-                                    <div className="flex justify-center items-center gap-[8px]">
-                                        <h4 className="text-3xl">{titleCatt}</h4>
-                                        <h3 className="font-black text-4xl">{brandCatt}</h3>
-                                    </div>
-                                    <img src={imgContent} alt="" className="rounded-[20px]" />
-                                    <div>
-                                        <FontAwesomeIcon icon={faTag} className="absolute -rotate-45 bottom-[80px] right-[0px] text-[60px]" />
-                                    </div>
-                                    <div className="absolute flex flex-col justify-center items-center bottom-[5px] left-[10px] ">
-                                        <p className="text-white text-[28px]">
-                                            ${dividirConComaCada3Caracteres((Price || 0).toString())}
-                                        </p>
-                                    </div>
+
+                        <div className="flex justify-center justify-self-center h-[450px] p-[0_0_5px_0] items-center w-fit">
+                            <div className="card">
+                                <div className="card-img">
+                                    <div className="img"> <img
+                                        src={imgContent}
+                                        alt="producto"
+                                        className="rounded-[20px]"
+                                    /></div>
                                 </div>
-                                <button tabIndex='-1' className="clip-path-triangle-inverse cursor-pointer flex justify-center text-[34px] items-end text-white rounded-t-[20px] rounded-br-[20px] w-[150px] h-[190px] bg-glass-1 bg-[#ffffff0f] absolute right-0 bottom-0">
-                                    <FontAwesomeIcon className="absolute bottom-[12px]" icon={faCartShopping} />
-                                </button>
+                                <div className="flex gap-1 items-end justify-center">
+                                    <div className="card-title">{titleCatt}</div>
+                                    <div className="font-black text-[18px]">{brandCatt}</div>
+                                </div>
+                                <div className="card-subtitle">Product description. Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
+                                <hr className="card-divider" />
+                                <div className="card-footer">
+                                    <div className="card-price">
+                                        <div>
+                                            <span>$</span> {dividirConComaCada3Caracteres((afterPrice || 0).toString())}
+                                        </div>
+                                        <div className="beforePrice text-[15px] line-through">
+                                            <span>$</span> {dividirConComaCada3Caracteres((beforePrice || 0).toString())}
+                                        </div>
+                                    </div>
+                                    <button className="card-btn hover:text-[#ffff]">
+                                        <FontAwesomeIcon icon={faCartShopping} />
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </SwiperSlide>

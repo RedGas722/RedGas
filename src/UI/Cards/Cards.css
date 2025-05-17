@@ -6,12 +6,115 @@
     min-width: 300px;
     gap: clamp(3rem, 2vw, 20px);
 }
-#cardContainer{
+
+#cardContainer {
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
 }
-#cc{
+
+#cc {
     width: 300px;
+}
+
+/* From Uiverse.io by andrew-demchenk0 */
+/* before adding the img to the div with the 
+"card-img" class, remove css styles 
+.card-img .img::before and .card-img .img::after,
+then set the desired styles for .card-img. */
+.card {
+    width: 230px;
+    height: fit-content;
+    background: var(--background-color);
+    border-radius: 20px;
+    box-shadow: 9.91px 9.91px 15px #CACACA, -9.91px -9.91px 15px #F2F2F2;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 20px;
+    gap: 10px;
+    font-family: Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.card:last-child {
+    justify-content: flex-end;
+}
+
+.card-img {
+    /* clear and add new css */
+    transition: all 0.5s;
+    display: flex;
+    justify-content: center;
+}
+
+.card-title {
+    font-size: 20px;
+    font-weight: 500;
+    text-align: center;
+    color: var(--font-color);
+}
+
+.card-subtitle {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--font-color-sub);
+}
+
+.card-divider {
+    width: 100%;
+    border: 1px solid var(--main-color);
+    border-radius: 50px;
+}
+
+.card-footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-price {
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--font-color);
+}
+
+.card-price span {
+    font-weight: 500;
+    color: var(--font-color-sub);
+}
+
+.card-btn {
+    height: 35px;
+    padding: 1px 15px;
+    background: var(--bg-color);
+    border: 2px solid var(--main-color);
+    border-radius: 5px;
+    transition: all 0.3s;
+    cursor: pointer;
+}
+
+.card-btn {
+    /* width: 100%;
+    height: 100%; */
+    color: var(--main-color);
+    transition: all 0.3s;
+}
+
+.card-img:hover {
+    transform: translateY(-3px);
+}
+
+.card-btn:hover {
+    border: 2px solid var(--main-focus);
+}
+
+.card-btn:hover {
+    color: var(--main-focus);
+}
+
+.card-btn:active {
+    transform: translateY(3px);
 }
