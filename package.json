@@ -24,7 +24,7 @@
     "react-router-dom": "^7.6.0",
     "react-scroll": "^1.9.3",
     "react-window": "^1.8.11",
-    "sweetalert2": "^11.21.0",
+    "sweetalert2": "^11.21.1",
     "sweetalert2-react-content": "^5.1.0",
     "swiper": "^11.2.6",
     "tailwindcss": "^4.1.6"
