@@ -1,4 +1,5 @@
 import { Buttons } from '../../UI/Login_Register/Buttons'
+import { InputLabel } from '../../UI/Login_Register/InputLabel/InputLabel';
 import { Link, useNavigate } from "react-router-dom"
 import { jwtDecode } from 'jwt-decode'
 import { useState } from "react"
@@ -195,28 +196,17 @@ export const ForgotPassword = () => {
 
     return (
 
-        <div className='sectionForgot w-full gap-[40px] h-dvh '>
-            <div className=" form shadow_box_RL bg-glass-total rounded-3xl flex flex-col justify-self-center items-center h-fit w-fit gap-[30px]">
-                <h1 className="text-center text-white text-4xl">¡Recuperar contraseña!</h1>
+        <div className='sectionForgot w-full text-[var(--main-color)] h-dvh '>
+            <div className="divForm NeoContainer_outset_TL p-[30px_15px_15px_15px]  flex flex-col justify-self-center items-center h-fit w-fit gap-[30px]">
+                <h1 className="text-center text-4xl">¡Recuperar contraseña!</h1>
                 <form className=" flex flex-col gap-[35px] justify-center items-center text-start w-full" onSubmit={handleForgotPassword} >
                     {/* E-mail */}
-                    <div className='flex flex-col gap-[10px] justify-center items-center text-start w-full'>
-                        <label htmlFor="Email" className="text-white text-2xl w-full">
-                            Correo electrónico
-                        </label>
-                        <input
-                            type="email"
-                            placeholder="example@gmail.com"
-                            id="Email"
-                            className="border-t-0 border-b-[1px] w-full placeholder:text-gray-400 text-gray-200 border-gray-300 outline-0"
-                            onChange={e => setEmail(e.target.value)}
-                            required
-                        />
-                    </div>
+                    <InputLabel type='2' ForID='Email' childLabel='Correo electrónico' placeholder='example@gmail.com' onChange={e => setEmail(e.target.value)} required />
+                    
                     <div className='flex flex-col gap-[10px] justify-center items-center text-start w-full'>
                         <Buttons type='submit' nameButton="Enviar" />
                         <Link to="/Login/">
-                            <button className="cursor-pointer text-[#18BBFC]">
+                            <button className="cursor-pointer text-[var(--main-focus)]">
                                 <p>¿Quieres volver al Login?</p>
                             </button>
                         </Link>
