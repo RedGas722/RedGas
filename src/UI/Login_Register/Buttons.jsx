@@ -3,7 +3,7 @@ import './LR.css'
 export const Buttons = ({nameButton, Onclick, Type}) => {
     return (
         <>
-            <button onClick={Onclick} type={Type} className='buttonRL w-fit bg-white text-2xl text-black rounded-[100px] cursor-pointer'>{nameButton}</button>
+            <button onClick={Onclick} type={Type} className='buttonTL p-[5px_70px] text-[var(--main-color)] w-fit NeoSubContainer_outset_TL cursor-pointer'>{nameButton}</button>
         </>
     )
 }

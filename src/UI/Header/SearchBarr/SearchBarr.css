@@ -1,5 +1,0 @@
-.searcBarr:focus-within {
-    background-color: #f0f0f0;
-    box-shadow: inset -2px -2px 4px #DADADA, inset 2px 2px 4px #FFFFFF, 0 0 5px rgba(0, 0, 0, 0.2);
-    text-shadow: 4px 4px 2px #CCCED0, -4px -4px 2px #F4F6FA;
-}

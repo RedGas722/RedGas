@@ -78,10 +78,10 @@ export const Cards = ({ uniqueId, imgContent, titleCatt, Price, brandCatt }) => 
             </Swiper>
             <div className="flex flex-col justify-center items-center self-center w-fit p-[10px] NeoSubContainer_outset_TL text-[var(--main-color)]">
                 <div className="flex justify-center items-center gap-[20px]">
-                    <button className={`arrow NeoSubContainer_outset_TL p-[7px] swiper-button-prev-${uniqueId} cursor-pointer`}>
+                    <button className={`buttonTL arrow NeoSubContainer_outset_TL p-[7px] swiper-button-prev-${uniqueId} cursor-pointer`}>
                         <FontAwesomeIcon icon={faArrowLeft} className="faArrowLeft text-[30px]" />
                     </button>
-                    <button className={`arrow NeoSubContainer_outset_TL p-[7px] swiper-button-next-${uniqueId} cursor-pointer`}>
+                    <button className={`buttonTL arrow NeoSubContainer_outset_TL p-[7px] swiper-button-next-${uniqueId} cursor-pointer`}>
                         <FontAwesomeIcon icon={faArrowRight} className="faArrowRight text-[30px]" />
                     </button>
                 </div>

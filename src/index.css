@@ -7,6 +7,10 @@
   transition: all 0.3s ease;
 }
 
+input::placeholder {
+  color: var(--main-color-sub);
+}
+
 :root {
   --bg-color: #fff;
   --main-color: #323232;
@@ -17,6 +21,14 @@
   --Font-Nav: #FDBC50;
   /* ADMIN */
   --background-color: #e0e2e5;
+  /* Shadows Neomorfism */
+  --shadow-1: #CACACA;
+  --shadow-2: #F2F2F2;
+  /* Sub Shadows Neomorfism */
+  --shadow-3: #CCCED0;
+  --shadow-4: #F4F6FA;
+  /* For Inputs:focus */
+  --shadow-5: #DADADA;
 }
 
 body {
@@ -24,47 +36,74 @@ body {
   background-size: cover;
 }
 
+input[type="password"]::-ms-reveal,
+input[type="password"]::-webkit-reveal {
+  display: none;
+}
+
 @layer utilities {
   .NeoContainer_inset_TL {
     background: var(--background-color);
     border-radius: 20px;
-    box-shadow: inset -9.91px -9.91px 15px #CACACA, inset 9.91px 9.91px 15px #F2F2F2;
+    box-shadow: inset -9.91px -9.91px 15px var(--shadow-1), inset 9.91px 9.91px 15px var(--shadow-2);
   }
 
   .NeoContainer_outset_TL {
     background: var(--background-color);
     border-radius: 20px;
-    box-shadow: 9.91px 9.91px 15px #CACACA, -9.91px -9.91px 15px #F2F2F2;
+    box-shadow: 9.91px 9.91px 15px var(--shadow-1), -9.91px -9.91px 15px var(--shadow-2);
   }
 
   .NeoSubContainer_outset_TL {
     background: var(--background-color);
     border-radius: 20px;
-    box-shadow: 9.91px 9.91px 15px #CCCED0, -9.91px -9.91px 15px #F4F6FA;
+    box-shadow: 9.91px 9.91px 15px var(--shadow-3), -9.91px -9.91px 15px var(--shadow-4);
   }
+
   .NeoSubContainer_inset_TL {
     background: var(--background-color);
     border-radius: 20px;
-    box-shadow: inset -9.91px -9.91px 15px #CCCED0, 9.91px 9.91px 15px #F4F6FA;
+    box-shadow: inset -9.91px -9.91px 15px var(--shadow-3), 9.91px 9.91px 15px var(--shadow-4);
   }
+
   .NeoSubContainer_inset_TOTAL {
     background: var(--background-color);
     border-radius: 20px;
-    box-shadow: inset -4px -4px 8px #CCCED0, inset 4px 4px 8px #F4F6FA;
+    box-shadow: inset -4px -4px 8px var(--shadow-3), inset 4px 4px 8px var(--shadow-4);
   }
 
   .NeoContainer_outset_BR {
     background: var(--background-color);
     border-radius: 20px;
-    box-shadow: -9.91px -9.91px 15px #CACACA, 9.91px 9.91px 15px #F2F2F2;
+    box-shadow: -9.91px -9.91px 15px var(--shadow-1), 9.91px 9.91px 15px var(--shadow-2);
   }
+
   .NeoSubContainer_inset_BR {
     background: var(--background-color);
     border-radius: 20px;
-    box-shadow: inset 9.91px 9.91px 15px #CACACA, -9.91px -9.91px 15px #F2F2F2;
+    box-shadow: inset 9.91px 9.91px 15px var(--shadow-1), -9.91px -9.91px 15px var(--shadow-2);
   }
 
   .NeoContainer_inset_BR {
+    background: var(--background-color);
+    border-radius: 20px;
+    box-shadow: inset 9.91px 9.91px 15px var(--shadow-1), -9.91px -9.91px 15px var(--shadow-2);
+  }
+
+  .inputs:focus-within {
+    background-color: #f0f0f0;
+    box-shadow: inset -2px -2px 4px var(--shadow-5), inset 2px 2px 4px white, 0 0 5px rgba(0, 0, 0, 0.2);
+    text-shadow: 4px 4px 2px var(--shadow-3), -4px -4px 2px var(--shadow-4);
+  }
+
+  .inputs:webkit-autofill {
+    background-color: var(--background-color);
+    box-shadow: inset -2px -2px 4px var(--shadow-5), inset 2px 2px 4px white, 0 0 5px rgba(0, 0, 0, 0.2);
+    text-shadow: 4px 4px 2px var(--shadow-3), -4px -4px 2px var(--shadow-4);
+    transition: background 50000s ease-in-out 0s;
+  }
+
+  .buttonTL:active {
     background: var(--background-color);
     border-radius: 20px;
     box-shadow: inset 9.91px 9.91px 15px #CACACA, -9.91px -9.91px 15px #F2F2F2;
