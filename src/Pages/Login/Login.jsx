@@ -158,10 +158,10 @@ export const Login = () => {
     }
 
     return (
-        <section className="sectionLogin relative text-[var(--main-color)] w-full gap-[40px] h-dvh ">
+        <section className="sectionLogin relative text-[var(--main-color)] w-full  h-dvh ">
             <BtnBack To='/' />
             <div id='divAlert' />
-            <div className="divForm p-[30px_15px_15px_15px] z-50 shadow_box_RL NeoContainer_outset_TL rounded-3xl flex flex-col items-center w-fit justify-self-center gap-[40px]">
+            <div className="divForm p-[30px_15px_15px_15px] z-50 shadow_box_RL NeoContainer_outset_TL rounded-3xl flex flex-col items-center w-fit justify-self-center gap-[20px]">
                 <h1 className="text-center text-4xl">¡Bienvenido de nuevo!</h1>
                 <form className="form flex flex-col gap-[30px] justify-center items-center text-start w-full " onSubmit={handleLogin}>
                     {/* Email */}
@@ -188,7 +188,7 @@ export const Login = () => {
                                 type={showPassword ? "text" : "password"}
                                 placeholder={showPassword ? "Contraseña" : "**********"}
                                 id="Password"
-                                className="NeoSubContainer_inset_TOTAL inputs text-[var(--main-colo)] w-full p-[10px_0_10px_15px] placeholder:text-gray-400 border-0 outline-0"
+                                className="NeoSubContainer_inset_TOTAL inputs text-[var(--main-colo)] w-full p-[10px_0_10px_15px] placeholder:text-[var(--main-color-sub)] border-0 outline-0"
                                 value={contrasena} onChange={e => setContrasena(e.target.value)}
                                 required
                             />

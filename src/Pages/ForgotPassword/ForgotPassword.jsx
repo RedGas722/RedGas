@@ -1,4 +1,3 @@
-import { HeadLR } from '../../UI/Login_Register/HeadLR/HeadLR'
 import { Buttons } from '../../UI/Login_Register/Buttons'
 import { Link, useNavigate } from "react-router-dom"
 import { jwtDecode } from 'jwt-decode'
@@ -197,7 +196,6 @@ export const ForgotPassword = () => {
     return (
 
         <div className='sectionForgot w-full gap-[40px] h-dvh '>
-            <HeadLR />
             <div className=" form shadow_box_RL bg-glass-total rounded-3xl flex flex-col justify-self-center items-center h-fit w-fit gap-[30px]">
                 <h1 className="text-center text-white text-4xl">¡Recuperar contraseña!</h1>
                 <form className=" flex flex-col gap-[35px] justify-center items-center text-start w-full" onSubmit={handleForgotPassword} >
