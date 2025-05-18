@@ -50,17 +50,13 @@ export const Navs = () => {
             >
                 Ofertas
             </Link>
-            <Link
-                to="HeatersSect"
-                smooth={true}
-                duration={500}
-                className={`${getLinkClass("HeatersSect")} NeoSubContainer_outset_TL p-[5px_10px]`}
+            <NavLink
+                to="/Technic"
+                className='NeoSubContainer_outset_TL p-[5px_10px]'
                 activeClass="!text-[var(--Font-Nav)] font-bold"
-                spy={true}
-                onSetActive={() => setActive("HeatersSect")}
             >
                 Técnicos
-            </Link>
+            </NavLink>
             <NavLink to="/Admin">
                 Admin
             </NavLink>

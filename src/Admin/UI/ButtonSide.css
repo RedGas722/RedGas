@@ -1,12 +1,5 @@
-.NavsBTN {
-    padding: 16px 0;
-}
-
-[data-theme="light"]{
-    --BackLigds: inset 9.91px 9.91px 15px #0066ff, -9.91px -9.91px 15px #ff0000;
-}
 .NavsBTN:active {
     background: var(--background-color);
     border-radius: 20px;
-    box-shadow:  var(--BackLight);
+    box-shadow: inset 9.91px 9.91px 15px var(--shadow-1), -9.91px -9.91px 15px var(--shadow-2);
 }

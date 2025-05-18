@@ -18,3 +18,6 @@
     border-radius: 20px;
     box-shadow: inset -9.91px -9.91px 15px #CACACA, inset 9.91px 9.91px 15px #F2F2F2;
 }
+.BTN:hover {
+    color: var(--Font-Nav);
+}
