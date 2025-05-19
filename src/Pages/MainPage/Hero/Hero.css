@@ -1,3 +1,4 @@
 #Logo{
     width: clamp(200px, 15vw, 250px);
+    filter: drop-shadow(15px 15px 15px var(--main-color));
 }

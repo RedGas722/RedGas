@@ -3,7 +3,7 @@ import Logo from '../../../assets/Images/red_gas.webp'
 
 export const Hero = () => {
     return (
-        <section className="p-[15px] w-[100%] bg-glass-total shadow_box rounded-[18px] text-white flex flex-col gap-[20px] justify-center items-center">
+        <section id='Hero' className="p-[15px] w-[100%] NeoContainer_outset_TL text-[var(--main-color)] flex flex-col gap-[20px] justify-center items-center">
             <img src={Logo} alt="RedGas Logo" id='Logo' />
             <div className='text-[20px] flex flex-col gap-[50px]'>
                 <div className='flex flex-col items-center justify-center text-center'>
