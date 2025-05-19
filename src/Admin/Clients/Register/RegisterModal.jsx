@@ -1,4 +1,8 @@
 import React, { useState } from 'react';
+<<<<<<< HEAD
+=======
+import { Inputs } from '../../UI/Inputs/Inputs'
+>>>>>>> 35af6dee4b0ce4c5dc6f0f6f6f61b187b135eb18
 
 export const RegisterModal = ({ onClose }) => {
   const [nombre, setNombre] = useState('');
@@ -83,6 +87,7 @@ export const RegisterModal = ({ onClose }) => {
         >✕</button>
 
         <h2 className="text-xl font-bold text-center">Registrar Cliente</h2>
+<<<<<<< HEAD
 
         <input
           type="text"
@@ -135,6 +140,18 @@ export const RegisterModal = ({ onClose }) => {
           onChange={(e) => setContrasena(e.target.value)}
           className="border rounded p-2"
         />
+=======
+        <Inputs Type='1' Place='Nombre del Cliente' Value={nombre} onChange={(e) => setNombre(e.target.value)} />
+        {errores.nombre && <p className="text-red-600 text-sm">{errores.nombre}</p>}
+        <Inputs Type='1' Place='Apellido del Cliente' Value={apellido} onChange={(e) => setApellido(e.target.value)} />
+        {errores.apellido && <p className="text-red-600 text-sm">{errores.apellido}</p>}
+        <Inputs Type='2' Place='Correo del Cliente' Value={correo} onChange={(e) => setCorreo(e.target.value)} />
+        {errores.correo && <p className="text-red-600 text-sm">{errores.correo}</p>}
+        <Inputs Type='6' Place='Telefono del Cliente' Value={telefono} onChange={(e) => setTelefono(e.target.value)} />
+        {errores.telefono && <p className="text-red-600 text-sm">{errores.telefono}</p>}
+        <Inputs Type='1' Place='Direccion del Cliente' Value={direccion} onChange={(e) => setDireccion(e.target.value)} />
+        <Inputs Type='3' Place='Contraseña del Cliente' Value={contrasena} onChange={(e) => setContrasena(e.target.value)} />
+>>>>>>> 35af6dee4b0ce4c5dc6f0f6f6f61b187b135eb18
         {errores.contrasena && <p className="text-red-600 text-sm">{errores.contrasena}</p>}
 
         <div className="flex justify-between gap-2">

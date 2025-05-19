@@ -1,4 +1,8 @@
 import React, { useState } from 'react';
+<<<<<<< HEAD
+=======
+import { Inputs } from '../../UI/Inputs/Inputs'
+>>>>>>> 35af6dee4b0ce4c5dc6f0f6f6f61b187b135eb18
 
 export const GetModal = ({ onClose }) => {
   const [correo, setCorreo] = useState('');
@@ -80,6 +84,7 @@ export const GetModal = ({ onClose }) => {
 
         <h2 className="text-xl font-bold text-center">Consultar Cliente</h2>
 
+<<<<<<< HEAD
         {/* Campo de correo */}
         <input
           type="email"
@@ -88,6 +93,9 @@ export const GetModal = ({ onClose }) => {
           onChange={(e) => setCorreo(e.target.value)}
           className="border rounded p-2"
         />
+=======
+        <Inputs Type='2' Place='Correo del Cliente' Value={correo} onChange={(e) => setCorreo(e.target.value)} />
+>>>>>>> 35af6dee4b0ce4c5dc6f0f6f6f61b187b135eb18
         {error && <p className="text-red-600 text-sm">{error}</p>}
 
         <div className="flex justify-between gap-2">

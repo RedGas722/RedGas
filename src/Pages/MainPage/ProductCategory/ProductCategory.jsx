@@ -8,7 +8,7 @@ import { PrpoductCatergories } from "../../../UI/PrpoductCatergories/PrpoductCat
 
 export const ProductCategory = () => {
     return (
-        <section id="ProductCategory" className="cardCategoryContainer">
+        <section id="ProductCategory" className="NeoContainer_outset_TL cardCategoryContainer p-[30px]">
             <PrpoductCatergories imgCategory={faWater} nameCategory="Calentadores" />
             <PrpoductCatergories imgCategory={faWrench} nameCategory="Herramientas" />
             <PrpoductCatergories imgCategory={faGear} nameCategory="Repuestos" />

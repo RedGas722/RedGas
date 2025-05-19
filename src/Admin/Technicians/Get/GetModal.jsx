@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { useState } from 'react';
+=======
+import React, { useState } from 'react';
+>>>>>>> 35af6dee4b0ce4c5dc6f0f6f6f61b187b135eb18
 
 export const GetModal = ({ onClose }) => {
   const [correo, setCorreo] = useState('');

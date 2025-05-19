@@ -1,4 +1,8 @@
 import React, { useState } from 'react';
+<<<<<<< HEAD
+=======
+import { Inputs } from '../../UI/Inputs/Inputs'
+>>>>>>> 35af6dee4b0ce4c5dc6f0f6f6f61b187b135eb18
 
 const URL = 'http://localhost:10101/ClienteDelete';
 const GET_URL = 'http://localhost:10101/ClienteGet'; // Endpoint para verificar si el cliente existe
@@ -93,6 +97,7 @@ export const DeleteModal = ({ onClose }) => {
 
         <h2 className="text-xl font-bold text-center">Eliminación de cliente</h2>
 
+<<<<<<< HEAD
         {/* Input de correo */}
         <input
           type="email"
@@ -101,6 +106,9 @@ export const DeleteModal = ({ onClose }) => {
           onChange={(e) => setCorreo(e.target.value)}
           className="border rounded p-2"
         />
+=======
+        <Inputs Type='2' Place='Correo del Cliente' Value={correo} onChange={(e) => setCorreo(e.target.value)} />
+>>>>>>> 35af6dee4b0ce4c5dc6f0f6f6f61b187b135eb18
         {error && <p className="text-red-600 text-sm">{error}</p>}
 
         <div className="flex justify-between gap-2">

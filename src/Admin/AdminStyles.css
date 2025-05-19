@@ -17,4 +17,10 @@
     background: var(--background-color);
     border-radius: 20px;
     box-shadow: inset -9.91px -9.91px 15px #CACACA, inset 9.91px 9.91px 15px #F2F2F2;
+<<<<<<< HEAD
+=======
+}
+.BTN:hover {
+    color: var(--Font-Nav);
+>>>>>>> 35af6dee4b0ce4c5dc6f0f6f6f61b187b135eb18
 }

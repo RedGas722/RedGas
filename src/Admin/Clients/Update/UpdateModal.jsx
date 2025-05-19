@@ -1,4 +1,8 @@
 import { useState } from 'react';
+<<<<<<< HEAD
+=======
+import { Inputs } from '../../UI/Inputs/Inputs'
+>>>>>>> 35af6dee4b0ce4c5dc6f0f6f6f61b187b135eb18
 
 export const UpdateModal = ({ onClose }) => {
 	const [correo, setCorreo] = useState('');
@@ -118,6 +122,7 @@ export const UpdateModal = ({ onClose }) => {
 
 				<h2 className="text-xl font-bold text-center">Actualizar Cliente</h2>
 
+<<<<<<< HEAD
 				{/* Correo a buscar */}
 				<input
 					type="email"
@@ -127,6 +132,14 @@ export const UpdateModal = ({ onClose }) => {
 					className="border rounded p-2"
 				/>
 				{errores.correo && <p className="text-red-600 text-sm">{errores.correo}</p>}
+=======
+				{!editando && (
+				<>
+					<Inputs Type="2" Place="Correo del cliente" Value={correo} onChange={(e) => setCorreo(e.target.value)} />
+					{errores.correo && (<p className="text-red-600 text-sm">{errores.correo}</p>)}
+				</>
+				)}
+>>>>>>> 35af6dee4b0ce4c5dc6f0f6f6f61b187b135eb18
 
 				{/* Botón buscar si aún no se editará */}
 				{!editando && (
@@ -139,6 +152,7 @@ export const UpdateModal = ({ onClose }) => {
 				{/* Campos editables si ya se encontró el cliente */}
 				{editando && cliente && (
 					<>
+<<<<<<< HEAD
 						<input
 							type="text"
 							placeholder="Nuevo Nombre"
@@ -192,6 +206,17 @@ export const UpdateModal = ({ onClose }) => {
 							}
 							className="border rounded p-2"
 						/>
+=======
+						<Inputs Type='1' Place='Nuevo Nombre del Cliente' Value={cliente.nombre_cliente} onChange={(e) => setCliente({ ...cliente, nombre_cliente: e.target.value })} />
+						{errores.nombre && <p className="text-red-600 text-sm">{errores.nombre}</p>}
+						<Inputs Type='1' Place='Nuevo Apellido del Cliente' Value={cliente.apellido_cliente} onChange={(e) => setCliente({ ...cliente, apellido_cliente: e.target.value })} />
+						{errores.apellido && <p className="text-red-600 text-sm">{errores.apellido}</p>}
+						<Inputs Type='2' Place='Nuevo Correo del Cliente' Value={cliente.nuevo_correo_cliente} onChange={(e) => setCliente({ ...cliente, nuevo_correo_cliente: e.target.value })} />
+						{errores.nuevoCorreo && <p className="text-red-600 text-sm">{errores.nuevoCorreo}</p>}
+						<Inputs Type='6' Place='Nuevo Telefono del Cliente' Value={cliente.telefono_cliente} onChange={(e) => setCliente({ ...cliente, telefono_cliente: e.target.value })} />
+						{errores.telefono && <p className="text-red-600 text-sm">{errores.telefono}</p>}
+						<Inputs Type='1' Place='Nueva Direccion del Cliente' Value={cliente.direccion_cliente} onChange={(e) => setCliente({ ...cliente, direccion_cliente: e.target.value })} />
+>>>>>>> 35af6dee4b0ce4c5dc6f0f6f6f61b187b135eb18
 						{errores.direccion && <p className="text-red-600 text-sm">{errores.direccion}</p>}
 
 						<div className="flex justify-between gap-2">
