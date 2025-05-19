@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Inputs } from '../../UI/Inputs/Inputs';
 
-export const RegisterModal = ({ onClose }) => {
+export const RegisterModal = ({ onClose, setRefrescar }) => {
   const [nombre, setNombre] = useState('');
   const [mensaje, setMensaje] = useState('');
   const [errores, setErrores] = useState({});
@@ -41,72 +41,17 @@ export const RegisterModal = ({ onClose }) => {
       const data = await res.json();
 
       if (!res.ok) {
+        // Si el error es 500 y tiene información de duplicado
+        if (res.status === 500 && data.errorInfo?.includes('Duplicate')) {
+          setMensaje('La categoría ya existe.');
+          return;
+        }
         const errorMsg = data?.errors?.[0]?.msg || 'Error al registrar categoría.';
         throw new Error(errorMsg);
       }
 
-      setMensaje('Registro exitoso.');console.log('Nombre:', nombre);
-console.log('Mensaje:', mensaje);
-console.log('Errores:', errores);
-console.log('URL:', URL);
-
-const validarCampos = () => {
-  console.log('Validando campos...');
-  const errores = {};
-  if (!nombre.trim()) {
-    errores.nombre = 'El nombre de la categoría es obligatorio.';
-  } else if (/^\d+$/.test(nombre)) {
-    errores.nombre = 'El nombre no puede ser solo números.';
-  }
-  console.log('Errores validados:', errores);
-  return errores;
-};
-
-const handleRegister = async (e) => {
-  console.log('Registrando categoría...');
-  e.preventDefault();
-
-  const erroresValidados = validarCampos();
-  if (Object.keys(erroresValidados).length > 0) {
-    console.log('Errores en el formulario:', erroresValidados);
-    setErrores(erroresValidados);
-    setMensaje('');
-    return;
-  }
-
-  setErrores({});
-
-  try {
-    console.log('Enviando solicitud a:', URL);
-    const res = await fetch(URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ nombre_categoria: nombre }),
-    });
-
-    console.log('Respuesta del servidor:', res);
-    const data = await res.json();
-
-    if (!res.ok) {
-      console.log('Error en la respuesta:', data);
-      const errorMsg = data?.errors?.[0]?.msg || 'Error al registrar categoría.';
-      throw new Error(errorMsg);
-    }
-
-    console.log('Registro exitoso:', data);
-    setMensaje('Registro exitoso.');
-  } catch (err) {
-    console.log('Error al registrar categoría:', err.message);
-    setMensaje('Error: ' + err.message);
-  }
-};
-
-const handleCancel = () => {
-  console.log('Cancelando registro...');
-  setNombre('');
-  setMensaje('');
-  setErrores({});
-};
+      setMensaje('Registro exitoso.');
+      setRefrescar(true); 
     } catch (err) {
       setMensaje('Error: ' + err.message);
     }
