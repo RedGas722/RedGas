@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Inputs } from '../../UI/Inputs/Inputs';
 
 export const GetModal = ({ onClose }) => {
   const [nombre, setNombre] = useState('');
@@ -46,12 +47,11 @@ export const GetModal = ({ onClose }) => {
 
         <h2 className="text-xl font-bold text-center">Consultar Servicio</h2>
 
-        <input
-          type="text"
-          placeholder="Nombre del servicio"
-          value={nombre}
+        <Inputs
+          Type="1"
+          Place="Nombre del servicio"
+          Value={nombre}
           onChange={(e) => setNombre(e.target.value)}
-          className="border rounded p-2"
         />
 
         <div className="flex justify-between gap-2">

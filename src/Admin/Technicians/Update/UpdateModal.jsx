@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Inputs } from '../../UI/Inputs/Inputs';
 
 export const UpdateModal = ({ onClose }) => {
   const [nuevoCorreo, setNuevoCorreo] = useState('');
@@ -105,45 +106,40 @@ export const UpdateModal = ({ onClose }) => {
 
         <h2 className="text-xl font-bold text-center">Actualizar Técnico</h2>
 
-        <input
-          type="text"
-          placeholder="Correo Actual del Técnico"
-          value={correo}
+        <Inputs
+          Type="1"
+          Place="Correo Actual del Técnico"
+          Value={correo}
           onChange={(e) => setCorreo(e.target.value)}
-          className="border rounded p-2"
         />
-        <input
-          type="text"
-          placeholder="Nuevo Nombre"
-          value={nombre}
+        <Inputs
+          Type="1"
+          Place="Nuevo Nombre"
+          Value={nombre}
           onChange={(e) => setNombre(e.target.value)}
-          className="border rounded p-2"
         />
-        <input
-          type="email"
-          placeholder="Nuevo Correo del Técnico"
-          value={nuevoCorreo}
+        <Inputs
+          Type="2"
+          Place="Nuevo Correo del Técnico"
+          Value={nuevoCorreo}
           onChange={(e) => setNuevoCorreo(e.target.value)}
-          className="border rounded p-2"
         />
-        <input
-          type="text"
-          placeholder="Nuevo Teléfono del Técnico"
-          value={telefono}
+        <Inputs
+          Type="6"
+          Place="Nuevo Teléfono del Técnico"
+          Value={telefono}
           onChange={(e) => setTelefono(e.target.value)}
-          className="border rounded p-2"
         />
-        <input
-          type="password"
-          placeholder="Nueva Contraseña del Técnico"
-          value={contrasena}
+        <Inputs
+          Type="3"
+          Place="Nueva Contraseña del Técnico"
+          Value={contrasena}
           onChange={(e) => setContrasena(e.target.value)}
-          className="border rounded p-2"
         />
-        <input
-          type="file"
+        <Inputs
+          Type="4"
+          Place="Nueva Imagen del Técnico"
           onChange={handleImageChange}
-          className="border rounded p-2"
         />
 
         <div className="flex justify-between gap-2">

@@ -70,12 +70,17 @@ export const ForgotPassword = () => {
                 );
             }
 
+<<<<<<< HEAD
         } catch (err) {
             alertSendForm(
                 502,
                 'Ocurrió un error de conexión',
                 'No se pudo procesar tu solicitud. Intenta nuevamente más tarde.'
             );
+=======
+        } catch {
+            alertSendForm(400, 'El correo no esta registrador');
+>>>>>>> 4a92b755c4f6c940a5061297f2d32cde3fffc72c
         }
     };
 

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Inputs } from '../../UI/Inputs/Inputs';
 
 export const RegisterModal = ({ onClose }) => {
     const [nombre, setNombre] = useState('');
@@ -51,33 +52,29 @@ export const RegisterModal = ({ onClose }) => {
 
                 <h2 className="text-xl font-bold text-center">Registrar Administrador</h2>
 
-                <input
-                    type="text"
-                    placeholder="Nombre"
-                    value={nombre}
+                <Inputs
+                    Type="1"
+                    Place="Nombre"
+                    Value={nombre}
                     onChange={(e) => setNombre(e.target.value)}
-                    className="border rounded p-2"
                 />
-                <input
-                    type="email"
-                    placeholder="Correo"
-                    value={correo}
+                <Inputs
+                    Type="2"
+                    Place="Correo"
+                    Value={correo}
                     onChange={(e) => setCorreo(e.target.value)}
-                    className="border rounded p-2"
                 />
-                <input
-                    type="text"
-                    placeholder="Teléfono"
-                    value={telefono}
+                <Inputs
+                    Type="6"
+                    Place="Teléfono"
+                    Value={telefono}
                     onChange={(e) => setTelefono(e.target.value)}
-                    className="border rounded p-2"
                 />
-                <input
-                    type="password"
-                    placeholder="Contraseña"
-                    value={contrasena}
+                <Inputs
+                    Type="3"
+                    Place="Contraseña"
+                    Value={contrasena}
                     onChange={(e) => setContrasena(e.target.value)}
-                    className="border rounded p-2"
                 />
 
                 <div className="flex justify-between gap-2">

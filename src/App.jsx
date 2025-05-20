@@ -19,6 +19,7 @@ import { CategoriesBack } from './Admin/Categories/CategoriesBack'
 import { TechniciansBack } from './Admin/Technicians/TechniciansBack'
 import { ServicesBack } from './Admin/Services/ServicesBack'
 import { AdminsBack } from './Admin/Admins/AdminsBack'
+import ContractBack from './Admin/Contracts/ContractsModal'
 
 export function App() {
     return (
@@ -40,7 +41,12 @@ export function App() {
                         <Route path="Factures" element={<FacturesBack />} />
                         <Route path="Categories" element={<CategoriesBack />} />
                         <Route path="Services" element={<ServicesBack />} />
+<<<<<<< HEAD
                         <Route path="Admins" element={<AdminsBack />} />
+=======
+						<Route path="Admins" element={<AdminsBack />} />
+                        <Route path="Contracts" element={<ContractBack/>} />
+>>>>>>> 4a92b755c4f6c940a5061297f2d32cde3fffc72c
                     </Route>
                     {/* SHOP */}
                     r

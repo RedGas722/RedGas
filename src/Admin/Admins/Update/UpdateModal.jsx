@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Inputs } from '../../UI/Inputs/Inputs';
 
 export const UpdateModal = ({ onClose }) => {
     const [nombre, setNombre] = useState('');
@@ -53,43 +54,35 @@ export const UpdateModal = ({ onClose }) => {
                 >✕</button>
 
                 <h2 className="text-xl font-bold text-center">Actualizar Administrador</h2>
-                
-                    <input
-                    type="email"
-                    placeholder="Correo actual"
-                    value={correo}
+                <Inputs
+                    Type="2"
+                    Place="Correo actual"
+                    Value={correo}
                     onChange={(e) => setCorreo(e.target.value)}
-                    className="border rounded p-2"
                 />
-
-                <input
-                    type="text"
-                    placeholder="Nombre del administrador"
-                    value={nombre}
+                <Inputs
+                    Type="1"
+                    Place="Nombre del administrador"
+                    Value={nombre}
                     onChange={(e) => setNombre(e.target.value)}
-                    className="border rounded p-2"
                 />
-            
-                <input
-                    type="email"
-                    placeholder="Nuevo correo"
-                    value={nuevoCorreo}
+                <Inputs
+                    Type="2"
+                    Place="Nuevo correo"
+                    Value={nuevoCorreo}
                     onChange={(e) => setNuevoCorreo(e.target.value)}
-                    className="border rounded p-2"
                 />
-                <input
-                    type="text"
-                    placeholder="Teléfono"
-                    value={telefono}
+                <Inputs
+                    Type="6"
+                    Place="Teléfono"
+                    Value={telefono}
                     onChange={(e) => setTelefono(e.target.value)}
-                    className="border rounded p-2"
                 />
-                <input
-                    type="password"
-                    placeholder="Contraseña"
-                    value={contrasena}
+                <Inputs
+                    Type="3"
+                    Place="Contraseña"
+                    Value={contrasena}
                     onChange={(e) => setContrasena(e.target.value)}
-                    className="border rounded p-2"
                 />
 
                 <div className="flex justify-between gap-2">

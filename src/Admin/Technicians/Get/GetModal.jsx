@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Inputs } from '../../UI/Inputs/Inputs';
 
 export const GetModal = ({ onClose }) => {
   const [correo, setCorreo] = useState('');
@@ -68,12 +69,15 @@ export const GetModal = ({ onClose }) => {
 
         <h2 className="text-xl font-bold text-center">Consultar Tecnico</h2>
 
-        <input
-          type="text"
-          placeholder="Correo del tecnico"
-          value={correo}
+        <Inputs
+          Type="1"
+          Place="Correo del tecnico"
+          Value={correo}
           onChange={(e) => setCorreo(e.target.value)}
+<<<<<<< HEAD
           className={`border rounded p-2 ${errorCorreo ? 'border-red-500' : ''}`}
+=======
+>>>>>>> 4a92b755c4f6c940a5061297f2d32cde3fffc72c
         />
         {errorCorreo && <p className="text-red-500 text-sm">{errorCorreo}</p>}
 

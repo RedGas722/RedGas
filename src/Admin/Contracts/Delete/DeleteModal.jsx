@@ -1,23 +1,34 @@
 import React, { useState } from 'react';
-import { Inputs } from '../../UI/Inputs/Inputs';
 
-const URL = 'http://localhost:10101/AdminDelete';
+const URL = 'http://localhost:10101/ContratoDelete';
 
 export const DeleteModal = ({ onClose }) => {
-  const [correoAdmin, setCorreoAdmin] = useState('');
+  const [idEmpleado, setIdEmpleado] = useState('');
   const [mensaje, setMensaje] = useState('');
 
   const handleDelete = async (e) => {
     e.preventDefault();
+    if (!idEmpleado || isNaN(idEmpleado)) {
+      setMensaje('Por favor ingresa un ID de empleado válido.');
+      return;
+    }
     try {
-      console.log('Eliminando administrador...');
-      const res = await fetch(`${URL}?correo_admin=${encodeURIComponent(correoAdmin)}`, {
+      setMensaje('Eliminando...');
+      const res = await fetch(`${URL}?id_empleado=${encodeURIComponent(idEmpleado)}`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
       });
 
-      if (!res.ok) throw new Error('Error al eliminar el administrador');
-      await res.json();
+      if (!res.ok) {
+        let errorMsg = 'Error al eliminar el contrato';
+        try {
+          const errorData = await res.json();
+          if (errorData && errorData.message) errorMsg = errorData.message;
+        } catch {
+          // intentionally empty
+        }
+        throw new Error(errorMsg);
+      }
       setMensaje('Eliminación exitosa');
     } catch (err) {
       setMensaje('Error al eliminar: ' + err.message);
@@ -25,7 +36,7 @@ export const DeleteModal = ({ onClose }) => {
   };
 
   const handleCancel = () => {
-    setCorreoAdmin('');
+    setIdEmpleado('');
     setMensaje('');
   };
 
@@ -37,13 +48,14 @@ export const DeleteModal = ({ onClose }) => {
           onClick={onClose}
         >✕</button>
 
-        <h2 className="text-xl font-bold text-center">Eliminación de Administrador</h2>
+        <h2 className="text-xl font-bold text-center">Eliminación de contrato</h2>
 
-        <Inputs
-          Type="2"
-          Place="Correo del Administrador..."
-          Value={correoAdmin}
-          onChange={(e) => setCorreoAdmin(e.target.value)}
+        <input
+          type="number"
+          placeholder="ID del empleado..."
+          value={idEmpleado}
+          onChange={(e) => setIdEmpleado(e.target.value)}
+          className="border rounded p-2"
         />
 
         <div className="flex justify-between gap-2">
@@ -57,7 +69,10 @@ export const DeleteModal = ({ onClose }) => {
           >Confirmar</button>
         </div>
 
-        {mensaje && (<p className="text-center text-green-600 font-semibold">{mensaje}</p>)}
+        {mensaje && (
+          <p className={`text-center font-semibold ${mensaje.toLowerCase().includes('éxito') ? 'text-green-600' : mensaje.toLowerCase().includes('error') ? 'text-red-600' : 'text-gray-700'}`}>{mensaje}</p>
+        )}
+
       </div>
     </div>
   );

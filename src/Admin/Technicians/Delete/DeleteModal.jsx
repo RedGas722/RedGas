@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Inputs from '../../UI/Inputs/Inputs';
 
 const URL = 'http://localhost:10101/TecnicoDelete';
 
@@ -65,12 +66,15 @@ export const DeleteModal = ({ onClose }) => {
 
         <h2 className="text-xl font-bold text-center">Eliminación de Tecnico</h2>
 
-        <input
-          type="text"
-          placeholder="Correo Tecnico..."
-          value={correo}
+        <Inputs
+          Type="1"
+          Place="Correo Tecnico..."
+          Value={correo}
           onChange={(e) => setCorreo(e.target.value)}
+<<<<<<< HEAD
           className={`border rounded p-2 ${mensaje.includes('correo') ? 'border-red-500' : ''}`}
+=======
+>>>>>>> 4a92b755c4f6c940a5061297f2d32cde3fffc72c
         />
 
         <div className="flex justify-between gap-2">
