@@ -6,10 +6,20 @@ export const DeleteModal = ({ onClose }) => {
   const [correo, setCorreo] = useState('');
   const [mensaje, setMensaje] = useState('');
 
+  const validarCorreo = (correo) => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Expresión regular para validar correos
+    return regex.test(correo);
+  };
+
   const handleDelete = async (e) => {
     e.preventDefault();
 
     if (!correo.trim()) {
+      setMensaje('Por favor, ingrese un correo.');
+      return;
+    }
+
+    if (!validarCorreo(correo)) {
       setMensaje('Por favor, ingrese un correo válido.');
       return;
     }
@@ -23,10 +33,17 @@ export const DeleteModal = ({ onClose }) => {
 
       if (!res.ok) {
         const errorData = await res.json();
+        if (errorData.message === 'Correo no encontrado') {
+          throw new Error('El correo no se encuentra registrado.');
+        }
         throw new Error(errorData.message || 'Error desconocido del servidor');
       }
 
-      await res.json(); // Procesa la respuesta sin asignarla a una variable innecesaria.
+      const data = await res.json();
+      if (data.success === false || data.message === 'Correo no encontrado') {
+        throw new Error('El correo no se encuentra registrado.');
+      }
+
       setMensaje('Eliminación exitosa');
     } catch (err) {
       setMensaje('Error al eliminar: ' + err.message);
@@ -53,7 +70,7 @@ export const DeleteModal = ({ onClose }) => {
           placeholder="Correo Tecnico..."
           value={correo}
           onChange={(e) => setCorreo(e.target.value)}
-          className="border rounded p-2"
+          className={`border rounded p-2 ${mensaje.includes('correo') ? 'border-red-500' : ''}`}
         />
 
         <div className="flex justify-between gap-2">
@@ -67,8 +84,11 @@ export const DeleteModal = ({ onClose }) => {
           >Confirmar</button>
         </div>
 
-        {mensaje && (<p className="text-center text-green-600 font-semibold">{mensaje}</p>)}
-
+        {mensaje && (
+          <p className={`text-center ${mensaje.includes('Error') ? 'text-red-600' : 'text-green-600'} font-semibold`}>
+            {mensaje}
+          </p>
+        )}
       </div>
     </div>
   );

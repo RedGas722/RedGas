@@ -11,13 +11,51 @@ export const UpdateModal = ({ onClose }) => {
 
   const URL = 'http://localhost:10101/TecnicoUpdate';
 
+  const validarCorreo = (correo) => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Expresión regular para validar correos
+    return regex.test(correo);
+  };
+
   const handleUpdate = async (e) => {
     e.preventDefault();
+
+    // Validaciones
+    if (!correo.trim()) {
+      setMensaje('Por favor, ingrese el correo actual del técnico.');
+      return;
+    }
+
+    if (!validarCorreo(correo)) {
+      setMensaje('Por favor, ingrese un correo actual válido.');
+      return;
+    }
+
+    if (!nombre.trim()) {
+      setMensaje('Por favor, ingrese el nuevo nombre del técnico.');
+      return;
+    }
+
+    if (!nuevoCorreo.trim() || !validarCorreo(nuevoCorreo)) {
+      setMensaje('Por favor, ingrese un nuevo correo válido.');
+      return;
+    }
+
+    if (!telefono.trim() || !/^\d{10}$/.test(telefono)) {
+      setMensaje('Por favor, ingrese un número de teléfono válido (10 dígitos).');
+      return;
+    }
+
+    if (!contrasena.trim() || contrasena.length < 6) {
+      setMensaje('La contraseña debe tener al menos 6 caracteres.');
+      return;
+    }
 
     if (!imagen) {
       setMensaje('Por favor, seleccione una imagen.');
       return;
     }
+
+    setMensaje(''); // Limpiar mensajes de error si todo es válido
 
     const formData = new FormData();
     formData.append('nombre_tecnico', nombre);
@@ -26,13 +64,14 @@ export const UpdateModal = ({ onClose }) => {
     formData.append('telefono_tecnico', telefono);
     formData.append('imagen', imagen);
     formData.append('correo_tecnico', correo);
+
     try {
       const res = await fetch(URL, {
         method: 'PUT',
         body: formData,
       });
 
-    if (!res.ok) throw new Error('Error al actualizar el producto');
+      if (!res.ok) throw new Error('Error al actualizar el técnico');
       await res.json();
       setMensaje('Actualización exitosa');
     } catch (err) {
@@ -56,7 +95,6 @@ export const UpdateModal = ({ onClose }) => {
     if (file) setImagen(file);
   };
 
-
   return (
     <div className="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-2xl p-6 shadow-lg w-[340px] flex flex-col gap-4 relative text-black">
@@ -65,7 +103,7 @@ export const UpdateModal = ({ onClose }) => {
           onClick={onClose}
         >✕</button>
 
-        <h2 className="text-xl font-bold text-center">Actualizar Tecnico</h2>
+        <h2 className="text-xl font-bold text-center">Actualizar Técnico</h2>
 
         <input
           type="text"
@@ -120,7 +158,9 @@ export const UpdateModal = ({ onClose }) => {
         </div>
 
         {mensaje && (
-          <p className="text-center text-green-600 font-semibold">{mensaje}</p>
+          <p className={`text-center ${mensaje.includes('Error') ? 'text-red-600' : 'text-green-600'} font-semibold`}>
+            {mensaje}
+          </p>
         )}
       </div>
     </div>
