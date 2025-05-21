@@ -65,11 +65,21 @@ export const GetModal = ({ onClose }) => {
           >Consultar</button>
         </div>
 
-        {mensaje && mensaje.data && (
+        {mensaje && mensaje.error && (
+          <div className="bg-red-100 p-3 rounded mt-2 text-sm text-red-700">
+            {mensaje.error}
+          </div>
+        )}
+        {mensaje && mensaje.data && mensaje.data.length > 0 && (
           <div className="bg-gray-100 p-3 rounded mt-2 text-sm">
             <p><strong>Nombre:</strong> {mensaje.data[0].nombre_servicio }</p>
             <p><strong>Descripción:</strong> {mensaje.data[0].descripcion_servicio}</p>
             <p><strong>Precio:</strong> {mensaje.data[0].precio_servicio}</p>
+          </div>
+        )}
+        {mensaje && mensaje.data && mensaje.data.length === 0 && (
+          <div className="bg-yellow-100 p-3 rounded mt-2 text-sm text-yellow-700">
+            No se encontró el servicio solicitado.
           </div>
         )}
       </div>

@@ -12,14 +12,23 @@ export const UpdateModal = ({ onClose }) => {
 
   const handleUpdate = async (e) => {
     e.preventDefault();
-
-    console.log('Datos enviados:', {
-      nombre_servicio: nombreServicio,
-      nuevo_nombre_servicio: nuevoNombreServicio,
-      descripcion_servicio: descripcionServicio,
-      precio_servicio: precioServicio,
-    });
-
+    // Validaciones de frontend
+    if (!nombreServicio.trim()) {
+      setMensaje('Por favor, ingrese el nombre actual del servicio.');
+      return;
+    }
+    if (!nuevoNombreServicio.trim()) {
+      setMensaje('Por favor, ingrese el nuevo nombre del servicio.');
+      return;
+    }
+    if (!descripcionServicio.trim()) {
+      setMensaje('Por favor, ingrese la descripción del servicio.');
+      return;
+    }
+    if (!precioServicio || isNaN(precioServicio) || parseFloat(precioServicio) <= 0) {
+      setMensaje('Por favor, ingrese un precio válido (mayor a 0).');
+      return;
+    }
     try {
       const res = await fetch(URL, {
         method: 'PUT',

@@ -53,19 +53,33 @@ export const DeleteModal = ({ onClose }) => {
       return;
     }
     // Proceder con la eliminación
-  try {
-  console.log('Eliminando...');
-  const res = await fetch(`${URL}?nombre_servicio=${encodeURIComponent(nombreServicio)}`, {
-    method: 'DELETE',
-    headers: { 'Content-Type': 'application/json' },
-  });
-  const data = await res.json(); // <-- Lee la respuesta
-  if (!res.ok) throw new Error(data?.status || 'Servicio no encontrado o error en la solicitud');
-  setMensaje(data?.status === 'delete ok' ? 'Eliminación exitosa' : data?.status || 'Error desconocido');
-  console.log('Completado!', data);
-} catch (err) {
-  setMensaje('Error al eliminar: ' + err.message);
-}
+    try {
+      const res = await fetch(`${URL}?nombre_servicio=${encodeURIComponent(nombreServicio)}`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+      });
+      let data = {};
+      try {
+        data = await res.json();
+      } catch {
+        // Intentionally ignore JSON parse errors
+      }
+      if (!res.ok) {
+        setMensaje(data?.status === 'not found' || data?.status === 'Servicio no encontrado'
+          ? 'No se encontró un servicio con este nombre'
+          : (data?.status || 'Error desconocido'));
+        return;
+      }
+      if (data?.status === 'delete ok') {
+        setMensaje('Eliminación exitosa');
+      } else if (data?.status === 'not found' || data?.status === 'Servicio no encontrado') {
+        setMensaje('No se encontró un servicio con este nombre');
+      } else {
+        setMensaje(data?.status || 'Error desconocido');
+      }
+    } catch (err) {
+      setMensaje('Error al eliminar: ' + err.message);
+    }
   };
 
   // Cancelar y limpiar
