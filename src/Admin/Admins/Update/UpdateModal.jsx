@@ -13,6 +13,40 @@ export const UpdateModal = ({ onClose }) => {
 
     const handleUpdate = async (e) => {
         e.preventDefault();
+        // Validaciones de frontend
+        if (!correo.trim()) {
+            setMensaje('Por favor, ingrese el correo actual.');
+            return;
+        }
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!regex.test(correo)) {
+            setMensaje('Por favor, ingrese un correo actual válido.');
+            return;
+        }
+        if (!nombre.trim()) {
+            setMensaje('Por favor, ingrese el nombre del administrador.');
+            return;
+        }
+        if (!nuevoCorreo.trim()) {
+            setMensaje('Por favor, ingrese el nuevo correo.');
+            return;
+        }
+        if (!regex.test(nuevoCorreo)) {
+            setMensaje('Por favor, ingrese un nuevo correo válido.');
+            return;
+        }
+        if (!telefono.trim()) {
+            setMensaje('Por favor, ingrese el teléfono.');
+            return;
+        }
+        if (!/^[0-9]+$/.test(telefono)) {
+            setMensaje('El teléfono solo debe contener números.');
+            return;
+        }
+        if (!contrasena.trim()) {
+            setMensaje('Por favor, ingrese la contraseña.');
+            return;
+        }
         try {
             console.log('Actualizando administrador...');
 

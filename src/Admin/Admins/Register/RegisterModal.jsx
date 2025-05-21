@@ -12,6 +12,32 @@ export const RegisterModal = ({ onClose }) => {
 
     const handleRegister = async (e) => {
         e.preventDefault();
+        // Validaciones de frontend
+        if (!nombre.trim()) {
+            setMensaje('Por favor, ingrese el nombre.');
+            return;
+        }
+        if (!correo.trim()) {
+            setMensaje('Por favor, ingrese el correo.');
+            return;
+        }
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!regex.test(correo)) {
+            setMensaje('Por favor, ingrese un correo válido.');
+            return;
+        }
+        if (!telefono.trim()) {
+            setMensaje('Por favor, ingrese el teléfono.');
+            return;
+        }
+        if (!/^[0-9]+$/.test(telefono)) {
+            setMensaje('El teléfono solo debe contener números.');
+            return;
+        }
+        if (!contrasena.trim()) {
+            setMensaje('Por favor, ingrese la contraseña.');
+            return;
+        }
         try {
             console.log('Registrando administrador...');
 

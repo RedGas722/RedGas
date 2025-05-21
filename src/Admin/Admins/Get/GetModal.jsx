@@ -59,12 +59,22 @@ export const GetModal = ({ onClose }) => {
           >Consultar</button>
         </div>
 
+        {mensaje && mensaje.error && (
+          <div className="bg-red-100 p-3 rounded mt-2 text-sm text-red-700">
+            {mensaje.error}
+          </div>
+        )}
         {mensaje && mensaje.data && mensaje.data.length > 0 && (
         <div className="bg-gray-100 p-3 rounded mt-2 text-sm">
             <p><strong>Nombre:</strong> {mensaje.data[0].nombre_admin}</p>
             <p><strong>Correo:</strong> {mensaje.data[0].correo_admin}</p>
             <p><strong>Teléfono:</strong> {mensaje.data[0].telefono_admin}</p>
         </div>
+        )}
+        {mensaje && mensaje.data && mensaje.data.length === 0 && (
+          <div className="bg-yellow-100 p-3 rounded mt-2 text-sm text-yellow-700">
+            No se encontró el administrador solicitado.
+          </div>
         )}
       </div>
     </div>
