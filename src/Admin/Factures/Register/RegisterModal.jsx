@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Inputs } from '../../UI/Inputs/Inputs';
 
-export const RegisterModal = ({ onClose }) => {
+export const RegisterModal = ({ onClose, setRefrescar, onFacturaRegistrada }) => {
   const [IDcliente, setIDcliente] = useState('');
   const [IDempleado, setIDempleado] = useState('');
   const [fecha, setFecha] = useState(new Date().toISOString().slice(0, 10));
@@ -61,7 +61,10 @@ export const RegisterModal = ({ onClose }) => {
         throw new Error(data?.errors?.[0]?.msg || 'Error en la solicitud');
       }
 
-      setMensaje('Registro exitoso.');
+      setMensaje('Factura registrada exitosamente.');
+      if (onFacturaRegistrada) onFacturaRegistrada(); // Puedes pasar data si lo deseas
+      if (setRefrescar) setRefrescar(true);
+      handleCancel(); // Limpiar campos
     } catch (err) {
       setMensaje('Error al registrar: ' + err.message);
     }
@@ -126,7 +129,7 @@ export const RegisterModal = ({ onClose }) => {
           </button>
           <button
             onClick={handleRegister}
-            className="bg-green-500 hover:bg-red-600 text-white px-4 py-2 rounded"
+            className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
           >
             Registrar
           </button>
@@ -135,7 +138,7 @@ export const RegisterModal = ({ onClose }) => {
         {mensaje && (
           <p
             className={`text-center font-semibold ${
-              mensaje.includes('exitoso') ? 'text-green-600' : 'text-red-600'
+              mensaje.includes('exitosamente') ? 'text-green-600' : 'text-red-600'
             }`}
           >
             {mensaje}

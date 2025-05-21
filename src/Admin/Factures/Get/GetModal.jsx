@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import { Inputs } from '../../UI/Inputs/Inputs';
 
-export const GetModal = ({ onClose }) => {
+export const GetModal = ({ onClose, clientes, empleados }) => {
   const [IDfactura, setIDfactura] = useState('');
   const [mensaje, setMensaje] = useState(null);
   const [errores, setErrores] = useState({});
 
   const URL = 'http://localhost:10101/FacturaGet';
 
-  // Función para validar que el ID de la factura no esté vacío y sea un número entero positivo
   const validarCampos = () => {
     const errores = {};
 
@@ -33,7 +32,6 @@ export const GetModal = ({ onClose }) => {
 
     setErrores({});
     try {
-      console.log('Consultando...');
       const res = await fetch(`${URL}?id_factura=${encodeURIComponent(IDfactura)}`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
@@ -53,7 +51,6 @@ export const GetModal = ({ onClose }) => {
       }
 
       setMensaje({ ...data, data: data.data[0] });
-      console.log('Completado!');
     } catch (err) {
       console.error(err);
       setMensaje({ error: 'Error al consultar: ' + err.message });
@@ -66,9 +63,26 @@ export const GetModal = ({ onClose }) => {
     setErrores({});
   };
 
+  // Buscar nombre y correo
+  const getClienteInfo = (id) => {
+    const cliente = clientes?.find(c => c.id_cliente === id);
+    return {
+      nombre: cliente?.nombre_cliente || 'Desconocido',
+      correo: cliente?.correo_cliente || 'No disponible',
+    };
+  };
+
+  const getEmpleadoInfo = (id) => {
+    const empleado = empleados?.find(e => e.id_empleado === id);
+    return {
+      nombre: empleado?.nombre_empleado || 'Desconocido',
+      correo: empleado?.correo_empleado || 'No disponible',
+    };
+  };
+
   return (
     <div className="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-2xl p-6 shadow-lg w-[320px] flex flex-col gap-4 relative text-black">
+      <div className="bg-white rounded-2xl p-6 shadow-lg w-[340px] flex flex-col gap-4 relative text-black">
         <button
           className="absolute top-2 right-3 text-gray-600 text-lg"
           onClick={onClose}
@@ -106,15 +120,29 @@ export const GetModal = ({ onClose }) => {
         )}
 
         {mensaje && mensaje.data && (
-          <div className="bg-gray-100 p-3 rounded mt-2 text-sm">
-            <p><strong>ID Factura:</strong> {mensaje.data.id_factura}</p>
-            <p><strong>ID Cliente:</strong> {mensaje.data.id_cliente}</p>
-            <p><strong>ID Empleado:</strong> {mensaje.data.id_empleado}</p>
-            <p><strong>Fecha Factura:</strong> {mensaje.data.fecha_factura}</p>
-            <p><strong>Estado Factura:</strong> {mensaje.data.estado_factura}</p>
-            <p><strong>Total:</strong> {mensaje.data.total}</p>
-          </div>
-        )}
+        <div className="bg-gray-100 p-3 rounded mt-2 text-sm space-y-2">
+
+          <p><strong>ID Factura:</strong> {mensaje.data.id_factura}</p>
+
+          {/* Sección Cliente */}
+          <hr className="my-2 border-gray-300" />
+          <h3 className="font-semibold text-gray-700">Datos del Cliente</h3>
+          <p><strong>Nombre:</strong> {getClienteInfo(mensaje.data.id_cliente).nombre}</p>
+          <p><strong>Correo:</strong> {getClienteInfo(mensaje.data.id_cliente).correo}</p>
+
+          {/* Sección Empleado */}
+          <hr className="my-2 border-gray-300" />
+          <h3 className="font-semibold text-gray-700">Datos del Empleado</h3>
+          <p><strong>Nombre:</strong> {getEmpleadoInfo(mensaje.data.id_empleado).nombre}</p>
+          <p><strong>Correo:</strong> {getEmpleadoInfo(mensaje.data.id_empleado).correo}</p>
+
+          {/* Otros campos */}
+          <hr className="my-2 border-gray-300" />
+          <p><strong>Fecha Factura:</strong> {mensaje.data.fecha_factura}</p>
+          <p><strong>Estado Factura:</strong> {mensaje.data.estado_factura}</p>
+          <p><strong>Total:</strong> ${mensaje.data.total}</p>
+        </div>
+      )}
       </div>
     </div>
   );
