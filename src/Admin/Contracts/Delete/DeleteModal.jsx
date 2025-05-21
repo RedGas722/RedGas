@@ -8,8 +8,8 @@ export const DeleteModal = ({ onClose }) => {
 
   const handleDelete = async (e) => {
     e.preventDefault();
-    if (!idEmpleado || isNaN(idEmpleado)) {
-      setMensaje('Por favor ingresa un ID de empleado válido.');
+    if (!idEmpleado || isNaN(idEmpleado) || parseInt(idEmpleado) <= 0) {
+      setMensaje('Por favor ingresa un ID de empleado válido (número mayor a 0).');
       return;
     }
     try {

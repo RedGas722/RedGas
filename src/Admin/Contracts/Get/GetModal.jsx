@@ -18,8 +18,12 @@ export const GetModal = ({ onClose }) => {
 
       if (!res.ok) throw new Error('Credenciales inválidas');
       const data = await res.json();
-        setMensaje(data);
-        console.log('Completado!');
+      if (!data.data || data.data.length === 0) {
+        setMensaje({ error: 'No se encontró un contrato para ese empleado.' });
+        return;
+      }
+      setMensaje(data);
+      console.log('Completado!');
     } catch (err) {
       setMensaje({ error: 'Error al consultar: ' + err.message });
     }
@@ -67,6 +71,11 @@ export const GetModal = ({ onClose }) => {
             <p><strong>salario:</strong> {mensaje.data[0].salario}</p>
             <p><strong>id_admin:</strong> {mensaje.data[0].id_admin}</p>
             <p><strong>id_empleado:</strong> {mensaje.data[0].id_empleado}</p>
+        </div>
+        )}
+        {mensaje && mensaje.error && (
+        <div className="bg-red-100 p-3 rounded mt-2 text-sm text-red-700">
+            {mensaje.error}
         </div>
         )}
       </div>

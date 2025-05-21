@@ -16,6 +16,35 @@ export const UpdateModal = ({ onClose }) => {
 
     const handleUpdate = async (e) => {
         e.preventDefault();
+        // Validaciones de frontend
+        if (!idContrato || isNaN(idContrato) || parseInt(idContrato) <= 0) {
+            setMensaje('Por favor, ingresa un ID de contrato válido (mayor a 0).');
+            return;
+        }
+        if (!fechaContrato.trim()) {
+            setMensaje('Por favor, ingresa la fecha del contrato.');
+            return;
+        }
+        if (!duracionContrato.trim()) {
+            setMensaje('Por favor, ingresa la duración del contrato.');
+            return;
+        }
+        if (!tipoContrato.trim()) {
+            setMensaje('Por favor, ingresa el tipo de contrato.');
+            return;
+        }
+        if (!salario || isNaN(salario) || parseFloat(salario) <= 0) {
+            setMensaje('Por favor, ingresa un salario válido (mayor a 0).');
+            return;
+        }
+        if (!idAdmin || isNaN(idAdmin) || parseInt(idAdmin) <= 0) {
+            setMensaje('Por favor, ingresa un ID de administrador válido (mayor a 0).');
+            return;
+        }
+        if (!idEmpleado || isNaN(idEmpleado) || parseInt(idEmpleado) <= 0) {
+            setMensaje('Por favor, ingresa un ID de empleado válido (mayor a 0).');
+            return;
+        }
         try {
             console.log('actualizando...');
             const res = await fetch(URL, {
