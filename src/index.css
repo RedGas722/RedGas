@@ -107,8 +107,22 @@ input[type="password"]::-webkit-reveal {
     text-shadow: 4px 4px 2px var(--shadow-3), -4px -4px 2px var(--shadow-4);
     transition: background 50000s ease-in-out 0s;
   }
-
+  .buttonTL{
+    cursor: pointer;
+    color: var(--main-color);
+  }
   .buttonTL:active {
+    background: var(--background-color);
+    border-radius: 20px;
+    box-shadow: inset 9.91px 9.91px 15px #CACACA, -9.91px -9.91px 15px #F2F2F2;
+  }
+  .buttonTL2{
+    cursor: pointer;
+    background: linear-gradient(to bottom right, #2d8cf0, #6edff6);
+    color: var(--main-color);
+  }
+  .buttonTL2:active {
+    color: var(--Font-Nav);
     background: var(--background-color);
     border-radius: 20px;
     box-shadow: inset 9.91px 9.91px 15px #CACACA, -9.91px -9.91px 15px #F2F2F2;

@@ -3,7 +3,7 @@ import usuarios from "./TechniciansArray"
 
 export const TechniciansPage = () => {
     return (
-        <section className="h-fit p-[20px_0] flex flex-wrap justify-center justify-self-center self-center items-center gap-[20px]">
+        <section className="h-fit MainPageContainer flex flex-wrap justify-center justify-self-center self-center items-center gap-[20px]">
             {usuarios.map((usuario, index) => (
                 <div key={index} className="flex flex-col items-center text-center gap-[20px] w-[300px] h-[500px] NeoContainer_outset_TL">
                     <div className='flex flex-col items-center justify-center gap-2.5 p-[10px_0]'>

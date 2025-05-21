@@ -4,6 +4,7 @@ import { Routes, Route } from 'react-router-dom'
 // -Import Pages: MainPage/Register/Login/ForgotPassword/RecoveryPassword/ShopCart-
 import { MainPage } from './Pages/MainPage/MainPage'
 import { TechniciansPage } from './Pages/Technicians/TechniciansPage'
+import { Shopping } from './Pages/Shopping/Shopping.jsx'
 import { Register } from './Pages/Register/Register'
 import { Login } from './Pages/Login/Login'
 import { ForgotPassword } from './Pages/ForgotPassword/ForgotPassword'
@@ -26,7 +27,8 @@ export function App() {
             <div className="flex flex-col gap-[80px]" >
                 <Routes>
                     <Route path="/" element={<MainPage />} />
-                    <Route path="/Technic" element={<TechniciansPage  />} />
+                    <Route path="/Technic" element={<TechniciansPage />} />
+                    <Route path="/Shopping" element={<Shopping />} />
                     <Route path='/Register' element={<Register />} />
                     <Route path='/Login' element={<Login />} />
                     <Route path='/Login/ForgotPassword' element={<ForgotPassword />} />
@@ -42,8 +44,6 @@ export function App() {
                         <Route path="Services" element={<ServicesBack />} />
                         <Route path="Admins" element={<AdminsBack />} />
                     </Route>
-                    {/* SHOP */}
-                    r
                 </Routes>
             </div>
         </>
