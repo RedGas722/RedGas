@@ -35,16 +35,18 @@ export const DeleteModal = ({ onClose }) => {
       if (!res.ok) {
         const errorData = await res.json();
         if (errorData.message === 'Correo no encontrado') {
-          throw new Error('El correo no se encuentra registrado.');
+          setMensaje('El correo no se encuentra registrado.');
+          return;
         }
-        throw new Error(errorData.message || 'Error desconocido del servidor');
+        setMensaje('Error al eliminar: ' + (errorData.message || 'Error desconocido del servidor'));
+        return;
       }
 
       const data = await res.json();
-      if (data.success === false || data.message === 'Correo no encontrado') {
-        throw new Error('El correo no se encuentra registrado.');
+      if (data && typeof data.message === 'string' && data.message === 'Correo no encontrado') {
+        setMensaje('El correo no se encuentra registrado.');
+        return;
       }
-
       setMensaje('Eliminación exitosa');
     } catch (err) {
       setMensaje('Error al eliminar: ' + err.message);
@@ -71,10 +73,6 @@ export const DeleteModal = ({ onClose }) => {
           Place="Correo Tecnico..."
           Value={correo}
           onChange={(e) => setCorreo(e.target.value)}
-<<<<<<< HEAD
-          className={`border rounded p-2 ${mensaje.includes('correo') ? 'border-red-500' : ''}`}
-=======
->>>>>>> 4a92b755c4f6c940a5061297f2d32cde3fffc72c
         />
 
         <div className="flex justify-between gap-2">

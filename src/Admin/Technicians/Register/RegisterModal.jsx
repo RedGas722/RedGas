@@ -109,11 +109,7 @@ export const RegisterModal = ({ onClose }) => {
                 <Inputs Type='2' Place='Correo del Tecnico' Value={correo} onChange={(e) => setCorreo(e.target.value)} />
                 <Inputs Type='6' Place='Telefono del Tecnico' Value={telefono} onChange={(e) => setTelefono(e.target.value)} />
                 <Inputs Type='3' Place='Contraseña del Tecnico' Value={contrasena} onChange={(e) => setContrasena(e.target.value)} />
-<<<<<<< HEAD
-                <Inputs Type='4' Place='Imagen del Tecnico' onChange={handleImageChange} /> {/* Sin Value */}
-=======
                 <Inputs Type='4' Place='Imagen del Tecnico' onChange={handleImageChange} />
->>>>>>> 4a92b755c4f6c940a5061297f2d32cde3fffc72c
                 
                 <div className="flex justify-between gap-2">
                     <button

@@ -41,15 +41,11 @@ export function App() {
                         <Route path="Factures" element={<FacturesBack />} />
                         <Route path="Categories" element={<CategoriesBack />} />
                         <Route path="Services" element={<ServicesBack />} />
-<<<<<<< HEAD
-                        <Route path="Admins" element={<AdminsBack />} />
-=======
 						<Route path="Admins" element={<AdminsBack />} />
                         <Route path="Contracts" element={<ContractBack/>} />
->>>>>>> 4a92b755c4f6c940a5061297f2d32cde3fffc72c
                     </Route>
                     {/* SHOP */}
-                    r
+                    
                 </Routes>
             </div>
         </>

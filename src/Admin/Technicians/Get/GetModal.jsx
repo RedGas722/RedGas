@@ -74,10 +74,6 @@ export const GetModal = ({ onClose }) => {
           Place="Correo del tecnico"
           Value={correo}
           onChange={(e) => setCorreo(e.target.value)}
-<<<<<<< HEAD
-          className={`border rounded p-2 ${errorCorreo ? 'border-red-500' : ''}`}
-=======
->>>>>>> 4a92b755c4f6c940a5061297f2d32cde3fffc72c
         />
         {errorCorreo && <p className="text-red-500 text-sm">{errorCorreo}</p>}
 
