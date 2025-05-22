@@ -53,7 +53,6 @@ export const Navs = () => {
             <NavLink
                 to="/Technic"
                 className='NeoSubContainer_outset_TL p-[5px_10px]'
-                activeClass="!text-[var(--Font-Nav)] font-bold"
             >
                 Técnicos
             </NavLink>

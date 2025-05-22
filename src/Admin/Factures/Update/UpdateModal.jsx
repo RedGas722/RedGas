@@ -1,14 +1,13 @@
 import { useState } from 'react';
 import { Inputs } from '../../UI/Inputs/Inputs';
 
-export const UpdateModal = ({ onClose }) => {
+export const UpdateModal = ({ onClose, setRefrescar }) => {
   const [estadoFactura, setEstadoFactura] = useState('inactiva');
   const [IDfactura, setIDfactura] = useState('');
   const [mensaje, setMensaje] = useState('');
   const [errores, setErrores] = useState({});
 
   const URL = 'http://localhost:10101/FacturaUpdate';
-  const URL_GET = 'http://localhost:10101/FacturaGet';
 
   const validarCampos = () => {
     const errores = {};
@@ -18,21 +17,6 @@ export const UpdateModal = ({ onClose }) => {
       errores.id_factura = 'Debe ser un número entero positivo.';
     }
     return errores;
-  };
-
-  const verificarExistenciaFactura = async () => {
-    try {
-      const res = await fetch(`${URL_GET}?id_factura=${encodeURIComponent(IDfactura)}`);
-      const data = await res.json();
-
-      if (!res.ok || !data?.data || data.data.length === 0) {
-        return false;
-      }
-      return true;
-    } catch (error) {
-      console.error('Error al verificar existencia:', error);
-      return false;
-    }
   };
 
   const handleUpdate = async (e) => {
@@ -46,15 +30,8 @@ export const UpdateModal = ({ onClose }) => {
     }
 
     setErrores({});
-
-    const existe = await verificarExistenciaFactura();
-    if (!existe) {
-      setMensaje('No se encontró una factura con ese ID.');
-      return;
-    }
-
+    
     try {
-      console.log('Actualizando...');
       const res = await fetch(URL, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -67,7 +44,9 @@ export const UpdateModal = ({ onClose }) => {
       if (!res.ok) throw new Error('Error al actualizar la factura.');
       const data = await res.json();
       setMensaje('Actualización exitosa.');
-      console.log('Completado!');
+
+      if (setRefrescar) setRefrescar(true);  // Esto indica que se debe refrescar los datos
+
     } catch (err) {
       setMensaje('Error al actualizar: ' + err.message);
     }

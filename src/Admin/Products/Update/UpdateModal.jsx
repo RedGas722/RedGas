@@ -28,13 +28,14 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
   };
 
   const handleBuscar = async () => {
-    setMensaje('');
+    if (!editando) setMensaje('');
     setErrores({});
+    
     if (!nombreProducto.trim()) {
       setErrores({ nombreProducto: 'El nombre del producto es obligatorio' });
       return;
     }
-
+    
     try {
       const res = await fetch(`${URL_GET}?nombre_producto=${encodeURIComponent(nombreBusqueda)}`);
       if (!res.ok) throw new Error('Producto no encontrado');
@@ -54,84 +55,89 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
         setImagenActual(`data:image/jpeg;base64,${data.data.imagen}`);
         setImagenNueva(null);
       }
-
       setEditando(true);
     } catch (err) {
       setMensaje('Error al buscar producto: ' + err.message);
     }
   };
 
-
-  // Función para actualizar el producto
   const handleActualizar = async () => {
-  const erroresValidados = validarCampos();
-  if (Object.keys(erroresValidados).length > 0) {
-    setErrores(erroresValidados);
-    return;
-  }
-
-  setErrores({});
-  const hayImagen = !!imagenNueva;
-
-  if (hayImagen) {
-    // Si hay imagen, enviar con FormData
-    const formData = new FormData();
-    formData.append('nombre_producto', producto.nombreProducto);
-    formData.append('nuevo_nombre_producto', producto.nuevoNombre);
-    formData.append('precio_producto', parseFloat(producto.precio));
-    formData.append('descripcion_producto', producto.descripcion);
-    formData.append('stock', parseInt(producto.stock));
-    formData.append('imagen', imagenNueva);
-
-    try {
-      const res = await fetch(URL_UPDATE_IMAGEN, {
-        method: 'PUT',
-        body: formData,
-      });
-
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data?.errors?.[0]?.msg || 'Error al actualizar con imagen');
-      }
-
-      setMensaje('Producto e imagen actualizados exitosamente.');
-      nombreBusqueda = producto.nuevoNombre
-    } catch (err) {
-      setMensaje('Error al actualizar: ' + err.message);
+    const erroresValidados = validarCampos();
+    if (Object.keys(erroresValidados).length > 0) {
+      setErrores(erroresValidados);
+      return;
     }
-  } else {
-    // Si no hay imagen, enviar como JSON
-    const jsonData = {
-      nombre_producto: producto.nombreProducto,
-      nuevo_nombre_producto: producto.nuevoNombre,
-      precio_producto: parseFloat(producto.precio),
-      descripcion_producto: producto.descripcion,
-      stock: parseInt(producto.stock),
-    };
 
-    try {
-      const res = await fetch(URL_UPDATE, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(jsonData),
-      });
+    setErrores({});
+    const hayImagen = !!imagenNueva;
 
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data?.errors?.[0]?.msg || 'Error al actualizar sin imagen');
-      }
+    if (hayImagen) {
+      const formData = new FormData();
+      formData.append('nombre_producto', producto.nombreProducto);
+      formData.append('nuevo_nombre_producto', producto.nuevoNombre);
+      formData.append('precio_producto', parseFloat(producto.precio));
+      formData.append('descripcion_producto', producto.descripcion);
+      formData.append('stock', parseInt(producto.stock));
+      formData.append('imagen', imagenNueva);
 
-      setMensaje('Producto actualizado exitosamente.');
-      nombreBusqueda = producto.nuevoNombre
-    } catch (err) {
+      try {
+        const res = await fetch(URL_UPDATE_IMAGEN, {
+          method: 'PUT',
+          body: formData,
+        });
+
+        if (!res.ok) {
+          const text = await res.text();
+          if (text.includes('Duplicate entry') && text.includes('nombre_producto')) {
+            throw new Error('El nombre del producto ya está registrado.');
+          }
+
+          const data = JSON.parse(text);
+          throw new Error(data?.errors?.[0]?.msg || 'Error al actualizar con imagen');
+        }
+
+        if (setRefrescar) setRefrescar(true);
+        nombreBusqueda = producto.nuevoNombre;
+        await handleBuscar();
+        setMensaje('Producto e imagen actualizados exitosamente.');
+      } catch (err) {
         setMensaje('Error al actualizar: ' + err.message);
       }
-      await handleBuscar();
-      if (setRefrescar) setRefrescar(true);
-      // setEditando(false)
-      // setNombreProducto('')
+    } else {
+      const jsonData = {
+        nombre_producto: producto.nombreProducto,
+        nuevo_nombre_producto: producto.nuevoNombre,
+        precio_producto: parseFloat(producto.precio),
+        descripcion_producto: producto.descripcion,
+        stock: parseInt(producto.stock),
+      };
+
+      try {
+        const res = await fetch(URL_UPDATE, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(jsonData),
+        });
+
+        if (!res.ok) {
+          const text = await res.text();
+          if (text.includes('Duplicate entry') && text.includes('nombre_producto')) {
+            throw new Error('El nombre del producto ya está registrado.');
+          }
+
+          const data = JSON.parse(text);
+          throw new Error(data?.errors?.[0]?.msg || 'Error al actualizar sin imagen');
+        }
+
+        if (setRefrescar) setRefrescar(true);
+        nombreBusqueda = producto.nuevoNombre;
+        await handleBuscar();
+        setMensaje('Producto actualizado exitosamente.');
+      } catch (err) {
+        setMensaje('Error al actualizar: ' + err.message);
+      }
     }
   };
 

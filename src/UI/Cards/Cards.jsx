@@ -1,37 +1,24 @@
 import "./Cards.css";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation } from "swiper/modules";
-import "swiper/css";
+import { Navigation } from "swiper/modules";  // Asegúrate de importar el módulo correctamente
+import "swiper/css";  // Estilos básicos de Swiper
+import "swiper/css/navigation";  // Estilos de navegación
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faArrowRight,
     faArrowLeft,
     faCartShopping,
-}
-    from '@fortawesome/free-solid-svg-icons';
+} from '@fortawesome/free-solid-svg-icons';
 
-export const Cards = ({ uniqueId, imgContent, titleCatt, Price, brandCatt }) => {
-
-
-    function dividirConComaCada3Caracteres(cadena) {
-        let resultado = "";
-        for (let i = 0; i < cadena.length; i += 3) {
-            resultado += cadena.substr(i, 3);
-            if (i + 3 < cadena.length) {
-                resultado += ",";
-            }
-        }
-        return resultado;
-    }
-
-
-    const cards = Array.from({ length: 8 });
+export const Cards = ({ uniqueId, productos = [] }) => {
+    // Duplicamos los productos si son pocos para que funcione el loop
+    const duplicatedProductos = productos.length < 5 ? [...productos, ...productos] : productos;
 
     return (
         <section id={`CardSect-${uniqueId}`} className="flex flex-col gap-[10px] h-fit w-[100%]">
             <Swiper
-                modules={[Navigation]}
-                loop={true}
+                modules={[Navigation]}  // Habilita el módulo de navegación
+                loop={duplicatedProductos.length > 1}  // Asegura que el loop solo se activa si hay más de una diapositiva
                 navigation={{
                     prevEl: `.swiper-button-prev-${uniqueId}`,
                     nextEl: `.swiper-button-next-${uniqueId}`,
@@ -46,26 +33,29 @@ export const Cards = ({ uniqueId, imgContent, titleCatt, Price, brandCatt }) => 
                 id={`cardContainer-${uniqueId}`}
                 className="w-[100%] flex justify-center items-center"
             >
-                {cards.map((_, index) => (
-                    <SwiperSlide key={index} id={`CardSect-${uniqueId}`}>
+                {duplicatedProductos.map((producto, index) => (
+                    <SwiperSlide key={index}>
                         <div className="flex justify-center justify-self-center h-fit p-[25px_0_25px_0] items-center w-fit">
                             <div className="card NeoSubContainer_outset_TL">
                                 <div className="card-img">
-                                    <div className="img"> <img
-                                        src={imgContent}
-                                        alt="producto"
-                                        className="rounded-[20px]"
-                                    /></div>
+                                    <div className="img">
+                                        <img
+                                            src={producto.imagen ? `data:image/jpeg;base64,${producto.imagen}` : "https://via.placeholder.com/150"}
+                                            alt={producto.nombre_producto || "Producto"}
+                                            className="rounded-[20px]"
+                                        />
+                                    </div>
                                 </div>
                                 <div className="flex gap-1 items-end justify-center">
-                                    <div className="card-title">{titleCatt}</div>
-                                    <div className="font-black text-[18px]">{brandCatt}</div>
+                                    <div className="card-title">{producto.nombre_producto}</div>
                                 </div>
-                                <div className="card-subtitle">Product description. Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
+                                <div className="card-subtitle max-w-[190px] break-words hyphens-auto">
+                                    {producto.descripcion_producto || "Sin descripción disponible."}
+                                </div>
                                 <hr className="card-divider" />
                                 <div className="card-footer">
                                     <div className="card-price">
-                                        <span>$</span> {dividirConComaCada3Caracteres((Price || 0).toString())}
+                                        <span>$</span> {(parseFloat(producto.precio_producto) || 0).toLocaleString()}
                                     </div>
                                     <button className="card-btn hover:text-[#ffff]">
                                         <FontAwesomeIcon icon={faCartShopping} />
@@ -76,12 +66,17 @@ export const Cards = ({ uniqueId, imgContent, titleCatt, Price, brandCatt }) => 
                     </SwiperSlide>
                 ))}
             </Swiper>
+            {/* Botones de navegación (izquierda y derecha) */}
             <div className="flex flex-col justify-center items-center self-center w-fit p-[10px] NeoSubContainer_outset_TL text-[var(--main-color)]">
                 <div className="flex justify-center items-center gap-[20px]">
-                    <button className={`buttonTL arrow NeoSubContainer_outset_TL p-[7px] swiper-button-prev-${uniqueId} cursor-pointer`}>
+                    <button
+                        className={`buttonTL arrow NeoSubContainer_outset_TL p-[7px] swiper-button-prev-${uniqueId} cursor-pointer`}
+                    >
                         <FontAwesomeIcon icon={faArrowLeft} className="faArrowLeft text-[30px]" />
                     </button>
-                    <button className={`buttonTL arrow NeoSubContainer_outset_TL p-[7px] swiper-button-next-${uniqueId} cursor-pointer`}>
+                    <button
+                        className={`buttonTL arrow NeoSubContainer_outset_TL p-[7px] swiper-button-next-${uniqueId} cursor-pointer`}
+                    >
                         <FontAwesomeIcon icon={faArrowRight} className="faArrowRight text-[30px]" />
                     </button>
                 </div>

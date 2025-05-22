@@ -1,9 +1,10 @@
-import "./CardsOffers.css"
-import { Swiper, SwiperSlide } from "swiper/react"
-import { Navigation } from "swiper/modules"
-import "swiper/css"
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowRight, faArrowLeft, faCartShopping } from '@fortawesome/free-solid-svg-icons'
+import "./CardsOffers.css";
+import { Swiper, SwiperSlide } from "swiper/react"; 
+import { Navigation } from "swiper/modules";
+import "swiper/css";  // Estilos básicos
+import "swiper/css/navigation";  // Estilos específicos para la navegación
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowRight, faArrowLeft, faCartShopping } from '@fortawesome/free-solid-svg-icons';
 
 export const CardsOffers = ({ uniqueId, imgContent, titleCatt, brandCatt, afterPrice, beforePrice }) => {
 
@@ -18,12 +19,12 @@ export const CardsOffers = ({ uniqueId, imgContent, titleCatt, brandCatt, afterP
         return resultado
     }
 
-    const cards = Array.from({ length: 8 })
+    const cards = Array.from({ length: 8 });
 
     return (
         <section id={`CardSect-${uniqueId}`} className="flex flex-col gap-[10px] h-fit w-[100%]">
             <Swiper
-                modules={[Navigation]}
+                modules={[Navigation]}  // Habilita el módulo de navegación
                 loop={true}
                 autoplay={{ delay: 2000 }}
                 pagination={{ clickable: true }}
@@ -39,24 +40,26 @@ export const CardsOffers = ({ uniqueId, imgContent, titleCatt, brandCatt, afterP
                     320: { slidesPerView: 1, spaceBetween: 5 },
                 }}
                 id={`cardContainer-${uniqueId}`}
-                className=" w-[100%] flex justify-center justify-self-center h- items-center "
+                className="w-[100%] flex justify-center justify-self-center h- items-center"
             >
                 {cards.map((_, index) => (
                     <SwiperSlide key={index} id={`CardSect-${uniqueId}`}>
                         <div className="flex justify-center justify-self-center h-fit p-[25px_0_25px_0] items-center w-fit">
                             <div className="card NeoSubContainer_outset_TL">
                                 <div className="card-img">
-                                    <div className="img"> <img
-                                        src={imgContent}
-                                        alt="producto"
-                                        className="rounded-[20px]"
-                                    /></div>
+                                    <div className="img">
+                                        <img
+                                            src={imgContent}
+                                            alt="producto"
+                                            className="rounded-[20px]"
+                                        />
+                                    </div>
                                 </div>
                                 <div className="flex gap-1 items-end justify-center">
                                     <div className="card-title">{titleCatt}</div>
                                     <div className="font-black text-[18px]">{brandCatt}</div>
                                 </div>
-                                <div className="card-subtitle">Product description. Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
+                                <div className="card-subtitle max-w-[190px] break-words hyphens-auto">Product description. Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
                                 <hr className="card-divider" />
                                 <div className="card-footer">
                                     <div className="card-price">
@@ -87,7 +90,7 @@ export const CardsOffers = ({ uniqueId, imgContent, titleCatt, brandCatt, afterP
                 </div>
             </div>
         </section>
-    )
-}
+    );
+};
 
-export default CardsOffers
+export default CardsOffers;

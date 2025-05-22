@@ -27,7 +27,7 @@
     "sweetalert2": "^11.21.2",
     "sweetalert2-react-content": "^5.1.0",
     "swiper": "^11.2.7",
-    "tailwindcss": "^4.1.7"
+    "tailwindcss": "^4.1.6"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",

@@ -26,6 +26,12 @@ export const Shopping = () => {
                         </section>
                     </section>
                 ))}
+                <footer>
+                    <div className='flex justify-center items-center gap-[20px]'>
+                        <button className='buttonTL2 active:text-[var(--main-color)] font-black NeoSubContainer_outset_TL p-[7px]'>Comprar todo</button>
+                        <button className='buttonTL2 active:text-[var(--main-color)] font-black NeoSubContainer_outset_TL p-[7px]'>Ver carrito</button>
+                    </div>
+                </footer>
             </div>
         </section>
     )

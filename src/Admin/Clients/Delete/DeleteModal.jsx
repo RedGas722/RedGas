@@ -4,7 +4,7 @@ import { Inputs } from '../../UI/Inputs/Inputs'
 const URL = 'http://localhost:10101/ClienteDelete';
 const GET_URL = 'http://localhost:10101/ClienteGet'; // Endpoint para verificar si el cliente existe
 
-export const DeleteModal = ({ onClose }) => {
+export const DeleteModal = ({ onClose, setRefrescar }) => {
   const [correo, setCorreo] = useState('');
   const [mensaje, setMensaje] = useState('');
   const [error, setError] = useState('');
@@ -55,13 +55,11 @@ export const DeleteModal = ({ onClose }) => {
 
     setError('');
 
-    // Verificar si el cliente existe
     const clienteExiste = await verificarExistenciaCliente(correo);
     if (!clienteExiste) {
-      return; // No se procede con la eliminación si no existe el cliente
+      return; 
     }
 
-    // Proceder con la eliminación del cliente
     try {
       console.log('Eliminando...');
       const res = await fetch(`${URL}?correo_cliente=${encodeURIComponent(correo)}`, {
@@ -71,6 +69,7 @@ export const DeleteModal = ({ onClose }) => {
 
       if (!res.ok) throw new Error('Cliente no encontrado o error en la solicitud');
       setMensaje('Eliminación exitosa');
+      setRefrescar(true)
       console.log('Completado!');
     } catch (err) {
       setMensaje('Error al eliminar: ' + err.message);

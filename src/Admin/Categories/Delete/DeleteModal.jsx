@@ -4,7 +4,7 @@ import { Inputs } from '../../UI/Inputs/Inputs';
 const URL_GET = 'http://localhost:10101/CategoriaGet';
 const URL_DELETE = 'http://localhost:10101/CategoriaDelete';
 
-export const DeleteModal = ({ onClose }) => {
+export const DeleteModal = ({ onClose, setRefrescar }) => {
   const [nombre, setNombre] = useState('');
   const [mensaje, setMensaje] = useState('');
   const [errores, setErrores] = useState({});
@@ -50,6 +50,7 @@ export const DeleteModal = ({ onClose }) => {
 
       setMensaje('Eliminación exitosa.');
       setErrores({});
+      setRefrescar(true);
     } catch (err) {
       setMensaje('Error: ' + err.message);
     }
