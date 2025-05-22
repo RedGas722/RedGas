@@ -3,4 +3,5 @@
 #HomeLink.force-active {
     color: var(--Font-Nav);
     font-weight: bold;
+    font-size: clamp(1.5rem, 2vw, 2rem);
 }

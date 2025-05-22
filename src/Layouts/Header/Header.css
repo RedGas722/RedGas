@@ -2,7 +2,6 @@
     display: grid;
     grid-template-columns: 2fr 2fr 70px;
     padding: 24px 25px;
-    transition: all .3s ease;
 }
 
 .Header.scrolled {
@@ -10,4 +9,9 @@
     background: var(--background-color);
     border-radius: 20px;
     box-shadow: 9.91px 9.91px 8px #CACACA, -9.91px -9.91px 15px #F2F2F2;
+}
+.Header.Burguer{
+    display: grid;
+    grid-template-columns: 1fr;
+    padding: 24px 25px;
 }

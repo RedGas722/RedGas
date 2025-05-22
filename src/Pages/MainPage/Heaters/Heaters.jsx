@@ -1,24 +1,24 @@
-import { useEffect, useState } from 'react';
-import { faWater } from '@fortawesome/free-solid-svg-icons';
+import { useEffect, useState } from 'react'
+import { faWater } from '@fortawesome/free-solid-svg-icons'
 import { TitleSectCategory } from '../../../UI/TitleSectCategory/TitleSectCategory'
 import { Cards } from '../../../UI/Cards/Cards'
 
 export const HeatersSect = () => {
-  const [calentadores, setCalentadores] = useState([]);
+  const [calentadores, setCalentadores] = useState([])
 
   useEffect(() => {
     async function fetchCalentadores() {
       try {
-        const res = await fetch('http://localhost:10101/ProductoGetAll');
-        if (!res.ok) throw new Error('Error al obtener productos');
-        const data = await res.json();
-        setCalentadores(data.data || []);
+        const res = await fetch('http://localhost:10101/ProductoGetAll')
+        if (!res.ok) throw new Error('Error al obtener productos')
+        const data = await res.json()
+        setCalentadores(data.data || [])
       } catch (error) {
-        console.error(error);
+        console.error(error)
       }
     }
-    fetchCalentadores();
-  }, []);
+    fetchCalentadores()
+  }, [])
 
   return (
     <section id="HeatersSect" className="NeoContainer_outset_TL flex flex-col p-[15px] gap-[20px]">
@@ -28,7 +28,7 @@ export const HeatersSect = () => {
         productos={calentadores}
       />
     </section>
-  );
-};
+  )
+}
 
-export default HeatersSect;
+export default HeatersSect
