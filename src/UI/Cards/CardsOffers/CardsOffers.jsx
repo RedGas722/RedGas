@@ -59,7 +59,7 @@ export const CardsOffers = ({ uniqueId, imgContent, titleCatt, brandCatt, afterP
                                     <div className="card-title">{titleCatt}</div>
                                     <div className="font-black text-[18px]">{brandCatt}</div>
                                 </div>
-                                <div className="card-subtitle">Product description. Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
+                                <div className="card-subtitle max-w-[190px] break-words hyphens-auto">Product description. Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
                                 <hr className="card-divider" />
                                 <div className="card-footer">
                                     <div className="card-price">
