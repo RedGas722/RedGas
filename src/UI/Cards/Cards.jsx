@@ -1,6 +1,6 @@
 import "./Cards.css";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation } from "swiper/modules";  // Asegúrate de importar el módulo correctamente
+import { Navigation } from "swiper/modules";  // Importa el módulo de navegación
 import "swiper/css";  // Estilos básicos de Swiper
 import "swiper/css/navigation";  // Estilos de navegación
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -11,14 +11,11 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 export const Cards = ({ uniqueId, productos = [] }) => {
-    // Duplicamos los productos si son pocos para que funcione el loop
-    const duplicatedProductos = productos.length < 5 ? [...productos, ...productos] : productos;
-
     return (
         <section id={`CardSect-${uniqueId}`} className="flex flex-col gap-[10px] h-fit w-[100%]">
             <Swiper
                 modules={[Navigation]}  // Habilita el módulo de navegación
-                loop={duplicatedProductos.length > 1}  // Asegura que el loop solo se activa si hay más de una diapositiva
+                loop={productos.length > 1}  // Solo activa loop si hay más de un producto
                 navigation={{
                     prevEl: `.swiper-button-prev-${uniqueId}`,
                     nextEl: `.swiper-button-next-${uniqueId}`,
@@ -33,7 +30,7 @@ export const Cards = ({ uniqueId, productos = [] }) => {
                 id={`cardContainer-${uniqueId}`}
                 className="w-[100%] flex justify-center items-center"
             >
-                {duplicatedProductos.map((producto, index) => (
+                {productos.map((producto, index) => (
                     <SwiperSlide key={index}>
                         <div className="flex justify-center justify-self-center h-fit p-[25px_0_25px_0] items-center w-fit">
                             <div className="card NeoSubContainer_outset_TL">
@@ -49,7 +46,7 @@ export const Cards = ({ uniqueId, productos = [] }) => {
                                 <div className="flex gap-1 items-end justify-center">
                                     <div className="card-title">{producto.nombre_producto}</div>
                                 </div>
-                                <div className="card-subtitle max-w-[190px] break-words hyphens-auto">
+                                <div className="card-subtitle">
                                     {producto.descripcion_producto || "Sin descripción disponible."}
                                 </div>
                                 <hr className="card-divider" />
