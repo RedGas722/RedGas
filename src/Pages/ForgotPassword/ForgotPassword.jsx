@@ -44,6 +44,7 @@ export const ForgotPassword = () => {
                     message: 'Hemos recibido su solicitud de cambio de contraseña, haga click en el siguiente enlace:',
                     link: `http://localhost:5173/Login/ForgotPassword/Recovery/${token}`,
                 }
+                
                 alertSendForm('wait', 'Enviando correo de recuperación...')
                 emailjs.send(serviceId, templateId, templateParams, publicKey)
                     .then(() => {
