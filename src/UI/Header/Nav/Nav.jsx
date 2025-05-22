@@ -11,20 +11,20 @@ export const Navs = () => {
     }, [])
 
     const getLinkClass = (id) =>
-        `text-white cursor-pointer transition-colors duration-300 ${active === id ? '!text-[var(--Font-Nav)] font-bold' : ''
+        `text-[var(--main-color)] cursor-pointer transition-colors duration-300 ${active === id ? '!text-[var(--Font-Nav)] font-bold' : ''
         }`
 
     return (
-        <div className="flex gap-[6%] flex-wrap text-center justify-center text-[20px] items-center">
+        <div className="flex gap-[15px] flex-wrap text-center justify-center text-[20px] items-center">
             <Link
                 to="Hero"
                 smooth={true}
                 duration={500}
                 id="HomeLink"
-                className={getLinkClass("Header")}
+                className={`${getLinkClass("Hero")} NeoSubContainer_outset_TL p-[5px_10px]`}
                 activeClass="!text-[var(--Font-Nav)] font-bold"
                 spy={true}
-                onSetActive={() => setActive("Header")}
+                onSetActive={() => setActive("Hero")}
             >
                 Inicio
             </Link>
@@ -32,7 +32,7 @@ export const Navs = () => {
                 to="ProductCategory"
                 smooth={true}
                 duration={500}
-                className={getLinkClass("ProductCategory")}
+                className={`${getLinkClass("ProductCategory")} NeoSubContainer_outset_TL p-[5px_10px]`}
                 activeClass="!text-[var(--Font-Nav)] font-bold"
                 spy={true}
                 onSetActive={() => setActive("ProductCategory")}
@@ -43,24 +43,19 @@ export const Navs = () => {
                 to="OffersSect"
                 smooth={true}
                 duration={500}
-                className={getLinkClass("OffersSect")}
+                className={`${getLinkClass("OffersSect")} NeoSubContainer_outset_TL p-[5px_10px]`}
                 activeClass="!text-[var(--Font-Nav)] font-bold"
                 spy={true}
                 onSetActive={() => setActive("OffersSect")}
             >
                 Ofertas
             </Link>
-            <Link
-                to="HeatersSect"
-                smooth={true}
-                duration={500}
-                className={getLinkClass("HeatersSect")}
-                activeClass="!text-[var(--Font-Nav)] font-bold"
-                spy={true}
-                onSetActive={() => setActive("HeatersSect")}
+            <NavLink
+                to="/Technic"
+                className='NeoSubContainer_outset_TL p-[5px_10px]'
             >
                 Técnicos
-            </Link>
+            </NavLink>
             <NavLink to="/Admin">
                 Admin
             </NavLink>

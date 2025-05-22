@@ -4,7 +4,7 @@ import { Inputs } from '../../UI/Inputs/Inputs';
 const URL_GET = 'http://localhost:10101/ProductoGet';
 const URL_DELETE = 'http://localhost:10101/ProductoDelete';
 
-export const DeleteModal = ({ onClose }) => {
+export const DeleteModal = ({ onClose, setRefrescar }) => {
   const [nombreProducto, setNombreProducto] = useState('');
   const [mensaje, setMensaje] = useState('');
   const [errores, setErrores] = useState({});
@@ -50,7 +50,7 @@ export const DeleteModal = ({ onClose }) => {
       if (!resDelete.ok) throw new Error('Error al eliminar el producto');
 
       setMensaje('Producto eliminado exitosamente.');
-      console.log('Producto eliminado');
+      if (setRefrescar) setRefrescar(true);
     } catch (err) {
       setMensaje('Error: ' + err.message);
     }

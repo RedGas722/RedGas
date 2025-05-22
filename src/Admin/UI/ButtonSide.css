@@ -1,9 +1,5 @@
-.NavsBTN {
-    padding: 16px 0;
-}
-
 .NavsBTN:active {
     background: var(--background-color);
     border-radius: 20px;
-    box-shadow: inset 9.91px 9.91px 15px #CACACA, -9.91px -9.91px 15px #F2F2F2;
+    box-shadow: inset 9.91px 9.91px 15px var(--shadow-1), -9.91px -9.91px 15px var(--shadow-2);
 }

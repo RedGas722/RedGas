@@ -6,7 +6,4 @@
 
 .cardCategory:hover {
     transform: scale(1.05);
-    transition: all ease-in-out 0.3s;
 }
-
-/* w-[300px] h-[140px] */
