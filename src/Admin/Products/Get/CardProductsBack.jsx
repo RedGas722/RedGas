@@ -22,7 +22,7 @@ const CardsProductsBack = ({ producto }) => {
         <img
           src={imageUrl}
           alt={producto.nombre_producto}
-          className="w-full h-[220px] object-cover rounded-md my-2"
+          className="w-full h-[220px] object-contain rounded-md my-2"
         />
       ) : (
         <div className="w-full h-[220px] flex justify-center items-center bg-gray-200 rounded-md text-gray-500">
