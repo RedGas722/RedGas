@@ -181,7 +181,7 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
       if (setRefrescar) setRefrescar(true);
       nombreBusqueda = producto.nuevoNombre;
       await handleBuscar();
-      setMensaje('Producto y categoría actualizados exitosamente.');
+      setMensaje('Producto actualizados exitosamente.');
     } catch (err) {
       setMensaje('Error al actualizar: ' + err.message);
     }
