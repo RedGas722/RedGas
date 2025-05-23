@@ -38,7 +38,7 @@
     transform: translate(50%, -50%);
     width: 12px;
     height: 12px;
-    background-color: var(--main-color-sub);
+    background-color: var(--Font-Nav);
     box-shadow: inset -2px -2px 4px var(--main-sub-colo), inset 2px 2px 4px white, 0 0 5px rgba(0, 0, 0, 0.2);
     text-shadow: 4px 4px 2px var(--shadow-3), -4px -4px 2px var(--shadow-4);
     border-radius: 2px;

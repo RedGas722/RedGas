@@ -175,8 +175,8 @@ export const Login = () => {
                         </label>
                         <div className="text-[var(--main-focus)]">
                             <Link to="/Login/ForgotPassword">
-                                <button className="cursor-pointer">
-                                    <p>Olvidaste tu contraseña?</p>
+                                <button className="cursor-pointer hover:text-[var(--Font-Nav)]">
+                                    <p >Olvidaste tu contraseña?</p>
                                 </button>
                             </Link>
                         </div>
