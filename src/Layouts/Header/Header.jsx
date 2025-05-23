@@ -27,20 +27,11 @@ export const Header = () => {
 
     return (
         <>
-            {/* <div className={`Header items-center w-[100%] h-fit sticky top-0 z-[10000] ${scrolled ? 'scrolled' : ''} ${hamburger ? "Burguer" : ""}`} >
-                {scrolled ? <h2 className="flex justify-self-center font-bold text-4xl text-[var(--Font-Nav)]">Red Gas</h2> : ''}
-                <SearchBarr />
-                <Navs />
-                <ProfilePhoto />
-            </div> */}
-            {/* sadasdadasdsadsad */}
-
-
-            <div id="Header" className={`Header items-center w-[100%] h-fit sticky top-0 z-[10000] ${scrolled ? 'scrolled' : ''}  ${hamburger ? 'Burguer' : ''}`}>
-                {scrolled ? <h2 className={`flex justify-self-center font-bold text-4xl text-[var(--Font-Nav)] ${hamburger ? '' : 'hidden'}`}>Red Gas</h2> : ''}
+            <div id="Header" className={`Header w-[100%] h-fit md:sticky fixed left-0 top-0 z-[10000] ${scrolled ? 'scrolled' : ''}  ${hamburger ? 'Burguer NeoContainer_outset_TL' : ''}`}>
+                {scrolled ? <h2 className={`justify-self-center hidden md:flex font-bold text-4xl text-[var(--Font-Nav)] ${hamburger ? 'hidden' : ''}`}>Red Gas</h2> : ''}
                 <div className="flex items-center justify-between py-5 md:hidden">
                     <div className="md:hidden">
-                        <button className="menu-btn text-gray-500 hover:text-gray-800"
+                        <button className="menu-btn text-[var(--main-color-sub)] fixed top-5 left-2 w-fit hover:text-[var(--main-color)]"
                             onClick={() => sethamburger(!hamburger)}
                         >
                             {
@@ -58,14 +49,11 @@ export const Header = () => {
                     </div>
                 </div>
 
-                {/* <div className={`${hamburger ? 'block' : 'hidden'} `}> */}
-                <SearchBarr className={`flex-1 gap-x-6 items-center justify-end mt-6 space-y-6 md:flex md:space-y-0 md:mt-0 ${hamburger ? '' : 'hidden'}`} />
-                {/* </div> */}
-                {/* <div className={`${hamburger ? 'block' : 'hidden'} `}> */}
-                <Navs className={`flex-1 gap-x-6 items-center justify-end mt-6 space-y-6 md:flex md:space-y-0 md:mt-0 ${hamburger ? '' : 'hidden'}`} />
-                {/* </div> */}
-                {/* <div className={`${hamburger ? 'block' : 'hidden'} `}> */}
-                <ProfilePhoto className={`flex-1 gap-x-6 items-center justify-end mt-6 space-y-6 md:flex md:space-y-0 md:mt-0 ${hamburger ? '' : 'hidden'}`} />
+                <SearchBarr className={`flex-1 items-center justify-center md:flex ${hamburger ? '' : 'hidden'}`} />
+                
+                <Navs className={`flex-1  items-center justify-center md:flex  ${hamburger ? '' : 'hidden'}`} />
+
+                <ProfilePhoto className={`flex-1 items-center justify-center md:flex ${hamburger ? '' : 'hidden'}`} />
                 {/* </div> */}
             </div>
         </>
