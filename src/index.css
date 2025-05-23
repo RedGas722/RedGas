@@ -58,7 +58,11 @@ input[type="password"]::-webkit-reveal {
     border-radius: 20px;
     box-shadow: 9.91px 9.91px 15px var(--shadow-1), -9.91px -9.91px 15px var(--shadow-2);
   }
-
+  .NeoNone{
+    background: none;
+    border-radius: none;
+    box-shadow: none;
+  }
   .NeoSubContainer_outset_TL {
     background: var(--background-color);
     border-radius: 20px;

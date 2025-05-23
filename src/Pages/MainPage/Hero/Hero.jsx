@@ -11,7 +11,7 @@ export const Hero = () => {
                     <p className='max-w-[810px]'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi eligendi eius, doloribus voluptas error accusantium in dignissimos, ipsam architecto labore rerum vel cum natus repellat esse beatae nostrum. Ratione, recusandae?</p>
                 </div>
                 <div className='flex flex-col items-end justify-center'>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt facere quae provident qui reprehenderit dignissimos animi cum.</p>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt facere quae provident qui reprehenderit dignissimos animi com.</p>
                     <p>-Pepe</p>
                 </div>
             </div>
