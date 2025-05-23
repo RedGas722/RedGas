@@ -4,7 +4,7 @@ import { Inputs } from '../../UI/Inputs/Inputs';
 const URL_GET = 'http://localhost:10101/ProductoGet';
 const URL_DELETE = 'http://localhost:10101/ProductoDelete';
 
-export const DeleteModal = ({ onClose, setRefrescar }) => {
+export const DeleteModal = ({ onClose, onProductoEliminado }) => {
   const [nombreProducto, setNombreProducto] = useState('');
   const [mensaje, setMensaje] = useState('');
   const [errores, setErrores] = useState({});
@@ -39,7 +39,10 @@ export const DeleteModal = ({ onClose, setRefrescar }) => {
       if (!resGet.ok) throw new Error('Producto no encontrado');
 
       const dataGet = await resGet.json();
-      if (!dataGet?.data) throw new Error('Producto no existe');
+      if (!dataGet?.data) {
+        setMensaje('No se encontró el producto registrado.');
+        return;
+      }
 
       // Si el producto existe, proceder a eliminarlo
       const resDelete = await fetch(`${URL_DELETE}?nombre_producto=${encodeURIComponent(nombreProducto)}`, {
@@ -50,7 +53,7 @@ export const DeleteModal = ({ onClose, setRefrescar }) => {
       if (!resDelete.ok) throw new Error('Error al eliminar el producto');
 
       setMensaje('Producto eliminado exitosamente.');
-      if (setRefrescar) setRefrescar(true);
+      if (onProductoEliminado) onProductoEliminado(nombreProducto);
     } catch (err) {
       setMensaje('Error: ' + err.message);
     }

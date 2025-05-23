@@ -72,11 +72,15 @@ export const ProductBack = () => {
       />}
       {showDeleteModal && 
       <DeleteModal 
-      onClose={() => setShowDeleteModal(false)} 
-      setRefrescar={setRefrescar}
+        onClose={() => setShowDeleteModal(false)} 
+        onProductoEliminado={nombreEliminado => {
+          setProductos(prev => prev.filter(p => p.nombre_producto !== nombreEliminado));
+          setShowDeleteModal(false); // Cierra el modal tras eliminar
+        }}
       />}
     </div>
   );
 };
+
 
 export default ProductBack;

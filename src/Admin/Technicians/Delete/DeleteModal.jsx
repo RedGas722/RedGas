@@ -3,7 +3,7 @@ import Inputs from '../../UI/Inputs/Inputs';
 
 const URL = 'http://localhost:10101/TecnicoDelete';
 
-export const DeleteModal = ({ onClose }) => {
+export const DeleteModal = ({ onClose, onTecnicoEliminado }) => {
   const [correo, setCorreo] = useState('');
   const [mensaje, setMensaje] = useState('');
 
@@ -26,7 +26,6 @@ export const DeleteModal = ({ onClose }) => {
     }
 
     try {
-      console.log('Eliminando...');
       const res = await fetch(`${URL}?correo_tecnico=${encodeURIComponent(correo)}`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
@@ -48,6 +47,7 @@ export const DeleteModal = ({ onClose }) => {
         return;
       }
       setMensaje('Eliminación exitosa');
+      if (onTecnicoEliminado) onTecnicoEliminado(correo);
     } catch (err) {
       setMensaje('Error al eliminar: ' + err.message);
     }

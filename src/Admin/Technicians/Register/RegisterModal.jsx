@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Inputs } from '../../UI/Inputs/Inputs'
 
-export const RegisterModal = ({ onClose }) => {
+export const RegisterModal = ({ onClose, onTecnicoRegistrado }) => {
     const [nombre, setNombre] = useState('')
     const [apellido, setApellido] = useState('')
     const [correo, setCorreo] = useState('')
@@ -68,6 +68,13 @@ export const RegisterModal = ({ onClose }) => {
             const data = await res.json();
             console.log('Técnico registrado: ', data);
             setMensaje('Técnico registrado exitosamente.');
+            if (onTecnicoRegistrado) onTecnicoRegistrado(data.data || {
+                nombre_tecnico: nombre,
+                apellido_tecnico: apellido,
+                correo_tecnico: correo,
+                telefono_tecnico: telefono,
+                imagen: data.data?.imagen || null
+            });
         } catch (err) {
             console.log('Error al registrar técnico: ', err);
             setMensaje('Error al registrar: ' + err.message);
