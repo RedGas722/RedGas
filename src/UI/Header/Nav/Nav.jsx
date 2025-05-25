@@ -15,7 +15,7 @@ export const Navs = ({ className }) => {
         }`
 
     return (
-        <div className={`flex gap-[15px] flex-col md:flex-wrap md:flex-row text-center justify-center text-[20px] items-center ${className}`}>
+        <div className={`flex gap-[15px] flex-col md:flex-wrap md:flex-row text-center justify-center items-center text-[20px] ${className}`}>
             <Link
                 to="Hero"
                 smooth={true}
