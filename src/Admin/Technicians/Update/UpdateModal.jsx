@@ -12,8 +12,8 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
   let correoActualBusqueda = correoBusqueda;
 
   const URL_GET = 'http://localhost:10101/TecnicoGet';
-  const URL_UPDATE = 'http://localhost:10101/TecnicoDataUpdateNI'; // Actualizar sin imagen
-  const URL_UPDATE_IMAGEN = 'http://localhost:10101/TecnicoDataUpdate'; // Actualizar con imagen
+  const URL_UPDATE = 'http://localhost:10101/TecnicoUpdateNI'; 
+  const URL_UPDATE_IMAGEN = 'http://localhost:10101/TecnicoDataUpdate'; 
 
   // Validar campos
   const validarCampos = () => {

@@ -22,7 +22,6 @@ export const TechniciansBack = () => {
       const data = await res.json();
       const tecnicosData = Array.isArray(data) ? data : (data.data || []);
       setTecnicos(tecnicosData);
-      console.log('Técnicos actualizados:', tecnicosData);
     } catch (error) {
       setTecnicos([]);
       console.error(error);

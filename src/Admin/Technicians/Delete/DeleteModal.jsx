@@ -87,7 +87,7 @@ export const DeleteModal = ({ onClose, onTecnicoEliminado }) => {
         </div>
 
         {mensaje && (
-          <p className={`text-center ${mensaje.includes('Error') ? 'text-red-600' : 'text-green-600'} font-semibold`}>
+          <p className={`text-center ${/error|por favor/i.test(mensaje) ? 'text-red-600' : 'text-green-600'} font-semibold`}>
             {mensaje}
           </p>
         )}
