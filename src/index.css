@@ -16,11 +16,11 @@ input::placeholder {
   --main-color: #323232;
   --main-color-sub: #666;
   --main-focus: #2d8cf0;
-  --Bacground-body: #e0e2e5;
+  --Bacground-body: #ffff;
   /* Body-color-end----------------- Font-Nav*/
-  --Font-Nav: #B87830;
+  --Font-Nav: #D4AF37;
   /* ADMIN */
-  --background-color: #e0e2e5;
+  --background-color: #ffff;
   /* Shadows Neomorfism */
   --shadow-1: #CACACA;
   --shadow-2: #F2F2F2;
