@@ -1,42 +1,62 @@
 import React, { useState } from 'react';
+import { Inputs } from '../../UI/Inputs/Inputs';
 
 export const GetModal = ({ onClose }) => {
   const [correo, setCorreo] = useState('');
   const [mensaje, setMensaje] = useState(null);
   const [imagenURL, setImagenURL] = useState(null); // Estado para la URL de la imagen
+  const [errorCorreo, setErrorCorreo] = useState(''); // Estado para errores en el correo
 
   const URL = 'http://localhost:10101/TecnicoGet';
 
+  const validarCorreo = (correo) => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(correo);
+  };
+
   const handleGet = async (e) => {
     e.preventDefault();
+
+    if (!validarCorreo(correo)) {
+      setErrorCorreo('Por favor, ingresa un correo válido.');
+      return;
+    }
+
+    setErrorCorreo(''); // Limpiar errores si el correo es válido
+
     try {
       const res = await fetch(`${URL}?correo_tecnico=${encodeURIComponent(correo)}`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
       });
-  
+
       if (!res.ok) throw new Error('Credenciales inválidas');
-      const data = await res.json();  
-      if (data.data) {
-        const tecnico = data.data;
-  
-        if (tecnico.imagen) {
-          const imagenBase64 = tecnico.imagen;
-          setImagenURL(`data:image/jpeg;base64,${imagenBase64}`);
-        }
-  
-        setMensaje({ ...data, data: tecnico });
+      const data = await res.json();
+
+      if (!data.data) {
+        setMensaje({ error: 'El correo no se encuentra registrado.' });
+        return;
       }
+
+      const tecnico = data.data;
+
+      if (tecnico.imagen) {
+        const imagenBase64 = tecnico.imagen;
+        setImagenURL(`data:image/jpeg;base64,${imagenBase64}`);
+      }
+
+      setMensaje({ ...data, data: tecnico });
     } catch (err) {
       console.error(err);
       setMensaje({ error: 'Error al consultar: ' + err.message });
     }
-  };    
+  };
 
   const handleCancel = () => {
     setCorreo('');
     setMensaje(null);
-    setImagenURL(null); 
+    setImagenURL(null);
+    setErrorCorreo(''); // Limpiar errores al cancelar
   };
 
   return (
@@ -49,13 +69,13 @@ export const GetModal = ({ onClose }) => {
 
         <h2 className="text-xl font-bold text-center">Consultar Tecnico</h2>
 
-        <input
-          type="text"
-          placeholder="Correo del tecnico"
-          value={correo}
+        <Inputs
+          Type="1"
+          Place="Correo del tecnico"
+          Value={correo}
           onChange={(e) => setCorreo(e.target.value)}
-          className="border rounded p-2"
         />
+        {errorCorreo && <p className="text-red-500 text-sm">{errorCorreo}</p>}
 
         <div className="flex justify-between gap-2">
           <button
@@ -81,6 +101,10 @@ export const GetModal = ({ onClose }) => {
             />
             )}
         </div>
+        )}
+
+        {mensaje && mensaje.error && (
+          <p className="text-red-500 text-sm mt-2">{mensaje.error}</p>
         )}
       </div>
     </div>

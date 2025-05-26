@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Inputs } from '../../UI/Inputs/Inputs'
 
-export const RegisterModal = ({ onClose }) => {
+export const RegisterModal = ({ onClose, onTecnicoRegistrado }) => {
     const [nombre, setNombre] = useState('')
     const [apellido, setApellido] = useState('')
     const [correo, setCorreo] = useState('')
@@ -13,38 +13,73 @@ export const RegisterModal = ({ onClose }) => {
     const URL = 'http://localhost:10101/TecnicoRegister'
 
     const handleRegister = async (e) => {
-        e.preventDefault()
+        e.preventDefault();
 
-        if (!imagen) {
-            setMensaje('Por favor, seleccione una imagen.')
-            return
+        // Validaciones
+        if (!nombre.trim()) {
+            setMensaje('Por favor, ingrese el nombre del técnico.');
+            return;
         }
 
-        const formData = new FormData()
-        formData.append('nombre_tecnico', nombre) + '' + apellido
-        formData.append('correo_tecnico', correo)
-        formData.append('telefono_tecnico', telefono)
-        formData.append('contrasena_tecnico', contrasena)
-        formData.append('imagen', imagen)
+        if (!apellido.trim()) {
+            setMensaje('Por favor, ingrese el apellido del técnico.');
+            return;
+        }
+
+        if (!correo.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) {
+            setMensaje('Por favor, ingrese un correo válido.');
+            return;
+        }
+
+        if (!telefono.trim() || !/^\d{10}$/.test(telefono)) {
+            setMensaje('Por favor, ingrese un número de teléfono válido (10 dígitos).');
+            return;
+        }
+
+        if (!contrasena.trim() || contrasena.length < 6) {
+            setMensaje('La contraseña debe tener al menos 6 caracteres.');
+            return;
+        }
+
+        if (!imagen) {
+            setMensaje('Por favor, seleccione una imagen.');
+            return;
+        }
+
+        setMensaje(''); // Limpiar mensajes de error si todo es válido
+
+        const formData = new FormData();
+        formData.append('nombre_tecnico', nombre);
+        formData.append('apellido_tecnico', apellido);
+        formData.append('correo_tecnico', correo);
+        formData.append('telefono_tecnico', telefono);
+        formData.append('contrasena_tecnico', contrasena);
+        formData.append('imagen', imagen);
 
         try {
-            console.log('Registrando Tecnico...')
+            console.log('Registrando Técnico...');
 
             const res = await fetch(URL, {
                 method: 'POST',
                 body: formData,
-            })
+            });
 
-            if (!res.ok) throw new Error('Error al registrar Tecnico')
-            const data = await res.json()
-            console.log('Tecnico registrado: ', data)
-            setMensaje('Tecnico registrado exitosamente.')
+            if (!res.ok) throw new Error('Error al registrar Técnico');
+            const data = await res.json();
+            console.log('Técnico registrado: ', data);
+            setMensaje('Técnico registrado exitosamente.');
+            if (onTecnicoRegistrado) onTecnicoRegistrado(data.data || {
+                nombre_tecnico: nombre,
+                apellido_tecnico: apellido,
+                correo_tecnico: correo,
+                telefono_tecnico: telefono,
+                imagen: data.data?.imagen || null
+            });
         } catch (err) {
-            console.log('Error al registrar producto: ', err)
-            setMensaje('Error al registrar: ' + err.message)
+            console.log('Error al registrar técnico: ', err);
+            setMensaje('Error al registrar: ' + err.message);
         }
     }
-
 
     const handleCancel = () => {
         setNombre('')
@@ -81,7 +116,7 @@ export const RegisterModal = ({ onClose }) => {
                 <Inputs Type='2' Place='Correo del Tecnico' Value={correo} onChange={(e) => setCorreo(e.target.value)} />
                 <Inputs Type='6' Place='Telefono del Tecnico' Value={telefono} onChange={(e) => setTelefono(e.target.value)} />
                 <Inputs Type='3' Place='Contraseña del Tecnico' Value={contrasena} onChange={(e) => setContrasena(e.target.value)} />
-                <Inputs Type='4' Place='Imagen del Tecnico' Value={imagen} onChange={handleImageChange} />
+                <Inputs Type='4' Place='Imagen del Tecnico' onChange={handleImageChange} />
                 
                 <div className="flex justify-between gap-2">
                     <button

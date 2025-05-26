@@ -1,21 +1,31 @@
 import React, { useState } from 'react';
+import Inputs from '../../UI/Inputs/Inputs';
 
 const URL = 'http://localhost:10101/TecnicoDelete';
 
-export const DeleteModal = ({ onClose }) => {
+export const DeleteModal = ({ onClose, onTecnicoEliminado }) => {
   const [correo, setCorreo] = useState('');
   const [mensaje, setMensaje] = useState('');
+
+  const validarCorreo = (correo) => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Expresión regular para validar correos
+    return regex.test(correo);
+  };
 
   const handleDelete = async (e) => {
     e.preventDefault();
 
     if (!correo.trim()) {
+      setMensaje('Por favor, ingrese un correo.');
+      return;
+    }
+
+    if (!validarCorreo(correo)) {
       setMensaje('Por favor, ingrese un correo válido.');
       return;
     }
 
     try {
-      console.log('Eliminando...');
       const res = await fetch(`${URL}?correo_tecnico=${encodeURIComponent(correo)}`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
@@ -23,11 +33,21 @@ export const DeleteModal = ({ onClose }) => {
 
       if (!res.ok) {
         const errorData = await res.json();
-        throw new Error(errorData.message || 'Error desconocido del servidor');
+        if (errorData.message === 'Correo no encontrado') {
+          setMensaje('El correo no se encuentra registrado.');
+          return;
+        }
+        setMensaje('Error al eliminar: ' + (errorData.message || 'Error desconocido del servidor'));
+        return;
       }
 
-      await res.json(); // Procesa la respuesta sin asignarla a una variable innecesaria.
+      const data = await res.json();
+      if (data && typeof data.message === 'string' && data.message === 'Correo no encontrado') {
+        setMensaje('El correo no se encuentra registrado.');
+        return;
+      }
       setMensaje('Eliminación exitosa');
+      if (onTecnicoEliminado) onTecnicoEliminado(correo);
     } catch (err) {
       setMensaje('Error al eliminar: ' + err.message);
     }
@@ -48,12 +68,11 @@ export const DeleteModal = ({ onClose }) => {
 
         <h2 className="text-xl font-bold text-center">Eliminación de Tecnico</h2>
 
-        <input
-          type="text"
-          placeholder="Correo Tecnico..."
-          value={correo}
+        <Inputs
+          Type="1"
+          Place="Correo Tecnico..."
+          Value={correo}
           onChange={(e) => setCorreo(e.target.value)}
-          className="border rounded p-2"
         />
 
         <div className="flex justify-between gap-2">
@@ -67,8 +86,11 @@ export const DeleteModal = ({ onClose }) => {
           >Confirmar</button>
         </div>
 
-        {mensaje && (<p className="text-center text-green-600 font-semibold">{mensaje}</p>)}
-
+        {mensaje && (
+          <p className={`text-center ${mensaje.includes('Error') ? 'text-red-600' : 'text-green-600'} font-semibold`}>
+            {mensaje}
+          </p>
+        )}
       </div>
     </div>
   );

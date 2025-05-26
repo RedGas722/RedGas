@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Inputs } from '../../UI/Inputs/Inputs';
 
 export const UpdateModal = ({ onClose }) => {
   const [nombreServicio, setNombreServicio] = useState('');
@@ -11,14 +12,23 @@ export const UpdateModal = ({ onClose }) => {
 
   const handleUpdate = async (e) => {
     e.preventDefault();
-
-    console.log('Datos enviados:', {
-      nombre_servicio: nombreServicio,
-      nuevo_nombre_servicio: nuevoNombreServicio,
-      descripcion_servicio: descripcionServicio,
-      precio_servicio: precioServicio,
-    });
-
+    // Validaciones de frontend
+    if (!nombreServicio.trim()) {
+      setMensaje('Por favor, ingrese el nombre actual del servicio.');
+      return;
+    }
+    if (!nuevoNombreServicio.trim()) {
+      setMensaje('Por favor, ingrese el nuevo nombre del servicio.');
+      return;
+    }
+    if (!descripcionServicio.trim()) {
+      setMensaje('Por favor, ingrese la descripción del servicio.');
+      return;
+    }
+    if (!precioServicio || isNaN(precioServicio) || parseFloat(precioServicio) <= 0) {
+      setMensaje('Por favor, ingrese un precio válido (mayor a 0).');
+      return;
+    }
     try {
       const res = await fetch(URL, {
         method: 'PUT',
@@ -57,19 +67,17 @@ export const UpdateModal = ({ onClose }) => {
 
         <h2 className="text-xl font-bold text-center">Actualizar Servicio</h2>
 
-        <input
-          type="text"
-          placeholder="Nombre del Servicio"
-          value={nombreServicio}
+        <Inputs
+          Type="1"
+          Place="Nombre del Servicio"
+          Value={nombreServicio}
           onChange={(e) => setNombreServicio(e.target.value)}
-          className="border rounded p-2"
         />
-        <input
-          type="text"
-          placeholder="Nuevo Nombre del Servicio"
-          value={nuevoNombreServicio}
+        <Inputs
+          Type="1"
+          Place="Nuevo Nombre del Servicio"
+          Value={nuevoNombreServicio}
           onChange={(e) => setNuevoNombreServicio(e.target.value)}
-          className="border rounded p-2"
         />
         <textarea
           placeholder="Descripción del Servicio"
@@ -77,12 +85,11 @@ export const UpdateModal = ({ onClose }) => {
           onChange={(e) => setDescripcionServicio(e.target.value)}
           className="border rounded p-2"
         />
-        <input
-          type="number"
-          placeholder="Precio del Servicio"
-          value={precioServicio}
+        <Inputs
+          Type="5"
+          Place="Precio del Servicio"
+          Value={precioServicio}
           onChange={(e) => setPrecioServicio(e.target.value)}
-          className="border rounded p-2"
         />
 
         <div className="flex justify-between gap-2">

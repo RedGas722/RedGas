@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Inputs } from '../../UI/Inputs/Inputs';
 
 export const RegisterModal = ({ onClose }) => {
     const [nombreServicio, setNombreServicio] = useState('');
@@ -10,6 +11,19 @@ export const RegisterModal = ({ onClose }) => {
 
     const handleRegister = async (e) => {
         e.preventDefault();
+        // Validaciones de frontend
+        if (!nombreServicio.trim()) {
+            setMensaje('Por favor, ingrese el nombre del servicio.');
+            return;
+        }
+        if (!descripcionServicio.trim()) {
+            setMensaje('Por favor, ingrese la descripción del servicio.');
+            return;
+        }
+        if (!precioServicio || isNaN(precioServicio) || parseFloat(precioServicio) <= 0) {
+            setMensaje('Por favor, ingrese un precio válido (mayor a 0).');
+            return;
+        }
         try {
             console.log('Registrando servicio...');
 
@@ -23,8 +37,17 @@ export const RegisterModal = ({ onClose }) => {
                 }),
             });
 
-            if (!res.ok) throw new Error('Error al registrar servicio');
-            await res.json(); // Procesa la respuesta sin asignarla a una variable innecesaria.
+            if (!res.ok) {
+                let errorMsg = 'Error al registrar servicio';
+                try {
+                    const errorData = await res.json();
+                    if (errorData && errorData.message) errorMsg = errorData.message;
+                } catch {
+                    // No se pudo extraer el mensaje del backend
+                }
+                throw new Error(errorMsg);
+            }
+            await res.json();
             setMensaje('Registro exitoso.');
         } catch (err) {
             setMensaje('Error al registrar: ' + err.message);
@@ -48,12 +71,11 @@ export const RegisterModal = ({ onClose }) => {
 
                 <h2 className="text-xl font-bold text-center">Registrar Servicio</h2>
 
-                <input
-                    type="text"
-                    placeholder="Nombre del Servicio"
-                    value={nombreServicio}
+                <Inputs
+                    Type="1"
+                    Place="Nombre del Servicio"
+                    Value={nombreServicio}
                     onChange={(e) => setNombreServicio(e.target.value)}
-                    className="border rounded p-2"
                 />
                 <textarea
                     placeholder="Descripción del Servicio"
@@ -61,12 +83,11 @@ export const RegisterModal = ({ onClose }) => {
                     onChange={(e) => setDescripcionServicio(e.target.value)}
                     className="border rounded p-2"
                 />
-                <input
-                    type="number"
-                    placeholder="Precio del Servicio"
-                    value={precioServicio}
+                <Inputs
+                    Type="5"
+                    Place="Precio del Servicio"
+                    Value={precioServicio}
                     onChange={(e) => setPrecioServicio(e.target.value)}
-                    className="border rounded p-2"
                 />
 
                 <div className="flex justify-between gap-2">

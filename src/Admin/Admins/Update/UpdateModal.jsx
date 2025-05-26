@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Inputs } from '../../UI/Inputs/Inputs';
 
 export const UpdateModal = ({ onClose }) => {
     const [nombre, setNombre] = useState('');
@@ -12,6 +13,40 @@ export const UpdateModal = ({ onClose }) => {
 
     const handleUpdate = async (e) => {
         e.preventDefault();
+        // Validaciones de frontend
+        if (!correo.trim()) {
+            setMensaje('Por favor, ingrese el correo actual.');
+            return;
+        }
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!regex.test(correo)) {
+            setMensaje('Por favor, ingrese un correo actual válido.');
+            return;
+        }
+        if (!nombre.trim()) {
+            setMensaje('Por favor, ingrese el nombre del administrador.');
+            return;
+        }
+        if (!nuevoCorreo.trim()) {
+            setMensaje('Por favor, ingrese el nuevo correo.');
+            return;
+        }
+        if (!regex.test(nuevoCorreo)) {
+            setMensaje('Por favor, ingrese un nuevo correo válido.');
+            return;
+        }
+        if (!telefono.trim()) {
+            setMensaje('Por favor, ingrese el teléfono.');
+            return;
+        }
+        if (!/^[0-9]+$/.test(telefono)) {
+            setMensaje('El teléfono solo debe contener números.');
+            return;
+        }
+        if (!contrasena.trim()) {
+            setMensaje('Por favor, ingrese la contraseña.');
+            return;
+        }
         try {
             console.log('Actualizando administrador...');
 
@@ -53,43 +88,35 @@ export const UpdateModal = ({ onClose }) => {
                 >✕</button>
 
                 <h2 className="text-xl font-bold text-center">Actualizar Administrador</h2>
-                
-                    <input
-                    type="email"
-                    placeholder="Correo actual"
-                    value={correo}
+                <Inputs
+                    Type="2"
+                    Place="Correo actual"
+                    Value={correo}
                     onChange={(e) => setCorreo(e.target.value)}
-                    className="border rounded p-2"
                 />
-
-                <input
-                    type="text"
-                    placeholder="Nombre del administrador"
-                    value={nombre}
+                <Inputs
+                    Type="1"
+                    Place="Nombre del administrador"
+                    Value={nombre}
                     onChange={(e) => setNombre(e.target.value)}
-                    className="border rounded p-2"
                 />
-            
-                <input
-                    type="email"
-                    placeholder="Nuevo correo"
-                    value={nuevoCorreo}
+                <Inputs
+                    Type="2"
+                    Place="Nuevo correo"
+                    Value={nuevoCorreo}
                     onChange={(e) => setNuevoCorreo(e.target.value)}
-                    className="border rounded p-2"
                 />
-                <input
-                    type="text"
-                    placeholder="Teléfono"
-                    value={telefono}
+                <Inputs
+                    Type="6"
+                    Place="Teléfono"
+                    Value={telefono}
                     onChange={(e) => setTelefono(e.target.value)}
-                    className="border rounded p-2"
                 />
-                <input
-                    type="password"
-                    placeholder="Contraseña"
-                    value={contrasena}
+                <Inputs
+                    Type="3"
+                    Place="Contraseña"
+                    Value={contrasena}
                     onChange={(e) => setContrasena(e.target.value)}
-                    className="border rounded p-2"
                 />
 
                 <div className="flex justify-between gap-2">
