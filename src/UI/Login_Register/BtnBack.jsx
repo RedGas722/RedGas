@@ -9,7 +9,7 @@ export const BtnBack = ({To}) => {
                 type="button"
             >
                 <div
-                    class="NeoSubContainer_outset_TL h-8 w-1/4 flex items-center justify-center absolute left-1 top-[4px] group-hover:w-38 group-hover:bg-[var(--main-color)] z-10 duration-500"
+                    class="NeoSubContainer_outset_TL h-8 w-1/4 flex items-center justify-center absolute left-1 top-[4px] group-hover:w-38 group-hover:bg-[var(--Font-Nav)] z-10 duration-500"
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
