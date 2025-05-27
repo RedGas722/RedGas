@@ -1,137 +1,194 @@
 import React, { useState } from 'react';
 import { Inputs } from '../../UI/Inputs/Inputs';
 
-export const UpdateModal = ({ onClose }) => {
-    const [nombre, setNombre] = useState('');
-    const [nuevoCorreo, setNuevoCorreo] = useState('');
-    const [correo, setCorreo] = useState('');
-    const [telefono, setTelefono] = useState('');
-    const [contrasena, setContrasena] = useState('');
-    const [mensaje, setMensaje] = useState('');
+export const UpdateModal = ({ onClose, setRefrescar }) => {
+  const [correoBusqueda, setCorreoBusqueda] = useState('');
+  const [admin, setAdmin] = useState(null);
+  const [mensaje, setMensaje] = useState('');
+  const [errores, setErrores] = useState({});
+  const [editando, setEditando] = useState(false);
+  let CorreoBusqueda = correoBusqueda;
 
-    const URL = 'http://localhost:10101/AdminUpdate';
+  const URL_GET = 'http://localhost:10101/AdminGet';
+  const URL_UPDATE = 'http://localhost:10101/AdminDataUpdate'; 
 
-    const handleUpdate = async (e) => {
-        e.preventDefault();
-        // Validaciones de frontend
-        if (!correo.trim()) {
-            setMensaje('Por favor, ingrese el correo actual.');
-            return;
-        }
-        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!regex.test(correo)) {
-            setMensaje('Por favor, ingrese un correo actual válido.');
-            return;
-        }
-        if (!nombre.trim()) {
-            setMensaje('Por favor, ingrese el nombre del administrador.');
-            return;
-        }
-        if (!nuevoCorreo.trim()) {
-            setMensaje('Por favor, ingrese el nuevo correo.');
-            return;
-        }
-        if (!regex.test(nuevoCorreo)) {
-            setMensaje('Por favor, ingrese un nuevo correo válido.');
-            return;
-        }
-        if (!telefono.trim()) {
-            setMensaje('Por favor, ingrese el teléfono.');
-            return;
-        }
-        if (!/^[0-9]+$/.test(telefono)) {
-            setMensaje('El teléfono solo debe contener números.');
-            return;
-        }
-        if (!contrasena.trim()) {
-            setMensaje('Por favor, ingrese la contraseña.');
-            return;
-        }
-        try {
-            console.log('Actualizando administrador...');
+  const validarCorreo = (correo) => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(correo);
+  };
 
-            const res = await fetch(URL, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    nombre_admin: nombre,
-                    new_correo_admin: nuevoCorreo,
-                    telefono_admin: telefono,
-                    contraseña_admin: contrasena,
-                    correo_admin: correo
-                }),
-            });
+  const validarCampos = () => {
+    const errores = {};
+    if (!admin.nuevoNombre.trim()) errores.nuevoNombre = 'Nombre es obligatorio';
+    if (!admin.nuevoCorreo.trim() || !validarCorreo(admin.nuevoCorreo)) errores.nuevoCorreo = 'Correo válido obligatorio';
+    if (!admin.telefono.trim() || !/^\d{10}$/.test(admin.telefono)) errores.telefono = 'Teléfono válido (10 dígitos) obligatorio';
+    return errores;
+  };
 
-            if (!res.ok) throw new Error('Error al actualizar el administrador');
-            await res.json();
-            setMensaje('Actualización exitosa.');
-        } catch (err) {
-            setMensaje('Error al actualizar: ' + err.message);
-        }
+  const handleBuscar = async () => {
+    setMensaje('');
+    setErrores({});
+    setCorreoBusqueda(CorreoBusqueda);
+    if (!correoBusqueda.trim()) {
+      setErrores({ correoBusqueda: 'El correo es obligatorio' });
+      return;
+    }
+    if (!validarCorreo(correoBusqueda)) {
+      setErrores({ correoBusqueda: 'Correo no válido' });
+      return;
+    }
+    try {
+      const res = await fetch(`${URL_GET}?correo_admin=${encodeURIComponent(CorreoBusqueda)}`);
+      if (!res.ok) throw new Error('Administrador no encontrado');
+      const data = await res.json();
+      if (!data.data) throw new Error('Administrador no existe');
+      // Aquí llenamos el estado con los datos traídos
+      setAdmin({
+        nuevoCorreo: data.data.correo_admin,
+        nuevoNombre: data.data.nombre_admin,
+        telefono: data.data.telefono_admin,
+      });
+      setEditando(true);
+    } catch (err) {
+      setMensaje('Error al buscar administrador: ' + err.message);
+    }
+  };
+
+  const handleActualizar = async () => {
+    const erroresValidados = validarCampos();
+    if (Object.keys(erroresValidados).length > 0) {
+      setErrores(erroresValidados);
+      return;
+    }
+    setErrores({});
+
+    const jsonData = {
+      correo_admin: CorreoBusqueda,
+      new_correo_admin: admin.nuevoCorreo,
+      nombre_admin: admin.nuevoNombre,
+      telefono_admin: admin.telefono,
     };
 
-    const handleCancel = () => {
-        setNombre('');
-        setNuevoCorreo('');
-        setCorreo('');
-        setTelefono('');
-        setContrasena('');
-        setMensaje('');
-    };
+    try {
+      const res = await fetch(URL_UPDATE, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(jsonData),
+      });
+      if (!res.ok) {
+        const text = await res.text();
+        if (text.includes('Duplicate entry') && text.includes('correo_admin')) {
+          throw new Error('El correo ya está registrado.');
+        }
+        const data = JSON.parse(text);
+        throw new Error(data?.errors?.[0]?.msg || 'Error al actualizar');
+      }
+      if (setRefrescar) setRefrescar(true);
+      setMensaje('Administrador actualizado exitosamente.');
+      CorreoBusqueda = admin.nuevoCorreo;
+      await handleBuscar();
+    } catch (err) {
+      setMensaje('Error al actualizar: ' + err.message);
+    }
+  };
 
-    return (
-        <div className="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-2xl p-6 shadow-lg w-[320px] flex flex-col gap-4 relative text-black">
-                <button
-                    className="absolute top-2 right-3 text-gray-600 text-lg"
-                    onClick={onClose}
-                >✕</button>
+  const handleCancelar = () => {
+    setCorreoBusqueda('');
+    setAdmin(null);
+    setEditando(false);
+    setMensaje('');
+    setErrores({});
+  };
 
-                <h2 className="text-xl font-bold text-center">Actualizar Administrador</h2>
-                <Inputs
-                    Type="2"
-                    Place="Correo actual"
-                    Value={correo}
-                    onChange={(e) => setCorreo(e.target.value)}
-                />
-                <Inputs
-                    Type="1"
-                    Place="Nombre del administrador"
-                    Value={nombre}
-                    onChange={(e) => setNombre(e.target.value)}
-                />
-                <Inputs
-                    Type="2"
-                    Place="Nuevo correo"
-                    Value={nuevoCorreo}
-                    onChange={(e) => setNuevoCorreo(e.target.value)}
-                />
-                <Inputs
-                    Type="6"
-                    Place="Teléfono"
-                    Value={telefono}
-                    onChange={(e) => setTelefono(e.target.value)}
-                />
-                <Inputs
-                    Type="3"
-                    Place="Contraseña"
-                    Value={contrasena}
-                    onChange={(e) => setContrasena(e.target.value)}
-                />
+  return (
+    <div className="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white rounded-2xl p-6 shadow-lg w-[340px] flex flex-col gap-4 relative text-black">
+        <button
+          className="absolute top-2 right-3 text-gray-600 text-lg"
+          onClick={onClose}
+        >
+          ✕
+        </button>
+        <h2 className="text-xl font-bold text-center">Actualizar Administrador</h2>
 
-                <div className="flex justify-between gap-2">
-                    <button
-                        onClick={handleCancel}
-                        className="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded"
-                    >Cancelar</button>
-                    <button
-                        onClick={handleUpdate}
-                        className="bg-yellow-500 hover:bg-red-600 text-white px-4 py-2 rounded"
-                    >Actualizar</button>
-                </div>
+        {!editando && (
+          <>
+            <Inputs
+              Type="2"
+              Place="Correo del Administrador"
+              Value={correoBusqueda}
+              onChange={(e) => setCorreoBusqueda(e.target.value)}
+            />
+            {errores.correoBusqueda && (
+              <p className="text-red-600 text-sm">{errores.correoBusqueda}</p>
+            )}
+            <button
+              onClick={handleBuscar}
+              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
+            >
+              Buscar
+            </button>
+          </>
+        )}
 
-                {mensaje && (<p className="text-center text-green-600 font-semibold">{mensaje}</p>)}
+        {editando && admin && (
+          <>
+            <Inputs
+              Type="1"
+              Place="Nombre"
+              Value={admin.nuevoNombre}
+              onChange={(e) => setAdmin({ ...admin, nuevoNombre: e.target.value })}
+              className={errores.nuevoNombre ? 'border-red-500' : ''}
+            />
+            {errores.nuevoNombre && <p className="text-red-600 text-xs font-semibold mb-1">{errores.nuevoNombre}</p>}
+
+            <Inputs
+              Type="2"
+              Place="Correo"
+              Value={admin.nuevoCorreo}
+              onChange={(e) => setAdmin({ ...admin, nuevoCorreo: e.target.value })}
+              className={errores.nuevoCorreo ? 'border-red-500' : ''}
+            />
+            {errores.nuevoCorreo && <p className="text-red-600 text-xs font-semibold mb-1">{errores.nuevoCorreo}</p>}
+
+            <Inputs
+              Type="6"
+              Place="Teléfono"
+              Value={admin.telefono}
+              onChange={(e) => setAdmin({ ...admin, telefono: e.target.value })}
+              className={errores.telefono ? 'border-red-500' : ''}
+            />
+            {errores.telefono && <p className="text-red-600 text-xs font-semibold mb-1">{errores.telefono}</p>}
+
+            <div className="flex justify-between gap-2 mt-2">
+              <button
+                onClick={handleCancelar}
+                className="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={handleActualizar}
+                className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded"
+              >
+                Actualizar
+              </button>
             </div>
-        </div>
-    );
+          </>
+        )}
+
+        {mensaje && (
+          <p
+            className={`text-center font-semibold ${
+              mensaje.includes('exitoso') ? 'text-green-600' : 'text-red-600'
+            }`}
+          >
+            {mensaje}
+          </p>
+        )}
+      </div>
+    </div>
+  );
 };
