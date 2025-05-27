@@ -62,7 +62,7 @@ export const TechniciansBack = () => {
           onClose={() => setShowRegisterModal(false)}
           onTecnicoRegistrado={nuevoTecnico => {
             setTecnicos(prev => [nuevoTecnico, ...prev]);
-            setShowRegisterModal(false); // Cierra el modal tras registrar
+            setShowRegisterModal(false); 
           }}
         />
       )}

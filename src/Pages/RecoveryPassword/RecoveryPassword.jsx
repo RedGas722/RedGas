@@ -18,7 +18,7 @@ export const RecoveryPassword = () => {
     const handleChangePassword = async (e) => {
         e.preventDefault()
 
-        // alertSendForm('wait', 'Cambiando contraseña...')
+        alertSendForm('wait', 'Cambiando contraseña...')
         if (password == confirmPassword) {
             try {
                 const res = await fetch(URL, {
