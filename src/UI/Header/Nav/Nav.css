@@ -1,7 +1,7 @@
 /* Nav.css */
 #HomeLink.active,
 #HomeLink.force-active {
-    color: var(--Font-Nav);
+    color: var(--Font-Nav2);
     font-weight: bold;
     font-size: clamp(1.5rem, 2vw, 2rem);
 }
