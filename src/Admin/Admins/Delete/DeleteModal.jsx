@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Inputs } from '../../UI/Inputs/Inputs';
 
 const URL = 'http://localhost:10101/AdminDelete';
 
@@ -8,16 +9,44 @@ export const DeleteModal = ({ onClose }) => {
 
   const handleDelete = async (e) => {
     e.preventDefault();
+    // Validación frontend: correo obligatorio y formato
+    if (!correoAdmin.trim()) {
+      setMensaje('Por favor, ingrese el correo del administrador.');
+      return;
+    }
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!regex.test(correoAdmin)) {
+      setMensaje('Por favor, ingrese un correo válido.');
+      return;
+    }
     try {
-      console.log('Eliminando administrador...');
       const res = await fetch(`${URL}?correo_admin=${encodeURIComponent(correoAdmin)}`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
       });
-
-      if (!res.ok) throw new Error('Error al eliminar el administrador');
-      await res.json();
-      setMensaje('Eliminación exitosa');
+      let data = {};
+      try {
+        data = await res.json();
+      } catch {
+        // No se pudo extraer el mensaje del backend
+      }
+      if (!res.ok) {
+        if (data?.message === 'Correo no encontrado') {
+          setMensaje('El correo no se encuentra registrado.');
+        } else if (data?.message === 'delete ok') {
+          setMensaje('Eliminación exitosa');
+        } else {
+          setMensaje(data?.message || 'Error desconocido');
+        }
+        return;
+      }
+      if (data?.message === 'delete ok') {
+        setMensaje('Eliminación exitosa');
+      } else if (data?.message === 'Correo no encontrado') {
+        setMensaje('El correo no se encuentra registrado.');
+      } else {
+        setMensaje('Eliminación exitosa'); // Si no hay error y no hay mensaje, asume éxito
+      }
     } catch (err) {
       setMensaje('Error al eliminar: ' + err.message);
     }
@@ -38,12 +67,11 @@ export const DeleteModal = ({ onClose }) => {
 
         <h2 className="text-xl font-bold text-center">Eliminación de Administrador</h2>
 
-        <input
-          type="email"
-          placeholder="Correo del Administrador..."
-          value={correoAdmin}
+        <Inputs
+          Type="2"
+          Place="Correo del Administrador..."
+          Value={correoAdmin}
           onChange={(e) => setCorreoAdmin(e.target.value)}
-          className="border rounded p-2"
         />
 
         <div className="flex justify-between gap-2">

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Inputs } from '../../UI/Inputs/Inputs';
 
 export const RegisterModal = ({ onClose, onProductoRegistrado, setRefrescar }) => {
@@ -7,11 +7,33 @@ export const RegisterModal = ({ onClose, onProductoRegistrado, setRefrescar }) =
   const [descripcion, setDescripcion] = useState('');
   const [stock, setStock] = useState('');
   const [imagen, setImagen] = useState(null);
+  const [categoriaId, setCategoriaId] = useState('');
+  const [categorias, setCategorias] = useState([]);
   const [mensaje, setMensaje] = useState('');
   const [errores, setErrores] = useState({});
 
   const URL_REGISTER = 'http://localhost:10101/ProductoRegister';
   const URL_GET = 'http://localhost:10101/ProductoGet';
+  const URL_CATEGORIAS = 'http://localhost:10101/CategoriaGetAll';
+  const URL_SE_ENCUENTRA = 'http://localhost:10101/SeEncuentraRegister';
+
+  useEffect(() => {
+    const fetchCategorias = async () => {
+      try {
+        const res = await fetch(URL_CATEGORIAS);
+        if (res.ok) {
+          const data = await res.json();
+          setCategorias(data?.data || []);
+        } else {
+          console.warn('Error al obtener categorías:', res.status);
+        }
+      } catch (error) {
+        console.error('Error al cargar categorías:', error);
+      }
+    };
+
+    fetchCategorias();
+  }, []);
 
   const validarCampos = () => {
     const errores = {};
@@ -51,6 +73,10 @@ export const RegisterModal = ({ onClose, onProductoRegistrado, setRefrescar }) =
       }
     }
 
+    if (!categoriaId) {
+      errores.categoria = 'Debe seleccionar una categoría.';
+    }
+
     return errores;
   };
 
@@ -68,7 +94,6 @@ export const RegisterModal = ({ onClose, onProductoRegistrado, setRefrescar }) =
     setMensaje('');
 
     try {
-      // Verificar si ya existe un producto con ese nombre
       const resCheck = await fetch(`${URL_GET}?nombre_producto=${encodeURIComponent(nombre)}`);
       if (resCheck.ok) {
         const dataCheck = await resCheck.json();
@@ -100,20 +125,43 @@ export const RegisterModal = ({ onClose, onProductoRegistrado, setRefrescar }) =
         return;
       }
 
-      // Intentar obtener el producto recién creado, pero si da 404, continuar sin error
       const resNuevo = await fetch(`${URL_GET}?nombre_producto=${encodeURIComponent(nombre)}`);
       if (resNuevo.ok) {
         const dataNuevo = await resNuevo.json();
-        if (onProductoRegistrado && dataNuevo?.data?.length > 0) {
-          onProductoRegistrado(dataNuevo.data[0]);
+        if (onProductoRegistrado && dataNuevo?.data) {
+          const producto = dataNuevo.data;
+          const idProducto = producto.id_producto;
+
+          // Registrar relación en SeEncuentra
+          try {
+            const resSeEncuentra = await fetch(URL_SE_ENCUENTRA, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                id_producto: idProducto,
+                id_categoria: parseInt(categoriaId),
+              }),
+            });
+
+            if (!resSeEncuentra.ok) {
+              console.warn('Error al registrar en SeEncuentra:', resSeEncuentra.status);
+            }
+          } catch (error) {
+            console.error('Error de red al registrar en SeEncuentra:', error);
+          }
+
+          onProductoRegistrado(producto);
         }
       } else if (resNuevo.status === 404) {
         console.warn('Producto registrado, pero no se pudo obtener con GET (404).');
       } else {
         console.warn('Error inesperado al obtener el producto:', resNuevo.status);
       }
+
       setMensaje('Producto registrado exitosamente.');
-      if (setRefrescar) setRefrescar(true); 
+      if (setRefrescar) setRefrescar(true);
     } catch (err) {
       setMensaje('Error al registrar: ' + err.message);
     }
@@ -125,6 +173,7 @@ export const RegisterModal = ({ onClose, onProductoRegistrado, setRefrescar }) =
     setDescripcion('');
     setStock('');
     setImagen(null);
+    setCategoriaId('');
     setMensaje('');
     setErrores({});
   };
@@ -162,6 +211,20 @@ export const RegisterModal = ({ onClose, onProductoRegistrado, setRefrescar }) =
 
         <Inputs Type="5" Place="Stock" Value={stock} onChange={(e) => setStock(e.target.value)} />
         {errores.stock && <p className="text-red-600 text-sm">{errores.stock}</p>}
+
+        <select
+          value={categoriaId}
+          onChange={(e) => setCategoriaId(e.target.value)}
+          className="border rounded p-2"
+        >
+          <option value="">Seleccione una categoría</option>
+          {categorias.map((cat) => (
+            <option key={cat.id_categoria} value={cat.id_categoria}>
+              {cat.nombre_categoria}
+            </option>
+          ))}
+        </select>
+        {errores.categoria && <p className="text-red-600 text-sm">{errores.categoria}</p>}
 
         <Inputs Type="4" Place="Imagen del Producto" onChange={handleImageChange} />
         {errores.imagen && <p className="text-red-600 text-sm">{errores.imagen}</p>}

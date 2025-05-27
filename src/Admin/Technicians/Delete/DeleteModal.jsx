@@ -1,34 +1,53 @@
-import { useState } from 'react'
-import { InputLabel } from '../../../UI/Login_Register/InputLabel/InputLabel'
+import { useState } from 'react';
+import { InputLabel } from '../../../UI/InputLabel/InputLabel';
 
 const URL = 'http://localhost:10101/TecnicoDelete'
 
 export const DeleteModal = ({ onClose }) => {
-  const [correo, setCorreo] = useState('')
-  const [mensaje, setMensaje] = useState('')
+  const [correo, setCorreo] = useState('');
+  const [mensaje, setMensaje] = useState('');
+
+  const validarCorreo = (correo) => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Expresión regular para validar correos
+    return regex.test(correo);
+  };
 
   const handleDelete = async (e) => {
     e.preventDefault()
 
     if (!correo.trim()) {
-      setMensaje('Por favor, ingrese un correo válido.')
-      return
+      setMensaje('Por favor, ingrese un correo.');
+      return;
+    }
+
+    if (!validarCorreo(correo)) {
+      setMensaje('Por favor, ingrese un correo válido.');
+      return;
     }
 
     try {
-      console.log('Eliminando...')
       const res = await fetch(`${URL}?correo_tecnico=${encodeURIComponent(correo)}`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
       })
 
       if (!res.ok) {
-        const errorData = await res.json()
-        throw new Error(errorData.message || 'Error desconocido del servidor')
+        const errorData = await res.json();
+        if (errorData.message === 'Correo no encontrado') {
+          setMensaje('El correo no se encuentra registrado.');
+          return;
+        }
+        setMensaje('Error al eliminar: ' + (errorData.message || 'Error desconocido del servidor'));
+        return;
       }
 
-      await res.json() // Procesa la respuesta sin asignarla a una variable innecesaria.
-      setMensaje('Eliminación exitosa')
+      const data = await res.json();
+      if (data && typeof data.message === 'string' && data.message === 'Correo no encontrado') {
+        setMensaje('El correo no se encuentra registrado.');
+        return;
+      }
+      setMensaje('Eliminación exitosa');
+      if (onTecnicoEliminado) onTecnicoEliminado(correo);
     } catch (err) {
       setMensaje('Error al eliminar: ' + err.message)
     }
@@ -67,8 +86,11 @@ export const DeleteModal = ({ onClose }) => {
           >Confirmar</button>
         </div>
 
-        {mensaje && (<p className="text-center text-green-600 font-semibold">{mensaje}</p>)}
-
+        {mensaje && (
+          <p className={`text-center ${/error|por favor/i.test(mensaje) ? 'text-red-600' : 'text-green-600'} font-semibold`}>
+            {mensaje}
+          </p>
+        )}
       </div>
     </div>
   )

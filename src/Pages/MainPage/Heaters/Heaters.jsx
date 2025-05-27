@@ -9,10 +9,10 @@ export const HeatersSect = () => {
   useEffect(() => {
     async function fetchCalentadores() {
       try {
-        const res = await fetch('http://localhost:10101/ProductoGetAll')
-        if (!res.ok) throw new Error('Error al obtener productos')
-        const data = await res.json()
-        setCalentadores(data.data || [])
+        const res = await fetch('http://localhost:10101/ProductoGetAllCategoria?nombre_categoria=Calentadores');
+        if (!res.ok) throw new Error('Error al obtener productos');
+        const data = await res.json();
+        setCalentadores(data.data || []);
       } catch (error) {
         console.error(error)
       }
@@ -21,7 +21,7 @@ export const HeatersSect = () => {
   }, [])
 
   return (
-    <section id="HeatersSect" className="NeoContainer_outset_TL flex flex-col p-[15px] gap-[20px]">
+    <section id="HeatersSect" className="NeoContainer_outset_TL flex flex-col p-[15px] gap-[20px] text-[var(--Font-Nav)]">
       <TitleSectCategory iconCategory={faWater} nameCategory="Calentadores" className='flex flex-row justify-start items-center gap-[8px]' />
       <Cards
         uniqueId="heaters"
@@ -31,4 +31,4 @@ export const HeatersSect = () => {
   )
 }
 
-export default HeatersSect
+export default HeatersSect;

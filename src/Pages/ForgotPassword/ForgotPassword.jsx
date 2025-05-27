@@ -42,6 +42,7 @@ export const ForgotPassword = () => {
                     message: 'Hemos recibido su solicitud de cambio de contraseña, haga click en el siguiente enlace:',
                     link: `http://localhost:5173/Login/ForgotPassword/Recovery/${token}`,
                 }
+                
                 alertSendForm('wait', 'Enviando correo de recuperación...')
                 emailjs.send(serviceId, templateId, templateParams, publicKey)
                     .then(() => {
@@ -70,12 +71,8 @@ export const ForgotPassword = () => {
                 );
             }
 
-        } catch (err) {
-            alertSendForm(
-                502,
-                'Ocurrió un error de conexión',
-                'No se pudo procesar tu solicitud. Intenta nuevamente más tarde.'
-            );
+        } catch {
+            alertSendForm(400, 'El correo no esta registrador');
         }
     };
 

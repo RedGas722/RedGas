@@ -20,6 +20,7 @@ import { CategoriesBack } from './Admin/Categories/CategoriesBack'
 import { TechniciansBack } from './Admin/Technicians/TechniciansBack'
 import { ServicesBack } from './Admin/Services/ServicesBack'
 import { AdminsBack } from './Admin/Admins/AdminsBack'
+import ContractBack from './Admin/Contracts/ContractsModal'
 
 export function App() {
     return (

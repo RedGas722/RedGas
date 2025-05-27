@@ -21,6 +21,9 @@
 .arrow:hover {
     color: var(--Font-Nav);
 }
+.arrow2:hover {
+    color: var(--Font-Nav2);
+}
 
 .card {
     width: 230px;

@@ -18,7 +18,7 @@ export const RecoveryPassword = () => {
     const handleChangePassword = async (e) => {
         e.preventDefault()
 
-        // alertSendForm('wait', 'Cambiando contraseña...')
+        alertSendForm('wait', 'Cambiando contraseña...')
         if (password == confirmPassword) {
             try {
                 const res = await fetch(URL, {
@@ -48,7 +48,7 @@ export const RecoveryPassword = () => {
                     alertSendForm(502, 'TOKEN EXPIRADO', 'El token de recuperación ha expirado o es inválido. Por favor, solicita un nuevo enlace de recuperación.')
                 }
             }
-            catch (err) {
+            catch {
                 alertSendForm(502, 'Error al cambiar la contraseña', 'Ocurrió un error al cambiar la contraseña. Por favor, intenta nuevamente más tarde.')
             }
         } else {
