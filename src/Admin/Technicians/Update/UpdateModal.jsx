@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Inputs } from '../../UI/Inputs/Inputs';
+import InputLabel from '../../../UI/Login_Register/InputLabel/InputLabel';
 
 export const UpdateModal = ({ onClose, setRefrescar }) => {
   const [correoBusqueda, setCorreoBusqueda] = useState('');
@@ -149,48 +150,92 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
   };
 
   return (
-    <div className="absolute inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50">
-      <div className="NeoContainer_Admin_outset_TL p-6 w-[340px] flex flex-col gap-4 relative text-[var(--main-color)]">
-        <div>
-          <button
-            className="absolute top-2 right-3 text-[var(--main-color)] text-lg"
-            onClick={onClose}
-          >✕</button>
-        </div>
+    <div className="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white rounded-2xl p-6 shadow-lg w-[340px] flex flex-col gap-4 relative text-black">
+        <button
+          className="absolute top-2 right-3 text-gray-600 text-lg"
+          onClick={onClose}
+        >✕</button>
+        <h2 className="text-xl font-bold text-center">Actualizar Técnico</h2>
 
-        <h2 className="text-xl font-bold text-center">Actualizar Tecnico</h2>
+        {!editando && (
+          <>
+            <InputLabel
+              type="2"
+              placeholder="Correo del Técnico"
+              value={correoBusqueda}
+              onChange={(e) => setCorreoBusqueda(e.target.value)}
+            />
+            {errores.correoBusqueda && (
+              <p className="text-red-600 text-sm">{errores.correoBusqueda}</p>
+            )}
+            <button
+              onClick={handleBuscar}
+              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
+            >
+              Buscar
+            </button>
+          </>
+        )}
 
-        <InputLabel type="1" value={nombre} onChange={(e) => setNombre(e.target.value)} placeholder="Nombre del Técnico" />
+        {editando && tecnico && (
+          <>
+            <InputLabel
+              type="1"
+              placeholder="Nuevo Nombre"
+              value={tecnico.nuevoNombre}
+              onChange={(e) => setTecnico({ ...tecnico, nuevoNombre: e.target.value })}
+            />
+            {errores.nuevoNombre && <p className="text-red-600 text-sm">{errores.nuevoNombre}</p>}
 
-        <InputLabel type="2" value={correo} onChange={(e) => setCorreo(e.target.value)} placeholder="Correo actual del Técnico" />
+            <InputLabel
+              type="2"
+              placeholder="Nuevo Correo del Técnico"
+              value={tecnico.nuevoCorreo}
+              onChange={(e) => setTecnico({ ...tecnico, nuevoCorreo: e.target.value })}
+            />
+            {errores.nuevoCorreo && <p className="text-red-600 text-sm">{errores.nuevoCorreo}</p>}
 
-        <InputLabel type="2" value={nuevoCorreo} onChange={(e) => setNuevoCorreo(e.target.value)} placeholder="Correo nuevo del Técnico" />
+            <InputLabel
+              type="6"
+              placeholder="Nuevo Teléfono del Técnico"
+              value={tecnico.telefono}
+              onChange={(e) => setTecnico({ ...tecnico, telefono: e.target.value })}
+            />
+            {errores.telefono && <p className="text-red-600 text-sm">{errores.telefono}</p>}
 
-        <InputLabel type="2" value={telefono} onChange={(e) => setTelefono(e.target.value)} placeholder="Teléfono nuevo del Técnico" />
-        
-        <InputLabel type="3" ForID="Password" value={contrasena} onChange={(e) => setContrasena(e.target.value)} placeholder="Contraseña nueva del Técnico" />
+            {imagenActual && (
+              <div className="mt-2 flex flex-col items-center">
+                <p>Imagen Actual:</p>
+                <img
+                  src={imagenActual}
+                  alt="Técnico"
+                  className="w-[200px] h-[200px] object-cover rounded shadow mt-2"
+                />
+              </div>
+            )}
+            <label className="mt-2">Seleccionar Nueva Imagen:</label>
+            <InputLabel
+              type="4"
+              placeholder="Seleccionar Nueva Imagen"
+              onChange={handleImageChange}
+            />
 
-        <InputLabel type="4" ForID="imagen" placeholder="Seleccionar imagen" onChange={handleImageChange} />
-
-        <div className="flex justify-between gap-2">
-          <button
-            onClick={handleCancel}
-            className="NeoContainer_Admin_outset_TL bg-[var(--Font-Nav)] hover:bg-[var(--main-color)] BTN text-[var(--main-color)]"
-          >Cancelar</button>
-          <button
-            onClick={handleUpdate}
-            className="NeoContainer_Admin_outset_TL bg-[var(--Font-Nav)] hover:bg-[var(--main-color)] BTN text-[var(--main-color)]"
-          >Actualizar</button>
-        </div>
-
-        {mensaje && (
-          <p
-            className={`text-center font-semibold ${
-              mensaje.includes('exitosa') ? 'text-green-600' : 'text-red-600'
-            }`}
-          >
-            {mensaje}
-          </p>
+            <div className="flex justify-between gap-2">
+              <button
+                onClick={handleCancelar}
+                className="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={handleActualizar}
+                className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded"
+              >
+                Actualizar
+              </button>
+            </div>
+          </>
         )}
       </div>
     </div>
