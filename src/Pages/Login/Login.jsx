@@ -2,30 +2,30 @@ import { Buttons } from "../../UI/Login_Register/Buttons"
 import { BtnBack } from "../../UI/Login_Register/BtnBack"
 import { InputLabel } from "../../UI/Login_Register/InputLabel/InputLabel"
 import { Text } from "../../UI/Login_Register/Text"
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom"
 import { Link } from "react-router-dom"
 import { jwtDecode } from 'jwt-decode'
 import { useState } from "react"
-import withReactContent from 'sweetalert2-react-content';
-import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content'
+import Swal from 'sweetalert2'
 import './Login.css'
 
-const URL = 'http://localhost:10101/ClienteLogin';
+const URL = 'http://localhost:10101/ClienteLogin'
 
 export const Login = () => {
     const navigate = useNavigate()
-    const [correo, setCorreo] = useState('');
-    const [contrasena, setContrasena] = useState('');
+    const [correo, setCorreo] = useState('')
+    const [contrasena, setContrasena] = useState('')
 
     const handleLogin = async (e) => {
-        e.preventDefault();
+        e.preventDefault()
         alertSendForm('wait', 'Iniciando sesión...')
         try {
             const res = await fetch(URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ correo_cliente: correo, contraseña_cliente: contrasena }),
-            });
+            })
 
             const data = await res.json()
             const token = data.token
@@ -37,8 +37,8 @@ export const Login = () => {
                 alertSendForm(200, 'Inicio de sesión exitoso', 'Bienvenido de nuevo' + ` ${user || 'Usuario'}`)
                 localStorage.setItem('token', token)
                 setTimeout(() => {
-                    navigate('/');
-                }, 4000);
+                    navigate('/')
+                }, 4000)
             } else {
                 alertSendForm(401, 'El correo electrónico o la contraseña son incorrectos')
             }
@@ -51,7 +51,7 @@ export const Login = () => {
     const alertSendForm = (status, title, message) => {
         const emailInput = document.getElementById('Email')
         const passwordInput = document.getElementById('Password')
-        const MySwal = withReactContent(Swal);
+        const MySwal = withReactContent(Swal)
 
         switch (status) {
             case 'wait':
@@ -64,10 +64,10 @@ export const Login = () => {
                     timer: 3000,
                     timerProgressBar: true,
                     didOpen: () => {
-                        Swal.showLoading();
+                        Swal.showLoading()
                     },
-                });
-                break;
+                })
+                break
 
             case 200:
                 MySwal.fire({
@@ -80,20 +80,20 @@ export const Login = () => {
                     showConfirmButton: false,
                     timer: 4000,
                     timerProgressBar: true,
-                });
+                })
                 emailInput.value = ''
                 passwordInput.value = ''
-                break;
+                break
 
             case 401:
                 MySwal.fire({
                     html: `
-                            <div style="display: flex; align-items: center;">
-                            <div style="font-size: 30px; color: #3498db; margin-right: 15px;">
+                            <div style="display: flex align-items: center">
+                            <div style="font-size: 30px color: #3498db margin-right: 15px">
                                 ℹ️
                             </div>
-                            <div style="text-align: left;">
-                                <h3 style="margin: 0; font-size: 16px; font-weight: 600; color: #2c3e50;">
+                            <div style="text-align: left">
+                                <h3 style="margin: 0 font-size: 16px font-weight: 600 color: #2c3e50">
                                 ${title || 'usuario no encontrado'}
                                 </h3>
                             </div>
@@ -105,11 +105,11 @@ export const Login = () => {
                     timer: 2000,
                     timerProgressBar: true,
                     background: '#ffffff',
-                });
+                })
 
                 emailInput.style.border = '2px solid #FF0000'
                 passwordInput.style.border = '2px solid #FF0000'
-                break;
+                break
 
             case 502:
                 MySwal.fire({
@@ -128,7 +128,7 @@ export const Login = () => {
                             emailinput.value = ''
                         }
                     })
-                break;
+                break
 
             default:
                 MySwal.fire({
@@ -147,7 +147,7 @@ export const Login = () => {
                             emailinput.value = ''
                         }
                     })
-                break;
+                break
         }
     }
 
@@ -175,8 +175,8 @@ export const Login = () => {
                         </label>
                         <div className="text-[var(--main-focus)]">
                             <Link to="/Login/ForgotPassword">
-                                <button className="cursor-pointer">
-                                    <p>Olvidaste tu contraseña?</p>
+                                <button className="cursor-pointer hover:text-[var(--Font-Nav)]">
+                                    <p >Olvidaste tu contraseña?</p>
                                 </button>
                             </Link>
                         </div>
@@ -188,7 +188,7 @@ export const Login = () => {
                 </form>
             </div>
         </section>
-    );
-};
+    )
+}
 
-export default Login;
+export default Login

@@ -1,13 +1,19 @@
 .Header {
     display: grid;
+    place-items: center;
     grid-template-columns: 2fr 2fr 70px;
     padding: 24px 25px;
-    transition: all .3s ease;
 }
 
 .Header.scrolled {
-    grid-template-columns: 1fr 3fr 3fr 70px;
-    background: var(--background-color);
-    border-radius: 20px;
-    box-shadow: 9.91px 9.91px 8px #CACACA, -9.91px -9.91px 15px #F2F2F2;
+    place-items: center;
+    grid-template-columns: 1fr 2.5fr 3fr 70px;
+}
+.Header.Burguer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
 }
