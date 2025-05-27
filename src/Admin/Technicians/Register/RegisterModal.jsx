@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Inputs } from '../../UI/Inputs/Inputs'
+import { InputLabel } from '../../../UI/Login_Register/InputLabel/InputLabel'
 
 export const RegisterModal = ({ onClose, onTecnicoRegistrado }) => {
     const [nombre, setNombre] = useState('')
@@ -104,28 +104,29 @@ export const RegisterModal = ({ onClose, onTecnicoRegistrado }) => {
 
     return (
         <div className="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-2xl p-6 shadow-lg w-[320px] flex flex-col gap-4 relative text-black">
+            <div className="NeoContainer_Admin_outset_TL p-6 w-[320px] flex flex-col gap-4 relative text-[var(--main-color)]">
                 <button
-                    className="absolute top-2 right-3 text-gray-600 text-lg"
+                    className="absolute top-2 right-3 text-[var(--main-color)] text-lg"
                     onClick={onClose}
                 >✕</button>
 
                 <h2 className="text-xl font-bold text-center">Registrar Tecnico</h2>
-                <Inputs Type='1' Place='Nombre del Tecnico' Value={nombre} onChange={(e) => setNombre(e.target.value)} />
-                <Inputs Type='1' Place='Apellido del Tecnico' Value={apellido} onChange={(e) => setApellido(e.target.value)} />
-                <Inputs Type='2' Place='Correo del Tecnico' Value={correo} onChange={(e) => setCorreo(e.target.value)} />
-                <Inputs Type='6' Place='Telefono del Tecnico' Value={telefono} onChange={(e) => setTelefono(e.target.value)} />
-                <Inputs Type='3' Place='Contraseña del Tecnico' Value={contrasena} onChange={(e) => setContrasena(e.target.value)} />
-                <Inputs Type='4' Place='Imagen del Tecnico' onChange={handleImageChange} />
+
+                <InputLabel type='1' placeholder='Nombre del Tecnico' value={nombre} onChange={(e) => setNombre(e.target.value)} />
+                <InputLabel type='1' placeholder='Apellido del Tecnico' value={apellido} onChange={(e) => setApellido(e.target.value)} />
+                <InputLabel type='2' placeholder='Correo del Tecnico' value={correo} onChange={(e) => setCorreo(e.target.value)} />
+                <InputLabel type='6' placeholder='Telefono del Tecnico' value={telefono} onChange={(e) => setTelefono(e.target.value)} />
+                <InputLabel type='3' placeholder='Contraseña del Tecnico' value={contrasena} onChange={(e) => setContrasena(e.target.value)} />
+                <InputLabel type='4' placeholder='Imagen del Tecnico' value={imagen} onChange={handleImageChange} />
                 
                 <div className="flex justify-between gap-2">
                     <button
                         onClick={handleCancel}
-                        className="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded"
+                        className="NeoContainer_Admin_outset_TL bg-[var(--Font-Nav)] hover:bg-[var(--main-color)] BTN text-[var(--main-color)]"
                     >Cancelar</button>
                     <button
                         onClick={handleRegister}
-                        className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
+                        className="NeoContainer_Admin_outset_TL bg-[var(--Font-Nav)] hover:bg-[var(--main-color)] BTN text-[var(--main-color)]"
                     >Registrar</button>
                 </div>
 

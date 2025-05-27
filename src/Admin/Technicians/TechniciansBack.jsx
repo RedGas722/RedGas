@@ -40,13 +40,13 @@ export const TechniciansBack = () => {
   }, [refrescar]);
 
   return (
-    <div className="p-[20px] flex flex-col gap-[20px]">
-      <div className="flex items-center gap-[20px]">
-        <h1 className="font-bold text-[20px]">Técnicos BACK-OFFICE</h1>
-        <ButtonBack ClickMod={() => setShowRegisterModal(true)} Child="Registrar" />
-        <ButtonBack ClickMod={() => setShowGetModal(true)} Child="Consultar" />
-        <ButtonBack ClickMod={() => setShowUpdateModal(true)} Child="Actualizar" />
-        <ButtonBack ClickMod={() => setShowDeleteModal(true)} Child="Eliminar" />
+    <div className="p-[20px_0_0_20px] flex items-start gap-[20px] justify-start h-screen">
+      <div className='flex flex-col items-start gap-[20px] justify-center'>
+        <h1 className='font-bold text-[20px]'>Tecnico BACK-OFFICE</h1>
+        <ButtonBack ClickMod={() => setShowRegisterModal(true)} Child='Registrar' />
+        <ButtonBack ClickMod={() => setShowGetModal(true)} Child='Consultar' />
+        <ButtonBack ClickMod={() => setShowUpdateModal(true)} Child='Actualizar' />
+        <ButtonBack ClickMod={() => setShowDeleteModal(true)} Child='Eliminar' />
       </div>
 
       {/* Sección de técnicos */}

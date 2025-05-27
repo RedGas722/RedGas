@@ -59,7 +59,7 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
     } catch (err) {
       setMensaje('Error al buscar técnico: ' + err.message);
     }
-  };
+  }
 
   const handleActualizar = async () => {
     const erroresValidados = validarCampos();
@@ -149,87 +149,40 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-2xl p-6 shadow-lg w-[340px] flex flex-col gap-4 relative text-black">
-        <button
-          className="absolute top-2 right-3 text-gray-600 text-lg"
-          onClick={onClose}
-        >✕</button>
-        <h2 className="text-xl font-bold text-center">Actualizar Técnico</h2>
-        {!editando && (
-          <>
-            <Inputs
-              Type="2"
-              Place="Correo del Técnico"
-              Value={correoBusqueda}
-              onChange={(e) => setCorreoBusqueda(e.target.value)}
-            />
-            {errores.correoBusqueda && (
-              <p className="text-red-600 text-sm">{errores.correoBusqueda}</p>
-            )}
-            <button
-              onClick={handleBuscar}
-              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
-            >
-              Buscar
-            </button>
-          </>
-        )}
-        {editando && tecnico && (
-          <>
-            <Inputs
-              Type="1"
-              Place="Nuevo Nombre"
-              Value={tecnico.nuevoNombre}
-              onChange={(e) => setTecnico({ ...tecnico, nuevoNombre: e.target.value })}
-            />
-            {errores.nuevoNombre && <p className="text-red-600 text-sm">{errores.nuevoNombre}</p>}
-            <Inputs
-              Type="2"
-              Place="Nuevo Correo del Técnico"
-              Value={tecnico.nuevoCorreo}
-              onChange={(e) => setTecnico({ ...tecnico, nuevoCorreo: e.target.value })}
-            />
-            {errores.nuevoCorreo && <p className="text-red-600 text-sm">{errores.nuevoCorreo}</p>}
-            <Inputs
-              Type="6"
-              Place="Nuevo Teléfono del Técnico"
-              Value={tecnico.telefono}
-              onChange={(e) => setTecnico({ ...tecnico, telefono: e.target.value })}
-            />
-            {errores.telefono && <p className="text-red-600 text-sm">{errores.telefono}</p>}
-            {imagenActual && (
-              <div className="mt-2 flex flex-col items-center">
-                <p>Imagen Actual:</p>
-                <img
-                  src={imagenActual}
-                  alt="Técnico"
-                  className="w-[200px] h-[200px] object-cover rounded shadow mt-2"
-                />
-              </div>
-            )}
-            <label className="mt-2">Seleccionar Nueva Imagen:</label>
-            <Inputs
-              Type="4"
-              Place="Seleccionar Nueva Imagen"
-              onChange={handleImageChange}
-            />
-            <div className="flex justify-between gap-2">
-              <button
-                onClick={handleCancelar}
-                className="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded"
-              >
-                Cancelar
-              </button>
-              <button
-                onClick={handleActualizar}
-                className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded"
-              >
-                Actualizar
-              </button>
-            </div>
-          </>
-        )}
+    <div className="absolute inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50">
+      <div className="NeoContainer_Admin_outset_TL p-6 w-[340px] flex flex-col gap-4 relative text-[var(--main-color)]">
+        <div>
+          <button
+            className="absolute top-2 right-3 text-[var(--main-color)] text-lg"
+            onClick={onClose}
+          >✕</button>
+        </div>
+
+        <h2 className="text-xl font-bold text-center">Actualizar Tecnico</h2>
+
+        <InputLabel type="1" value={nombre} onChange={(e) => setNombre(e.target.value)} placeholder="Nombre del Técnico" />
+
+        <InputLabel type="2" value={correo} onChange={(e) => setCorreo(e.target.value)} placeholder="Correo actual del Técnico" />
+
+        <InputLabel type="2" value={nuevoCorreo} onChange={(e) => setNuevoCorreo(e.target.value)} placeholder="Correo nuevo del Técnico" />
+
+        <InputLabel type="2" value={telefono} onChange={(e) => setTelefono(e.target.value)} placeholder="Teléfono nuevo del Técnico" />
+        
+        <InputLabel type="3" ForID="Password" value={contrasena} onChange={(e) => setContrasena(e.target.value)} placeholder="Contraseña nueva del Técnico" />
+
+        <InputLabel type="4" ForID="imagen" placeholder="Seleccionar imagen" onChange={handleImageChange} />
+
+        <div className="flex justify-between gap-2">
+          <button
+            onClick={handleCancel}
+            className="NeoContainer_Admin_outset_TL bg-[var(--Font-Nav)] hover:bg-[var(--main-color)] BTN text-[var(--main-color)]"
+          >Cancelar</button>
+          <button
+            onClick={handleUpdate}
+            className="NeoContainer_Admin_outset_TL bg-[var(--Font-Nav)] hover:bg-[var(--main-color)] BTN text-[var(--main-color)]"
+          >Actualizar</button>
+        </div>
+
         {mensaje && (
           <p
             className={`text-center font-semibold ${
@@ -241,5 +194,5 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
         )}
       </div>
     </div>
-  );
-};
+  )
+}

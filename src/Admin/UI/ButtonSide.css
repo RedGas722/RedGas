@@ -1,5 +1,8 @@
 .NavsBTN:active {
     background: var(--background-color);
-    border-radius: 20px;
+    border-radius: 10px;
     box-shadow: inset 9.91px 9.91px 15px var(--shadow-1), -9.91px -9.91px 15px var(--shadow-2);
+}
+.NavsBTN:hover {
+    transform: translateY(-5px);
 }

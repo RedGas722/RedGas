@@ -5,7 +5,7 @@ export const BtnBack = ({To}) => {
     return (
         <NavLink to={To}>
             <button
-                className="btnBack NeoContainer_outset_TL top-5 left-5 text-center w-40 h-10 absolute text-white text-[16px] font-semibold group"
+                className="btnBack NeoContainer_outset_TL cursor-pointer top-5 left-5 text-center w-40 h-10 absolute text-white text-[16px] font-semibold group"
                 type="button"
             >
                 <div
@@ -27,7 +27,7 @@ export const BtnBack = ({To}) => {
                         ></path>
                     </svg>
                 </div>
-                <p className="translate-x-2">Inicio</p>
+                <p className="text-[var(--main-color)] translate-x-2">Inicio</p>
             </button>
         </NavLink>
 

@@ -25,7 +25,7 @@ import ContractBack from './Admin/Contracts/ContractsModal'
 export function App() {
     return (
         <>
-            <div className="flex flex-col gap-[80px]" >
+            <div>
                 <Routes>
                     <Route path="/" element={<MainPage />} />
                     <Route path="/Technic" element={<TechniciansPage />} />
@@ -35,21 +35,19 @@ export function App() {
                     <Route path='/Login/ForgotPassword' element={<ForgotPassword />} />
                     <Route path='/Login/ForgotPassword/Recovery/:token' element={<RecoveryPassword />} />
                     {/* ADMIN */}
-                    <Route path="/Admin" element={<AdminApp />} >
-                        <Route path='Technicians' element={<TechniciansBack />} />
-                        <Route path="Clients" element={<ClientsBack />} />
-                        <Route path="Employees" element={<EmployeesBack />} />
-                        <Route path="Products" element={<ProductBack />} />
-                        <Route path="Factures" element={<FacturesBack />} />
-                        <Route path="Categories" element={<CategoriesBack />} />
-                        <Route path="Services" element={<ServicesBack />} />
-						<Route path="Admins" element={<AdminsBack />} />
-                        <Route path="Contracts" element={<ContractBack/>} />
-                    </Route>
+                    <Route path="/Admin" element={<AdminApp />} />
+                    <Route path='/Admin/Technicians' element={<TechniciansBack />} />
+                    <Route path="/Admin/Clients" element={<ClientsBack />} />
+                    <Route path="/Admin/Employees" element={<EmployeesBack />} />
+                    <Route path="/Admin/Products" element={<ProductBack />} />
+                    <Route path="/Admin/Factures" element={<FacturesBack />} />
+                    <Route path="/Admin/Categories" element={<CategoriesBack />} />
+                    <Route path="/Admin/Services" element={<ServicesBack />} />
+                    <Route path="/Admin/Admins" element={<AdminsBack />} />
                 </Routes>
             </div>
         </>
     )
 }
 
-export default App;
+export default App

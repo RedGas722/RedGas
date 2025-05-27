@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import Inputs from '../../UI/Inputs/Inputs';
+import { useState } from 'react'
+import { InputLabel } from '../../../UI/Login_Register/InputLabel/InputLabel'
 
-const URL = 'http://localhost:10101/TecnicoDelete';
+const URL = 'http://localhost:10101/TecnicoDelete'
 
 export const DeleteModal = ({ onClose, onTecnicoEliminado }) => {
   const [correo, setCorreo] = useState('');
@@ -13,7 +13,7 @@ export const DeleteModal = ({ onClose, onTecnicoEliminado }) => {
   };
 
   const handleDelete = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
     if (!correo.trim()) {
       setMensaje('Por favor, ingrese un correo.');
@@ -29,7 +29,7 @@ export const DeleteModal = ({ onClose, onTecnicoEliminado }) => {
       const res = await fetch(`${URL}?correo_tecnico=${encodeURIComponent(correo)}`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
-      });
+      })
 
       if (!res.ok) {
         const errorData = await res.json();
@@ -49,14 +49,14 @@ export const DeleteModal = ({ onClose, onTecnicoEliminado }) => {
       setMensaje('Eliminación exitosa');
       if (onTecnicoEliminado) onTecnicoEliminado(correo);
     } catch (err) {
-      setMensaje('Error al eliminar: ' + err.message);
+      setMensaje('Error al eliminar: ' + err.message)
     }
-  };
+  }
 
   const handleCancel = () => {
-    setCorreo('');
-    setMensaje('');
-  };
+    setCorreo('')
+    setMensaje('')
+  }
 
   return (
     <div className="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50">
@@ -67,22 +67,22 @@ export const DeleteModal = ({ onClose, onTecnicoEliminado }) => {
         >✕</button>
 
         <h2 className="text-xl font-bold text-center">Eliminación de Tecnico</h2>
-
-        <Inputs
-          Type="1"
-          Place="Correo Tecnico..."
-          Value={correo}
+        <InputLabel
+          type='2'
+          placeholder='Correo del tecnico'
+          value={correo}
           onChange={(e) => setCorreo(e.target.value)}
+          required={true}
         />
 
         <div className="flex justify-between gap-2">
           <button
             onClick={handleCancel}
-            className="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded"
+            className="NeoContainer_Admin_outset_TL bg-[var(--Font-Nav)] hover:bg-[var(--main-color)] BTN text-[var(--main-color)]"
           >Cancelar</button>
           <button
             onClick={handleDelete}
-            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
+            className="NeoContainer_Admin_outset_TL bg-[var(--Font-Nav)] hover:bg-[var(--main-color)] BTN text-[var(--main-color)]"
           >Confirmar</button>
         </div>
 
@@ -93,5 +93,6 @@ export const DeleteModal = ({ onClose, onTecnicoEliminado }) => {
         )}
       </div>
     </div>
-  );
-};
+  )
+}
+export default DeleteModal
