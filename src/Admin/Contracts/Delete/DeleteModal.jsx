@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 const URL = 'http://localhost:10101/ContratoDelete';
 
-export const DeleteModal = ({ onClose }) => {
+export const DeleteModal = ({ onClose, setRefrescar }) => {
   const [idEmpleado, setIdEmpleado] = useState('');
   const [mensaje, setMensaje] = useState('');
 
@@ -30,6 +30,7 @@ export const DeleteModal = ({ onClose }) => {
         throw new Error(errorMsg);
       }
       setMensaje('Eliminación exitosa');
+      if (typeof setRefrescar === 'function') setRefrescar(true);
     } catch (err) {
       setMensaje('Error al eliminar: ' + err.message);
     }

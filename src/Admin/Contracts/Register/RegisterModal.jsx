@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Inputs } from '../../UI/Inputs/Inputs';
 
-export const RegisterModal = ({ onClose }) => {
+export const RegisterModal = ({ onClose,setRefrescar }) => {
     const [fechaContrato, setFechaContrato] = useState('');
     const [duracionContrato, setDuracionContrato] = useState('');
     const [tipoContrato, setTipoContrato] = useState('');
@@ -50,8 +50,8 @@ export const RegisterModal = ({ onClose }) => {
             duracion_contrato: duracionContrato,
             tipo_contrato: tipoContrato,
             salario: parseFloat(salario),
-            id_admin: idAdmin,
-            id_empleado: idEmpleado
+            id_admin: parseInt(idAdmin),
+            id_empleado: parseInt(idEmpleado)
            }),
         });
 
@@ -67,6 +67,7 @@ export const RegisterModal = ({ onClose }) => {
         }
         await res.json();
         setMensaje('Registro exitoso.');
+        if (typeof setRefrescar === 'function') setRefrescar(true);
         console.log('Completado!');
      } catch (err) {
         setMensaje('Error al registrar: ' + err.message);
