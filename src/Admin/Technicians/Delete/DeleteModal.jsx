@@ -1,42 +1,43 @@
-import React, { useState } from 'react';
+import { useState } from 'react'
+import { InputLabel } from '../../../UI/Login_Register/InputLabel/InputLabel'
 
-const URL = 'http://localhost:10101/TecnicoDelete';
+const URL = 'http://localhost:10101/TecnicoDelete'
 
 export const DeleteModal = ({ onClose }) => {
-  const [correo, setCorreo] = useState('');
-  const [mensaje, setMensaje] = useState('');
+  const [correo, setCorreo] = useState('')
+  const [mensaje, setMensaje] = useState('')
 
   const handleDelete = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
     if (!correo.trim()) {
-      setMensaje('Por favor, ingrese un correo válido.');
-      return;
+      setMensaje('Por favor, ingrese un correo válido.')
+      return
     }
 
     try {
-      console.log('Eliminando...');
+      console.log('Eliminando...')
       const res = await fetch(`${URL}?correo_tecnico=${encodeURIComponent(correo)}`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
-      });
+      })
 
       if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(errorData.message || 'Error desconocido del servidor');
+        const errorData = await res.json()
+        throw new Error(errorData.message || 'Error desconocido del servidor')
       }
 
-      await res.json(); // Procesa la respuesta sin asignarla a una variable innecesaria.
-      setMensaje('Eliminación exitosa');
+      await res.json() // Procesa la respuesta sin asignarla a una variable innecesaria.
+      setMensaje('Eliminación exitosa')
     } catch (err) {
-      setMensaje('Error al eliminar: ' + err.message);
+      setMensaje('Error al eliminar: ' + err.message)
     }
-  };
+  }
 
   const handleCancel = () => {
-    setCorreo('');
-    setMensaje('');
-  };
+    setCorreo('')
+    setMensaje('')
+  }
 
   return (
     <div className="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50">
@@ -47,23 +48,22 @@ export const DeleteModal = ({ onClose }) => {
         >✕</button>
 
         <h2 className="text-xl font-bold text-center">Eliminación de Tecnico</h2>
-
-        <input
-          type="text"
-          placeholder="Correo Tecnico..."
+        <InputLabel
+          type='2'
+          placeholder='Correo del tecnico'
           value={correo}
           onChange={(e) => setCorreo(e.target.value)}
-          className="border rounded p-2"
+          required={true}
         />
 
         <div className="flex justify-between gap-2">
           <button
             onClick={handleCancel}
-            className="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded"
+            className="NeoContainer_Admin_outset_TL bg-[var(--Font-Nav)] hover:bg-[var(--main-color)] BTN text-[var(--main-color)]"
           >Cancelar</button>
           <button
             onClick={handleDelete}
-            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
+            className="NeoContainer_Admin_outset_TL bg-[var(--Font-Nav)] hover:bg-[var(--main-color)] BTN text-[var(--main-color)]"
           >Confirmar</button>
         </div>
 
@@ -71,5 +71,6 @@ export const DeleteModal = ({ onClose }) => {
 
       </div>
     </div>
-  );
-};
+  )
+}
+export default DeleteModal

@@ -60,7 +60,7 @@ export const UpdateModal = ({ onClose }) => {
 
   return (
     <div className="absolute inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50">
-      <div className="NeoContainer_Admin_outset_TL p-6 w-[340px] flex flex-col gap-4 relative text-black">
+      <div className="NeoContainer_Admin_outset_TL p-6 w-[340px] flex flex-col gap-4 relative text-[var(--main-color)]">
         <div>
           <button
             className="absolute top-2 right-3 text-[var(--main-color)] text-lg"
@@ -85,11 +85,11 @@ export const UpdateModal = ({ onClose }) => {
         <div className="flex justify-between gap-2">
           <button
             onClick={handleCancel}
-            className="NeoContainer_Admin_outset_TL hover:bg-gray-400 text-[var(--main-color)] px-4 py-2 rounded"
+            className="NeoContainer_Admin_outset_TL bg-[var(--Font-Nav)] hover:bg-[var(--main-color)] BTN text-[var(--main-color)]"
           >Cancelar</button>
           <button
             onClick={handleUpdate}
-            className="bg-[var(--Font-Nav)] hover:bg-yellow-600 text-white px-4 py-2 rounded"
+            className="NeoContainer_Admin_outset_TL bg-[var(--Font-Nav)] hover:bg-[var(--main-color)] BTN text-[var(--main-color)]"
           >Actualizar</button>
         </div>
 
