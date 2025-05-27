@@ -15,3 +15,7 @@
 #cc{
     width: 300px;
 }
+#btnOffer:hover{
+    color: var(--Font-Nav2);
+    border: 2px solid var(--Font-Nav2);
+}

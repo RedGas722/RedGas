@@ -1,10 +1,5 @@
-<<<<<<< HEAD
 import { useState } from 'react';
 import { InputLabel } from '../../../UI/Login_Register/InputLabel/InputLabel';
-=======
-import React, { useState } from 'react';
-import { Inputs } from '../../UI/Inputs/Inputs';
->>>>>>> a7adef14018a26ba01b7fd227c6672b5e0c70e54
 
 export const GetModal = ({ onClose }) => {
   const [correo, setCorreo] = useState('');
@@ -37,22 +32,10 @@ export const GetModal = ({ onClose }) => {
 
       if (!res.ok) throw new Error('Credenciales inválidas');
       const data = await res.json();
-<<<<<<< HEAD
-      if (data.data) {
-        const tecnico = data.data;
-
-        if (tecnico.imagen) {
-          const imagenBase64 = tecnico.imagen;
-          setImagenURL(`data:image/jpeg;base64,${imagenBase64}`);
-        }
-
-        setMensaje({ ...data, data: tecnico });
-=======
 
       if (!data.data) {
         setMensaje({ error: 'El correo no se encuentra registrado.' });
         return;
->>>>>>> a7adef14018a26ba01b7fd227c6672b5e0c70e54
       }
 
       const tecnico = data.data;
@@ -73,10 +56,7 @@ export const GetModal = ({ onClose }) => {
     setCorreo('');
     setMensaje(null);
     setImagenURL(null);
-<<<<<<< HEAD
-=======
     setErrorCorreo(''); // Limpiar errores al cancelar
->>>>>>> a7adef14018a26ba01b7fd227c6672b5e0c70e54
   };
 
   return (
@@ -88,18 +68,8 @@ export const GetModal = ({ onClose }) => {
         >✕</button>
 
         <h2 className="text-xl font-bold text-center">Consultar Tecnico</h2>
-<<<<<<< HEAD
         <InputLabel type='2' placeholder='Correo del tecnico' value={correo} onChange={(e) => setCorreo(e.target.value)} />
-=======
-
-        <Inputs
-          Type="1"
-          Place="Correo del tecnico"
-          Value={correo}
-          onChange={(e) => setCorreo(e.target.value)}
-        />
         {errorCorreo && <p className="text-red-500 text-sm">{errorCorreo}</p>}
->>>>>>> a7adef14018a26ba01b7fd227c6672b5e0c70e54
 
         <div className="flex justify-between gap-2">
           <button

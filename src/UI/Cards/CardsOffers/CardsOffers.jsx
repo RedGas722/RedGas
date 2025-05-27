@@ -70,7 +70,7 @@ export const CardsOffers = ({ uniqueId, imgContent, titleCatt, brandCatt, afterP
                                             <span>$</span> {dividirConComaCada3Caracteres((beforePrice || 0).toString())}
                                         </div>
                                     </div>
-                                    <button className="card-btn hover:text-[#ffff]">
+                                    <button id="btnOffer" className="card-btn hover:text-[#ffff]">
                                         <FontAwesomeIcon icon={faCartShopping} />
                                     </button>
                                 </div>
