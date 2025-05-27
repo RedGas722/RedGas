@@ -15,7 +15,7 @@ export const TechniciansBack = () => {
 
   return (
     <div className="p-[20px_0_0_20px] flex items-start gap-[20px] justify-start h-screen">
-      <div className='flex items-center gap-[20px] justify-center'>
+      <div className='flex flex-col items-start gap-[20px] justify-center'>
         <h1 className='font-bold text-[20px]'>Tecnico BACK-OFFICE</h1>
         <ButtonBack ClickMod={() => setShowRegisterModal(true)} Child='Registrar' />
         <ButtonBack ClickMod={() => setShowGetModal(true)} Child='Consultar' />
