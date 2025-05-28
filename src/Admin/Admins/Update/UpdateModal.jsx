@@ -1,102 +1,113 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Inputs } from '../../UI/Inputs/Inputs';
 
-export const UpdateModal = ({ onClose, setRefrescar }) => {
-  const [correoBusqueda, setCorreoBusqueda] = useState('');
-  const [admin, setAdmin] = useState(null);
+export const UpdateModal = ({ onClose, setRefrescar, idEmpleado }) => {
+  const [idBusqueda, setIdBusqueda] = useState(idEmpleado || '');
+  const [contrato, setContrato] = useState(null);
   const [mensaje, setMensaje] = useState('');
   const [errores, setErrores] = useState({});
   const [editando, setEditando] = useState(false);
-  let CorreoBusqueda = correoBusqueda;
 
-  const URL_GET = 'http://localhost:10101/AdminGet';
-  const URL_UPDATE = 'http://localhost:10101/AdminDataUpdate'; 
+  const URL_GET = 'http://localhost:10101/ContratoGet';
+  const URL_UPDATE = 'http://localhost:10101/ContratoDataUpdate';
 
-  const validarCorreo = (correo) => {
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return regex.test(correo);
-  };
+  // Cuando cambia idEmpleado (prop), actualizar idBusqueda y buscar datos
+  useEffect(() => {
+    if (idEmpleado) {
+      setIdBusqueda(idEmpleado);
+      buscarContrato(idEmpleado);
+    }
+  }, [idEmpleado]);
 
-  const validarCampos = () => {
-    const errores = {};
-    if (!admin.nuevoNombre.trim()) errores.nuevoNombre = 'Nombre es obligatorio';
-    if (!admin.nuevoCorreo.trim() || !validarCorreo(admin.nuevoCorreo)) errores.nuevoCorreo = 'Correo válido obligatorio';
-    if (!admin.telefono.trim() || !/^\d{10}$/.test(admin.telefono)) errores.telefono = 'Teléfono válido (10 dígitos) obligatorio';
-    return errores;
-  };
-
-  const handleBuscar = async () => {
+  // Buscar contrato por id_empleado
+  const buscarContrato = async (id) => {
     setMensaje('');
     setErrores({});
-    setCorreoBusqueda(CorreoBusqueda);
-    if (!correoBusqueda.trim()) {
-      setErrores({ correoBusqueda: 'El correo es obligatorio' });
+    setContrato(null);
+    setEditando(false);
+
+    if (!id || isNaN(id) || Number(id) <= 0) {
+      setErrores({ idBusqueda: 'El ID debe ser un número mayor a 0' });
       return;
     }
-    if (!validarCorreo(correoBusqueda)) {
-      setErrores({ correoBusqueda: 'Correo no válido' });
-      return;
-    }
+
     try {
-      const res = await fetch(`${URL_GET}?correo_admin=${encodeURIComponent(CorreoBusqueda)}`);
-      if (!res.ok) throw new Error('Administrador no encontrado');
+      const res = await fetch(`${URL_GET}?id_empleado=${encodeURIComponent(id)}`);
+      if (!res.ok) throw new Error('Contrato no encontrado');
       const data = await res.json();
-      if (!data.data) throw new Error('Administrador no existe');
-      // Aquí llenamos el estado con los datos traídos
-      setAdmin({
-        nuevoCorreo: data.data.correo_admin,
-        nuevoNombre: data.data.nombre_admin,
-        telefono: data.data.telefono_admin,
+
+      if (!data.data || !Array.isArray(data.data) || data.data.length === 0) {
+        throw new Error('Contrato no existe');
+      }
+
+      // Suponiendo que data.data es un array con un solo contrato
+      const c = data.data[0];
+      
+      setContrato({
+        fecha_contrato: c.fecha_contrato ? c.fecha_contrato.split('T')[0] : '',
+        duracion_contrato: c.duracion_contrato || '',
+        tipo_contrato: c.tipo_contrato || '',
+        salario: c.salario ? c.salario.toString() : '',
       });
       setEditando(true);
     } catch (err) {
-      setMensaje('Error al buscar administrador: ' + err.message);
+      setMensaje('Error al buscar contrato: ' + err.message);
+      setContrato(null);
+      setEditando(false);
     }
   };
 
+  // Validar antes de actualizar
+  const validarCampos = () => {
+    const nuevosErrores = {};
+    if (!contrato.fecha_contrato) nuevosErrores.fecha_contrato = 'La fecha del contrato es obligatoria';
+    if (!contrato.duracion_contrato) nuevosErrores.duracion_contrato = 'La duración del contrato es obligatoria';
+    if (!contrato.tipo_contrato) nuevosErrores.tipo_contrato = 'El tipo de contrato es obligatorio';
+    if (!contrato.salario || isNaN(contrato.salario) || Number(contrato.salario) <= 0) nuevosErrores.salario = 'El salario debe ser un número mayor a 0';
+    return nuevosErrores;
+  };
+
+  // Actualizar contrato
   const handleActualizar = async () => {
-    const erroresValidados = validarCampos();
-    if (Object.keys(erroresValidados).length > 0) {
-      setErrores(erroresValidados);
+    const erroresValidos = validarCampos();
+    if (Object.keys(erroresValidos).length > 0) {
+      setErrores(erroresValidos);
       return;
     }
     setErrores({});
+    setMensaje('');
 
     const jsonData = {
-      correo_admin: CorreoBusqueda,
-      new_correo_admin: admin.nuevoCorreo,
-      nombre_admin: admin.nuevoNombre,
-      telefono_admin: admin.telefono,
+      fecha_contrato: contrato.fecha_contrato,
+      duracion_contrato: contrato.duracion_contrato,
+      tipo_contrato: contrato.tipo_contrato,
+      salario: parseFloat(contrato.salario),
     };
 
     try {
       const res = await fetch(URL_UPDATE, {
         method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(jsonData),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ contrato: jsonData, id_empleado: idBusqueda }),
       });
       if (!res.ok) {
         const text = await res.text();
-        if (text.includes('Duplicate entry') && text.includes('correo_admin')) {
-          throw new Error('El correo ya está registrado.');
-        }
-        const data = JSON.parse(text);
-        throw new Error(data?.errors?.[0]?.msg || 'Error al actualizar');
+        throw new Error(text || 'Error al actualizar');
       }
+
+      setMensaje('Contrato actualizado exitosamente.');
       if (setRefrescar) setRefrescar(true);
-      setMensaje('Administrador actualizado exitosamente.');
-      CorreoBusqueda = admin.nuevoCorreo;
-      await handleBuscar();
+      // Volver a cargar datos actualizados
+      await buscarContrato(idBusqueda);
     } catch (err) {
       setMensaje('Error al actualizar: ' + err.message);
     }
   };
 
+  // Cancelar edición
   const handleCancelar = () => {
-    setCorreoBusqueda('');
-    setAdmin(null);
+    setIdBusqueda('');
+    setContrato(null);
     setEditando(false);
     setMensaje('');
     setErrores({});
@@ -105,27 +116,20 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
   return (
     <div className="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-2xl p-6 shadow-lg w-[340px] flex flex-col gap-4 relative text-black">
-        <button
-          className="absolute top-2 right-3 text-gray-600 text-lg"
-          onClick={onClose}
-        >
-          ✕
-        </button>
-        <h2 className="text-xl font-bold text-center">Actualizar Administrador</h2>
+        <button className="absolute top-2 right-3 text-gray-600 text-lg" onClick={onClose}>✕</button>
+        <h2 className="text-xl font-bold text-center">Actualizar Contrato</h2>
 
         {!editando && (
           <>
             <Inputs
-              Type="2"
-              Place="Correo del Administrador"
-              Value={correoBusqueda}
-              onChange={(e) => setCorreoBusqueda(e.target.value)}
+              Type="5"
+              Place="ID del empleado"
+              Value={idBusqueda}
+              onChange={e => setIdBusqueda(e.target.value)}
             />
-            {errores.correoBusqueda && (
-              <p className="text-red-600 text-sm">{errores.correoBusqueda}</p>
-            )}
+            {errores.idBusqueda && <p className="text-red-600 text-sm">{errores.idBusqueda}</p>}
             <button
-              onClick={handleBuscar}
+              onClick={() => buscarContrato(idBusqueda)}
               className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
             >
               Buscar
@@ -133,34 +137,43 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
           </>
         )}
 
-        {editando && admin && (
+        {editando && contrato && (
           <>
             <Inputs
+              Type="7"
+              Place="Fecha del contrato"
+              Value={contrato.fecha_contrato}
+              onChange={e => setContrato({ ...contrato, fecha_contrato: e.target.value })}
+              className={errores.fecha_contrato ? 'border-red-500' : ''}
+            />
+            {errores.fecha_contrato && <p className="text-red-600 text-xs font-semibold">{errores.fecha_contrato}</p>}
+
+            <Inputs
               Type="1"
-              Place="Nombre"
-              Value={admin.nuevoNombre}
-              onChange={(e) => setAdmin({ ...admin, nuevoNombre: e.target.value })}
-              className={errores.nuevoNombre ? 'border-red-500' : ''}
+              Place="Duración del contrato"
+              Value={contrato.duracion_contrato}
+              onChange={e => setContrato({ ...contrato, duracion_contrato: e.target.value })}
+              className={errores.duracion_contrato ? 'border-red-500' : ''}
             />
-            {errores.nuevoNombre && <p className="text-red-600 text-xs font-semibold mb-1">{errores.nuevoNombre}</p>}
+            {errores.duracion_contrato && <p className="text-red-600 text-xs font-semibold">{errores.duracion_contrato}</p>}
 
             <Inputs
-              Type="2"
-              Place="Correo"
-              Value={admin.nuevoCorreo}
-              onChange={(e) => setAdmin({ ...admin, nuevoCorreo: e.target.value })}
-              className={errores.nuevoCorreo ? 'border-red-500' : ''}
+              Type="1"
+              Place="Tipo de contrato"
+              Value={contrato.tipo_contrato}
+              onChange={e => setContrato({ ...contrato, tipo_contrato: e.target.value })}
+              className={errores.tipo_contrato ? 'border-red-500' : ''}
             />
-            {errores.nuevoCorreo && <p className="text-red-600 text-xs font-semibold mb-1">{errores.nuevoCorreo}</p>}
+            {errores.tipo_contrato && <p className="text-red-600 text-xs font-semibold">{errores.tipo_contrato}</p>}
 
             <Inputs
-              Type="6"
-              Place="Teléfono"
-              Value={admin.telefono}
-              onChange={(e) => setAdmin({ ...admin, telefono: e.target.value })}
-              className={errores.telefono ? 'border-red-500' : ''}
+              Type="5"
+              Place="Salario"
+              Value={contrato.salario}
+              onChange={e => setContrato({ ...contrato, salario: e.target.value })}
+              className={errores.salario ? 'border-red-500' : ''}
             />
-            {errores.telefono && <p className="text-red-600 text-xs font-semibold mb-1">{errores.telefono}</p>}
+            {errores.salario && <p className="text-red-600 text-xs font-semibold">{errores.salario}</p>}
 
             <div className="flex justify-between gap-2 mt-2">
               <button
@@ -180,11 +193,7 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
         )}
 
         {mensaje && (
-          <p
-            className={`text-center font-semibold ${
-              mensaje.includes('exitoso') ? 'text-green-600' : 'text-red-600'
-            }`}
-          >
+          <p className={`text-center font-semibold ${mensaje.includes('exitoso') ? 'text-green-600' : 'text-red-600'}`}>
             {mensaje}
           </p>
         )}
