@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Inputs } from '../../UI/Inputs/Inputs';
+import CardServicesGetBack from './CardServicesGetBack';
 
-export const GetModal = ({ onClose }) => {
+export const GetModal = ({ onClose, onResult }) => {
   const [nombre, setNombre] = useState('');
   const [mensaje, setMensaje] = useState(null);
 
@@ -12,6 +13,7 @@ export const GetModal = ({ onClose }) => {
 
     if (!nombre.trim()) {
       setMensaje({ error: 'Por favor, ingrese un nombre válido.' });
+      if (onResult) onResult([]);
       return;
     }
 
@@ -23,18 +25,23 @@ export const GetModal = ({ onClose }) => {
 
       if (!res.ok) throw new Error('Error al consultar el servicio');
       const data = await res.json();
-      if (data.data) {
+      if (data.data && Array.isArray(data.data) && data.data.length > 0) {
         setMensaje({ ...data });
+        if (onResult) onResult(data.data);
+      } else {
+        setMensaje({ data: [] });
+        if (onResult) onResult([]);
       }
     } catch (err) {
-      console.error(err);
       setMensaje({ error: 'Error al consultar: ' + err.message });
+      if (onResult) onResult([]);
     }
   };
 
   const handleCancel = () => {
     setNombre('');
     setMensaje(null);
+    if (onResult) onResult([]);
   };
 
   return (
@@ -72,9 +79,7 @@ export const GetModal = ({ onClose }) => {
         )}
         {mensaje && mensaje.data && mensaje.data.length > 0 && (
           <div className="bg-gray-100 p-3 rounded mt-2 text-sm">
-            <p><strong>Nombre:</strong> {mensaje.data[0].nombre_servicio }</p>
-            <p><strong>Descripción:</strong> {mensaje.data[0].descripcion_servicio}</p>
-            <p><strong>Precio:</strong> {mensaje.data[0].precio_servicio}</p>
+            <CardServicesGetBack servicio={mensaje.data[0]} />
           </div>
         )}
         {mensaje && mensaje.data && mensaje.data.length === 0 && (

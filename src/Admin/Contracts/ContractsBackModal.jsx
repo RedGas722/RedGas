@@ -1,9 +1,9 @@
 // Delete.jsx
 import { useState, useEffect } from 'react';
-import { RegisterModal } from '../Contracts/Register/RegisterModal';
+import { RegisterModal } from './Register/RegisterModal';
 import { GetModal } from './Get/GetModal';
-import { UpdateModal } from '../Contracts/Update/UpdateModal';
-import { DeleteModal } from '../Contracts/Delete/DeleteModal';
+import { UpdateModal } from './Update/UpdateModal';
+import { DeleteModal } from './Delete/DeleteModal';
 import { ButtonBack } from '../UI/ButtonBack/ButtonBack';
 import CardContractsBack from './Get/CardContractsBack';
 
