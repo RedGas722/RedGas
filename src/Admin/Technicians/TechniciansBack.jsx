@@ -1,47 +1,47 @@
-import { useState, useEffect } from 'react';
-import { RegisterModal } from './Register/RegisterModal';
-import { GetModal } from './Get/GetModal';
-import { UpdateModal } from './Update/UpdateModal';
-import { DeleteModal } from './Delete/DeleteModal';
-import { ButtonBack } from '../UI/ButtonBack/ButtonBack';
-import CardTechniciansBack from './Get/CardTechniciansBack';
+import { useState, useEffect } from 'react'
+import { RegisterModal } from './Register/RegisterModal'
+import { GetModal } from './Get/GetModal'
+import { UpdateModal } from './Update/UpdateModal'
+import { DeleteModal } from './Delete/DeleteModal'
+import { ButtonBack } from '../UI/ButtonBack/ButtonBack'
+import CardTechniciansBack from './Get/CardTechniciansBack'
 
 
 export const TechniciansBack = () => {
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [showGetModal, setShowGetModal] = useState(false);
-  const [showRegisterModal, setShowRegisterModal] = useState(false);
-  const [showUpdateModal, setShowUpdateModal] = useState(false);
-  const [tecnicos, setTecnicos] = useState([]);
-  const [refrescar, setRefrescar] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [showGetModal, setShowGetModal] = useState(false)
+  const [showRegisterModal, setShowRegisterModal] = useState(false)
+  const [showUpdateModal, setShowUpdateModal] = useState(false)
+  const [tecnicos, setTecnicos] = useState([])
+  const [refrescar, setRefrescar] = useState(false)
 
   async function fetchTecnicos() {
     try {
-      const res = await fetch('http://localhost:10101/TecnicoGetAll');
-      if (!res.ok) throw new Error('Error al obtener técnicos');
-      const data = await res.json();
-      const tecnicosData = Array.isArray(data) ? data : (data.data || []);
-      setTecnicos(tecnicosData);
+      const res = await fetch('http://localhost:10101/TecnicoGetAll')
+      if (!res.ok) throw new Error('Error al obtener técnicos')
+      const data = await res.json()
+      const tecnicosData = Array.isArray(data) ? data : (data.data || [])
+      setTecnicos(tecnicosData)
     } catch (error) {
-      setTecnicos([]);
-      console.error(error);
+      setTecnicos([])
+      console.error(error)
     }
   }
 
   useEffect(() => {
-    fetchTecnicos();
-  }, []);
+    fetchTecnicos()
+  }, [])
 
   useEffect(() => {
     if (refrescar) {
-      fetchTecnicos();
-      setRefrescar(false);
+      fetchTecnicos()
+      setRefrescar(false)
     }
-  }, [refrescar]);
+  }, [refrescar])
 
   return (
-    <div className="p-[20px] flex flex-col gap-[20px]">
-      <div className="NeoContainer_outset_TL flex items-center gap-[20px]">
+    <div className="p-[20px] h-full flex flex-col gap-[20px]">
+      <div className="NeoContainer_outset_TL flex flex-col w-fit h-fit justify-center justify-self-center items-center gap-[20px]">
         <h1 className="font-bold text-[20px]">Técnicos BACK-OFFICE</h1>
         <ButtonBack ClickMod={() => setShowRegisterModal(true)} Child="Registrar" />
         <ButtonBack ClickMod={() => setShowGetModal(true)} Child="Consultar" />
@@ -61,8 +61,8 @@ export const TechniciansBack = () => {
         <RegisterModal
           onClose={() => setShowRegisterModal(false)}
           onTecnicoRegistrado={nuevoTecnico => {
-            setTecnicos(prev => [nuevoTecnico, ...prev]);
-            setShowRegisterModal(false); 
+            setTecnicos(prev => [nuevoTecnico, ...prev])
+            setShowRegisterModal(false) 
           }}
         />
       )}
@@ -71,8 +71,8 @@ export const TechniciansBack = () => {
         <UpdateModal
           onClose={() => setShowUpdateModal(false)}
           setRefrescar={() => {
-            setRefrescar(true);
-            fetchTecnicos(); // Refresca la lista inmediatamente
+            setRefrescar(true)
+            fetchTecnicos()
           }}
         />
       )}
@@ -80,13 +80,13 @@ export const TechniciansBack = () => {
         <DeleteModal
           onClose={() => setShowDeleteModal(false)}
           onTecnicoEliminado={correoEliminado => {
-            setTecnicos(prev => prev.filter(t => t.correo_tecnico !== correoEliminado));
-            setShowDeleteModal(false); // Cierra el modal tras eliminar
+            setTecnicos(prev => prev.filter(t => t.correo_tecnico !== correoEliminado))
+            setShowDeleteModal(false) // Cierra el modal tras eliminar
           }}
         />
       )}
     </div>
-  );
-};
+  )
+}
 
-export default TechniciansBack;
+export default TechniciansBack
