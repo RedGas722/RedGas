@@ -1,5 +1,12 @@
 import React from 'react';
 
+const convertirFecha = (fechaConvertir) => {
+      const fechaISO = fechaConvertir;
+      const fecha = new Date(fechaISO);
+      const fechaSolo = fecha.toLocaleDateString('en-GB');
+      return fechaSolo;
+}
+
 const convertirBase64AUrl = (imagen) => {
   if (!imagen) {
     console.warn("No hay imagen");
@@ -33,6 +40,12 @@ const CardsProductsBack = ({ producto }) => {
 
       <h2 className="text-md text-gray-600">Categoría: {producto.nombre_categoria || 'Sin categoría'}</h2>
       <h2 className="text-md font-bold text-gray-600">Stock: {producto.stock}</h2>
+      {producto.descuento != 0 && (
+      <h2 className="text-md font-bold text-gray-600">Descuento: {producto.descuento}%</h2>
+      )}
+      {producto.descuento != 0 && (
+        <h2 className="text-md font-bold text-gray-600">Fecha Descuento: {convertirFecha(producto.fecha_descuento)}</h2>
+      )}
       <p className="text-lg font-bold text-green-600">
         {new Intl.NumberFormat('es-CO', {
           style: 'currency',
