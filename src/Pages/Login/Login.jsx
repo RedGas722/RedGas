@@ -38,7 +38,7 @@ export const Login = () => {
                 localStorage.setItem('token', token)
                 setTimeout(() => {
                     navigate('/')
-                }, 4000)
+                }, 0)
             } else {
                 alertSendForm(401, 'El correo electrónico o la contraseña son incorrectos')
             }
@@ -52,7 +52,6 @@ export const Login = () => {
         const emailInput = document.getElementById('Email')
         const passwordInput = document.getElementById('Password')
         const MySwal = withReactContent(Swal)
-
         switch (status) {
             case 'wait':
                 Swal.fire({
@@ -78,7 +77,7 @@ export const Login = () => {
                     allowEscapeKey: false,
                     allowEnterKey: false,
                     showConfirmButton: false,
-                    timer: 4000,
+                    timer: 2000,
                     timerProgressBar: true,
                 })
                 emailInput.value = ''
