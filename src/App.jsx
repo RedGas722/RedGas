@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom'
 // ---Import Components---
 // -Import Pages: MainPage/Register/Login/ForgotPassword/RecoveryPassword/ShopCart-
 import { MainPage } from './Pages/MainPage/MainPage'
+import { CostumerServices } from './Pages/Costumer/CostumerServices'
 import { TechniciansPage } from './Pages/Technicians/TechniciansPage'
 import { Shopping } from './Pages/Shopping/Shopping.jsx'
 import { Register } from './Pages/Register/Register'
@@ -28,6 +29,7 @@ export function App() {
             <div>
                 <Routes>
                     <Route path="/" element={<MainPage />} />
+                    <Route path="/Costumer" element={<CostumerServices />} />
                     <Route path="/Technic" element={<TechniciansPage />} />
                     <Route path="/Shopping" element={<Shopping />} />
                     <Route path='/Register' element={<Register />} />

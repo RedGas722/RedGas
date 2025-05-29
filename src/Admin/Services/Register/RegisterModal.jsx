@@ -7,7 +7,7 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
     const [precioServicio, setPrecioServicio] = useState('');
     const [mensaje, setMensaje] = useState('');
 
-    const URL = 'http://localhost:10101/ServicioRegister';
+    const URL = 'https://redgas.onrender.com/ServicioRegister';
 
     const handleRegister = async (e) => {
         e.preventDefault();

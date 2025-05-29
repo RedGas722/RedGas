@@ -17,7 +17,7 @@ export const ServicesBack = () => {
 
   async function fetchServicios() {
     try {
-      const res = await fetch('http://localhost:10101/ServicioGetAll');
+      const res = await fetch('https://redgas.onrender.com/ServicioGetAll');
       if (!res.ok) throw new Error('Error al obtener servicios');
       const data = await res.json();
       setServicios(Array.isArray(data) ? data : (data.data || []));

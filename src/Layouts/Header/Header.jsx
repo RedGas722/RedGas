@@ -59,7 +59,7 @@ export const Header = () => {
             } ${hamburger ? 'Burguer w-fit NeoContainer_outset_TL' : ''}`}
         >
             {(scrolled && !hamburger && isDesktop()) && (
-                <h2 className="justify-self-center hidden md:flex font-bold text-4xl text-[var(--Font-Nav)]">
+                <h2 className="justify-self-center hidden md:flex font-bold text-5xl text-[var(--Font-Nav)]">
                     Red Gas
                 </h2>
             )}

@@ -7,7 +7,7 @@ export const GetModal = ({ onClose }) => {
   const [imagenURL, setImagenURL] = useState(null); // Estado para la URL de la imagen
   const [errorCorreo, setErrorCorreo] = useState(''); // Estado para errores en el correo
 
-  const URL = 'http://localhost:10101/TecnicoGet';
+  const URL = 'https://redgas.onrender.com/TecnicoGet';
 
   const validarCorreo = (correo) => {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -69,6 +69,7 @@ export const GetModal = ({ onClose }) => {
 
         <h2 className="text-xl font-bold text-center">Consultar Tecnico</h2>
         <InputLabel type='2' placeholder='Correo del tecnico' value={correo} onChange={(e) => setCorreo(e.target.value)} />
+        {errorCorreo && <p className="text-red-500 text-sm">{errorCorreo}</p>}
 
         <div className="flex justify-between gap-2">
           <button

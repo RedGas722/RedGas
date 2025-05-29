@@ -17,7 +17,7 @@ export const FacturesBack = () => {
 
   const fetchFacturas = async () => {
     try {
-      const res = await fetch('http://localhost:10101/FacturaGetAll');
+      const res = await fetch('https://redgas.onrender.com/FacturaGetAll');
       const data = await res.json();
       setFacturas(data.data || []);
     } catch (error) {
@@ -27,7 +27,7 @@ export const FacturesBack = () => {
 
   const fetchClientes = async () => {
     try {
-      const res = await fetch('http://localhost:10101/ClienteGetAll');
+      const res = await fetch('https://redgas.onrender.com/ClienteGetAll');
       const data = await res.json();
       setClientes(data.data || []);
     } catch (error) {
@@ -37,7 +37,7 @@ export const FacturesBack = () => {
 
   const fetchEmpleados = async () => {
     try {
-      const res = await fetch('http://localhost:10101/EmpleadoGetAll');
+      const res = await fetch('https://redgas.onrender.com/EmpleadoGetAll');
       const data = await res.json();
       setEmpleados(data.data || []);
     } catch (error) {

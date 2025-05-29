@@ -9,7 +9,7 @@ export const ToolsSect = () => {
   useEffect(() => {
     async function fetchHerramientas() {
       try {
-        const res = await fetch('http://localhost:10101/ProductoGetAllCategoria?nombre_categoria=Herramientas');
+        const res = await fetch('https://redgas.onrender.com/ProductoGetAllCategoria?nombre_categoria=Herramientas');
         if (!res.ok) throw new Error('Error al obtener productos');
         const data = await res.json();
         setHerramientas(data.data || []);
@@ -21,7 +21,7 @@ export const ToolsSect = () => {
   }, []);
 
   return (
-    <section id="ToolsSect" className="NeoContainer_outset_TL flex flex-col p-[15px] gap-[20px]">
+    <section id="ToolsSect" className="NeoContainer_outset_TL flex flex-col p-[15px] gap-[20px] text-[var(--Font-Nav)]">
       <TitleSectCategory iconCategory={faWrench} nameCategory="Herramientas" className='flex flex-row justify-start items-center gap-[8px]' />
       <Cards
         uniqueId="tools"

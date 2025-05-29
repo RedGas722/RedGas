@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const URL = 'http://localhost:10101/ContratoDelete';
+const URL = 'https://redgas.onrender.com/ContratoDelete';
 
 export const DeleteModal = ({ onClose, setRefrescar }) => {
   const [idEmpleado, setIdEmpleado] = useState('');

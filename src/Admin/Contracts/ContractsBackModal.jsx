@@ -17,7 +17,7 @@ export const ContractBack = () => {
 
   async function fetchContratos() {
     try {
-      const res = await fetch('http://localhost:10101/ContratoGetAll');
+      const res = await fetch('https://redgas.onrender.com/ContratoGetAll');
       if (!res.ok) throw new Error('Error al obtener contratos');
       const data = await res.json();
       setContratos(Array.isArray(data) ? data : (data.data || []));

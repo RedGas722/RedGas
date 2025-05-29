@@ -7,7 +7,7 @@ import "./Register.css"
 import { useNavigate } from "react-router-dom"
 
 
-const URL = 'http://localhost:10101/ClienteRegister'
+const URL = 'https://redgas.onrender.com/ClienteRegister'
 
 export const Register = () => {
 
@@ -61,8 +61,12 @@ export const Register = () => {
                             <InputLabel type='1' ForID='LastName' childLabel='Apellido' placeholder='Apellido' value={apellido} onChange={e => setApellido(e.target.value)} />
                         </div>
                     </div>
+
                     {/* Phone */}
                     <InputLabel type='6' ForID='Phone' childLabel='Telefono' placeholder='3*********' value={telefono} onChange={e => setTelefono(e.target.value)} />
+                    
+                    {/* Address */}
+                    <InputLabel type='1' ForID='Address' childLabel='Dirección' placeholder='Cra 22 #19 ******' value={direccion} onChange={e => setDireccion(e.target.value)} />
 
                     {/* E-mail */}
                     <InputLabel type='2' ForID='email' childLabel='Correo electrónico' placeholder='example@gmail.com' value={correo} onChange={e => setCorreo(e.target.value)} />

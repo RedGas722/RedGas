@@ -17,7 +17,7 @@ export const ProductBack = () => {
 
   async function fetchProductos() {
     try {
-      const res = await fetch('http://localhost:10101/ProductoGetAll');
+      const res = await fetch('https://redgas.onrender.com/ProductoGetAll');
       if (!res.ok) throw new Error('Error al obtener productos y categorías');
       const data = await res.json();
       // data.data es un objeto con { productos, categorias }

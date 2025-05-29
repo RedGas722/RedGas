@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Inputs } from '../../UI/Inputs/Inputs';
 
-const URL_GET = 'http://localhost:10101/ProductoGet';
-const URL_DELETE = 'http://localhost:10101/ProductoDelete';
+const URL_GET = 'https://redgas.onrender.com/ProductoGet';
+const URL_DELETE = 'https://redgas.onrender.com/ProductoDelete';
 
 export const DeleteModal = ({ onClose, onProductoEliminado, setRefrescar }) => {
   const [nombreProducto, setNombreProducto] = useState('');

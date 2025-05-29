@@ -9,7 +9,7 @@ export const OffersSect = () => {
   useEffect(() => {
     async function fetchCalentadores() {
       try {
-        const res = await fetch('http://localhost:10101/ProductoGetAllCategoria?nombre_categoria=Ofertas');
+        const res = await fetch('https://redgas.onrender.com/ProductoGetAllCategoria?nombre_categoria=Ofertas');
         if (!res.ok) throw new Error('Error al obtener productos');
         const data = await res.json();
         setOfertas(data.data || []);
@@ -22,7 +22,7 @@ export const OffersSect = () => {
 
   return (
     <section id="OffersSect" className="NeoContainer_outset_TL flex flex-col p-[15px] gap-[20px]">
-      <TitleSectCategory iconCategory={faWater} nameCategory="Ofertas" className='flex flex-row justify-start items-center gap-[8px]' />
+      <TitleSectCategory iconCategory={faWater} nameCategory="Ofertas" className='flex flex-row justify-start items-center text-[var(--Font-Nav2)] gap-[8px]' />
       <CardsOffers
         uniqueId="offers"
         productos={ofertas}

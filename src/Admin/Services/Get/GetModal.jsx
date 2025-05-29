@@ -6,7 +6,7 @@ export const GetModal = ({ onClose, onResult }) => {
   const [nombre, setNombre] = useState('');
   const [mensaje, setMensaje] = useState(null);
 
-  const URL = 'http://localhost:10101/ServicioGet';
+  const URL = 'https://redgas.onrender.com/ServicioGet';
 
   const handleGet = async (e) => {
     e.preventDefault();

@@ -11,8 +11,8 @@ export const RegisterModal = ({ onClose, onClienteRegistrado, setRefrescar }) =>
   const [mensaje, setMensaje] = useState('');
   const [errores, setErrores] = useState({});
 
-  const URL_REGISTER = 'http://localhost:10101/ClienteRegister';
-  const URL_GET = 'http://localhost:10101/ClienteGet';
+  const URL_REGISTER = 'https://redgas.onrender.com/ClienteRegister';
+  const URL_GET = 'https://redgas.onrender.com/ClienteGet';
 
   const validarCampos = () => {
     const errores = {};

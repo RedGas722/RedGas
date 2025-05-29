@@ -6,7 +6,7 @@ export const GetModal = ({ onClose }) => {
   const [mensaje, setMensaje] = useState(null);
   const [errores, setErrores] = useState({});
 
-  const URL = 'http://localhost:10101/CategoriaGet';
+  const URL = 'https://redgas.onrender.com/CategoriaGet';
 
   // Validar nombre antes de hacer la solicitud
   const validarCampos = () => {

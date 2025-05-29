@@ -8,7 +8,7 @@ import emailjs from '@emailjs/browser'
 import Swal from 'sweetalert2';
 import './ForgotPassword.css'
 
-const URL = 'http://localhost:10101/ClienteEmail'
+const URL = 'https://redgas.onrender.com/ClienteEmail'
 
 export const ForgotPassword = () => {
     const [email, setEmail] = useState('')
