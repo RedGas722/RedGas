@@ -40,6 +40,17 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
     if (!producto.precio || producto.precio <= 0) errores.precio = 'Precio debe ser mayor que 0';
     if (!producto.descripcion.trim()) errores.descripcion = 'Descripción es obligatoria';
     if (!producto.stock || producto.stock < 0) errores.stock = 'Stock no puede ser negativo';
+    if (
+      producto.descuento === '' ||
+      isNaN(parseInt(producto.descuento)) ||
+      parseInt(producto.descuento) < 0 ||
+      parseInt(producto.descuento) > 100
+    ) {
+      errores.descuento = 'Descuento no puede ser menor a 0 o mayor a 100';
+    }    
+    if (!producto.fechaDescuento || producto.fechaDescuento < new Date().toISOString().slice(0, 10)) {
+      errores.fechaDescuento = 'Fecha de descuento no puede ser anterior a hoy';
+    }
     if (!producto.categoriaSeleccionada) errores.categoriaSeleccionada = 'Seleccione una categoría';
     return errores;
   };
@@ -72,7 +83,9 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
         precio: data.data.precio_producto,
         descripcion: data.data.descripcion_producto,
         stock: data.data.stock,
-        categoriaSeleccionada: categoriaObj ? String(categoriaObj.id_categoria) : '', // Asignamos el id_categoria como string
+        descuento: data.data.descuento,
+        fechaDescuento: convertirFecha(data.data.fecha_descuento),
+        categoriaSeleccionada: categoriaObj ? String(categoriaObj.id_categoria) : '', 
       });
 
       if (data.data.imagen) {
@@ -131,6 +144,8 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
         formData.append('precio_producto', parseFloat(producto.precio));
         formData.append('descripcion_producto', producto.descripcion);
         formData.append('stock', parseInt(producto.stock));
+        formData.append('descuento', parseInt(producto.descuento));
+        formData.append('fecha_descuento', producto.fechaDescuento);
         formData.append('imagen', imagenNueva);
 
         const res = await fetch(URL_UPDATE_IMAGEN, {
@@ -154,6 +169,8 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
           precio_producto: parseFloat(producto.precio),
           descripcion_producto: producto.descripcion,
           stock: parseInt(producto.stock),
+          descuento: parseInt(producto.descuento),
+          fecha_descuento: producto.fechaDescuento,
         };
 
         const res = await fetch(URL_UPDATE, {
@@ -181,7 +198,7 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
       if (setRefrescar) setRefrescar(true);
       nombreBusqueda = producto.nuevoNombre;
       await handleBuscar();
-      setMensaje('Producto actualizados exitosamente.');
+      setMensaje('Producto actualizado exitosamente.');
     } catch (err) {
       setMensaje('Error al actualizar: ' + err.message);
     }
@@ -207,6 +224,22 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
       setImagenNueva(null);
     }
   };
+
+  const convertirFecha = (fechaConvertir) => {
+    const fecha = new Date(fechaConvertir);
+    const año = fecha.getFullYear();
+    const mes = String(fecha.getMonth() + 1).padStart(2, '0');
+    const día = String(fecha.getDate()).padStart(2, '0');
+    return `${año}-${mes}-${día}`; // <-- formato correcto para input type="date"
+  };
+
+  const esCategoriaOfertas = () => {
+    const ofertaCategoria = categorias.find(
+      (cat) => cat.nombre_categoria.toLowerCase() === 'ofertas'
+    );
+    return producto?.categoriaSeleccionada === String(ofertaCategoria?.id_categoria);
+  };
+
 
   return (
     <div className="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50">
@@ -272,12 +305,63 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
             />
             {errores.stock && <p className="text-red-600 text-sm">{errores.stock}</p>}
 
+            <Inputs
+              Type="5"
+              Place="Nuevo Descuento del Producto"
+              Value={producto.descuento}
+              onChange={(e) => {
+                const inputValue = e.target.value;
+
+                if (/^\d{0,3}$/.test(inputValue)) {
+                  let nuevaCategoria = producto.categoriaSeleccionada;
+                  const descuentoNum = parseInt(inputValue);
+
+                  const ofertaCategoria = categorias.find(
+                    (cat) => cat.nombre_categoria.toLowerCase() === 'ofertas'
+                  );
+
+                  if (inputValue === "" || descuentoNum === 0 || isNaN(descuentoNum)) {
+                    // Si descuento 0 o vacío, desbloquea el select permitiendo cambiar la categoría
+                    if (esCategoriaOfertas()) {
+                      // Si estaba en ofertas y descuento baja a 0, permitimos cambiar categoría
+                      nuevaCategoria = '';
+                    }
+                  } else if (descuentoNum > 0 && ofertaCategoria) {
+                    // Si descuento > 0 y existe la categoría ofertas, forzamos a 'ofertas'
+                    nuevaCategoria = String(ofertaCategoria.id_categoria);
+                  }
+
+                  setProducto({
+                    ...producto,
+                    descuento: inputValue,
+                    categoriaSeleccionada: nuevaCategoria,
+                  });
+                }
+              }}
+            />
+            {errores.descuento && <p className="text-red-600 text-sm">{errores.descuento}</p>}
+            
+            {producto.descuento > 0 && (
+            <Inputs
+              Type="7"
+              Place="Nueva Fecha de Descuento"
+              Value={producto.fechaDescuento}
+              onChange={(e) => setProducto({ ...producto, fechaDescuento: e.target.value })}
+            />
+            )}
+            {errores.fechaDescuento && <p className="text-red-600 text-sm">{errores.fechaDescuento}</p>}
+
             {/* Select para categoría */}
             <select
               id="categoria"
               value={producto.categoriaSeleccionada}
               onChange={(e) => setProducto({ ...producto, categoriaSeleccionada: e.target.value })}
-              className="border rounded p-2 w-full"
+              className={`border rounded p-2 w-full transition-colors duration-300 ${
+                esCategoriaOfertas() && parseInt(producto.descuento) > 0
+                  ? 'bg-gray-200 cursor-not-allowed text-gray-500'
+                  : 'bg-white cursor-pointer text-black'
+              }`}
+              disabled={esCategoriaOfertas() && parseInt(producto.descuento) > 0}
             >
               <option value="">-- Seleccione una categoría --</option>
               {categorias.map((cat) => (

@@ -6,6 +6,8 @@ export const RegisterModal = ({ onClose, onProductoRegistrado, setRefrescar }) =
   const [precio, setPrecio] = useState('');
   const [descripcion, setDescripcion] = useState('');
   const [stock, setStock] = useState('');
+  const [descuento, setDescuento] = useState('');
+  const [fechaDescuento, setFechaDescuento] = useState(new Date().toISOString().slice(0, 10));
   const [imagen, setImagen] = useState(null);
   const [categoriaId, setCategoriaId] = useState('');
   const [categorias, setCategorias] = useState([]);
@@ -62,6 +64,14 @@ export const RegisterModal = ({ onClose, onProductoRegistrado, setRefrescar }) =
       errores.stock = 'El stock debe ser un número entero mayor que 0.';
     }
 
+    if (!/^\d+(\.\d{1,2})?$/.test(descuento) || parseFloat(descuento) < 0 || parseFloat(descuento) > 100) {
+        errores.descuento = 'El descuento debe ser un número decimal entre 0 y 100.';
+    }
+
+    if (!fechaDescuento.trim()) {
+      errores.fechaDescuento = 'La fecha de descuento es obligatoria.';
+    }
+
     if (!imagen) {
       errores.imagen = 'La imagen es obligatoria.';
     } else {
@@ -108,6 +118,8 @@ export const RegisterModal = ({ onClose, onProductoRegistrado, setRefrescar }) =
       formData.append('precio_producto', parseFloat(precio));
       formData.append('descripcion_producto', descripcion);
       formData.append('stock', parseInt(stock));
+      formData.append('descuento', parseInt(descuento));
+      formData.append('fecha_descuento', fechaDescuento);
       formData.append('imagen', imagen);
 
       const resRegister = await fetch(URL_REGISTER, {
@@ -172,6 +184,8 @@ export const RegisterModal = ({ onClose, onProductoRegistrado, setRefrescar }) =
     setPrecio('');
     setDescripcion('');
     setStock('');
+    setDescuento('');
+    setFechaDescuento(new Date().toISOString().slice(0, 10));
     setImagen(null);
     setCategoriaId('');
     setMensaje('');
@@ -211,6 +225,12 @@ export const RegisterModal = ({ onClose, onProductoRegistrado, setRefrescar }) =
 
         <Inputs Type="5" Place="Stock" Value={stock} onChange={(e) => setStock(e.target.value)} />
         {errores.stock && <p className="text-red-600 text-sm">{errores.stock}</p>}
+
+        <Inputs Type="5" Place="Descuento" Value={descuento} onChange={(e) => setDescuento(e.target.value)} />
+        {errores.descuento && <p className="text-red-600 text-sm">{errores.descuento}</p>}
+
+        <Inputs Type="7" Place="Fecha Descuento" Value={fechaDescuento} onChange={(e) => setFechaDescuento(e.target.value)} />
+        {errores.fechaDescuento && <p className="text-red-600 text-sm">{errores.fechaDescuento}</p>}
 
         <select
           value={categoriaId}

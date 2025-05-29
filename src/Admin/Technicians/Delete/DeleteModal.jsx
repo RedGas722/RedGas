@@ -4,8 +4,8 @@ import { InputLabel } from '../../../UI/Login_Register/InputLabel/InputLabel'
 const URL = 'http://localhost:10101/TecnicoDelete'
 
 export const DeleteModal = ({ onClose, onTecnicoEliminado }) => {
-  const [correo, setCorreo] = useState('')
-  const [mensaje, setMensaje] = useState('')
+  const [correo, setCorreo] = useState('');
+  const [mensaje, setMensaje] = useState('');
 
   const validarCorreo = (correo) => {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/ // Expresión regular para validar correos
@@ -16,13 +16,13 @@ export const DeleteModal = ({ onClose, onTecnicoEliminado }) => {
     e.preventDefault()
 
     if (!correo.trim()) {
-      setMensaje('Por favor, ingrese un correo.')
-      return
+      setMensaje('Por favor, ingrese un correo.');
+      return;
     }
 
     if (!validarCorreo(correo)) {
-      setMensaje('Por favor, ingrese un correo válido.')
-      return
+      setMensaje('Por favor, ingrese un correo válido.');
+      return;
     }
 
     try {
@@ -32,7 +32,7 @@ export const DeleteModal = ({ onClose, onTecnicoEliminado }) => {
       })
 
       if (!res.ok) {
-        const errorData = await res.json()
+        const errorData = await res.json();
         if (errorData.message === 'Correo no encontrado') {
           setMensaje('El correo no se encuentra registrado.')
           return
@@ -43,11 +43,11 @@ export const DeleteModal = ({ onClose, onTecnicoEliminado }) => {
 
       const data = await res.json()
       if (data && typeof data.message === 'string' && data.message === 'Correo no encontrado') {
-        setMensaje('El correo no se encuentra registrado.')
-        return
+        setMensaje('El correo no se encuentra registrado.');
+        return;
       }
-      setMensaje('Eliminación exitosa')
-      if (onTecnicoEliminado) onTecnicoEliminado(correo)
+      setMensaje('Eliminación exitosa');
+      if (onTecnicoEliminado) onTecnicoEliminado(correo);
     } catch (err) {
       setMensaje('Error al eliminar: ' + err.message)
     }
