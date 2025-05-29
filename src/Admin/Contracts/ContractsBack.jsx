@@ -1,4 +1,3 @@
-// Delete.jsx
 import { useState, useEffect } from 'react';
 import { RegisterModal } from './Register/RegisterModal';
 import { GetModal } from './Get/GetModal';
@@ -7,7 +6,7 @@ import { DeleteModal } from './Delete/DeleteModal';
 import { ButtonBack } from '../UI/ButtonBack/ButtonBack';
 import CardContractsBack from './Get/CardContractsBack';
 
-export const ContractBack = () => {
+export const ContractsBack = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showGetModal, setShowGetModal] = useState(false);
   const [showRegisterModal, setShowRegisterModal] = useState(false);
@@ -87,4 +86,4 @@ export const ContractBack = () => {
   );
 };
 
-export default ContractBack;
+export default ContractsBack;
