@@ -41,12 +41,14 @@ export const TechniciansBack = () => {
 
   return (
     <div className="p-[20px] h-full flex flex-col gap-[20px]">
-      <div className="NeoContainer_outset_TL flex flex-col w-fit h-fit justify-center justify-self-center items-center gap-[20px]">
-        <h1 className="font-bold text-[20px]">Técnicos BACK-OFFICE</h1>
-        <ButtonBack ClickMod={() => setShowRegisterModal(true)} Child="Registrar" />
-        <ButtonBack ClickMod={() => setShowGetModal(true)} Child="Consultar" />
-        <ButtonBack ClickMod={() => setShowUpdateModal(true)} Child="Actualizar" />
-        <ButtonBack ClickMod={() => setShowDeleteModal(true)} Child="Eliminar" />
+      <div className='NeoContainer_outset_TL flex flex-col w-fit p-[0_0_0_20px]'>
+        <h1 className="font-bold text-[20px] text-[var(--main-color)]">Técnicos</h1>
+        <div className="flex p-[20px] w-fit h-fit flex-wrap justify-center justify-self-center items-center gap-[20px]">
+          <ButtonBack ClickMod={() => setShowRegisterModal(true)} Child="Registrar" />
+          <ButtonBack ClickMod={() => setShowGetModal(true)} Child="Consultar" />
+          <ButtonBack ClickMod={() => setShowUpdateModal(true)} Child="Actualizar" />
+          <ButtonBack ClickMod={() => setShowDeleteModal(true)} Child="Eliminar" />
+        </div>
       </div>
 
       {/* Sección de técnicos */}
@@ -62,7 +64,7 @@ export const TechniciansBack = () => {
           onClose={() => setShowRegisterModal(false)}
           onTecnicoRegistrado={nuevoTecnico => {
             setTecnicos(prev => [nuevoTecnico, ...prev])
-            setShowRegisterModal(false) 
+            setShowRegisterModal(false)
           }}
         />
       )}
