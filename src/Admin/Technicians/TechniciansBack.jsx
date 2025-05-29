@@ -41,7 +41,7 @@ export const TechniciansBack = () => {
 
   return (
     <div className="p-[20px] flex flex-col gap-[20px]">
-      <div className="NeoContainer_outset_TL flex items-center gap-[20px]">
+      <div className="NeoContainer_outset_TL flex-col w-fit  flex items-center gap-[20px]">
         <h1 className="font-bold text-[20px]">Técnicos BACK-OFFICE</h1>
         <ButtonBack ClickMod={() => setShowRegisterModal(true)} Child="Registrar" />
         <ButtonBack ClickMod={() => setShowGetModal(true)} Child="Consultar" />
