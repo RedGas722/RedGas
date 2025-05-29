@@ -13,8 +13,8 @@ export const UpdateModal = ({ onClose, setRefrescar, idEmpleado }) => {
   const [errores, setErrores] = useState({});
   const [editando, setEditando] = useState(false);
 
-  const URL_GET = 'http://localhost:10101/ContratoGet';
-  const URL_UPDATE = 'http://localhost:10101/ContratoDataUpdate';
+  const URL_GET = 'https://redgas.onrender.com/ContratoGet';
+  const URL_UPDATE = 'https://redgas.onrender.com/ContratoDataUpdate';
 
   useEffect(() => {
     if (idEmpleado) {

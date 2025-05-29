@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Inputs } from '../../UI/Inputs/Inputs';
 
-const URL = 'http://localhost:10101/ServicioDelete';
-const GET_URL = 'http://localhost:10101/ServicioGet'; // Endpoint para verificar si el servicio existe
+const URL = 'https://redgas.onrender.com/ServicioDelete';
+const GET_URL = 'https://redgas.onrender.com/ServicioGet'; // Endpoint para verificar si el servicio existe
 
 export const DeleteModal = ({ onClose, setRefrescar }) => {
   const [nombreServicio, setNombreServicio] = useState('');

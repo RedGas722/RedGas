@@ -10,7 +10,7 @@ export const RegisterModal = ({ onClose,setRefrescar }) => {
     const [idEmpleado, setIdEmpleado] = useState('');
     const [mensaje, setMensaje] = useState('');
 
-  const URL = 'http://localhost:10101/ContratoRegister';
+  const URL = 'https://redgas.onrender.com/ContratoRegister';
 
   const handleRegister = async (e) => {
     e.preventDefault();

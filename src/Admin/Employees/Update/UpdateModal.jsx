@@ -11,7 +11,7 @@ export const UpdateModal = ({ onClose }) => {
     const [contrasena, setContrasena] = useState('');
     const [mensaje, setMensaje] = useState('');
 
-    const URL = 'http://localhost:10101/EmpleadoUpdate';
+    const URL = 'https://redgas.onrender.com/EmpleadoUpdate';
 
     const handleUpdate = async (e) => {
         e.preventDefault();

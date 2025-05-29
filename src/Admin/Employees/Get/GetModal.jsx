@@ -4,7 +4,7 @@ export const GetModal = ({ onClose }) => {
   const [correo, setCorreo] = useState('');
   const [mensaje, setMensaje] = useState(null);
 
-  const URL = 'http://localhost:10101/EmpleadoGet';
+  const URL = 'https://redgas.onrender.com/EmpleadoGet';
 
   const handleGet = async (e) => {
     e.preventDefault();

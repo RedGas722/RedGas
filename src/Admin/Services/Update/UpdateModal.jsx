@@ -10,8 +10,8 @@ export const UpdateModal = ({ onClose, setRefrescar, nombreServicioInicial }) =>
   const [editando, setEditando] = useState(false);
   const [errores, setErrores] = useState({});
 
-  const URL_GET = 'http://localhost:10101/ServicioGet';  // Endpoint para obtener info del servicio
-  const URL_UPDATE = 'http://localhost:10101/ServicioUpdate';  // Endpoint para actualizar
+  const URL_GET = 'https://redgas.onrender.com/ServicioGet';  // Endpoint para obtener info del servicio
+  const URL_UPDATE = 'https://redgas.onrender.com/ServicioUpdate';  // Endpoint para actualizar
 
   useEffect(() => {
     if (nombreServicioInicial) {
