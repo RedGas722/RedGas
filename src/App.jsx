@@ -21,7 +21,7 @@ import { CategoriesBack } from './Admin/Categories/CategoriesBack'
 import { TechniciansBack } from './Admin/Technicians/TechniciansBack'
 import { ServicesBack } from './Admin/Services/ServicesBack'
 import { AdminsBack } from './Admin/Admins/AdminsBack'
-import ContractBack from './Admin/Contracts/ContractsBackModal'
+import { ContractsBack } from './Admin/Contracts/ContractsBack.jsx'
 
 export function App() {
     return (
@@ -46,6 +46,7 @@ export function App() {
                     <Route path="/Admin/Categories" element={<CategoriesBack />} />
                     <Route path="/Admin/Services" element={<ServicesBack />} />
                     <Route path="/Admin/Admins" element={<AdminsBack />} />
+                    <Route path="/Admin/Contracts" element={<ContractsBack />} />
                 </Routes>
             </div>
         </>
