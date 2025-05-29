@@ -4,6 +4,7 @@ import { Routes, Route } from 'react-router-dom'
 // -Import Pages: MainPage/Register/Login/ForgotPassword/RecoveryPassword/ShopCart-
 import { MainPage } from './Pages/MainPage/MainPage'
 import { CostumerServices } from './Pages/Costumer/CostumerServices'
+import { ServicesInfo } from './Pages/Services/Services.jsx' 
 import { TechniciansPage } from './Pages/Technicians/TechniciansPage'
 import { Shopping } from './Pages/Shopping/Shopping.jsx'
 import { Register } from './Pages/Register/Register'
@@ -30,6 +31,7 @@ export function App() {
                 <Routes>
                     <Route path="/" element={<MainPage />} />
                     <Route path="/Costumer" element={<CostumerServices />} />
+                    <Route path="/Services" element={<ServicesInfo />} />
                     <Route path="/Technic" element={<TechniciansPage />} />
                     <Route path="/Shopping" element={<Shopping />} />
                     <Route path='/Register' element={<Register />} />

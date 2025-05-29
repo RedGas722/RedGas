@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 
-const URL = 'http://localhost:10101/Diagnostic';
-
 export const CostumerServices = () => {
   const [user, setUser] = useState('');
   const [phone, setPhone] = useState('');
@@ -11,43 +9,35 @@ export const CostumerServices = () => {
   const [solutions, setSolutions] = useState('');
 
   useEffect(() => {
-    const fetchData = async () => {
-      const token = localStorage.getItem('token');
+    const token = localStorage.getItem('token');
+    const data = JSON.parse(localStorage.getItem("data"))
 
-      if (token) {
-        try {
-          const res = await fetch(URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ descripcion: 'tengo un nuevo calentador' }),
-          });
+    console.log(data);
+    
 
-          const data = await res.json();
+    if (token || data) {
 
-          const labelInfo = data.resultado.etiqueta;
-          const soluciones = data.resultado.posibles_soluciones;
+      const labelInfo = data.resultado.etiqueta;
+      const soluciones = data.resultado.posibles_soluciones;
 
-          const solucionesTexto = Array.isArray(soluciones)
-            ? soluciones.join('\n') 
-            : soluciones; 
+      const solucionesTexto = Array.isArray(soluciones)
+        ? soluciones.join('\n')
+        : soluciones;
 
-          const decoded = jwtDecode(token); 
-          const userInfo = decoded.data.name;
-          const phoneInfo = decoded.data.telefono;
-          const addressInfo = decoded.data.direccion;
+      const decoded = jwtDecode(token);
+      const userInfo = decoded.data.name;
+      const phoneInfo = decoded.data.telefono;
+      const addressInfo = decoded.data.direccion;
 
-          setUser(userInfo);
-          setPhone(phoneInfo);
-          setAddress(addressInfo);
-          setLabel(labelInfo);
-          setSolutions(solucionesTexto);
-        } catch (err) {
-          console.error("Error en fetch:", err);
-        }
-      }
+      setUser(userInfo);
+      setPhone(phoneInfo);
+      setAddress(addressInfo);
+      setLabel(labelInfo);
+      setSolutions(solucionesTexto);
+
+
     }
 
-    fetchData() 
   }, [])
 
   return (
