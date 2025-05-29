@@ -15,11 +15,10 @@ export const RecoveryPassword = () => {
     const { token } = useParams()
     const navigate = useNavigate()
 
-
     const handleChangePassword = async (e) => {
         e.preventDefault()
 
-        // alertSendForm('wait', 'Cambiando contraseña...')
+        alertSendForm('wait', 'Cambiando contraseña...')
         if (password == confirmPassword) {
             try {
                 const res = await fetch(URL, {
@@ -32,7 +31,6 @@ export const RecoveryPassword = () => {
                 });
 
                 const data = await res.json()
-
 
                 if (data.status !== 'Unauthorized') {
                     if (data.errors && Array.isArray(data.errors) && data.errors.length > 0) {
@@ -121,7 +119,6 @@ export const RecoveryPassword = () => {
                     timerProgressBar: true,
                     background: '#ffffff',
                 });
-
                 break;
 
             case 502:
@@ -169,7 +166,6 @@ export const RecoveryPassword = () => {
                         }
                     })
                 break;
-
         }
     }
 

@@ -5,7 +5,10 @@
     overflow-y: scroll;
 }
 #sideBarr{
-    padding: 0 30px;
+    display: flex;
+    flex-wrap: wrap;
+    min-width: 120px;
+    max-width: calc((6.5rem * 5) + (2.5rem * (5 - 1)));
 }
 .BTN {
     padding: 5px 20px;

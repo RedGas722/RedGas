@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom'
 import { Link } from 'react-scroll'
 import { useEffect, useState } from "react"
 
-export const Navs = () => {
+export const Navs = ({ className }) => {
     const [active, setActive] = useState("Header")
 
     useEffect(() => {
@@ -15,7 +15,7 @@ export const Navs = () => {
         }`
 
     return (
-        <div className="flex gap-[15px] flex-wrap text-center justify-center text-[20px] items-center">
+        <div className={`flex gap-[15px] flex-col md:flex-wrap md:flex-row text-center justify-center items-center text-[20px] ${className}`}>
             <Link
                 to="Hero"
                 smooth={true}
@@ -53,7 +53,6 @@ export const Navs = () => {
             <NavLink
                 to="/Technic"
                 className='NeoSubContainer_outset_TL p-[5px_10px]'
-                activeClass="!text-[var(--Font-Nav)] font-bold"
             >
                 Técnicos
             </NavLink>

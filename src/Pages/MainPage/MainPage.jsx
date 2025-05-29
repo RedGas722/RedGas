@@ -9,7 +9,7 @@ import './MainPage.css'
 
 export const MainPage = () => {
     return (
-        <div className="MainPageContainer flex flex-col gap-[80px]">  
+        <div className="MainPageContainer flex flex-col gap-[50px]">  
             <Header />
             <Hero />
             <ProductCategory />

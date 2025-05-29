@@ -5,11 +5,11 @@ export const BtnBack = ({To}) => {
     return (
         <NavLink to={To}>
             <button
-                className="btnBack NeoContainer_outset_TL top-5 left-5 text-center w-40 h-10 absolute text-[var(--main-color)] text-[16px] font-semibold group"
+                className="btnBack NeoContainer_outset_TL cursor-pointer top-5 left-5 text-center w-40 h-10 absolute text-white text-[16px] font-semibold group"
                 type="button"
             >
                 <div
-                    class="NeoSubContainer_outset_TL h-8 w-1/4 flex items-center justify-center absolute left-1 top-[4px] group-hover:w-38 group-hover:bg-[var(--main-color)] z-10 duration-500"
+                    class="NeoSubContainer_outset_TL h-8 w-1/4 flex items-center justify-center absolute left-1 top-[4px] group-hover:w-38 group-hover:bg-[var(--Font-Nav)] z-10 duration-500"
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -27,7 +27,7 @@ export const BtnBack = ({To}) => {
                         ></path>
                     </svg>
                 </div>
-                <p className="translate-x-2">Inicio</p>
+                <p className="text-[var(--main-color)] translate-x-2">Inicio</p>
             </button>
         </NavLink>
 

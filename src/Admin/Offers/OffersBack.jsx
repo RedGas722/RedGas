@@ -7,7 +7,7 @@ import { ButtonBack } from '../UI/ButtonBack/ButtonBack';
 import CardTechniciansBack from './Get/CardTechniciansBack';
 
 
-export const TechniciansBack = () => {
+export const OffersBack = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showGetModal, setShowGetModal] = useState(false);
   const [showRegisterModal, setShowRegisterModal] = useState(false);
@@ -72,7 +72,7 @@ export const TechniciansBack = () => {
           onClose={() => setShowUpdateModal(false)}
           setRefrescar={() => {
             setRefrescar(true);
-            fetchTecnicos(); // Refresca la lista inmediatamente
+            fetchTecnicos(); 
           }}
         />
       )}

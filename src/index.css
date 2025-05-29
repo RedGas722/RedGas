@@ -6,21 +6,25 @@
   box-sizing: border-box;
   transition: all 0.3s ease;
 }
-
+button{
+  cursor: pointer;
+}
+input[type="file"] {
+  cursor: pointer;
+}
 input::placeholder {
   color: var(--main-color-sub);
 }
 
 :root {
-  --bg-color: #fff;
   --main-color: #323232;
   --main-color-sub: #666;
   --main-focus: #2d8cf0;
-  --Bacground-body: #e0e2e5;
+  --Bacground-Admin: linear-gradient(90deg, #c7c7c7, #f2f2f2, #c7c7c7);
   /* Body-color-end----------------- Font-Nav*/
-  --Font-Nav: #FDBC50;
+  --Font-Nav: #D4AF37;
   /* ADMIN */
-  --background-color: #e0e2e5;
+  --background-color: #ffff;
   /* Shadows Neomorfism */
   --shadow-1: #CACACA;
   --shadow-2: #F2F2F2;
@@ -32,7 +36,7 @@ input::placeholder {
 }
 
 body {
-  background: var(--Bacground-body);
+  background: var(--background-color);
   background-size: cover;
 }
 
@@ -59,6 +63,18 @@ input[type="password"]::-webkit-reveal {
     box-shadow: 9.91px 9.91px 15px var(--shadow-1), -9.91px -9.91px 15px var(--shadow-2);
   }
 
+  .NeoContainer_Admin_outset_TL {
+    background: #e0e2e5e3;
+    border-radius: 10px;
+    box-shadow: 9.91px 9.91px 15px var(--shadow-1), -9.91px -9.91px 15px var(--shadow-2);
+  }
+
+  .NeoNone {
+    background: none;
+    border-radius: none;
+    box-shadow: none;
+  }
+
   .NeoSubContainer_outset_TL {
     background: var(--background-color);
     border-radius: 20px;
@@ -75,6 +91,12 @@ input[type="password"]::-webkit-reveal {
     background: var(--background-color);
     border-radius: 20px;
     box-shadow: inset -4px -4px 8px var(--shadow-3), inset 4px 4px 8px var(--shadow-4);
+  }
+
+  .NeoSubContainer_outset_TOTAL {
+    background: var(--background-color);
+    border-radius: 20px;
+    box-shadow: 4px 4px 8px var(--shadow-3), -4px -4px 8px var(--shadow-4);
   }
 
   .NeoContainer_outset_BR {
@@ -108,7 +130,25 @@ input[type="password"]::-webkit-reveal {
     transition: background 50000s ease-in-out 0s;
   }
 
+  .buttonTL {
+    cursor: pointer;
+    color: var(--main-color);
+  }
+
   .buttonTL:active {
+    background: var(--background-color);
+    border-radius: 20px;
+    box-shadow: inset 9.91px 9.91px 15px #CACACA, -9.91px -9.91px 15px #F2F2F2;
+  }
+
+  .buttonTL2 {
+    cursor: pointer;
+    background: linear-gradient(to bottom right, #2d8cf0, #6edff6);
+    color: var(--main-color);
+  }
+
+  .buttonTL2:active {
+    color: var(--Font-Nav);
     background: var(--background-color);
     border-radius: 20px;
     box-shadow: inset 9.91px 9.91px 15px #CACACA, -9.91px -9.91px 15px #F2F2F2;

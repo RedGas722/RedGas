@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Inputs } from '../../UI/Inputs/Inputs';
 
 export const GetModal = ({ onClose }) => {
@@ -65,7 +65,7 @@ export const GetModal = ({ onClose }) => {
       } else {
         setImagenURL(null);
       }
-
+      console.log('Producto consultado:', producto);
       setMensaje({ ...data, data: producto });
       console.log('Completado!');
     } catch (err) {
@@ -81,28 +81,46 @@ export const GetModal = ({ onClose }) => {
     setErrores({});
   };
 
+  const convertirFecha = (fechaConvertir) => {
+      const fechaISO = fechaConvertir;
+      const fecha = new Date(fechaISO);
+      const fechaSolo = fecha.toLocaleDateString('en-GB');
+      return fechaSolo;
+  }
+
   return (
     <div className="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-2xl p-6 shadow-lg w-[320px] flex flex-col gap-4 relative text-black">
         <button
           className="absolute top-2 right-3 text-gray-600 text-lg"
           onClick={onClose}
-        >✕</button>
+        >
+          ✕
+        </button>
 
         <h2 className="text-xl font-bold text-center">Consultar Producto</h2>
 
-        <Inputs Type='1' Place='Nombre del Producto' Value={nombre} onChange={(e) => setNombre(e.target.value)} />
+        <Inputs
+          Type="1"
+          Place="Nombre del Producto"
+          Value={nombre}
+          onChange={(e) => setNombre(e.target.value)}
+        />
         {errores.nombre && <p className="text-red-600 text-sm">{errores.nombre}</p>}
 
         <div className="flex justify-between gap-2">
           <button
             onClick={handleCancel}
             className="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded"
-          >Cancelar</button>
+          >
+            Cancelar
+          </button>
           <button
             onClick={handleGet}
             className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
-          >Consultar</button>
+          >
+            Consultar
+          </button>
         </div>
 
         {mensaje && mensaje.error && (
@@ -111,10 +129,31 @@ export const GetModal = ({ onClose }) => {
 
         {mensaje && mensaje.data && (
           <div className="bg-gray-100 p-3 rounded mt-2 text-sm">
-            <p><strong>Nombre:</strong> {mensaje.data.nombre_producto}</p>
-            <p><strong>Precio:</strong> {mensaje.data.precio_producto}</p>
-            <p><strong>Descripción:</strong> {mensaje.data.descripcion_producto}</p>
-            <p><strong>Stock:</strong> {mensaje.data.stock}</p>
+            <p>
+              <strong>Nombre:</strong> {mensaje.data.nombre_producto}
+            </p>
+            <p>
+              <strong>Categoría:</strong> {mensaje.data.nombre_categoria || 'Sin categoría'} {/* <-- Aquí la categoría */}
+            </p>
+            <p>
+              <strong>Precio:</strong> {mensaje.data.precio_producto}
+            </p>
+            <p>
+              <strong>Descripción:</strong> {mensaje.data.descripcion_producto}
+            </p>
+            <p>
+              <strong>Stock:</strong> {mensaje.data.stock}
+            </p>
+            {mensaje.data.descuento != 0 && (
+            <p>
+              <strong>Descuento:</strong> {mensaje.data.descuento}%
+            </p>
+            )}
+            {mensaje.data.descuento != 0 && (
+            <p>
+              <strong>Fecha Descuento:</strong> {convertirFecha(mensaje.data.fecha_descuento)}
+            </p>
+            )}
             {imagenURL && (
               <img
                 src={imagenURL}

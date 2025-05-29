@@ -12,7 +12,7 @@ export const Inputs = ({ Type, Place, Value, onChange, className }) => {
                     Type == '7' ? 'date' : 'text'
                 }
                 placeholder={Place}
-                {...(Type !== '4' && { value: Value })} // No usar value si es tipo file
+                {...(Type !== '4' && { value: Value })} 
                 onChange={onChange}
                 className={`border rounded p-2 ${className}`}
             />

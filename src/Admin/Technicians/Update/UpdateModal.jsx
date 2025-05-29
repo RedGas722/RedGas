@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Inputs } from '../../UI/Inputs/Inputs';
+import InputLabel from '../../../UI/Login_Register/InputLabel/InputLabel';
 
 export const UpdateModal = ({ onClose, setRefrescar }) => {
   const [correoBusqueda, setCorreoBusqueda] = useState('');
@@ -12,8 +13,8 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
   let correoActualBusqueda = correoBusqueda;
 
   const URL_GET = 'http://localhost:10101/TecnicoGet';
-  const URL_UPDATE = 'http://localhost:10101/TecnicoDataUpdateNI'; // Actualizar sin imagen
-  const URL_UPDATE_IMAGEN = 'http://localhost:10101/TecnicoDataUpdate'; // Actualizar con imagen
+  const URL_UPDATE = 'http://localhost:10101/TecnicoUpdateNI'; 
+  const URL_UPDATE_IMAGEN = 'http://localhost:10101/TecnicoDataUpdate'; 
 
   // Validar campos
   const validarCampos = () => {
@@ -59,7 +60,7 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
     } catch (err) {
       setMensaje('Error al buscar técnico: ' + err.message);
     }
-  };
+  }
 
   const handleActualizar = async () => {
     const erroresValidados = validarCampos();
@@ -156,12 +157,13 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
           onClick={onClose}
         >✕</button>
         <h2 className="text-xl font-bold text-center">Actualizar Técnico</h2>
+
         {!editando && (
           <>
-            <Inputs
-              Type="2"
-              Place="Correo del Técnico"
-              Value={correoBusqueda}
+            <InputLabel
+              type="2"
+              placeholder="Correo del Técnico"
+              value={correoBusqueda}
               onChange={(e) => setCorreoBusqueda(e.target.value)}
             />
             {errores.correoBusqueda && (
@@ -175,29 +177,33 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
             </button>
           </>
         )}
+
         {editando && tecnico && (
           <>
-            <Inputs
-              Type="1"
-              Place="Nuevo Nombre"
-              Value={tecnico.nuevoNombre}
+            <InputLabel
+              type="1"
+              placeholder="Nuevo Nombre"
+              value={tecnico.nuevoNombre}
               onChange={(e) => setTecnico({ ...tecnico, nuevoNombre: e.target.value })}
             />
             {errores.nuevoNombre && <p className="text-red-600 text-sm">{errores.nuevoNombre}</p>}
-            <Inputs
-              Type="2"
-              Place="Nuevo Correo del Técnico"
-              Value={tecnico.nuevoCorreo}
+
+            <InputLabel
+              type="2"
+              placeholder="Nuevo Correo del Técnico"
+              value={tecnico.nuevoCorreo}
               onChange={(e) => setTecnico({ ...tecnico, nuevoCorreo: e.target.value })}
             />
             {errores.nuevoCorreo && <p className="text-red-600 text-sm">{errores.nuevoCorreo}</p>}
-            <Inputs
-              Type="6"
-              Place="Nuevo Teléfono del Técnico"
-              Value={tecnico.telefono}
+
+            <InputLabel
+              type="6"
+              placeholder="Nuevo Teléfono del Técnico"
+              value={tecnico.telefono}
               onChange={(e) => setTecnico({ ...tecnico, telefono: e.target.value })}
             />
             {errores.telefono && <p className="text-red-600 text-sm">{errores.telefono}</p>}
+
             {imagenActual && (
               <div className="mt-2 flex flex-col items-center">
                 <p>Imagen Actual:</p>
@@ -209,11 +215,12 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
               </div>
             )}
             <label className="mt-2">Seleccionar Nueva Imagen:</label>
-            <Inputs
-              Type="4"
-              Place="Seleccionar Nueva Imagen"
+            <InputLabel
+              type="4"
+              placeholder="Seleccionar Nueva Imagen"
               onChange={handleImageChange}
             />
+
             <div className="flex justify-between gap-2">
               <button
                 onClick={handleCancelar}
@@ -230,16 +237,7 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
             </div>
           </>
         )}
-        {mensaje && (
-          <p
-            className={`text-center font-semibold ${
-              mensaje.includes('exitosa') ? 'text-green-600' : 'text-red-600'
-            }`}
-          >
-            {mensaje}
-          </p>
-        )}
       </div>
     </div>
-  );
-};
+  )
+}

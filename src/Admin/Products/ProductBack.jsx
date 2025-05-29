@@ -12,30 +12,33 @@ export const ProductBack = () => {
   const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [productos, setProductos] = useState([]);
+  const [categorias, setCategorias] = useState([]);
   const [refrescar, setRefrescar] = useState(false);
 
   async function fetchProductos() {
-      try {
-        const res = await fetch('http://localhost:10101/ProductoGetAll');
-        if (!res.ok) throw new Error('Error al obtener productos');
-        const data = await res.json();
-        setProductos(data.data || []);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-    //useEffect para la carga inicial
-    useEffect(() => {
-      fetchProductos();
-    }, []); 
+    try {
+      const res = await fetch('http://localhost:10101/ProductoGetAll');
+      if (!res.ok) throw new Error('Error al obtener productos y categorías');
+      const data = await res.json();
+      // data.data es un objeto con { productos, categorias }
+      setProductos(data.data.productos || []);
+      setCategorias(data.data.categorias || []);
 
-    useEffect(() => {
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  useEffect(() => {
+    fetchProductos();
+  }, []);
+
+  useEffect(() => {
     if (refrescar) {
-      fetchProductos(); 
-      setRefrescar(false); 
+      fetchProductos();
+      setRefrescar(false);
     }
   }, [refrescar]);
-
 
   return (
     <div className="p-[20px] flex flex-col gap-[20px]">
@@ -47,37 +50,34 @@ export const ProductBack = () => {
         <ButtonBack ClickMod={() => setShowDeleteModal(true)} Child="Eliminar" />
       </div>
 
-      {/* Sección de productos */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {productos.map(producto => (
           <CardsProductsBack key={producto.id_producto} producto={producto} />
-      ))}
+        ))}
       </div>
 
-      {/* Modales */}
       {showRegisterModal && (
-      <RegisterModal
-      onClose={() => setShowRegisterModal(false)}
-      onProductoRegistrado={(nuevoProducto) => {
-        setProductos(prev => [nuevoProducto, ...prev]);
-      }}
-      setRefrescar={setRefrescar}  // 👈 nuevo prop
-      />
-    )}
+        <RegisterModal
+          onClose={() => setShowRegisterModal(false)}
+          onProductoRegistrado={(nuevoProducto) => {
+            setProductos(prev => [nuevoProducto, ...prev]);
+          }}
+          setRefrescar={setRefrescar}
+        />
+      )}
       {showGetModal && <GetModal onClose={() => setShowGetModal(false)} />}
-      {showUpdateModal && 
-      <UpdateModal 
-      onClose={() => setShowUpdateModal(false)} 
-      setRefrescar={setRefrescar}
-      />}
-      {showDeleteModal && 
-      <DeleteModal 
-        onClose={() => setShowDeleteModal(false)} 
-        onProductoEliminado={nombreEliminado => {
-          setProductos(prev => prev.filter(p => p.nombre_producto !== nombreEliminado));
-          setShowDeleteModal(false); // Cierra el modal tras eliminar
-        }}
-      />}
+      {showUpdateModal && (
+        <UpdateModal
+          onClose={() => setShowUpdateModal(false)}
+          setRefrescar={setRefrescar}
+        />
+      )}
+      {showDeleteModal && (
+        <DeleteModal
+          onClose={() => setShowDeleteModal(false)}
+          setRefrescar={setRefrescar}
+        />
+      )}
     </div>
   );
 };

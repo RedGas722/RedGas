@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Inputs } from '../../UI/Inputs/Inputs';
 
 export const RegisterModal = ({ onClose, onProductoRegistrado, setRefrescar }) => {
@@ -6,12 +6,36 @@ export const RegisterModal = ({ onClose, onProductoRegistrado, setRefrescar }) =
   const [precio, setPrecio] = useState('');
   const [descripcion, setDescripcion] = useState('');
   const [stock, setStock] = useState('');
+  const [descuento, setDescuento] = useState('');
+  const [fechaDescuento, setFechaDescuento] = useState(new Date().toISOString().slice(0, 10));
   const [imagen, setImagen] = useState(null);
+  const [categoriaId, setCategoriaId] = useState('');
+  const [categorias, setCategorias] = useState([]);
   const [mensaje, setMensaje] = useState('');
   const [errores, setErrores] = useState({});
 
   const URL_REGISTER = 'http://localhost:10101/ProductoRegister';
   const URL_GET = 'http://localhost:10101/ProductoGet';
+  const URL_CATEGORIAS = 'http://localhost:10101/CategoriaGetAll';
+  const URL_SE_ENCUENTRA = 'http://localhost:10101/SeEncuentraRegister';
+
+  useEffect(() => {
+    const fetchCategorias = async () => {
+      try {
+        const res = await fetch(URL_CATEGORIAS);
+        if (res.ok) {
+          const data = await res.json();
+          setCategorias(data?.data || []);
+        } else {
+          console.warn('Error al obtener categorías:', res.status);
+        }
+      } catch (error) {
+        console.error('Error al cargar categorías:', error);
+      }
+    };
+
+    fetchCategorias();
+  }, []);
 
   const validarCampos = () => {
     const errores = {};
@@ -40,6 +64,14 @@ export const RegisterModal = ({ onClose, onProductoRegistrado, setRefrescar }) =
       errores.stock = 'El stock debe ser un número entero mayor que 0.';
     }
 
+    if (!/^\d+(\.\d{1,2})?$/.test(descuento) || parseFloat(descuento) < 0 || parseFloat(descuento) > 100) {
+        errores.descuento = 'El descuento debe ser un número decimal entre 0 y 100.';
+    }
+
+    if (!fechaDescuento.trim()) {
+      errores.fechaDescuento = 'La fecha de descuento es obligatoria.';
+    }
+
     if (!imagen) {
       errores.imagen = 'La imagen es obligatoria.';
     } else {
@@ -49,6 +81,10 @@ export const RegisterModal = ({ onClose, onProductoRegistrado, setRefrescar }) =
       if (imagen.size > maxSize) {
         errores.imagen = 'La imagen no debe superar los 8MB.';
       }
+    }
+
+    if (!categoriaId) {
+      errores.categoria = 'Debe seleccionar una categoría.';
     }
 
     return errores;
@@ -68,7 +104,6 @@ export const RegisterModal = ({ onClose, onProductoRegistrado, setRefrescar }) =
     setMensaje('');
 
     try {
-      // Verificar si ya existe un producto con ese nombre
       const resCheck = await fetch(`${URL_GET}?nombre_producto=${encodeURIComponent(nombre)}`);
       if (resCheck.ok) {
         const dataCheck = await resCheck.json();
@@ -83,6 +118,8 @@ export const RegisterModal = ({ onClose, onProductoRegistrado, setRefrescar }) =
       formData.append('precio_producto', parseFloat(precio));
       formData.append('descripcion_producto', descripcion);
       formData.append('stock', parseInt(stock));
+      formData.append('descuento', parseInt(descuento));
+      formData.append('fecha_descuento', fechaDescuento);
       formData.append('imagen', imagen);
 
       const resRegister = await fetch(URL_REGISTER, {
@@ -100,20 +137,43 @@ export const RegisterModal = ({ onClose, onProductoRegistrado, setRefrescar }) =
         return;
       }
 
-      // Intentar obtener el producto recién creado, pero si da 404, continuar sin error
       const resNuevo = await fetch(`${URL_GET}?nombre_producto=${encodeURIComponent(nombre)}`);
       if (resNuevo.ok) {
         const dataNuevo = await resNuevo.json();
-        if (onProductoRegistrado && dataNuevo?.data?.length > 0) {
-          onProductoRegistrado(dataNuevo.data[0]);
+        if (onProductoRegistrado && dataNuevo?.data) {
+          const producto = dataNuevo.data;
+          const idProducto = producto.id_producto;
+
+          // Registrar relación en SeEncuentra
+          try {
+            const resSeEncuentra = await fetch(URL_SE_ENCUENTRA, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                id_producto: idProducto,
+                id_categoria: parseInt(categoriaId),
+              }),
+            });
+
+            if (!resSeEncuentra.ok) {
+              console.warn('Error al registrar en SeEncuentra:', resSeEncuentra.status);
+            }
+          } catch (error) {
+            console.error('Error de red al registrar en SeEncuentra:', error);
+          }
+
+          onProductoRegistrado(producto);
         }
       } else if (resNuevo.status === 404) {
         console.warn('Producto registrado, pero no se pudo obtener con GET (404).');
       } else {
         console.warn('Error inesperado al obtener el producto:', resNuevo.status);
       }
+
       setMensaje('Producto registrado exitosamente.');
-      if (setRefrescar) setRefrescar(true); 
+      if (setRefrescar) setRefrescar(true);
     } catch (err) {
       setMensaje('Error al registrar: ' + err.message);
     }
@@ -124,7 +184,10 @@ export const RegisterModal = ({ onClose, onProductoRegistrado, setRefrescar }) =
     setPrecio('');
     setDescripcion('');
     setStock('');
+    setDescuento('');
+    setFechaDescuento(new Date().toISOString().slice(0, 10));
     setImagen(null);
+    setCategoriaId('');
     setMensaje('');
     setErrores({});
   };
@@ -162,6 +225,26 @@ export const RegisterModal = ({ onClose, onProductoRegistrado, setRefrescar }) =
 
         <Inputs Type="5" Place="Stock" Value={stock} onChange={(e) => setStock(e.target.value)} />
         {errores.stock && <p className="text-red-600 text-sm">{errores.stock}</p>}
+
+        <Inputs Type="5" Place="Descuento" Value={descuento} onChange={(e) => setDescuento(e.target.value)} />
+        {errores.descuento && <p className="text-red-600 text-sm">{errores.descuento}</p>}
+
+        <Inputs Type="7" Place="Fecha Descuento" Value={fechaDescuento} onChange={(e) => setFechaDescuento(e.target.value)} />
+        {errores.fechaDescuento && <p className="text-red-600 text-sm">{errores.fechaDescuento}</p>}
+
+        <select
+          value={categoriaId}
+          onChange={(e) => setCategoriaId(e.target.value)}
+          className="border rounded p-2"
+        >
+          <option value="">Seleccione una categoría</option>
+          {categorias.map((cat) => (
+            <option key={cat.id_categoria} value={cat.id_categoria}>
+              {cat.nombre_categoria}
+            </option>
+          ))}
+        </select>
+        {errores.categoria && <p className="text-red-600 text-sm">{errores.categoria}</p>}
 
         <Inputs Type="4" Place="Imagen del Producto" onChange={handleImageChange} />
         {errores.imagen && <p className="text-red-600 text-sm">{errores.imagen}</p>}
