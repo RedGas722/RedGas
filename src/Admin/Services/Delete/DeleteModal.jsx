@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Inputs } from '../../UI/Inputs/Inputs';
 
-const URL = 'http://localhost:10101/ServicioDelete';
-const GET_URL = 'http://localhost:10101/ServicioGet'; // Endpoint para verificar si el servicio existe
+const URL = 'https://redgas.onrender.com/ServicioDelete';
+const GET_URL = 'https://redgas.onrender.com/ServicioGet'; // Endpoint para verificar si el servicio existe
 
-export const DeleteModal = ({ onClose }) => {
+export const DeleteModal = ({ onClose, setRefrescar }) => {
   const [nombreServicio, setNombreServicio] = useState('');
   const [mensaje, setMensaje] = useState('');
   const [error, setError] = useState('');
@@ -72,6 +72,7 @@ export const DeleteModal = ({ onClose }) => {
       }
       if (data?.status === 'delete ok') {
         setMensaje('Eliminación exitosa');
+        if (typeof setRefrescar === 'function') setRefrescar(true);
       } else if (data?.status === 'not found' || data?.status === 'Servicio no encontrado') {
         setMensaje('No se encontró un servicio con este nombre');
       } else {

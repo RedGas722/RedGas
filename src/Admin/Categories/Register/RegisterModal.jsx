@@ -6,7 +6,7 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
   const [mensaje, setMensaje] = useState('');
   const [errores, setErrores] = useState({});
 
-  const URL = 'http://localhost:10101/CategoriaRegister';
+  const URL = 'https://redgas.onrender.com/CategoriaRegister';
 
   // Validación del campo en el frontend
   const validarCampos = () => {

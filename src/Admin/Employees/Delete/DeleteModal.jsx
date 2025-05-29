@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const URL = 'http://localhost:10101/EmpleadoDelete';
+const URL = 'https://redgas.onrender.com/EmpleadoDelete';
 
 export const DeleteModal = ({ onClose }) => {
   const [correo, setCorreo] = useState('');

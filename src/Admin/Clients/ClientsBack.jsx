@@ -16,7 +16,7 @@ export const ClientsBack = () => {
 
   async function fetchClientes() {
     try {
-      const res = await fetch('http://localhost:10101/ClienteGetAll');
+      const res = await fetch('https://redgas.onrender.com/ClienteGetAll');
       if (!res.ok) throw new Error('Error al obtener clientes');
       const data = await res.json();
       setClientes(data.data || []);

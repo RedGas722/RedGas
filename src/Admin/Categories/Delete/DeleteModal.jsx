@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Inputs } from '../../UI/Inputs/Inputs';
 
-const URL_GET = 'http://localhost:10101/CategoriaGet';
-const URL_DELETE = 'http://localhost:10101/CategoriaDelete';
+const URL_GET = 'https://redgas.onrender.com/CategoriaGet';
+const URL_DELETE = 'https://redgas.onrender.com/CategoriaDelete';
 
 export const DeleteModal = ({ onClose, setRefrescar }) => {
   const [nombre, setNombre] = useState('');

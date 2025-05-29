@@ -8,7 +8,7 @@ export const RegisterModal = ({ onClose, setRefrescar, onFacturaRegistrada }) =>
   const [mensaje, setMensaje] = useState('');
   const [errores, setErrores] = useState({});
 
-  const URL = 'http://localhost:10101/FacturaRegister';
+  const URL = 'https://redgas.onrender.com/FacturaRegister';
 
   const validarCampos = () => {
     const errores = {};

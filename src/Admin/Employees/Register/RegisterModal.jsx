@@ -9,7 +9,7 @@ export const RegisterModal = ({ onClose }) => {
     const [contrasena, setContrasena] = useState('');
     const [mensaje, setMensaje] = useState('');
 
-  const URL = 'http://localhost:10101/EmpleadoRegister';
+  const URL = 'https://redgas.onrender.com/EmpleadoRegister';
 
   const handleRegister = async (e) => {
     e.preventDefault();

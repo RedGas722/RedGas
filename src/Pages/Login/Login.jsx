@@ -10,7 +10,7 @@ import withReactContent from 'sweetalert2-react-content'
 import Swal from 'sweetalert2'
 import './Login.css'
 
-const URL = 'http://localhost:10101/ClienteLogin'
+const URL = 'https://redgas.onrender.com/ClienteLogin'
 
 export const Login = () => {
     const navigate = useNavigate()

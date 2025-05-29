@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
-import { Inputs } from '../../UI/Inputs/Inputs';
-import InputLabel from '../../../UI/Login_Register/InputLabel/InputLabel';
+import { useState } from 'react'
+import {InputLabel} from '../../../UI/Login_Register/InputLabel/InputLabel'
 
 export const UpdateModal = ({ onClose, setRefrescar }) => {
   const [correoBusqueda, setCorreoBusqueda] = useState('')
@@ -12,9 +11,9 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
   const [imagenActual, setImagenActual] = useState(null)
   let correoActualBusqueda = correoBusqueda
 
-  const URL_GET = 'http://localhost:10101/TecnicoGet'
-  const URL_UPDATE = 'http://localhost:10101/TecnicoUpdateNI'
-  const URL_UPDATE_IMAGEN = 'http://localhost:10101/TecnicoDataUpdate'
+  const URL_GET = 'https://redgas.onrender.com/TecnicoGet';
+  const URL_UPDATE = 'https://redgas.onrender.com/TecnicoUpdateNI'; 
+  const URL_UPDATE_IMAGEN = 'https://redgas.onrender.com/TecnicoDataUpdate'; 
 
   // Validar campos
   const validarCampos = () => {
@@ -58,7 +57,7 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
       }
       setEditando(true)
     } catch (err) {
-      setMensaje('Error al buscar técnico: ' + err.message);
+      setMensaje('Error al buscar técnico: ' + err.message)
     }
   }
 
@@ -131,23 +130,23 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
   }
 
   const handleCancelar = () => {
-    setCorreoBusqueda('');
-    setTecnico(null);
-    setEditando(false);
-    setMensaje('');
-    setErrores({});
-    setImagenActual(null);
-    setImagenNueva(null);
-  };
+    setCorreoBusqueda('')
+    setTecnico(null)
+    setEditando(false)
+    setMensaje('')
+    setErrores({})
+    setImagenActual(null)
+    setImagenNueva(null)
+  }
 
   const handleImageChange = (e) => {
-    const file = e.target.files[0];
+    const file = e.target.files[0]
     if (file) {
-      setImagenNueva(file);
+      setImagenNueva(file)
     } else {
-      setImagenNueva(null);
+      setImagenNueva(null)
     }
-  };
+  }
 
   return (
     <div className="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50">
@@ -160,12 +159,7 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
 
         {!editando && (
           <>
-            <InputLabel
-              type="2"
-              placeholder="Correo del Técnico"
-              value={correoBusqueda}
-              onChange={(e) => setCorreoBusqueda(e.target.value)}
-            />
+          <InputLabel type='2' placeholder='Correo del Técnico' value={correoBusqueda} onChange={(e) => setCorreoBusqueda(e.target.value)} />
             {errores.correoBusqueda && (
               <p className="text-red-600 text-sm">{errores.correoBusqueda}</p>
             )}
@@ -180,20 +174,14 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
 
         {editando && tecnico && (
           <>
-            <InputLabel
-              type="1"
-              placeholder="Nuevo Nombre"
-              value={tecnico.nuevoNombre}
-              onChange={(e) => setTecnico({ ...tecnico, nuevoNombre: e.target.value })}
-            />
-            {errores.nuevoNombre && <p className="text-red-600 text-sm">{errores.nuevoNombre}</p>}
 
-            <InputLabel
-              type="2"
-              placeholder="Nuevo Correo del Técnico"
-              value={tecnico.nuevoCorreo}
-              onChange={(e) => setTecnico({ ...tecnico, nuevoCorreo: e.target.value })}
-            />
+
+            <InputLabel type="6" value={tecnico.telefono} onChange={(e) => setTecnico({ ...tecnico, telefono: e.target.value })} placeholder="Teléfono nuevo del Técnico" />
+
+
+            <InputLabel type="1" value={tecnico.nuevoNombre} onChange={(e) => setTecnico({ ...tecnico, nuevoNombre: e.target.value })} placeholder="Nombre del Técnico" />
+            {errores.nuevoNombre && <p className="text-red-600 text-sm">{errores.nuevoNombre}</p>}
+            <InputLabel type="2" value={tecnico.nuevoCorreo} onChange={(e) => setTecnico({ ...tecnico, nuevoCorreo: e.target.value })} placeholder="Correo nuevo del Técnico" />
             {errores.nuevoCorreo && <p className="text-red-600 text-sm">{errores.nuevoCorreo}</p>}
 
             <InputLabel
@@ -215,12 +203,7 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
               </div>
             )}
             <label className="mt-2">Seleccionar Nueva Imagen:</label>
-            <InputLabel
-              type="4"
-              placeholder="Seleccionar Nueva Imagen"
-              onChange={handleImageChange}
-            />
-
+            <InputLabel type="4" ForID="imagen" placeholder="Seleccionar imagen" onChange={handleImageChange} />
             <div className="flex justify-between gap-2">
               <button
                 onClick={handleCancelar}
@@ -236,6 +219,14 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
               </button>
             </div>
           </>
+        )}
+        {mensaje && (
+          <p
+            className={`text-center font-semibold ${mensaje.includes('exitosa') ? 'text-green-600' : 'text-red-600'
+              }`}
+          >
+            {mensaje}
+          </p>
         )}
       </div>
     </div>

@@ -16,7 +16,7 @@ export const Shopping = () => {
         return;
       }
 
-      const resCart = await fetch("http://localhost:10101/CartGet", {
+      const resCart = await fetch("https://redgas.onrender.com/CartGet", {
         headers: {
           "Authorization": `Bearer ${token}`,
           "Content-Type": "application/json"
@@ -29,7 +29,7 @@ export const Shopping = () => {
 
       const productDetails = await Promise.all(
         cartData.map(async (item) => {
-          const res = await fetch(`http://localhost:10101/ProductoGet?nombre_producto=${encodeURIComponent(item.productName)}`, {
+          const res = await fetch(`https://redgas.onrender.com/ProductoGet?nombre_producto=${encodeURIComponent(item.productName)}`, {
             method: "GET",
             headers: {
               "Content-Type": "application/json"
@@ -58,7 +58,7 @@ export const Shopping = () => {
 
   const fetchTotalPrice = async () => {
     try {
-      const res = await fetch("http://localhost:10101/CartTotal", {
+      const res = await fetch("https://redgas.onrender.com/CartTotal", {
         method: "GET",
         headers: {
           "Authorization": `Bearer ${token}`,
@@ -87,7 +87,7 @@ export const Shopping = () => {
         return;
       }
 
-      const res = await fetch("http://localhost:10101/CartRemove", {
+      const res = await fetch("https://redgas.onrender.com/CartRemove", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -107,7 +107,7 @@ export const Shopping = () => {
 
   const handleUpdateQuantity = async (productId, newQuantity) => {
     try {
-      const res = await fetch("http://localhost:10101/CartUpdateQuantity", {
+      const res = await fetch("https://redgas.onrender.com/CartUpdateQuantity", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -136,7 +136,7 @@ export const Shopping = () => {
         return;
       }
 
-      const res = await fetch("http://localhost:10101/CartClear", {
+      const res = await fetch("https://redgas.onrender.com/CartClear", {
         method: "DELETE",
         headers: {
           "Authorization": `Bearer ${token}`,

@@ -17,11 +17,11 @@ export const TechniciansBack = () => {
 
   async function fetchTecnicos() {
     try {
-      const res = await fetch('http://localhost:10101/TecnicoGetAll')
-      if (!res.ok) throw new Error('Error al obtener técnicos')
-      const data = await res.json()
-      const tecnicosData = Array.isArray(data) ? data : (data.data || [])
-      setTecnicos(tecnicosData)
+      const res = await fetch('https://redgas.onrender.com/TecnicoGetAll');
+      if (!res.ok) throw new Error('Error al obtener técnicos');
+      const data = await res.json();
+      const tecnicosData = Array.isArray(data) ? data : (data.data || []);
+      setTecnicos(tecnicosData);
     } catch (error) {
       setTecnicos([])
       console.error(error)

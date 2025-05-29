@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { InputLabel } from '../../../UI/Login_Register/InputLabel/InputLabel'
 
-const URL = 'http://localhost:10101/TecnicoDelete'
+const URL = 'https://redgas.onrender.com/TecnicoDelete'
 
 export const DeleteModal = ({ onClose, onTecnicoEliminado }) => {
   const [correo, setCorreo] = useState('');
@@ -34,14 +34,14 @@ export const DeleteModal = ({ onClose, onTecnicoEliminado }) => {
       if (!res.ok) {
         const errorData = await res.json();
         if (errorData.message === 'Correo no encontrado') {
-          setMensaje('El correo no se encuentra registrado.')
-          return
+          setMensaje('El correo no se encuentra registrado.');
+          return;
         }
-        setMensaje('Error al eliminar: ' + (errorData.message || 'Error desconocido del servidor'))
-        return
+        setMensaje('Error al eliminar: ' + (errorData.message || 'Error desconocido del servidor'));
+        return;
       }
 
-      const data = await res.json()
+      const data = await res.json();
       if (data && typeof data.message === 'string' && data.message === 'Correo no encontrado') {
         setMensaje('El correo no se encuentra registrado.');
         return;
