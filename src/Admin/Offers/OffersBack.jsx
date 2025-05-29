@@ -7,7 +7,7 @@ import { ButtonBack } from '../UI/ButtonBack/ButtonBack'
 import CardTechniciansBack from './Get/CardTechniciansBack'
 
 
-export const TechniciansBack = () => {
+export const OffersBack = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [showGetModal, setShowGetModal] = useState(false)
   const [showRegisterModal, setShowRegisterModal] = useState(false)
@@ -40,18 +40,13 @@ export const TechniciansBack = () => {
   }, [refrescar])
 
   return (
-<<<<<<< HEAD
-    <div className="p-[20px] flex flex-col gap-[20px]">
-      <div className="NeoContainer_outset_TL flex-col w-fit  flex items-center gap-[20px]">
-=======
-    <div className="p-[20px] h-full flex flex-col gap-[20px]">
-      <div className="NeoContainer_outset_TL flex flex-col w-fit h-fit justify-center justify-self-center items-center gap-[20px]">
->>>>>>> 90ba87e56585f9d31c6f5e5ee7c98c5b20d15fa2
-        <h1 className="font-bold text-[20px]">Técnicos BACK-OFFICE</h1>
-        <ButtonBack ClickMod={() => setShowRegisterModal(true)} Child="Registrar" />
-        <ButtonBack ClickMod={() => setShowGetModal(true)} Child="Consultar" />
-        <ButtonBack ClickMod={() => setShowUpdateModal(true)} Child="Actualizar" />
-        <ButtonBack ClickMod={() => setShowDeleteModal(true)} Child="Eliminar" />
+    <div className="p-[20px_0_0_20px] flex items-start gap-[20px] justify-start h-screen">
+      <div className='flex flex-col items-start gap-[20px] justify-center'>
+        <h1 className='font-bold text-[20px]'>Tecnico BACK-OFFICE</h1>
+        <ButtonBack ClickMod={() => setShowRegisterModal(true)} Child='Registrar' />
+        <ButtonBack ClickMod={() => setShowGetModal(true)} Child='Consultar' />
+        <ButtonBack ClickMod={() => setShowUpdateModal(true)} Child='Actualizar' />
+        <ButtonBack ClickMod={() => setShowDeleteModal(true)} Child='Eliminar' />
       </div>
 
       {/* Sección de técnicos */}
@@ -77,7 +72,7 @@ export const TechniciansBack = () => {
           onClose={() => setShowUpdateModal(false)}
           setRefrescar={() => {
             setRefrescar(true)
-            fetchTecnicos()
+            fetchTecnicos() 
           }}
         />
       )}
@@ -93,5 +88,4 @@ export const TechniciansBack = () => {
     </div>
   )
 }
-
-export default TechniciansBack
+export default OffersBack

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Inputs } from '../../UI/Inputs/Inputs';
 
 export const GetModal = ({ onClose }) => {
@@ -65,7 +65,7 @@ export const GetModal = ({ onClose }) => {
       } else {
         setImagenURL(null);
       }
-
+      console.log('Producto consultado:', producto);
       setMensaje({ ...data, data: producto });
       console.log('Completado!');
     } catch (err) {
@@ -80,6 +80,13 @@ export const GetModal = ({ onClose }) => {
     setImagenURL(null);
     setErrores({});
   };
+
+  const convertirFecha = (fechaConvertir) => {
+      const fechaISO = fechaConvertir;
+      const fecha = new Date(fechaISO);
+      const fechaSolo = fecha.toLocaleDateString('en-GB');
+      return fechaSolo;
+  }
 
   return (
     <div className="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50">
@@ -137,6 +144,16 @@ export const GetModal = ({ onClose }) => {
             <p>
               <strong>Stock:</strong> {mensaje.data.stock}
             </p>
+            {mensaje.data.descuento != 0 && (
+            <p>
+              <strong>Descuento:</strong> {mensaje.data.descuento}%
+            </p>
+            )}
+            {mensaje.data.descuento != 0 && (
+            <p>
+              <strong>Fecha Descuento:</strong> {convertirFecha(mensaje.data.fecha_descuento)}
+            </p>
+            )}
             {imagenURL && (
               <img
                 src={imagenURL}

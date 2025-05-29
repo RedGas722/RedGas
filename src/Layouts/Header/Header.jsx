@@ -24,7 +24,6 @@ export const Header = () => {
     }, [hamburger])
 
     useEffect(() => {
-        // Cierra el menú al hacer clic fuera
         document.onclick = (e) => {
             const target = e.target
             if (!target.closest(".menu-btn")) setHamburger(false)
@@ -32,7 +31,6 @@ export const Header = () => {
     }, [])
 
     useEffect(() => {
-        // Si cambia el tamaño de pantalla y se vuelve móvil, quitar scroll effect
         const handleResize = () => {
             if (!isDesktop()) setScrolled(false)
         }
@@ -59,7 +57,7 @@ export const Header = () => {
             } ${hamburger ? 'Burguer w-fit NeoContainer_outset_TL' : ''}`}
         >
             {(scrolled && !hamburger && isDesktop()) && (
-                <h2 className="justify-self-center hidden md:flex font-bold text-5xl text-[var(--Font-Nav)]">
+                <h2 className="justify-self-center hidden md:flex font-bold text-4xl text-[var(--Font-Nav)]">
                     Red Gas
                 </h2>
             )}
