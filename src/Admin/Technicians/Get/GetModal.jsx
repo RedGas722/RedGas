@@ -69,6 +69,7 @@ export const GetModal = ({ onClose }) => {
 
         <h2 className="text-xl font-bold text-center">Consultar Tecnico</h2>
         <InputLabel type='2' placeholder='Correo del tecnico' value={correo} onChange={(e) => setCorreo(e.target.value)} />
+        {errorCorreo && <p className="text-red-500 text-sm">{errorCorreo}</p>}
 
         <div className="flex justify-between gap-2">
           <button

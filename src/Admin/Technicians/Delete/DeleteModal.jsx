@@ -8,9 +8,9 @@ export const DeleteModal = ({ onClose, onTecnicoEliminado }) => {
   const [mensaje, setMensaje] = useState('');
 
   const validarCorreo = (correo) => {
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Expresión regular para validar correos
-    return regex.test(correo);
-  };
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/ // Expresión regular para validar correos
+    return regex.test(correo)
+  }
 
   const handleDelete = async (e) => {
     e.preventDefault()

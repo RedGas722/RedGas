@@ -11,7 +11,7 @@ export const Navs = ({ className }) => {
     }, [])
 
     const getLinkClass = (id) =>
-        `text-[var(--main-color)] cursor-pointer transition-colors duration-300 ${active === id ? '!text-[var(--Font-Nav)] font-bold' : ''
+        `text-[var(--main-color)] cursor-pointer transition-colors duration-300 ${active === id ? '!text-[var(--Font-Nav2)] font-bold' : ''
         }`
 
     return (
@@ -58,6 +58,9 @@ export const Navs = ({ className }) => {
             </NavLink>
             <NavLink to="/Admin">
                 Admin
+            </NavLink>
+             <NavLink to="/Costumer">
+                Cliente
             </NavLink>
         </div>
     )
