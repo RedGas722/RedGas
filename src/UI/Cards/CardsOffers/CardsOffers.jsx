@@ -138,6 +138,7 @@ export const CardsOffers = ({ uniqueId, productos = [] }) => {
     productName: producto.nombre_producto,  
     quantity: 1,
     price: producto.precio_producto,
+    discount: producto.descuento || 0
     };
 
     try {
