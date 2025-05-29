@@ -10,7 +10,7 @@ export const RegisterModal = ({ onClose, onTecnicoRegistrado }) => {
     const [imagen, setImagen] = useState(null)
     const [mensaje, setMensaje] = useState('')
 
-    const URL = 'http://localhost:10101/TecnicoRegister'
+    const URL = 'https://redgas.onrender.com/TecnicoRegister'
 
     const handleRegister = async (e) => {
         e.preventDefault();

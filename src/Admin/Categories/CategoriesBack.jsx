@@ -16,7 +16,7 @@ export const CategoriesBack = () => {
 
   async function fetchCategorias() {
     try {
-      const res = await fetch('http://localhost:10101/CategoriaGetAll');
+      const res = await fetch('https://redgas.onrender.com/CategoriaGetAll');
       if (!res.ok) throw new Error('Error al obtener categorías');
       const data = await res.json();
       setCategorias(data.data || []);

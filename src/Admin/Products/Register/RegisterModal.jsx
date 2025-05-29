@@ -14,10 +14,10 @@ export const RegisterModal = ({ onClose, onProductoRegistrado, setRefrescar }) =
   const [mensaje, setMensaje] = useState('');
   const [errores, setErrores] = useState({});
 
-  const URL_REGISTER = 'http://localhost:10101/ProductoRegister';
-  const URL_GET = 'http://localhost:10101/ProductoGet';
-  const URL_CATEGORIAS = 'http://localhost:10101/CategoriaGetAll';
-  const URL_SE_ENCUENTRA = 'http://localhost:10101/SeEncuentraRegister';
+  const URL_REGISTER = 'https://redgas.onrender.com/ProductoRegister';
+  const URL_GET = 'https://redgas.onrender.com/ProductoGet';
+  const URL_CATEGORIAS = 'https://redgas.onrender.com/CategoriaGetAll';
+  const URL_SE_ENCUENTRA = 'https://redgas.onrender.com/SeEncuentraRegister';
 
   useEffect(() => {
     const fetchCategorias = async () => {

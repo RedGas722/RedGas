@@ -11,8 +11,8 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
   // Variable local para manejar la búsqueda
   let nombreBusquedaConsulta = nombreBusqueda;
 
-  const URL_GET = 'http://localhost:10101/CategoriaGet';
-  const URL_UPDATE = 'http://localhost:10101/CategoriaUpdate';
+  const URL_GET = 'https://redgas.onrender.com/CategoriaGet';
+  const URL_UPDATE = 'https://redgas.onrender.com/CategoriaUpdate';
 
   const validarCampos = () => {
     const errores = {};

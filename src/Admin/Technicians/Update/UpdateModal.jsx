@@ -12,9 +12,9 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
   const [imagenActual, setImagenActual] = useState(null);
   let correoActualBusqueda = correoBusqueda;
 
-  const URL_GET = 'http://localhost:10101/TecnicoGet';
-  const URL_UPDATE = 'http://localhost:10101/TecnicoUpdateNI'; 
-  const URL_UPDATE_IMAGEN = 'http://localhost:10101/TecnicoDataUpdate'; 
+  const URL_GET = 'https://redgas.onrender.com/TecnicoGet';
+  const URL_UPDATE = 'https://redgas.onrender.com/TecnicoUpdateNI'; 
+  const URL_UPDATE_IMAGEN = 'https://redgas.onrender.com/TecnicoDataUpdate'; 
 
   // Validar campos
   const validarCampos = () => {

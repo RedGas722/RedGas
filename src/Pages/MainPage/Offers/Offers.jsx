@@ -9,7 +9,7 @@ export const OffersSect = () => {
   useEffect(() => {
     async function fetchCalentadores() {
       try {
-        const res = await fetch('http://localhost:10101/ProductoGetAllCategoria?nombre_categoria=Ofertas');
+        const res = await fetch('https://redgas.onrender.com/ProductoGetAllCategoria?nombre_categoria=Ofertas');
         if (!res.ok) throw new Error('Error al obtener productos');
         const data = await res.json();
         setOfertas(data.data || []);

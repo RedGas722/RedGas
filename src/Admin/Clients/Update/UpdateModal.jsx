@@ -55,7 +55,7 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
     }
 
     try {
-      const res = await fetch(`http://localhost:10101/ClienteGet?correo_cliente=${correoBusqueda}`);
+      const res = await fetch(`https://redgas.onrender.com/ClienteGet?correo_cliente=${correoBusqueda}`);
       const data = await res.json();
 
       if (res.ok && data.data) {
@@ -99,7 +99,7 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
     };
 
     try {
-      const res = await fetch("http://localhost:10101/ClienteDataUpdate", {
+      const res = await fetch("https://redgas.onrender.com/ClienteDataUpdate", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),

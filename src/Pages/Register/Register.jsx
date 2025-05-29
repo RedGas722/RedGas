@@ -7,7 +7,7 @@ import "./Register.css"
 import { useNavigate } from "react-router-dom"
 
 
-const URL = 'http://localhost:10101/ClienteRegister'
+const URL = 'https://redgas.onrender.com/ClienteRegister'
 
 export const Register = () => {
 

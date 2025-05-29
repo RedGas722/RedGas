@@ -7,7 +7,7 @@ export const GetModal = ({ onClose }) => {
   const [imagenURL, setImagenURL] = useState(null);
   const [errores, setErrores] = useState({});
 
-  const URL = 'http://localhost:10101/ProductoGet';
+  const URL = 'https://redgas.onrender.com/ProductoGet';
 
   const validarCampos = () => {
     const errores = {};

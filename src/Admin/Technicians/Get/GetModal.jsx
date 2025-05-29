@@ -7,7 +7,7 @@ export const GetModal = ({ onClose }) => {
   const [imagenURL, setImagenURL] = useState(null); // Estado para la URL de la imagen
   const [errorCorreo, setErrorCorreo] = useState(''); // Estado para errores en el correo
 
-  const URL = 'http://localhost:10101/TecnicoGet';
+  const URL = 'https://redgas.onrender.com/TecnicoGet';
 
   const validarCorreo = (correo) => {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
