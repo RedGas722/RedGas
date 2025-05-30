@@ -3,7 +3,7 @@ import { InputLabel } from '../../../UI/Login_Register/InputLabel/InputLabel'
 
 const URL = 'https://redgas.onrender.com/TecnicoDelete'
 
-export const DeleteModal = ({ onClose, onTecnicoEliminado }) => {
+export const DeleteModal = ({ onClose, setRefrescar }) => {
   const [correo, setCorreo] = useState('');
   const [mensaje, setMensaje] = useState('');
 
@@ -47,7 +47,7 @@ export const DeleteModal = ({ onClose, onTecnicoEliminado }) => {
         return;
       }
       setMensaje('Eliminación exitosa');
-      if (onTecnicoEliminado) onTecnicoEliminado(correo);
+      setRefrescar(true)
     } catch (err) {
       setMensaje('Error al eliminar: ' + err.message)
     }

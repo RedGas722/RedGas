@@ -57,9 +57,6 @@ export const ClientsBack = () => {
       {showRegisterModal && (
         <RegisterModal
           onClose={() => setShowRegisterModal(false)}
-          onClienteRegistrado={(nuevoCliente) => {
-            setClientes(prev => [nuevoCliente, ...prev]);
-          }}
           setRefrescar={setRefrescar}
         />
       )}
