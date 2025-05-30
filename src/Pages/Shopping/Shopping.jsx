@@ -162,7 +162,13 @@ export const Shopping = () => {
       <div className="flex flex-col gap-[80px] text-[var(--main-color)] MainPageContainer">
         {products.length === 0 && <p>No hay productos para mostrar.</p>}
 
-        {products.map((producto, index) => (
+        {products.map((producto, index) => {
+        const descuento = Number(producto.descuento) || 0;
+        const precioUnidad = Number(producto.precio_producto) || 0;
+        const precioConDescuento = precioUnidad * (1 - descuento / 100);
+        const subtotal = precioConDescuento * producto.cantidad;
+
+        return (
           <section key={index}>
             <section className='flex justify-center gap-[20px]'>
               <section className='NeoContainer_outset_TL flex gap-[20px] p-[20px_10px] w-[70%] h-fit'>
@@ -177,10 +183,15 @@ export const Shopping = () => {
                   <h2 className='text-2xl font-bold'>{producto.nombre_producto}</h2>
                   <div className="flex flex-col gap-1">
                     <p className='text-base font-medium text-[var(--main-color)]'>
-                      <strong>Precio Unidad:</strong> ${Number(producto.precio_producto).toLocaleString("es-CO", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
+                      <strong>Precio Unidad:</strong> ${precioConDescuento.toLocaleString("es-CO", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
+                      {descuento > 0 && (
+                        <span className="ml-2 text-sm text-green-600 font-semibold">
+                          ({descuento}% OFF)
+                        </span>
+                      )}
                     </p>
                     <p className='text-base font-medium text-[var(--main-color)]'>
-                      <strong>Subtotal:</strong> ${Number(producto.precio_producto * producto.cantidad).toLocaleString("es-CO", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
+                      <strong>Subtotal:</strong> ${subtotal.toLocaleString("es-CO", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
                     </p>
                   </div>
                   <p className='text-[var(--main-color-sub)]'>{producto.descripcion_producto || "Sin descripción disponible."}</p>
@@ -211,7 +222,8 @@ export const Shopping = () => {
               </div>
             </section>
           </section>
-        ))}
+        );
+      })}
 
         <footer className="flex flex-col items-center gap-4">
           <div className='flex justify-center items-center gap-[20px]'>

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Buttons } from "../../UI/Login_Register/Buttons"
 
-const URL = 'http://localhost:10101/Diagnostic';
+const URL = 'https://redgas.onrender.com/Diagnostic';
 
 export const ServicesInfo = () => {
 

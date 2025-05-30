@@ -113,7 +113,7 @@ import {
         alert("Debes iniciar sesión para agregar al carrito");
         return null;
     }
-    const res = await fetch("http://localhost:10101/CartAdd", {
+    const res = await fetch("https://redgas.onrender.com/CartAdd", {
     method: "POST",
     headers: {
         "Content-Type": "application/json",
@@ -138,6 +138,7 @@ export const CardsOffers = ({ uniqueId, productos = [] }) => {
     productName: producto.nombre_producto,  
     quantity: 1,
     price: producto.precio_producto,
+    discount: producto.descuento || 0
     };
 
     try {
