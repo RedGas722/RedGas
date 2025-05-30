@@ -60,29 +60,20 @@ export const TechniciansBack = () => {
       {showRegisterModal && (
         <RegisterModal
           onClose={() => setShowRegisterModal(false)}
-          onTecnicoRegistrado={nuevoTecnico => {
-            setTecnicos(prev => [nuevoTecnico, ...prev]);
-            setShowRegisterModal(false); 
-          }}
+          setRefrescar={setRefrescar}
         />
       )}
       {showGetModal && <GetModal onClose={() => setShowGetModal(false)} />}
       {showUpdateModal && (
         <UpdateModal
           onClose={() => setShowUpdateModal(false)}
-          setRefrescar={() => {
-            setRefrescar(true);
-            fetchTecnicos(); // Refresca la lista inmediatamente
-          }}
+          setRefrescar={setRefrescar}
         />
       )}
       {showDeleteModal && (
         <DeleteModal
           onClose={() => setShowDeleteModal(false)}
-          onTecnicoEliminado={correoEliminado => {
-            setTecnicos(prev => prev.filter(t => t.correo_tecnico !== correoEliminado));
-            setShowDeleteModal(false); // Cierra el modal tras eliminar
-          }}
+          setRefrescar={setRefrescar}
         />
       )}
     </div>

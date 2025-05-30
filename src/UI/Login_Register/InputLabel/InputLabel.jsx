@@ -7,7 +7,6 @@ export const InputLabel = ({ type, ForID, placeholder, childLabel, value, onChan
     const [showCapPassword, setShowCapPassword] = useState(false)
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
-
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword)
     }
@@ -38,15 +37,27 @@ export const InputLabel = ({ type, ForID, placeholder, childLabel, value, onChan
         <div className="w-full flex flex-col gap-2 ">
             <label htmlFor={ForID} className="text-[var(--main-color)] text-2xl w-full">{childLabel}</label>
             <div className="relative w-full ">
-                <input
-                    type={inputType}
-                    className="NeoSubContainer_inset_TOTAL inputs relative text-[var(--main-color)] w-full p-[10px_0_10px_15px] placeholder:text-[var(--main-color-sub)] border-0 outline-0"
-                    value={value}
-                    id={ForID}
-                    onChange={onChange}
-                    placeholder={placeholderText}
-                    required={required}
-                />
+                {inputType !== "file" ? (
+                    <input
+                        type={inputType}
+                        className="NeoSubContainer_inset_TOTAL inputs relative text-[var(--main-color)] w-full p-[10px_0_10px_15px] placeholder:text-[var(--main-color-sub)] border-0 outline-0"
+                        value={value}
+                        id={ForID}
+                        onChange={onChange}
+                        placeholder={placeholderText}
+                        required={required}
+                    />
+                ) : (
+                    <input
+                        type="file"
+                        className="NeoSubContainer_inset_TOTAL inputs relative text-[var(--main-color)] w-full p-[10px_0_10px_15px] placeholder:text-[var(--main-color-sub)] border-0 outline-0"
+                        id={ForID}
+                        onChange={onChange}
+                        placeholder={placeholderText}
+                        required={required}
+                    />
+                )}
+
                 {type === "3" && ForID === "password" && (
                     <FontAwesomeIcon
                         icon={showPassword ? faEyeSlash : faEye}
