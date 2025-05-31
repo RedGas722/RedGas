@@ -4,7 +4,7 @@ import { Inputs } from '../../UI/Inputs/Inputs';
 const URL_GET = 'https://redgas.onrender.com/ProductoGet';
 const URL_DELETE = 'https://redgas.onrender.com/ProductoDelete';
 
-export const DeleteModal = ({ onClose, onProductoEliminado, setRefrescar }) => {
+export const DeleteModal = ({ onClose, setRefrescar }) => {
   const [nombreProducto, setNombreProducto] = useState('');
   const [mensaje, setMensaje] = useState('');
   const [errores, setErrores] = useState({});
@@ -54,7 +54,6 @@ export const DeleteModal = ({ onClose, onProductoEliminado, setRefrescar }) => {
 
       setMensaje('Producto eliminado exitosamente.');
       setRefrescar(true);
-      if (onProductoEliminado) onProductoEliminado(nombreProducto);
     } catch (err) {
       setMensaje('Error: ' + err.message);
     }

@@ -10,6 +10,7 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
   const [editando, setEditando] = useState(false);
   const [nombre, setNombre] = useState("");
   const [apellido, setApellido] = useState("");
+  let CorreoBusqueda = correoBuscar;
 
   const validarCampos = () => {
     const errores = {};
@@ -39,7 +40,7 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
   const buscarEmpleado = async () => {
     setMensaje("");
     setErrores({});
-
+    setCorreoBuscar(CorreoBusqueda);
     const correoRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!correoBuscar.trim()) {
       setErrores({ correoBuscar: "Ingresa un correo para buscar" });
@@ -52,9 +53,8 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
     }
 
     try {
-      const res = await fetch(`https://redgas.onrender.com/EmpleadoGet?correo_empleado=${correoBuscar}`);
+      const res = await fetch(`https://redgas.onrender.com/EmpleadoGet?correo_empleado=${CorreoBusqueda}`);
       const data = await res.json();
-
       if (res.ok && data.data) {
         setEmpleado(data.data);
         setNuevoCorreo(data.data.correo_empleado);
@@ -105,7 +105,8 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
       if (res.ok) {
         setMensaje("Empleado actualizado exitosamente.");
         setRefrescar(true);
-        await buscarEmpleado(); // Para refrescar datos actualizados
+        CorreoBusqueda = nuevoCorreo; 
+        await buscarEmpleado(); 
       } else {
         const data = await res.json();
         setMensaje(data.errorInfo || "Error al actualizar empleado.");
