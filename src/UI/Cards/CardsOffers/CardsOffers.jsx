@@ -173,7 +173,7 @@ export const CardsOffers = ({ uniqueId, productos = [] }) => {
           <SwiperSlide key={index}>
             <div className="flex justify-center justify-self-center h-fit p-[25px_0_25px_0] items-center w-fit">
               <div className="card NeoSubContainer_outset_TL">
-                <div className="card-img">
+                <div className="card-img flex justify-center items-center">
                   <div className="img">
                     <img
                       src={producto.imagen ? `data:image/jpeg;base64,${producto.imagen}` : "https://via.placeholder.com/150"}
