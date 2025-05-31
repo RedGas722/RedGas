@@ -153,6 +153,45 @@ export const Shopping = () => {
     }
   };
 
+  const handlePayWithPaypal = async () => {
+    try {
+      if (!token) {
+        alert("Debes iniciar sesión para pagar con PayPal");
+        return;
+      }
+
+    const body = {
+      cantidad: totalPrice.toFixed(0), // solo envías lo necesario
+      referencia: `ORD-${Date.now()}`
+    };
+
+    const res = await fetch("https://redgas.onrender.com/PagoPaypal", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      body: JSON.stringify(body)
+    });
+
+      const data = await res.json();
+
+      if (!res.ok) throw new Error(data.errorInfo || "Error al iniciar el pago");
+
+      // Buscar el link de aprobación
+      const approvalLink = data.data.links.find(link => link.rel === "approve");
+
+      if (!approvalLink) throw new Error("No se encontró el link de aprobación de PayPal");
+
+      // Redirigir al link de PayPal
+      window.location.href = approvalLink.href;
+
+    } catch (error) {
+      console.error("Error al pagar con PayPal:", error);
+      alert("Ocurrió un error al iniciar el pago con PayPal");
+    }
+  };
+
   if (loading) return <p>Cargando productos...</p>;
   if (error) return <p>Error: {error}</p>;
 
@@ -228,6 +267,12 @@ export const Shopping = () => {
         <footer className="flex flex-col items-center gap-4">
           <div className='flex justify-center items-center gap-[20px]'>
             <button className='buttonTL2 active:text-[var(--main-color)] font-black NeoSubContainer_outset_TL p-[7px]'>Comprar todo</button>
+            <button
+              className='buttonTL2 bg-yellow-500 text-white font-black NeoSubContainer_outset_TL p-[7px] hover:bg-yellow-600'
+              onClick={handlePayWithPaypal}
+            >
+              Pagar con PayPal
+            </button>
             <button className='buttonTL2 active:text-[var(--main-color)] font-black NeoSubContainer_outset_TL p-[7px]'>Ver carrito</button>
             <button
               className='buttonTL2 bg-red-600 text-white font-black NeoSubContainer_outset_TL p-[7px] hover:bg-red-700'

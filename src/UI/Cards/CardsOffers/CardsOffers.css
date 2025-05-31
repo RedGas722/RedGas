@@ -19,3 +19,7 @@
     color: var(--Font-Nav2);
     border: 2px solid var(--Font-Nav2);
 }
+.arrow-right:hover, 
+.arrow-left:hover{
+    color: var(--Font-Nav2);
+}
