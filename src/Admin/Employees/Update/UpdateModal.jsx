@@ -38,7 +38,6 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
   };
 
   const buscarEmpleado = async () => {
-    setMensaje("");
     setErrores({});
     setCorreoBuscar(CorreoBusqueda);
     const correoRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
