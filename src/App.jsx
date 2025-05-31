@@ -23,6 +23,8 @@ import { TechniciansBack } from './Admin/Technicians/TechniciansBack'
 import { ServicesBack } from './Admin/Services/ServicesBack'
 import { AdminsBack } from './Admin/Admins/AdminsBack'
 import { ContractsBack } from './Admin/Contracts/ContractsBack.jsx'
+import { Cancelado } from './Pages/Shopping/Cancelado.jsx'
+import { Confirmacion } from './Pages/Shopping/Confirmacion.jsx'
 
 export function App() {
     return (
@@ -49,6 +51,9 @@ export function App() {
                     <Route path="/Admin/Services" element={<ServicesBack />} />
                     <Route path="/Admin/Admins" element={<AdminsBack />} />
                     <Route path="/Admin/Contracts" element={<ContractsBack />} />
+                    {/*Rutas de Pago*/}
+                    <Route path="/Shopping/Confirmacion" element={<Confirmacion />} />
+                    <Route path="/Shopping/Cancelado" element={<Cancelado />} />
                 </Routes>
             </div>
         </>
