@@ -52,6 +52,11 @@ export const Confirmacion = () => {
             <p><strong>Estado:</strong> {resultado.data.status}</p>
             <p><strong>Pagado por:</strong> {resultado.data.payer.name.given_name} {resultado.data.payer.name.surname}</p>
             <p><strong>Correo:</strong> {resultado.data.payer.email_address}</p>
+            <p>
+              <strong>Total:</strong>{" "}
+              {resultado.data.purchase_units[0].payments.captures[0].amount.value}{" "}
+              {resultado.data.purchase_units[0].payments.captures[0].amount.currency_code}
+            </p>
           </>
         )}
       </div>
