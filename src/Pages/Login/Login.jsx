@@ -77,8 +77,7 @@ export const Login = () => {
                     allowEscapeKey: false,
                     allowEnterKey: false,
                     showConfirmButton: false,
-                    timer: 2000,
-                    timerProgressBar: true,
+                    timer: 10
                 })
                 emailInput.value = ''
                 passwordInput.value = ''
