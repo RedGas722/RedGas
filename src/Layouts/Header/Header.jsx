@@ -1,7 +1,8 @@
 import { SearchBarr } from "../../UI/Header/SearchBarr/SearchBarr"
 import { Navs } from "../../UI/Header/Nav/Nav"
 import { ProfilePhoto } from "../../UI/Header/ProfilePhoto/ProfilePhoto"
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import { gsap } from 'gsap'
 import './Header.css'
 
 export const Header = () => {
@@ -49,12 +50,51 @@ export const Header = () => {
         })
     }
 
+    // GSAP
+    const headerRef = useRef(null)
+    const navRef1 = useRef(null)
+    const navRef2 = useRef(null)
+    const navRef3 = useRef(null)
+    const navRef4 = useRef(null)
+
+    useEffect(() => {
+        if (hamburger) {
+            const tl = gsap.timeline({ defaults: { ease: 'back.in', duration: 0.3 } })
+
+            tl.fromTo(
+                headerRef.current,
+                { scale: 0.92 },
+                { scale: 1 }
+            )
+                .fromTo(
+                    navRef1.current,
+                    { x: -200, opacity: 0 },
+                    { x: 0, opacity: 1 }
+                )
+                .fromTo(
+                    navRef2.current,
+                    { x: -300, opacity: 0 },
+                    { x: 0, opacity: 1 }
+                )
+                .fromTo(
+                    navRef3.current,
+                    { x: -400, opacity: 0 },
+                    { x: 0, opacity: 1 }
+                )
+                .fromTo(
+                    navRef4.current,
+                    { x: -500, opacity: 0 },
+                    { x: 0, opacity: 1 }
+                )
+        }
+    }, [hamburger])
+
     return (
         <div
+            ref={headerRef}
             id="Header"
-            className={`Header w-[100%] h-fit md:sticky fixed left-0 top-0 z-[10000] ${
-                (scrolled && !hamburger && isDesktop()) ? 'scrolled NeoContainer_outset_TL' : ''
-            } ${hamburger ? 'Burguer w-fit NeoContainer_outset_TL' : ''}`}
+            className={`Header w-[100%] h-fit md:sticky fixed left-0 top-0 z-[10000] ${(scrolled && !hamburger && isDesktop()) ? 'scrolled NeoContainer_outset_TL' : ''
+                } ${hamburger ? 'Burguer w-fit NeoContainer_outset_TL' : ''}`}
         >
             {(scrolled && !hamburger && isDesktop()) && (
                 <h2 className="justify-self-center hidden md:flex font-bold text-4xl text-[var(--Font-Nav)]">
@@ -82,7 +122,7 @@ export const Header = () => {
             </div>
 
             <SearchBarr className={`flex-1 items-center justify-center md:flex ${hamburger ? '' : 'hidden'}`} />
-            <Navs className={`flex-1 items-center justify-center md:flex ${hamburger ? '' : 'hidden'}`} />
+            <Navs ref1={navRef1} ref2={navRef2} ref3={navRef3} ref4={navRef4} className={`flex-1 items-center justify-center md:flex ${hamburger ? '' : 'hidden'}`} />
             <ProfilePhoto className={`flex-1 items-center justify-center md:flex ${hamburger ? '' : 'hidden'}`} />
         </div>
     )
