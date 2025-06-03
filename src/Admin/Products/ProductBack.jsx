@@ -59,9 +59,6 @@ export const ProductBack = () => {
       {showRegisterModal && (
         <RegisterModal
           onClose={() => setShowRegisterModal(false)}
-          onProductoRegistrado={(nuevoProducto) => {
-            setProductos(prev => [nuevoProducto, ...prev]);
-          }}
           setRefrescar={setRefrescar}
         />
       )}
