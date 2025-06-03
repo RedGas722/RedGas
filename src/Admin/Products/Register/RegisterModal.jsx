@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Inputs } from '../../UI/Inputs/Inputs';
 
-export const RegisterModal = ({ onClose, onProductoRegistrado, setRefrescar }) => {
+export const RegisterModal = ({ onClose, setRefrescar }) => {
   const [nombre, setNombre] = useState('');
   const [precio, setPrecio] = useState('');
   const [descripcion, setDescripcion] = useState('');
@@ -87,6 +87,12 @@ export const RegisterModal = ({ onClose, onProductoRegistrado, setRefrescar }) =
       errores.categoria = 'Debe seleccionar una categoría.';
     }
 
+    const hoy = new Date().toISOString().slice(0, 10);
+    if (!fechaDescuento.trim()) {
+      errores.fechaDescuento = 'La fecha de descuento es obligatoria.';
+    } else if (fechaDescuento < hoy) {
+      errores.fechaDescuento = 'La fecha de descuento no puede ser anterior a hoy.';
+    }
     return errores;
   };
 
@@ -140,7 +146,7 @@ export const RegisterModal = ({ onClose, onProductoRegistrado, setRefrescar }) =
       const resNuevo = await fetch(`${URL_GET}?nombre_producto=${encodeURIComponent(nombre)}`);
       if (resNuevo.ok) {
         const dataNuevo = await resNuevo.json();
-        if (onProductoRegistrado && dataNuevo?.data) {
+        if (dataNuevo?.data) {
           const producto = dataNuevo.data;
           const idProducto = producto.id_producto;
 
@@ -163,15 +169,12 @@ export const RegisterModal = ({ onClose, onProductoRegistrado, setRefrescar }) =
           } catch (error) {
             console.error('Error de red al registrar en SeEncuentra:', error);
           }
-
-          onProductoRegistrado(producto);
         }
       } else if (resNuevo.status === 404) {
         console.warn('Producto registrado, pero no se pudo obtener con GET (404).');
       } else {
         console.warn('Error inesperado al obtener el producto:', resNuevo.status);
       }
-
       setMensaje('Producto registrado exitosamente.');
       if (setRefrescar) setRefrescar(true);
     } catch (err) {
@@ -226,16 +229,58 @@ export const RegisterModal = ({ onClose, onProductoRegistrado, setRefrescar }) =
         <Inputs Type="5" Place="Stock" Value={stock} onChange={(e) => setStock(e.target.value)} />
         {errores.stock && <p className="text-red-600 text-sm">{errores.stock}</p>}
 
-        <Inputs Type="5" Place="Descuento" Value={descuento} onChange={(e) => setDescuento(e.target.value)} />
+        <Inputs
+          Type="5"
+          Place="Descuento"
+          Value={descuento}
+          onChange={(e) => {
+            const inputValue = e.target.value;
+
+            if (/^\d{0,3}$/.test(inputValue)) {
+              const descuentoNum = parseInt(inputValue);
+              const ofertaCategoria = categorias.find(
+                (cat) => cat.nombre_categoria.toLowerCase() === 'ofertas'
+              );
+
+              if (inputValue === '' || descuentoNum === 0 || isNaN(descuentoNum)) {
+                // Si se borra o se pone 0, permite cambiar la categoría manualmente
+                if (ofertaCategoria && categoriaId === String(ofertaCategoria.id_categoria)) {
+                  setCategoriaId('');
+                }
+              } else if (descuentoNum > 0 && ofertaCategoria) {
+                // Si hay descuento y existe categoría "ofertas", forzamos su id
+                setCategoriaId(String(ofertaCategoria.id_categoria));
+              }
+
+              setDescuento(inputValue);
+            }
+          }}
+        />
         {errores.descuento && <p className="text-red-600 text-sm">{errores.descuento}</p>}
 
-        <Inputs Type="7" Place="Fecha Descuento" Value={fechaDescuento} onChange={(e) => setFechaDescuento(e.target.value)} />
+        {descuento > 0 && (
+          <Inputs
+            Type="7"
+            Place="Fecha Descuento"
+            Value={fechaDescuento}
+            onChange={(e) => setFechaDescuento(e.target.value)}
+            min={new Date().toISOString().slice(0, 10)}
+          />
+        )}
         {errores.fechaDescuento && <p className="text-red-600 text-sm">{errores.fechaDescuento}</p>}
 
         <select
           value={categoriaId}
           onChange={(e) => setCategoriaId(e.target.value)}
-          className="border rounded p-2"
+          className={`border rounded p-2 transition-colors duration-300 w-full ${
+            categorias.find(cat => cat.nombre_categoria.toLowerCase() === 'ofertas')?.id_categoria == categoriaId && parseInt(descuento) > 0
+              ? 'bg-gray-200 cursor-not-allowed text-gray-500'
+              : 'bg-white cursor-pointer text-black'
+          }`}
+          disabled={
+            categorias.find(cat => cat.nombre_categoria.toLowerCase() === 'ofertas')?.id_categoria == categoriaId &&
+            parseInt(descuento) > 0
+          }
         >
           <option value="">Seleccione una categoría</option>
           {categorias.map((cat) => (
