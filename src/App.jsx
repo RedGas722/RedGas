@@ -4,7 +4,7 @@ import { Routes, Route } from 'react-router-dom'
 // -Import Pages: MainPage/Register/Login/ForgotPassword/RecoveryPassword/ShopCart-
 import { MainPage } from './Pages/MainPage/MainPage'
 import { CostumerServices } from './Pages/Costumer/CostumerServices'
-import { ServicesInfo } from './Pages/Services/Services.jsx' 
+import { ServicesInfo } from './Pages/Services/Services.jsx'
 import { TechniciansPage } from './Pages/Technicians/TechniciansPage'
 import { Shopping } from './Pages/Shopping/Shopping.jsx'
 import { Register } from './Pages/Register/Register'
@@ -25,6 +25,8 @@ import { AdminsBack } from './Admin/Admins/AdminsBack'
 import { ContractsBack } from './Admin/Contracts/ContractsBack.jsx'
 import { Cancelado } from './Pages/Shopping/Cancelado.jsx'
 import { Confirmacion } from './Pages/Shopping/Confirmacion.jsx'
+import { notFound } from './Pages/NotFound/notFound.jsx'
+
 
 export function App() {
     return (
@@ -54,6 +56,8 @@ export function App() {
                     {/*Rutas de Pago*/}
                     <Route path="/Shopping/Confirmacion" element={<Confirmacion />} />
                     <Route path="/Shopping/Cancelado" element={<Cancelado />} />
+                    {/* 404 */}
+                    <Route path="/notFound" element={<notFound />} />
                 </Routes>
             </div>
         </>
