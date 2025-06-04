@@ -1,11 +1,9 @@
 import React from 'react';
 
-const convertirFecha = (fechaConvertir) => {
-      const fechaISO = fechaConvertir;
-      const fecha = new Date(fechaISO);
-      const fechaSolo = fecha.toLocaleDateString('en-GB');
-      return fechaSolo;
-}
+  const convertirFecha = (fechaConvertir) => {
+    // Solo extraemos la fecha YYYY-MM-DD directamente
+    return fechaConvertir ? fechaConvertir.slice(0, 10) : '';
+  };
 
 const convertirBase64AUrl = (imagen) => {
   if (!imagen) {

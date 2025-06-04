@@ -226,12 +226,10 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
   };
 
   const convertirFecha = (fechaConvertir) => {
-    const fecha = new Date(fechaConvertir);
-    const año = fecha.getFullYear();
-    const mes = String(fecha.getMonth() + 1).padStart(2, '0');
-    const día = String(fecha.getDate()).padStart(2, '0');
-    return `${año}-${mes}-${día}`; // <-- formato correcto para input type="date"
+    // Solo extraemos la fecha YYYY-MM-DD directamente
+    return fechaConvertir ? fechaConvertir.slice(0, 10) : '';
   };
+
 
   const esCategoriaOfertas = () => {
     const ofertaCategoria = categorias.find(
