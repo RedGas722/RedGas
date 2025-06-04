@@ -174,7 +174,7 @@ export const CardsOffers = ({ uniqueId, productos = [] }) => {
             <div className="flex justify-center justify-self-center h-fit p-[25px_0_25px_0] items-center w-fit">
               <div className="card NeoSubContainer_outset_TL">
                 <div className="card-img">
-                  <div className="img">
+                  <div className="img h-full">
                     <img
                       src={producto.imagen ? `data:image/jpeg;base64,${producto.imagen}` : "https://via.placeholder.com/150"}
                       alt={producto.nombre_producto || "Producto"}
@@ -212,12 +212,12 @@ export const CardsOffers = ({ uniqueId, productos = [] }) => {
       <div className="flex flex-col justify-center items-center self-center w-fit p-[10px] NeoSubContainer_outset_TL text-[var(--main-color)]">
         <div className="flex justify-center items-center gap-[20px]">
           <button
-            className={`buttonTL arrow NeoSubContainer_outset_TL p-[7px] swiper-button-prev-${uniqueId} cursor-pointer`}
+            className={`buttonTL arrow-left NeoSubContainer_outset_TL p-[7px] swiper-button-prev-${uniqueId} cursor-pointer`}
           >
             <FontAwesomeIcon icon={faArrowLeft} className="faArrowLeft text-[30px]" />
           </button>
           <button
-            className={`buttonTL arrow NeoSubContainer_outset_TL p-[7px] swiper-button-next-${uniqueId} cursor-pointer`}
+            className={`buttonTL arrow-right NeoSubContainer_outset_TL p-[7px] swiper-button-next-${uniqueId} cursor-pointer`}
           >
             <FontAwesomeIcon icon={faArrowRight} className="faArrowRight text-[30px]" />
           </button>

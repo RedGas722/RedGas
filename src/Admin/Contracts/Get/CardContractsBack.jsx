@@ -1,5 +1,3 @@
-import React from 'react';
-
 const CardContractsBack = ({ contrato }) => {
   return (
     <div className="bg-white shadow-lg rounded-lg p-4 w-full min-h-[220px] flex flex-col justify-between overflow-hidden">
