@@ -220,10 +220,10 @@ export const Shopping = () => {
                       className='w-[150px] rounded-[20px]'
                     />
                   </div>
-                  <div className='flex flex-col justify-center items-start gap-[10px]'>
+                  <div className='flex flex-col justify-center w-[80%] items-start gap-[10px]'>
                     <h2 className='text-2xl font-bold'>{producto.nombre_producto}</h2>
                     <div className="flex flex-col gap-1">
-                      <div className='font-medium flex items-center text-[var(--main-color)]'>
+                      <div className='font-medium flex items-center gap-2 text-[var(--main-color)]'>
                         <p className="font-bold">Precio Unidad: <span className="font-normal"> ${precioConDescuento.toLocaleString("es-CO", { minimumFractionDigits: 0, maximumFractionDigits: 0 })} </span> </p>
                         {descuento > 0 && (
                           <span className="text-sm text-green-600">
@@ -231,40 +231,42 @@ export const Shopping = () => {
                           </span>
                         )}
                       </div>
-                      <p className='font-medium text-[var(--main-color)]'>
+                      <p className='text-[var(--main-color)]'>
                         <p className="font-bold">Subtotal: <span className="font-normal"> ${subtotal.toLocaleString("es-CO", { minimumFractionDigits: 0, maximumFractionDigits: 0 })} </span></p>
                       </p>
                     </div>
-                    <p className='text-[var(--main-color-sub)]'>{producto.descripcion_producto || "Sin descripción disponible."}</p>
+                    <p className='text-[var(--main-color-sub)] font-bold'>Descripción: <span className="font-normal"> {producto.descripcion_producto || "Sin descripción disponible."} </span> </p>
                     <p className='text-[var(--main-color-sub)]'>Cantidad: {producto.cantidad}</p>
-                    <div className="flex gap-2 items-center">
-                      <button className="rounded-full w-6 h-6 bg-[var(--Font-Nav)]" onClick={() =>
-                        producto.cantidad > 1 &&
-                        handleUpdateQuantity(producto.id_producto, producto.cantidad - 1)
-                      }>
-                        <FontAwesomeIcon icon={faPlus} alt='Agregar' className="text-[var(--main-color)]" />
-                      </button>
-                      <span>{producto.cantidad}</span>
-                      <button className="rounded-full w-6 h-6 bg-[var(--Font-Nav)]" onClick={() =>
-                        handleUpdateQuantity(producto.id_producto, producto.cantidad + 1)
-                      }>
-                        <FontAwesomeIcon icon={faMinus} alt='Quitar' className="text-[var(--main-color)]" />
-                      </button>
-                    </div>
+                    <section className="flex justify-between w-full">
+                      <div className="flex gap-2 items-center">
+                        <button className="rounded-full w-6 h-6  bg-red-700" onClick={() =>
+                          producto.cantidad > 1 &&
+                          handleUpdateQuantity(producto.id_producto, producto.cantidad - 1)
+                        }>
+                          <FontAwesomeIcon icon={faMinus} alt='Agregar' className="text-white" />
+                        </button>
+                        <span>{producto.cantidad}</span>
+                        <button className="rounded-full w-6 h-6  bg-green-700" onClick={() =>
+                          handleUpdateQuantity(producto.id_producto, producto.cantidad + 1)
+                        }>
+                          <FontAwesomeIcon icon={faPlus} alt='Quitar' className="text-white" />
+                        </button>
+                      </div>
+                      <div className="flex items-center gap-5">
+                        <button className='buttonTL2 NeoSubContainer_outset_TL p-[7px]' onClick={() => alert("Comprar producto aún no implementado")}>
+                          Comprar!!
+                        </button>
+                        <button
+                          className='buttonTL2 NeoSubContainer_outset_TL p-[7px]'
+                          onClick={() => handleRemoveProduct(producto.id_producto)}
+                        >
+                          Eliminar
+                        </button>
+                      </div>
+                    </section>
                   </div>
-                <div className="flex flex-col gap-2">
-                  <button className='buttonTL2 NeoSubContainer_outset_TL p-[7px]' onClick={() => alert("Comprar producto aún no implementado")}>
-                    Comprar!!
-                  </button>
-                  <button
-                    className='buttonTL2 NeoSubContainer_outset_TL p-[7px]'
-                    onClick={() => handleRemoveProduct(producto.id_producto)}
-                  >
-                    Eliminar
-                  </button>
-                </div>
-                </section>
 
+                </section>
               </section>
             </section>
           );
