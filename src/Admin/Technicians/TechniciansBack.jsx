@@ -17,7 +17,7 @@ export const TechniciansBack = () => {
 
   async function fetchTecnicos() {
     try {
-      const res = await fetch('http://localhost:10101/TecnicoGetAll');
+      const res = await fetch('https://redgas.onrender.com/TecnicoGetAll');
       if (!res.ok) throw new Error('Error al obtener técnicos');
       const data = await res.json();
       const tecnicosData = Array.isArray(data) ? data : (data.data || []);
@@ -40,13 +40,13 @@ export const TechniciansBack = () => {
   }, [refrescar]);
 
   return (
-    <div className="p-[20px_0_0_20px] flex items-start gap-[20px] justify-start h-screen">
-      <div className='flex flex-col items-start gap-[20px] justify-center'>
-        <h1 className='font-bold text-[20px]'>Tecnico BACK-OFFICE</h1>
-        <ButtonBack ClickMod={() => setShowRegisterModal(true)} Child='Registrar' />
-        <ButtonBack ClickMod={() => setShowGetModal(true)} Child='Consultar' />
-        <ButtonBack ClickMod={() => setShowUpdateModal(true)} Child='Actualizar' />
-        <ButtonBack ClickMod={() => setShowDeleteModal(true)} Child='Eliminar' />
+    <div className="p-[20px] flex flex-col gap-[20px]">
+      <div className="NeoContainer_outset_TL flex items-center gap-[20px]">
+        <h1 className="font-bold text-[20px]">Técnicos BACK-OFFICE</h1>
+        <ButtonBack ClickMod={() => setShowRegisterModal(true)} Child="Registrar" />
+        <ButtonBack ClickMod={() => setShowGetModal(true)} Child="Consultar" />
+        <ButtonBack ClickMod={() => setShowUpdateModal(true)} Child="Actualizar" />
+        <ButtonBack ClickMod={() => setShowDeleteModal(true)} Child="Eliminar" />
       </div>
 
       {/* Sección de técnicos */}
@@ -60,29 +60,20 @@ export const TechniciansBack = () => {
       {showRegisterModal && (
         <RegisterModal
           onClose={() => setShowRegisterModal(false)}
-          onTecnicoRegistrado={nuevoTecnico => {
-            setTecnicos(prev => [nuevoTecnico, ...prev]);
-            setShowRegisterModal(false); 
-          }}
+          setRefrescar={setRefrescar}
         />
       )}
       {showGetModal && <GetModal onClose={() => setShowGetModal(false)} />}
       {showUpdateModal && (
         <UpdateModal
           onClose={() => setShowUpdateModal(false)}
-          setRefrescar={() => {
-            setRefrescar(true);
-            fetchTecnicos(); // Refresca la lista inmediatamente
-          }}
+          setRefrescar={setRefrescar}
         />
       )}
       {showDeleteModal && (
         <DeleteModal
           onClose={() => setShowDeleteModal(false)}
-          onTecnicoEliminado={correoEliminado => {
-            setTecnicos(prev => prev.filter(t => t.correo_tecnico !== correoEliminado));
-            setShowDeleteModal(false); // Cierra el modal tras eliminar
-          }}
+          setRefrescar={setRefrescar}
         />
       )}
     </div>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Inputs } from '../../UI/Inputs/Inputs';
 
-export const RegisterModal = ({ onClose, onClienteRegistrado, setRefrescar }) => {
+export const RegisterModal = ({ onClose, setRefrescar }) => {
   const [nombre, setNombre] = useState('');
   const [apellido, setApellido] = useState('');
   const [correo, setCorreo] = useState('');
@@ -11,8 +11,8 @@ export const RegisterModal = ({ onClose, onClienteRegistrado, setRefrescar }) =>
   const [mensaje, setMensaje] = useState('');
   const [errores, setErrores] = useState({});
 
-  const URL_REGISTER = 'http://localhost:10101/ClienteRegister';
-  const URL_GET = 'http://localhost:10101/ClienteGet';
+  const URL_REGISTER = 'https://redgas.onrender.com/ClienteRegister';
+  const URL_GET = 'https://redgas.onrender.com/ClienteGet';
 
   const validarCampos = () => {
     const errores = {};
@@ -66,15 +66,6 @@ export const RegisterModal = ({ onClose, onClienteRegistrado, setRefrescar }) =>
         const errorData = await res.json();
         setMensaje('Error al registrar: ' + (errorData?.errors?.[0]?.msg || 'Datos inválidos.'));
         return;
-      }
-
-      // Obtener el cliente recién creado
-      const resNuevo = await fetch(`${URL_GET}?correo_cliente=${encodeURIComponent(correo)}`);
-      if (resNuevo.ok) {
-        const dataNuevo = await resNuevo.json();
-        if (onClienteRegistrado && dataNuevo?.data?.length > 0) {
-          onClienteRegistrado(dataNuevo.data[0]);
-        }
       }
 
       setMensaje('Cliente registrado exitosamente.');

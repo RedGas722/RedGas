@@ -7,7 +7,7 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
   const [mensaje, setMensaje] = useState('');
   const [errores, setErrores] = useState({});
 
-  const URL = 'http://localhost:10101/FacturaUpdate';
+  const URL = 'https://redgas.onrender.com/FacturaUpdate';
 
   const validarCampos = () => {
     const errores = {};

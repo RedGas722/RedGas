@@ -6,7 +6,7 @@ export const GetModal = ({ onClose }) => {
   const [mensaje, setMensaje] = useState(null);
   const [error, setError] = useState('');
 
-  const URL = 'http://localhost:10101/ClienteGet'; 
+  const URL = 'https://redgas.onrender.com/ClienteGet'; 
 
   const validarCorreo = (correo) => {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

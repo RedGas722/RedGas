@@ -1,16 +1,16 @@
 import { useState } from 'react'
 import { InputLabel } from '../../../UI/Login_Register/InputLabel/InputLabel'
 
-const URL = 'http://localhost:10101/TecnicoDelete'
+const URL = 'https://redgas.onrender.com/TecnicoDelete'
 
-export const DeleteModal = ({ onClose, onTecnicoEliminado }) => {
+export const DeleteModal = ({ onClose, setRefrescar }) => {
   const [correo, setCorreo] = useState('');
   const [mensaje, setMensaje] = useState('');
 
   const validarCorreo = (correo) => {
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Expresión regular para validar correos
-    return regex.test(correo);
-  };
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/ // Expresión regular para validar correos
+    return regex.test(correo)
+  }
 
   const handleDelete = async (e) => {
     e.preventDefault()
@@ -47,7 +47,7 @@ export const DeleteModal = ({ onClose, onTecnicoEliminado }) => {
         return;
       }
       setMensaje('Eliminación exitosa');
-      if (onTecnicoEliminado) onTecnicoEliminado(correo);
+      setRefrescar(true)
     } catch (err) {
       setMensaje('Error al eliminar: ' + err.message)
     }

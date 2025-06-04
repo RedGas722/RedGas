@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Inputs } from '../../UI/Inputs/Inputs'
 
-const URL = 'http://localhost:10101/ClienteDelete';
-const GET_URL = 'http://localhost:10101/ClienteGet'; // Endpoint para verificar si el cliente existe
+const URL = 'https://redgas.onrender.com/ClienteDelete';
+const GET_URL = 'https://redgas.onrender.com/ClienteGet'; 
 
 export const DeleteModal = ({ onClose, setRefrescar }) => {
   const [correo, setCorreo] = useState('');

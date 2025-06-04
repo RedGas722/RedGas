@@ -6,7 +6,7 @@ export const GetModal = ({ onClose, clientes, empleados }) => {
   const [mensaje, setMensaje] = useState(null);
   const [errores, setErrores] = useState({});
 
-  const URL = 'http://localhost:10101/FacturaGet';
+  const URL = 'https://redgas.onrender.com/FacturaGet';
 
   const validarCampos = () => {
     const errores = {};

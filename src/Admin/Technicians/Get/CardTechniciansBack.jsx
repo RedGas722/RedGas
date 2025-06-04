@@ -1,21 +1,15 @@
 import React from 'react';
 
 const convertirBase64AUrl = (imagen) => {
-  if (!imagen) {
-    console.warn("No hay imagen");
-    return null;
-  }
-  if (typeof imagen === 'string') {
-    return `data:image/png;base64,${imagen}`;
-  }
-  if (typeof imagen === 'object' && imagen.type === 'Buffer' && Array.isArray(imagen.data)) {
+  if (!imagen) return null;
+  if (typeof imagen === 'string') return `data:image/png;base64,${imagen}`;
+  if (imagen.type === 'Buffer' && Array.isArray(imagen.data)) {
     const binary = imagen.data.reduce((acc, byte) => acc + String.fromCharCode(byte), '');
     const base64 = btoa(binary);
     return `data:image/png;base64,${base64}`;
   }
-  console.warn("Formato de imagen desconocido:", imagen);
   return null;
-};
+}
 
 const CardTechniciansBack = ({ tecnico }) => {
   const imageUrl = convertirBase64AUrl(tecnico.imagen);

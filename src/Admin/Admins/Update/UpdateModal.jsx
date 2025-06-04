@@ -1,137 +1,203 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Inputs } from '../../UI/Inputs/Inputs';
 
-export const UpdateModal = ({ onClose }) => {
-    const [nombre, setNombre] = useState('');
-    const [nuevoCorreo, setNuevoCorreo] = useState('');
-    const [correo, setCorreo] = useState('');
-    const [telefono, setTelefono] = useState('');
-    const [contrasena, setContrasena] = useState('');
-    const [mensaje, setMensaje] = useState('');
+export const UpdateModal = ({ onClose, setRefrescar, idEmpleado }) => {
+  const [idBusqueda, setIdBusqueda] = useState(idEmpleado || '');
+  const [contrato, setContrato] = useState(null);
+  const [mensaje, setMensaje] = useState('');
+  const [errores, setErrores] = useState({});
+  const [editando, setEditando] = useState(false);
 
-    const URL = 'http://localhost:10101/AdminUpdate';
+  const URL_GET = 'http://localhost:10101/ContratoGet';
+  const URL_UPDATE = 'http://localhost:10101/ContratoDataUpdate';
 
-    const handleUpdate = async (e) => {
-        e.preventDefault();
-        // Validaciones de frontend
-        if (!correo.trim()) {
-            setMensaje('Por favor, ingrese el correo actual.');
-            return;
-        }
-        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!regex.test(correo)) {
-            setMensaje('Por favor, ingrese un correo actual válido.');
-            return;
-        }
-        if (!nombre.trim()) {
-            setMensaje('Por favor, ingrese el nombre del administrador.');
-            return;
-        }
-        if (!nuevoCorreo.trim()) {
-            setMensaje('Por favor, ingrese el nuevo correo.');
-            return;
-        }
-        if (!regex.test(nuevoCorreo)) {
-            setMensaje('Por favor, ingrese un nuevo correo válido.');
-            return;
-        }
-        if (!telefono.trim()) {
-            setMensaje('Por favor, ingrese el teléfono.');
-            return;
-        }
-        if (!/^[0-9]+$/.test(telefono)) {
-            setMensaje('El teléfono solo debe contener números.');
-            return;
-        }
-        if (!contrasena.trim()) {
-            setMensaje('Por favor, ingrese la contraseña.');
-            return;
-        }
-        try {
-            console.log('Actualizando administrador...');
+  // Cuando cambia idEmpleado (prop), actualizar idBusqueda y buscar datos
+  useEffect(() => {
+    if (idEmpleado) {
+      setIdBusqueda(idEmpleado);
+      buscarContrato(idEmpleado);
+    }
+  }, [idEmpleado]);
 
-            const res = await fetch(URL, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    nombre_admin: nombre,
-                    new_correo_admin: nuevoCorreo,
-                    telefono_admin: telefono,
-                    contraseña_admin: contrasena,
-                    correo_admin: correo
-                }),
-            });
+  // Buscar contrato por id_empleado
+  const buscarContrato = async (id) => {
+    setMensaje('');
+    setErrores({});
+    setContrato(null);
+    setEditando(false);
 
-            if (!res.ok) throw new Error('Error al actualizar el administrador');
-            await res.json();
-            setMensaje('Actualización exitosa.');
-        } catch (err) {
-            setMensaje('Error al actualizar: ' + err.message);
-        }
+    if (!id || isNaN(id) || Number(id) <= 0) {
+      setErrores({ idBusqueda: 'El ID debe ser un número mayor a 0' });
+      return;
+    }
+
+    try {
+      const res = await fetch(`${URL_GET}?id_empleado=${encodeURIComponent(id)}`);
+      if (!res.ok) throw new Error('Contrato no encontrado');
+      const data = await res.json();
+
+      if (!data.data || !Array.isArray(data.data) || data.data.length === 0) {
+        throw new Error('Contrato no existe');
+      }
+
+      // Suponiendo que data.data es un array con un solo contrato
+      const c = data.data[0];
+      
+      setContrato({
+        fecha_contrato: c.fecha_contrato ? c.fecha_contrato.split('T')[0] : '',
+        duracion_contrato: c.duracion_contrato || '',
+        tipo_contrato: c.tipo_contrato || '',
+        salario: c.salario ? c.salario.toString() : '',
+      });
+      setEditando(true);
+    } catch (err) {
+      setMensaje('Error al buscar contrato: ' + err.message);
+      setContrato(null);
+      setEditando(false);
+    }
+  };
+
+  // Validar antes de actualizar
+  const validarCampos = () => {
+    const nuevosErrores = {};
+    if (!contrato.fecha_contrato) nuevosErrores.fecha_contrato = 'La fecha del contrato es obligatoria';
+    if (!contrato.duracion_contrato) nuevosErrores.duracion_contrato = 'La duración del contrato es obligatoria';
+    if (!contrato.tipo_contrato) nuevosErrores.tipo_contrato = 'El tipo de contrato es obligatorio';
+    if (!contrato.salario || isNaN(contrato.salario) || Number(contrato.salario) <= 0) nuevosErrores.salario = 'El salario debe ser un número mayor a 0';
+    return nuevosErrores;
+  };
+
+  // Actualizar contrato
+  const handleActualizar = async () => {
+    const erroresValidos = validarCampos();
+    if (Object.keys(erroresValidos).length > 0) {
+      setErrores(erroresValidos);
+      return;
+    }
+    setErrores({});
+    setMensaje('');
+
+    const jsonData = {
+      fecha_contrato: contrato.fecha_contrato,
+      duracion_contrato: contrato.duracion_contrato,
+      tipo_contrato: contrato.tipo_contrato,
+      salario: parseFloat(contrato.salario),
     };
 
-    const handleCancel = () => {
-        setNombre('');
-        setNuevoCorreo('');
-        setCorreo('');
-        setTelefono('');
-        setContrasena('');
-        setMensaje('');
-    };
+    try {
+      const res = await fetch(URL_UPDATE, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ contrato: jsonData, id_empleado: idBusqueda }),
+      });
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(text || 'Error al actualizar');
+      }
 
-    return (
-        <div className="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-2xl p-6 shadow-lg w-[320px] flex flex-col gap-4 relative text-black">
-                <button
-                    className="absolute top-2 right-3 text-gray-600 text-lg"
-                    onClick={onClose}
-                >✕</button>
+      setMensaje('Contrato actualizado exitosamente.');
+      if (setRefrescar) setRefrescar(true);
+      // Volver a cargar datos actualizados
+      await buscarContrato(idBusqueda);
+    } catch (err) {
+      setMensaje('Error al actualizar: ' + err.message);
+    }
+  };
 
-                <h2 className="text-xl font-bold text-center">Actualizar Administrador</h2>
-                <Inputs
-                    Type="2"
-                    Place="Correo actual"
-                    Value={correo}
-                    onChange={(e) => setCorreo(e.target.value)}
-                />
-                <Inputs
-                    Type="1"
-                    Place="Nombre del administrador"
-                    Value={nombre}
-                    onChange={(e) => setNombre(e.target.value)}
-                />
-                <Inputs
-                    Type="2"
-                    Place="Nuevo correo"
-                    Value={nuevoCorreo}
-                    onChange={(e) => setNuevoCorreo(e.target.value)}
-                />
-                <Inputs
-                    Type="6"
-                    Place="Teléfono"
-                    Value={telefono}
-                    onChange={(e) => setTelefono(e.target.value)}
-                />
-                <Inputs
-                    Type="3"
-                    Place="Contraseña"
-                    Value={contrasena}
-                    onChange={(e) => setContrasena(e.target.value)}
-                />
+  // Cancelar edición
+  const handleCancelar = () => {
+    setIdBusqueda('');
+    setContrato(null);
+    setEditando(false);
+    setMensaje('');
+    setErrores({});
+  };
 
-                <div className="flex justify-between gap-2">
-                    <button
-                        onClick={handleCancel}
-                        className="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded"
-                    >Cancelar</button>
-                    <button
-                        onClick={handleUpdate}
-                        className="bg-yellow-500 hover:bg-red-600 text-white px-4 py-2 rounded"
-                    >Actualizar</button>
-                </div>
+  return (
+    <div className="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white rounded-2xl p-6 shadow-lg w-[340px] flex flex-col gap-4 relative text-black">
+        <button className="absolute top-2 right-3 text-gray-600 text-lg" onClick={onClose}>✕</button>
+        <h2 className="text-xl font-bold text-center">Actualizar Contrato</h2>
 
-                {mensaje && (<p className="text-center text-green-600 font-semibold">{mensaje}</p>)}
+        {!editando && (
+          <>
+            <Inputs
+              Type="5"
+              Place="ID del empleado"
+              Value={idBusqueda}
+              onChange={e => setIdBusqueda(e.target.value)}
+            />
+            {errores.idBusqueda && <p className="text-red-600 text-sm">{errores.idBusqueda}</p>}
+            <button
+              onClick={() => buscarContrato(idBusqueda)}
+              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
+            >
+              Buscar
+            </button>
+          </>
+        )}
+
+        {editando && contrato && (
+          <>
+            <Inputs
+              Type="7"
+              Place="Fecha del contrato"
+              Value={contrato.fecha_contrato}
+              onChange={e => setContrato({ ...contrato, fecha_contrato: e.target.value })}
+              className={errores.fecha_contrato ? 'border-red-500' : ''}
+            />
+            {errores.fecha_contrato && <p className="text-red-600 text-xs font-semibold">{errores.fecha_contrato}</p>}
+
+            <Inputs
+              Type="1"
+              Place="Duración del contrato"
+              Value={contrato.duracion_contrato}
+              onChange={e => setContrato({ ...contrato, duracion_contrato: e.target.value })}
+              className={errores.duracion_contrato ? 'border-red-500' : ''}
+            />
+            {errores.duracion_contrato && <p className="text-red-600 text-xs font-semibold">{errores.duracion_contrato}</p>}
+
+            <Inputs
+              Type="1"
+              Place="Tipo de contrato"
+              Value={contrato.tipo_contrato}
+              onChange={e => setContrato({ ...contrato, tipo_contrato: e.target.value })}
+              className={errores.tipo_contrato ? 'border-red-500' : ''}
+            />
+            {errores.tipo_contrato && <p className="text-red-600 text-xs font-semibold">{errores.tipo_contrato}</p>}
+
+            <Inputs
+              Type="5"
+              Place="Salario"
+              Value={contrato.salario}
+              onChange={e => setContrato({ ...contrato, salario: e.target.value })}
+              className={errores.salario ? 'border-red-500' : ''}
+            />
+            {errores.salario && <p className="text-red-600 text-xs font-semibold">{errores.salario}</p>}
+
+            <div className="flex justify-between gap-2 mt-2">
+              <button
+                onClick={handleCancelar}
+                className="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={handleActualizar}
+                className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded"
+              >
+                Actualizar
+              </button>
             </div>
-        </div>
-    );
+          </>
+        )}
+
+        {mensaje && (
+          <p className={`text-center font-semibold ${mensaje.includes('exitoso') ? 'text-green-600' : 'text-red-600'}`}>
+            {mensaje}
+          </p>
+        )}
+      </div>
+    </div>
+  );
 };

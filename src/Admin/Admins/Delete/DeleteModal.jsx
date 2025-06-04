@@ -3,7 +3,7 @@ import { Inputs } from '../../UI/Inputs/Inputs';
 
 const URL = 'http://localhost:10101/AdminDelete';
 
-export const DeleteModal = ({ onClose }) => {
+export const DeleteModal = ({ onClose, setRefrescar }) => {
   const [correoAdmin, setCorreoAdmin] = useState('');
   const [mensaje, setMensaje] = useState('');
 
@@ -42,10 +42,12 @@ export const DeleteModal = ({ onClose }) => {
       }
       if (data?.message === 'delete ok') {
         setMensaje('Eliminación exitosa');
+        if (setRefrescar) setRefrescar(true);
       } else if (data?.message === 'Correo no encontrado') {
         setMensaje('El correo no se encuentra registrado.');
       } else {
         setMensaje('Eliminación exitosa'); // Si no hay error y no hay mensaje, asume éxito
+        if (setRefrescar) setRefrescar(true);
       }
     } catch (err) {
       setMensaje('Error al eliminar: ' + err.message);

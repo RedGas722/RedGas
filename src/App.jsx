@@ -3,6 +3,8 @@ import { Routes, Route } from 'react-router-dom'
 // ---Import Components---
 // -Import Pages: MainPage/Register/Login/ForgotPassword/RecoveryPassword/ShopCart-
 import { MainPage } from './Pages/MainPage/MainPage'
+import { CostumerServices } from './Pages/Costumer/CostumerServices'
+import { ServicesInfo } from './Pages/Services/Services.jsx' 
 import { TechniciansPage } from './Pages/Technicians/TechniciansPage'
 import { Shopping } from './Pages/Shopping/Shopping.jsx'
 import { Register } from './Pages/Register/Register'
@@ -20,7 +22,9 @@ import { CategoriesBack } from './Admin/Categories/CategoriesBack'
 import { TechniciansBack } from './Admin/Technicians/TechniciansBack'
 import { ServicesBack } from './Admin/Services/ServicesBack'
 import { AdminsBack } from './Admin/Admins/AdminsBack'
-import ContractBack from './Admin/Contracts/ContractsModal'
+import { ContractsBack } from './Admin/Contracts/ContractsBack.jsx'
+import { Cancelado } from './Pages/Shopping/Cancelado.jsx'
+import { Confirmacion } from './Pages/Shopping/Confirmacion.jsx'
 
 export function App() {
     return (
@@ -28,6 +32,8 @@ export function App() {
             <div>
                 <Routes>
                     <Route path="/" element={<MainPage />} />
+                    <Route path="/Costumer" element={<CostumerServices />} />
+                    <Route path="/Services" element={<ServicesInfo />} />
                     <Route path="/Technic" element={<TechniciansPage />} />
                     <Route path="/Shopping" element={<Shopping />} />
                     <Route path='/Register' element={<Register />} />
@@ -44,6 +50,10 @@ export function App() {
                     <Route path="/Admin/Categories" element={<CategoriesBack />} />
                     <Route path="/Admin/Services" element={<ServicesBack />} />
                     <Route path="/Admin/Admins" element={<AdminsBack />} />
+                    <Route path="/Admin/Contracts" element={<ContractsBack />} />
+                    {/*Rutas de Pago*/}
+                    <Route path="/Shopping/Confirmacion" element={<Confirmacion />} />
+                    <Route path="/Shopping/Cancelado" element={<Cancelado />} />
                 </Routes>
             </div>
         </>

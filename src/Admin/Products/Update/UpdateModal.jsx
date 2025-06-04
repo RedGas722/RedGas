@@ -12,11 +12,11 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
   const [categorias, setCategorias] = useState([]);
   let nombreBusqueda = nombreProducto;
 
-  const URL_GET = 'http://localhost:10101/ProductoGet';
-  const URL_UPDATE = 'http://localhost:10101/ProductoUpdateNI';
-  const URL_UPDATE_IMAGEN = 'http://localhost:10101/ProductoUpdate';
-  const URL_SE_ENCUENTRA_UPDATE = 'http://localhost:10101/SeEncuentraUpdate';
-  const URL_CATEGORIAS = 'http://localhost:10101/CategoriaGetAll'; 
+  const URL_GET = 'https://redgas.onrender.com/ProductoGet';
+  const URL_UPDATE = 'https://redgas.onrender.com/ProductoUpdateNI';
+  const URL_UPDATE_IMAGEN = 'https://redgas.onrender.com/ProductoUpdate';
+  const URL_SE_ENCUENTRA_UPDATE = 'https://redgas.onrender.com/SeEncuentraUpdate';
+  const URL_CATEGORIAS = 'https://redgas.onrender.com/CategoriaGetAll'; 
 
   // Cargar categorías al montar el componente
   useEffect(() => {
@@ -226,12 +226,10 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
   };
 
   const convertirFecha = (fechaConvertir) => {
-    const fecha = new Date(fechaConvertir);
-    const año = fecha.getFullYear();
-    const mes = String(fecha.getMonth() + 1).padStart(2, '0');
-    const día = String(fecha.getDate()).padStart(2, '0');
-    return `${año}-${mes}-${día}`; // <-- formato correcto para input type="date"
+    // Solo extraemos la fecha YYYY-MM-DD directamente
+    return fechaConvertir ? fechaConvertir.slice(0, 10) : '';
   };
+
 
   const esCategoriaOfertas = () => {
     const ofertaCategoria = categorias.find(

@@ -59,6 +59,12 @@ export const Navs = ({ className }) => {
             <NavLink to="/Admin">
                 Admin
             </NavLink>
+             <NavLink to="/Costumer">
+                Cliente
+            </NavLink>
+             <NavLink to="/Services">
+                Servicios
+            </NavLink>
         </div>
     )
 }

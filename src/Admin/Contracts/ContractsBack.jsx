@@ -4,89 +4,86 @@ import { GetModal } from './Get/GetModal';
 import { UpdateModal } from './Update/UpdateModal';
 import { DeleteModal } from './Delete/DeleteModal';
 import { ButtonBack } from '../UI/ButtonBack/ButtonBack';
-import CardTechniciansBack from './Get/CardTechniciansBack';
+import CardContractsBack from './Get/CardContractsBack';
 
-
-export const OffersBack = () => {
+export const ContractsBack = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showGetModal, setShowGetModal] = useState(false);
   const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
-  const [tecnicos, setTecnicos] = useState([]);
+  const [contratos, setContratos] = useState([]);
   const [refrescar, setRefrescar] = useState(false);
 
-  async function fetchTecnicos() {
+  async function fetchContratos() {
     try {
-      const res = await fetch('http://localhost:10101/TecnicoGetAll');
-      if (!res.ok) throw new Error('Error al obtener técnicos');
+      const res = await fetch('https://redgas.onrender.com/ContratoGetAll');
+      if (!res.ok) throw new Error('Error al obtener contratos');
       const data = await res.json();
-      const tecnicosData = Array.isArray(data) ? data : (data.data || []);
-      setTecnicos(tecnicosData);
+      setContratos(Array.isArray(data) ? data : (data.data || []));
     } catch (error) {
-      setTecnicos([]);
+      setContratos([]);
       console.error(error);
     }
   }
 
   useEffect(() => {
-    fetchTecnicos();
+    fetchContratos();
   }, []);
 
   useEffect(() => {
     if (refrescar) {
-      fetchTecnicos();
+      fetchContratos();
       setRefrescar(false);
     }
   }, [refrescar]);
 
   return (
-    <div className="p-[20px_0_0_20px] flex items-start gap-[20px] justify-start h-screen">
-      <div className='flex flex-col items-start gap-[20px] justify-center'>
-        <h1 className='font-bold text-[20px]'>Tecnico BACK-OFFICE</h1>
+    <div className="flex flex-row h-screen p-[40px_0_0_40px] gap-[40px]">
+      {/* Panel lateral izquierdo: Backoffice y botones */}
+      <div className='flex flex-col items-start gap-[30px] min-w-[320px]'>
+        <h1 className='font-bold text-[22px] mb-2'>Contrato BACK-OFFICE</h1>
         <ButtonBack ClickMod={() => setShowRegisterModal(true)} Child='Registrar' />
         <ButtonBack ClickMod={() => setShowGetModal(true)} Child='Consultar' />
         <ButtonBack ClickMod={() => setShowUpdateModal(true)} Child='Actualizar' />
         <ButtonBack ClickMod={() => setShowDeleteModal(true)} Child='Eliminar' />
       </div>
 
-      {/* Sección de técnicos */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {tecnicos.map(tecnico => (
-          <CardTechniciansBack key={tecnico.id_tecnico || tecnico.correo_tecnico} tecnico={tecnico} />
-        ))}
+      {/* Sección de contratos, más abajo y a la derecha */}
+      <div className="flex flex-col justify-start w-full mt-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {contratos.map((contrato, idx) => (
+            <CardContractsBack
+              key={contrato.id_contrato ? String(contrato.id_contrato) : `contrato-${idx}`}
+              contrato={contrato}
+            />
+          ))}
+        </div>
       </div>
 
       {/* Modales */}
       {showRegisterModal && (
         <RegisterModal
           onClose={() => setShowRegisterModal(false)}
-          onTecnicoRegistrado={nuevoTecnico => {
-            setTecnicos(prev => [nuevoTecnico, ...prev]);
-            setShowRegisterModal(false); 
-          }}
+          setRefrescar={setRefrescar}
         />
       )}
-      {showGetModal && <GetModal onClose={() => setShowGetModal(false)} />}
+      {showGetModal && (
+        <GetModal onClose={() => setShowGetModal(false)} />
+      )}
       {showUpdateModal && (
         <UpdateModal
           onClose={() => setShowUpdateModal(false)}
-          setRefrescar={() => {
-            setRefrescar(true);
-            fetchTecnicos(); 
-          }}
+          setRefrescar={setRefrescar}
         />
       )}
       {showDeleteModal && (
         <DeleteModal
           onClose={() => setShowDeleteModal(false)}
-          onTecnicoEliminado={correoEliminado => {
-            setTecnicos(prev => prev.filter(t => t.correo_tecnico !== correoEliminado));
-            setShowDeleteModal(false); // Cierra el modal tras eliminar
-          }}
+          setRefrescar={setRefrescar}
         />
       )}
     </div>
   );
 };
 
-export default TechniciansBack;
+export default ContractsBack;

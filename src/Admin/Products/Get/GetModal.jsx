@@ -7,7 +7,7 @@ export const GetModal = ({ onClose }) => {
   const [imagenURL, setImagenURL] = useState(null);
   const [errores, setErrores] = useState({});
 
-  const URL = 'http://localhost:10101/ProductoGet';
+  const URL = 'https://redgas.onrender.com/ProductoGet';
 
   const validarCampos = () => {
     const errores = {};
@@ -82,11 +82,9 @@ export const GetModal = ({ onClose }) => {
   };
 
   const convertirFecha = (fechaConvertir) => {
-      const fechaISO = fechaConvertir;
-      const fecha = new Date(fechaISO);
-      const fechaSolo = fecha.toLocaleDateString('en-GB');
-      return fechaSolo;
-  }
+    // Solo extraemos la fecha YYYY-MM-DD directamente
+    return fechaConvertir ? fechaConvertir.slice(0, 10) : '';
+  };
 
   return (
     <div className="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50">

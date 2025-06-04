@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { Inputs } from '../../UI/Inputs/Inputs';
 
-export const RegisterModal = ({ onClose }) => {
+export const RegisterModal = ({ onClose, setRefrescar }) => {
     const [nombreServicio, setNombreServicio] = useState('');
     const [descripcionServicio, setDescripcionServicio] = useState('');
     const [precioServicio, setPrecioServicio] = useState('');
     const [mensaje, setMensaje] = useState('');
 
-    const URL = 'http://localhost:10101/ServicioRegister';
+    const URL = 'https://redgas.onrender.com/ServicioRegister';
 
     const handleRegister = async (e) => {
         e.preventDefault();
@@ -49,6 +49,7 @@ export const RegisterModal = ({ onClose }) => {
             }
             await res.json();
             setMensaje('Registro exitoso.');
+            if (typeof setRefrescar === 'function') setRefrescar(true);
         } catch (err) {
             setMensaje('Error al registrar: ' + err.message);
         }

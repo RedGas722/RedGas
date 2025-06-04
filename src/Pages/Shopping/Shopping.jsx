@@ -16,7 +16,7 @@ export const Shopping = () => {
         return;
       }
 
-      const resCart = await fetch("http://localhost:10101/CartGet", {
+      const resCart = await fetch("https://redgas.onrender.com/CartGet", {
         headers: {
           "Authorization": `Bearer ${token}`,
           "Content-Type": "application/json"
@@ -29,7 +29,7 @@ export const Shopping = () => {
 
       const productDetails = await Promise.all(
         cartData.map(async (item) => {
-          const res = await fetch(`http://localhost:10101/ProductoGet?nombre_producto=${encodeURIComponent(item.productName)}`, {
+          const res = await fetch(`https://redgas.onrender.com/ProductoGet?nombre_producto=${encodeURIComponent(item.productName)}`, {
             method: "GET",
             headers: {
               "Content-Type": "application/json"
@@ -58,7 +58,7 @@ export const Shopping = () => {
 
   const fetchTotalPrice = async () => {
     try {
-      const res = await fetch("http://localhost:10101/CartTotal", {
+      const res = await fetch("https://redgas.onrender.com/CartTotal", {
         method: "GET",
         headers: {
           "Authorization": `Bearer ${token}`,
@@ -87,7 +87,7 @@ export const Shopping = () => {
         return;
       }
 
-      const res = await fetch("http://localhost:10101/CartRemove", {
+      const res = await fetch("https://redgas.onrender.com/CartRemove", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -107,7 +107,7 @@ export const Shopping = () => {
 
   const handleUpdateQuantity = async (productId, newQuantity) => {
     try {
-      const res = await fetch("http://localhost:10101/CartUpdateQuantity", {
+      const res = await fetch("https://redgas.onrender.com/CartUpdateQuantity", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -136,7 +136,7 @@ export const Shopping = () => {
         return;
       }
 
-      const res = await fetch("http://localhost:10101/CartClear", {
+      const res = await fetch("https://redgas.onrender.com/CartClear", {
         method: "DELETE",
         headers: {
           "Authorization": `Bearer ${token}`,
@@ -153,6 +153,45 @@ export const Shopping = () => {
     }
   };
 
+  const handlePayWithPaypal = async () => {
+    try {
+      if (!token) {
+        alert("Debes iniciar sesión para pagar con PayPal");
+        return;
+      }
+
+    const body = {
+      cantidad: totalPrice.toFixed(0), // solo envías lo necesario
+      referencia: `ORD-${Date.now()}`
+    };
+
+    const res = await fetch("https://redgas.onrender.com/PagoPaypal", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      body: JSON.stringify(body)
+    });
+
+      const data = await res.json();
+
+      if (!res.ok) throw new Error(data.errorInfo || "Error al iniciar el pago");
+
+      // Buscar el link de aprobación
+      const approvalLink = data.data.links.find(link => link.rel === "approve");
+
+      if (!approvalLink) throw new Error("No se encontró el link de aprobación de PayPal");
+
+      // Redirigir al link de PayPal
+      window.location.href = approvalLink.href;
+
+    } catch (error) {
+      console.error("Error al pagar con PayPal:", error);
+      alert("Ocurrió un error al iniciar el pago con PayPal");
+    }
+  };
+
   if (loading) return <p>Cargando productos...</p>;
   if (error) return <p>Error: {error}</p>;
 
@@ -162,7 +201,13 @@ export const Shopping = () => {
       <div className="flex flex-col gap-[80px] text-[var(--main-color)] MainPageContainer">
         {products.length === 0 && <p>No hay productos para mostrar.</p>}
 
-        {products.map((producto, index) => (
+        {products.map((producto, index) => {
+        const descuento = Number(producto.descuento) || 0;
+        const precioUnidad = Number(producto.precio_producto) || 0;
+        const precioConDescuento = precioUnidad * (1 - descuento / 100);
+        const subtotal = precioConDescuento * producto.cantidad;
+
+        return (
           <section key={index}>
             <section className='flex justify-center gap-[20px]'>
               <section className='NeoContainer_outset_TL flex gap-[20px] p-[20px_10px] w-[70%] h-fit'>
@@ -177,10 +222,15 @@ export const Shopping = () => {
                   <h2 className='text-2xl font-bold'>{producto.nombre_producto}</h2>
                   <div className="flex flex-col gap-1">
                     <p className='text-base font-medium text-[var(--main-color)]'>
-                      <strong>Precio Unidad:</strong> ${Number(producto.precio_producto).toLocaleString("es-CO", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
+                      <strong>Precio Unidad:</strong> ${precioConDescuento.toLocaleString("es-CO", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
+                      {descuento > 0 && (
+                        <span className="ml-2 text-sm text-green-600 font-semibold">
+                          ({descuento}% OFF)
+                        </span>
+                      )}
                     </p>
                     <p className='text-base font-medium text-[var(--main-color)]'>
-                      <strong>Subtotal:</strong> ${Number(producto.precio_producto * producto.cantidad).toLocaleString("es-CO", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
+                      <strong>Subtotal:</strong> ${subtotal.toLocaleString("es-CO", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
                     </p>
                   </div>
                   <p className='text-[var(--main-color-sub)]'>{producto.descripcion_producto || "Sin descripción disponible."}</p>
@@ -203,6 +253,12 @@ export const Shopping = () => {
                   Comprar!!
                 </button>
                 <button
+                  className='buttonTL2 bg-yellow-500 text-white font-black NeoSubContainer_outset_TL p-[7px] hover:bg-yellow-600'
+                  onClick={handlePayWithPaypal}
+                >
+                  Pagar con PayPal
+                </button>
+                <button
                   className='buttonTL2 NeoSubContainer_outset_TL p-[7px] bg-red-500 text-white hover:bg-red-600'
                   onClick={() => handleRemoveProduct(producto.id_producto)}
                 >
@@ -211,11 +267,18 @@ export const Shopping = () => {
               </div>
             </section>
           </section>
-        ))}
+        );
+      })}
 
         <footer className="flex flex-col items-center gap-4">
           <div className='flex justify-center items-center gap-[20px]'>
             <button className='buttonTL2 active:text-[var(--main-color)] font-black NeoSubContainer_outset_TL p-[7px]'>Comprar todo</button>
+            <button
+              className='buttonTL2 bg-yellow-500 text-white font-black NeoSubContainer_outset_TL p-[7px] hover:bg-yellow-600'
+              onClick={handlePayWithPaypal}
+            >
+              Pagar con PayPal
+            </button>
             <button className='buttonTL2 active:text-[var(--main-color)] font-black NeoSubContainer_outset_TL p-[7px]'>Ver carrito</button>
             <button
               className='buttonTL2 bg-red-600 text-white font-black NeoSubContainer_outset_TL p-[7px] hover:bg-red-700'
