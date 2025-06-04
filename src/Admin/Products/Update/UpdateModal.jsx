@@ -48,8 +48,8 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
     ) {
       errores.descuento = 'Descuento no puede ser menor a 0 o mayor a 100';
     }    
-    if (!producto.fechaDescuento || producto.fechaDescuento < new Date().toISOString().slice(0, 10)) {
-      errores.fechaDescuento = 'Fecha de descuento no puede ser anterior a hoy';
+    if (!producto.fechaDescuento || producto.fechaDescuento <= new Date().toISOString().slice(0, 10)) {
+      errores.fechaDescuento = 'Fecha de descuento debe ser posterior a hoy';
     }
     if (!producto.categoriaSeleccionada) errores.categoriaSeleccionada = 'Seleccione una categoría';
     return errores;
