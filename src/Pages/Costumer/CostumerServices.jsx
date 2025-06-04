@@ -10,10 +10,7 @@ export const CostumerServices = () => {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    const data = JSON.parse(localStorage.getItem("data"))
-
-    console.log(data);
-    
+    const data = JSON.parse(localStorage.getItem("data"))    
 
     if (token || data) {
 
