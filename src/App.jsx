@@ -4,7 +4,7 @@ import { Routes, Route } from 'react-router-dom'
 // -Import Pages: MainPage/Register/Login/ForgotPassword/RecoveryPassword/ShopCart-
 import { MainPage } from './Pages/MainPage/MainPage'
 import { CostumerServices } from './Pages/Costumer/CostumerServices'
-import { ServicesInfo } from './Pages/Services/Services.jsx' 
+import { ServicesInfo } from './Pages/Services/Services.jsx'
 import { TechniciansPage } from './Pages/Technicians/TechniciansPage'
 import { Shopping } from './Pages/Shopping/Shopping.jsx'
 import { Register } from './Pages/Register/Register'
@@ -25,6 +25,9 @@ import { AdminsBack } from './Admin/Admins/AdminsBack'
 import { ContractsBack } from './Admin/Contracts/ContractsBack.jsx'
 import { Cancelado } from './Pages/Shopping/Cancelado.jsx'
 import { Confirmacion } from './Pages/Shopping/Confirmacion.jsx'
+// Login Client, Technician
+import { LoginClient } from './Pages/Login/LoginClient.jsx'
+import { LoginTechnician } from './Pages/Login/LoginTechnician.jsx'
 
 export function App() {
     return (
@@ -37,7 +40,12 @@ export function App() {
                     <Route path="/Technic" element={<TechniciansPage />} />
                     <Route path="/Shopping" element={<Shopping />} />
                     <Route path='/Register' element={<Register />} />
-                    <Route path='/Login' element={<Login />} />
+                    {/* Login's Route */}
+                    <Route path='/Login' element={<Login />} >
+                        <Route index element={<LoginClient />} />
+                        <Route path='LoginClient' element={<LoginClient />} />
+                        <Route path='LoginTechnician' element={<LoginTechnician />} />
+                    </Route>
                     <Route path='/Login/ForgotPassword' element={<ForgotPassword />} />
                     <Route path='/Login/ForgotPassword/Recovery/:token' element={<RecoveryPassword />} />
                     {/* ADMIN */}

@@ -258,6 +258,12 @@ export const Shopping = () => {
                         </button>
                         <button
                           className='buttonTL2 NeoSubContainer_outset_TL p-[7px]'
+                          onClick={handlePayWithPaypal}
+                        >
+                          Pagar con PayPal
+                        </button>
+                        <button
+                          className='buttonTL2 NeoSubContainer_outset_TL p-[7px]'
                           onClick={() => handleRemoveProduct(producto.id_producto)}
                         >
                           Eliminar
