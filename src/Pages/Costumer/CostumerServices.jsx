@@ -1,36 +1,36 @@
-import { useState, useEffect } from "react";
-import { jwtDecode } from "jwt-decode";
+import { useState, useEffect } from "react"
+import { jwtDecode } from "jwt-decode"
 
 export const CostumerServices = () => {
-  const [user, setUser] = useState('');
-  const [phone, setPhone] = useState('');
-  const [address, setAddress] = useState('');
-  const [label, setLabel] = useState('');
-  const [solutions, setSolutions] = useState('');
+  const [user, setUser] = useState('')
+  const [phone, setPhone] = useState('')
+  const [address, setAddress] = useState('')
+  const [label, setLabel] = useState('')
+  const [solutions, setSolutions] = useState('')
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('token')
     const data = JSON.parse(localStorage.getItem("data"))    
 
     if (token || data) {
 
-      const labelInfo = data.resultado.etiqueta;
-      const soluciones = data.resultado.posibles_soluciones;
+      const labelInfo = data.resultado.etiqueta
+      const soluciones = data.resultado.posibles_soluciones
 
       const solucionesTexto = Array.isArray(soluciones)
         ? soluciones.join('\n')
-        : soluciones;
+        : soluciones
 
-      const decoded = jwtDecode(token);
-      const userInfo = decoded.data.name;
-      const phoneInfo = decoded.data.telefono;
-      const addressInfo = decoded.data.direccion;
+      const decoded = jwtDecode(token)
+      const userInfo = decoded.data.name
+      const phoneInfo = decoded.data.telefono
+      const addressInfo = decoded.data.direccion
 
-      setUser(userInfo);
-      setPhone(phoneInfo);
-      setAddress(addressInfo);
-      setLabel(labelInfo);
-      setSolutions(solucionesTexto);
+      setUser(userInfo)
+      setPhone(phoneInfo)
+      setAddress(addressInfo)
+      setLabel(labelInfo)
+      setSolutions(solucionesTexto)
 
 
     }
@@ -47,7 +47,7 @@ export const CostumerServices = () => {
         <p className="whitespace-pre-line"> {solutions}</p>
       </div>
     </section>
-  );
-};
+  )
+}
 
-export default CostumerServices;
+export default CostumerServices
