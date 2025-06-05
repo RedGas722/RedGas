@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { Header } from '../../Layouts/Header/Header';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
 
 export const Shopping = () => {
   const [products, setProducts] = useState([]);
@@ -160,19 +162,19 @@ export const Shopping = () => {
         return;
       }
 
-    const body = {
-      cantidad: totalPrice.toFixed(0), // solo envías lo necesario
-      referencia: `ORD-${Date.now()}`
-    };
+      const body = {
+        cantidad: totalPrice.toFixed(0), // solo envías lo necesario
+        referencia: `ORD-${Date.now()}`
+      };
 
-    const res = await fetch("https://redgas.onrender.com/PagoPaypal", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
-      },
-      body: JSON.stringify(body)
-    });
+      const res = await fetch("https://redgas.onrender.com/PagoPaypal", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify(body)
+      });
 
       const data = await res.json();
 
@@ -202,86 +204,92 @@ export const Shopping = () => {
         {products.length === 0 && <p>No hay productos para mostrar.</p>}
 
         {products.map((producto, index) => {
-        const descuento = Number(producto.descuento) || 0;
-        const precioUnidad = Number(producto.precio_producto) || 0;
-        const precioConDescuento = precioUnidad * (1 - descuento / 100);
-        const subtotal = precioConDescuento * producto.cantidad;
+          const descuento = Number(producto.descuento) || 0;
+          const precioUnidad = Number(producto.precio_producto) || 0;
+          const precioConDescuento = precioUnidad * (1 - descuento / 100);
+          const subtotal = precioConDescuento * producto.cantidad;
 
-        return (
-          <section key={index}>
-            <section className='flex justify-center gap-[20px]'>
-              <section className='NeoContainer_outset_TL flex gap-[20px] p-[20px_10px] w-[70%] h-fit'>
-                <div>
-                  <img
-                    src={producto.imagen ? `data:image/jpeg;base64,${producto.imagen}` : "https://via.placeholder.com/150"}
-                    alt={producto.nombre_producto}
-                    className='w-[150px] rounded-[20px]'
-                  />
-                </div>
-                <div className='flex flex-col justify-center items-start gap-[10px]'>
-                  <h2 className='text-2xl font-bold'>{producto.nombre_producto}</h2>
-                  <div className="flex flex-col gap-1">
-                    <p className='text-base font-medium text-[var(--main-color)]'>
-                      <strong>Precio Unidad:</strong> ${precioConDescuento.toLocaleString("es-CO", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
-                      {descuento > 0 && (
-                        <span className="ml-2 text-sm text-green-600 font-semibold">
-                          ({descuento}% OFF)
-                        </span>
-                      )}
-                    </p>
-                    <p className='text-base font-medium text-[var(--main-color)]'>
-                      <strong>Subtotal:</strong> ${subtotal.toLocaleString("es-CO", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
-                    </p>
+          return (
+            <section key={index}>
+              <section className='flex justify-center gap-[20px]'>
+                <section className='NeoContainer_outset_TL flex gap-[20px] p-[20px_10px] w-[70%] h-fit'>
+                  <div>
+                    <img
+                      src={producto.imagen ? `data:image/jpeg;base64,${producto.imagen}` : "https://via.placeholder.com/150"}
+                      alt={producto.nombre_producto}
+                      className='w-[150px] rounded-[20px]'
+                    />
                   </div>
-                  <p className='text-[var(--main-color-sub)]'>{producto.descripcion_producto || "Sin descripción disponible."}</p>
-                  <p className='text-[var(--main-color-sub)]'>Cantidad: {producto.cantidad}</p>
-                  <div className="flex gap-2 items-center">
-                    <button className="buttonTL2 p-2" onClick={() =>
-                      producto.cantidad > 1 &&
-                      handleUpdateQuantity(producto.id_producto, producto.cantidad - 1)
-                    }>-</button>
-                    <span>{producto.cantidad}</span>
-                    <button className="buttonTL2 p-2" onClick={() =>
-                      handleUpdateQuantity(producto.id_producto, producto.cantidad + 1)
-                    }>+</button>
+                  <div className='flex flex-col justify-center w-[80%] items-start gap-[10px]'>
+                    <h2 className='text-2xl font-bold'>{producto.nombre_producto}</h2>
+                    <div className="flex flex-col gap-1">
+                      <div className='font-medium flex items-center gap-2 text-[var(--main-color)]'>
+                        <p className="font-bold">Precio Unidad: <span className="font-normal"> ${precioConDescuento.toLocaleString("es-CO", { minimumFractionDigits: 0, maximumFractionDigits: 0 })} </span> </p>
+                        {descuento > 0 && (
+                          <span className="text-sm text-green-600">
+                            ({descuento}% OFF)
+                          </span>
+                        )}
+                      </div>
+                      <p className='text-[var(--main-color)]'>
+                        <p className="font-bold">Subtotal: <span className="font-normal"> ${subtotal.toLocaleString("es-CO", { minimumFractionDigits: 0, maximumFractionDigits: 0 })} </span></p>
+                      </p>
+                    </div>
+                    <p className='text-[var(--main-color-sub)] font-bold'>Descripción: <span className="font-normal"> {producto.descripcion_producto || "Sin descripción disponible."} </span> </p>
+                    <p className='text-[var(--main-color-sub)]'>Cantidad: {producto.cantidad}</p>
+                    <section className="flex justify-between w-full">
+                      <div className="flex gap-2 items-center">
+                        <button className="rounded-full w-6 h-6  bg-red-700" onClick={() =>
+                          producto.cantidad > 1 &&
+                          handleUpdateQuantity(producto.id_producto, producto.cantidad - 1)
+                        }>
+                          <FontAwesomeIcon icon={faMinus} alt='Agregar' className="text-white" />
+                        </button>
+                        <span>{producto.cantidad}</span>
+                        <button className="rounded-full w-6 h-6  bg-green-700" onClick={() =>
+                          handleUpdateQuantity(producto.id_producto, producto.cantidad + 1)
+                        }>
+                          <FontAwesomeIcon icon={faPlus} alt='Quitar' className="text-white" />
+                        </button>
+                      </div>
+                      <div className="flex items-center gap-5">
+                        <button className='buttonTL2 NeoSubContainer_outset_TL p-[7px]' onClick={() => alert("Comprar producto aún no implementado")}>
+                          Comprar!!
+                        </button>
+                        <button
+                          className='buttonTL2 NeoSubContainer_outset_TL p-[7px]'
+                          onClick={handlePayWithPaypal}
+                        >
+                          Pagar con PayPal
+                        </button>
+                        <button
+                          className='buttonTL2 NeoSubContainer_outset_TL p-[7px]'
+                          onClick={() => handleRemoveProduct(producto.id_producto)}
+                        >
+                          Eliminar
+                        </button>
+                      </div>
+                    </section>
                   </div>
-                </div>
+
+                </section>
               </section>
-
-              <div className="flex flex-col gap-2">
-                <button className='buttonTL2 NeoSubContainer_outset_TL p-[7px]' onClick={() => alert("Comprar producto aún no implementado")}>
-                  Comprar!!
-                </button>
-                <button
-                  className='buttonTL2 bg-yellow-500 text-white font-black NeoSubContainer_outset_TL p-[7px] hover:bg-yellow-600'
-                  onClick={handlePayWithPaypal}
-                >
-                  Pagar con PayPal
-                </button>
-                <button
-                  className='buttonTL2 NeoSubContainer_outset_TL p-[7px] bg-red-500 text-white hover:bg-red-600'
-                  onClick={() => handleRemoveProduct(producto.id_producto)}
-                >
-                  Eliminar
-                </button>
-              </div>
             </section>
-          </section>
-        );
-      })}
+          );
+        })}
 
         <footer className="flex flex-col items-center gap-4">
           <div className='flex justify-center items-center gap-[20px]'>
             <button className='buttonTL2 active:text-[var(--main-color)] font-black NeoSubContainer_outset_TL p-[7px]'>Comprar todo</button>
             <button
-              className='buttonTL2 bg-yellow-500 text-white font-black NeoSubContainer_outset_TL p-[7px] hover:bg-yellow-600'
+              className='buttonTL2 text-white font-black NeoSubContainer_outset_TL p-[7px]'
               onClick={handlePayWithPaypal}
             >
               Pagar con PayPal
             </button>
             <button className='buttonTL2 active:text-[var(--main-color)] font-black NeoSubContainer_outset_TL p-[7px]'>Ver carrito</button>
             <button
-              className='buttonTL2 bg-red-600 text-white font-black NeoSubContainer_outset_TL p-[7px] hover:bg-red-700'
+              className='buttonTL2 text-white font-black NeoSubContainer_outset_TL p-[7px]'
               onClick={handleClearCart}
             >
               Limpiar carrito

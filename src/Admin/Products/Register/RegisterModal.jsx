@@ -91,7 +91,7 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
     if (!fechaDescuento.trim()) {
       errores.fechaDescuento = 'La fecha de descuento es obligatoria.';
     } else if (fechaDescuento < hoy) {
-      errores.fechaDescuento = 'La fecha de descuento no puede ser anterior a hoy.';
+      errores.fechaDescuento = 'La fecha de descuento debe ser posterior a hoy.';
     }
     return errores;
   };
