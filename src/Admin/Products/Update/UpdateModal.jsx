@@ -16,6 +16,8 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
   const URL_UPDATE = 'https://redgas.onrender.com/ProductoUpdateNI';
   const URL_UPDATE_IMAGEN = 'https://redgas.onrender.com/ProductoUpdate';
   const URL_SE_ENCUENTRA_UPDATE = 'https://redgas.onrender.com/SeEncuentraUpdate';
+  const URL_SE_ENCUENTRA_REGISTER = 'https://redgas.onrender.com/SeEncuentraRegister';
+  const URL_SE_ENCUENTRA_DELETE = 'https://redgas.onrender.com/SeEncuentraDelete';
   const URL_CATEGORIAS = 'https://redgas.onrender.com/CategoriaGetAll'; 
 
   // Cargar categorías al montar el componente
@@ -73,10 +75,14 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
       if (!data.data) throw new Error('Producto no existe');
 
       // Buscar id_categoria por nombre_categoria
-      const categoriaObj = categorias.find(
-        (cat) => cat.nombre_categoria === data.data.nombre_categoria
+      const nombreCategoriaValida = data.data.categorias.find(
+        (nombre_categoria) => nombre_categoria.toLowerCase() !== 'ofertas'
       );
 
+      const categoriaObj = categorias.find(
+        (cat) => cat.nombre_categoria === nombreCategoriaValida
+      );
+      console.log('Categoría encontrada:', data.data.categorias[0]);
       setProducto({
         nombreProducto: data.data.nombre_producto,
         nuevoNombre: data.data.nombre_producto,
@@ -95,33 +101,6 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
       setEditando(true);
     } catch (err) {
       setMensaje('Error al buscar producto: ' + err.message);
-    }
-  };
-
-  // Actualizar relación producto-categoría
-  const actualizarRelacionCategoria = async () => {
-    try {
-      const res = await fetch(URL_SE_ENCUENTRA_UPDATE, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          nombre_producto: producto.nuevoNombre,
-          id_categoria: producto.categoriaSeleccionada,
-        }),
-      });
-
-      if (!res.ok) {
-        const text = await res.text();
-        let data;
-        try {
-          data = JSON.parse(text);
-        } catch {
-          data = {};
-        }
-        throw new Error(data?.errors?.[0]?.msg || 'Error al actualizar categoría');
-      }
-    } catch (error) {
-      throw error;
     }
   };
 
@@ -193,7 +172,19 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
       }
 
       // Actualizar la categoría mediante la ruta separada
+      // const categoriaObj = categorias.find(
+      //   (cat) =>
+      //     cat.nombre_categoria.toLowerCase() !== 'ofertas' &&
+      //     cat.nombre_categoria === data.data.categorias[0]
+      // );
+      // if (producto.categoriaSeleccionada != categoriaObj ? String(categoriaObj.id_categoria) : '') {
       await actualizarRelacionCategoria();
+      // }
+      if (parseInt(producto.descuento) > 0) {
+        await agregarRelacionCategoriaOfertas(nombreBusqueda, categorias);
+      } else if (parseInt(producto.descuento) === 0) {
+        await eliminarRelacionCategoriaOfertas(nombreBusqueda, categorias);
+      }
 
       if (setRefrescar) setRefrescar(true);
       nombreBusqueda = producto.nuevoNombre;
@@ -230,12 +221,92 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
     return fechaConvertir ? fechaConvertir.slice(0, 10) : '';
   };
 
+  const actualizarRelacionCategoria = async () => {
+    try {
+      const res = await fetch(URL_SE_ENCUENTRA_UPDATE, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          nombre_producto: nombreBusqueda,
+          id_categoria: producto.categoriaSeleccionada,
+        }),
+      });
 
-  const esCategoriaOfertas = () => {
-    const ofertaCategoria = categorias.find(
-      (cat) => cat.nombre_categoria.toLowerCase() === 'ofertas'
-    );
-    return producto?.categoriaSeleccionada === String(ofertaCategoria?.id_categoria);
+      if (!res.ok) {
+        const text = await res.text();
+        let data;
+        try {
+          data = JSON.parse(text);
+        } catch {
+          data = {};
+        }
+        throw new Error(data?.errors?.[0]?.msg || 'Error al actualizar categoría');
+      }
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const agregarRelacionCategoriaOfertas = async (nombreProducto, categorias) => {
+    try {
+      // Buscar la categoría "Ofertas" (sin importar mayúsculas/minúsculas)
+      const categoriaOfertas = categorias.find(
+        (cat) => cat.nombre_categoria.toLowerCase() === 'ofertas'
+      );
+
+      if (!categoriaOfertas) {
+        console.warn('No existe la categoría "Ofertas".');
+        return;
+      }
+
+      const payload = {
+        nombre_producto: nombreProducto,
+        id_categoria: categoriaOfertas.id_categoria,
+      };
+
+      const response = await fetch(URL_SE_ENCUENTRA_REGISTER, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Error al agregar relación:', errorData);
+        return;
+      }
+
+      const data = await response.json();
+      console.log('Relación agregada correctamente:', data);
+    } catch (error) {
+      console.error('Error en agregarRelacionCategoriaOfertas:', error);
+    }
+  };
+
+  const eliminarRelacionCategoriaOfertas = async (nombreProducto, categorias) => {
+    try {
+      const categoriaOfertas = categorias.find(
+        (cat) => cat.nombre_categoria.toLowerCase().trim() === 'ofertas'
+      );
+
+      if (!categoriaOfertas) {
+        console.warn('Categoría "Ofertas" no encontrada.');
+        return;
+      }
+
+      const res = await fetch(`${URL_SE_ENCUENTRA_DELETE}?nombre_producto=${encodeURIComponent(nombreProducto)}&id_categoria=${categoriaOfertas.id_categoria}`, {
+        method: 'DELETE'
+      });
+
+      if (!res.ok) {
+        const errorText = await res.text();
+        throw new Error(`Error en la respuesta del servidor: ${errorText}`);
+      }
+    } catch (error) {
+      console.error('Error al eliminar relación de categoría Ofertas:', error);
+    }
   };
 
 
@@ -311,41 +382,24 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
                 const inputValue = e.target.value;
 
                 if (/^\d{0,3}$/.test(inputValue)) {
-                  let nuevaCategoria = producto.categoriaSeleccionada;
-                  const descuentoNum = parseInt(inputValue);
-
-                  const ofertaCategoria = categorias.find(
-                    (cat) => cat.nombre_categoria.toLowerCase() === 'ofertas'
-                  );
-
-                  if (inputValue === "" || descuentoNum === 0 || isNaN(descuentoNum)) {
-                    // Si descuento 0 o vacío, desbloquea el select permitiendo cambiar la categoría
-                    if (esCategoriaOfertas()) {
-                      // Si estaba en ofertas y descuento baja a 0, permitimos cambiar categoría
-                      nuevaCategoria = '';
-                    }
-                  } else if (descuentoNum > 0 && ofertaCategoria) {
-                    // Si descuento > 0 y existe la categoría ofertas, forzamos a 'ofertas'
-                    nuevaCategoria = String(ofertaCategoria.id_categoria);
-                  }
-
+                  // Eliminamos la lógica de forzar categoría 'Ofertas'
                   setProducto({
                     ...producto,
                     descuento: inputValue,
-                    categoriaSeleccionada: nuevaCategoria,
+                    // Ya no cambiamos categoría automáticamente
                   });
                 }
               }}
             />
             {errores.descuento && <p className="text-red-600 text-sm">{errores.descuento}</p>}
-            
+
             {producto.descuento > 0 && (
-            <Inputs
-              Type="7"
-              Place="Nueva Fecha de Descuento"
-              Value={producto.fechaDescuento}
-              onChange={(e) => setProducto({ ...producto, fechaDescuento: e.target.value })}
-            />
+              <Inputs
+                Type="7"
+                Place="Nueva Fecha de Descuento"
+                Value={producto.fechaDescuento}
+                onChange={(e) => setProducto({ ...producto, fechaDescuento: e.target.value })}
+              />
             )}
             {errores.fechaDescuento && <p className="text-red-600 text-sm">{errores.fechaDescuento}</p>}
 
@@ -354,12 +408,8 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
               id="categoria"
               value={producto.categoriaSeleccionada}
               onChange={(e) => setProducto({ ...producto, categoriaSeleccionada: e.target.value })}
-              className={`border rounded p-2 w-full transition-colors duration-300 ${
-                esCategoriaOfertas() && parseInt(producto.descuento) > 0
-                  ? 'bg-gray-200 cursor-not-allowed text-gray-500'
-                  : 'bg-white cursor-pointer text-black'
-              }`}
-              disabled={esCategoriaOfertas() && parseInt(producto.descuento) > 0}
+              className="border rounded p-2 w-full transition-colors duration-300 bg-white cursor-pointer text-black"
+              disabled={false} // Nunca deshabilitado
             >
               <option value="">-- Seleccione una categoría --</option>
               {categorias.map((cat) => (
