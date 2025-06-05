@@ -45,15 +45,23 @@ export const Register = () => {
             if (!res.ok) throw new Error('Credenciales inválidas')
             const data = await res.json()
             alertSendForm(200, 'Registro exitoso', 'Tu cuenta ha sido creada con éxito. Ahora puedes iniciar sesión.')
+            setTimeout(() => {
             navigate('/login')
+            }, 0)
         } catch (err) {
             alertSendForm(502, 'Error al registrar usuario', 'Ocurrió un error al registrar tu cuenta. Por favor, intenta nuevamente más tarde.')
         }
     }
 
     const alertSendForm = (status, title, message) => {
-        const emailInput = document.getElementById('Email')
-        const passwordInput = document.getElementById('Password')
+        const nameInput = document.getElementById('Name')
+        const lastNameInput = document.getElementById('LastName')
+        const phoneInput = document.getElementById('Phone')
+        const addressInput = document.getElementById('Address')
+        const emailInput = document.getElementById('email')
+        const passwordInput = document.getElementById('password')
+        const passwordConfirmInput = document.getElementById('passwordConfirm')
+
         const MySwal = withReactContent(Swal)
         switch (status) {
             case 'wait':
@@ -82,8 +90,13 @@ export const Register = () => {
                     showConfirmButton: false,
                     timer: 10
                 })
+                nameInput.value = ''
+                lastNameInput.value = ''
+                phoneInput.value = ''
+                addressInput.value = ''
                 emailInput.value = ''
                 passwordInput.value = ''
+                passwordConfirmInput.value = ''
                 break
 
             case 401:
@@ -108,8 +121,13 @@ export const Register = () => {
                     background: '#ffffff',
                 })
 
+                nameInput.style.border = '2px solid #FF0000'
+                lastNameInput.style.border = '2px solid #FF0000'
+                phoneInput.style.border = '2px solid #FF0000'
+                addressInput.style.border = '2px solid #FF0000'
                 emailInput.style.border = '2px solid #FF0000'
                 passwordInput.style.border = '2px solid #FF0000'
+                passwordConfirmInput.style.border = '2px solid #FF0000'
                 break
 
             case 502:
@@ -126,7 +144,13 @@ export const Register = () => {
                     .then((result) => {
                         if (result.isConfirmed) {
                             navigate('/')
-                            emailinput.value = ''
+                            nameInput.value = ''
+                            lastNameInput.value = ''
+                            phoneInput.value = ''
+                            addressInput.value = ''
+                            emailInput.value = ''
+                            passwordInput.value = ''
+                            passwordConfirmInput.value = ''
                         }
                     })
                 break
@@ -145,7 +169,13 @@ export const Register = () => {
                     .then((result) => {
                         if (result.isConfirmed) {
                             navigate('/')
-                            emailinput.value = ''
+                            nameInput.value = ''
+                            lastNameInput.value = ''
+                            phoneInput.value = ''
+                            addressInput.value = ''
+                            emailInput.value = ''
+                            passwordInput.value = ''
+                            passwordConfirmInput.value = ''
                         }
                     })
                 break
