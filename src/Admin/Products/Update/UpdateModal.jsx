@@ -85,7 +85,6 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
       const categoriaObj = categorias.find(
         (cat) => cat.nombre_categoria === nombreCategoriaValida
       );
-      console.log('Categoría encontrada:', data.data.categorias[0]);
       setProducto({
         nombreProducto: data.data.nombre_producto,
         nuevoNombre: data.data.nombre_producto,

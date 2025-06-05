@@ -65,7 +65,6 @@ export const GetModal = ({ onClose }) => {
       } else {
         setImagenURL(null);
       }
-      console.log('Producto consultado:', producto);
       setMensaje({ ...data, data: producto });
       console.log('Completado!');
     } catch (err) {
@@ -131,7 +130,10 @@ export const GetModal = ({ onClose }) => {
               <strong>Nombre:</strong> {mensaje.data.nombre_producto}
             </p>
             <p>
-              <strong>Categoría:</strong> {mensaje.data.nombre_categoria || 'Sin categoría'} {/* <-- Aquí la categoría */}
+              <strong>Categoría:</strong>{' '}
+              {Array.isArray(mensaje.data.categorias)
+                ? mensaje.data.categorias.join(', ')
+                : mensaje.data.categorias || 'Sin categoría'}
             </p>
             <p>
               <strong>Precio:</strong> {mensaje.data.precio_producto}
