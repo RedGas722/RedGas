@@ -192,13 +192,13 @@ export const CardsOffers = ({ uniqueId, productos = [] }) => {
                 <hr className="card-divider" />
                 <div className="card-footer">
                   <div className="card-price">
-                    <span>$</span> {(parseFloat(producto.precio_producto) - (parseFloat(producto.precio_producto) * (producto.descuento / 100))).toLocaleString()}
-                    <div className="beforePrice text-[15px] text-[var(--main-color-sub)] line-through">
-                      <span>$</span> {(parseFloat(producto.precio_producto)).toLocaleString()} {producto.descuento}%
+                    <p className="text-[var(--Font-Nav2)]"><span className="text-[var(--Font-Nav2-shadow)]">$</span>{(parseFloat(producto.precio_producto) - (parseFloat(producto.precio_producto) * (producto.descuento / 100))).toLocaleString()} </p>
+                    <div className="text-[15px] text-[var(--Font-Nav)] line-through">
+                      <p><span className="text-[var(--Font-Nav-shadow)]">$</span> {(parseFloat(producto.precio_producto)).toLocaleString()} {producto.descuento}% </p>
                     </div>
                   </div>
                   <button
-                    className="card-btn hover:text-[#ffff]"
+                    className="card-btn_Offer"
                     onClick={() => handleAddToCart(producto)}
                   >
                     <FontAwesomeIcon icon={faCartShopping} />
