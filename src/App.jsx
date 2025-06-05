@@ -25,8 +25,7 @@ import { AdminsBack } from './Admin/Admins/AdminsBack'
 import { ContractsBack } from './Admin/Contracts/ContractsBack.jsx'
 import { Cancelado } from './Pages/Shopping/Cancelado.jsx'
 import { Confirmacion } from './Pages/Shopping/Confirmacion.jsx'
-import { notFound } from './Pages/NotFound/notFound.jsx'
-
+import { NotFound } from './Pages/NotFound/NotFound.jsx'
 
 export function App() {
     return (
@@ -57,7 +56,7 @@ export function App() {
                     <Route path="/Shopping/Confirmacion" element={<Confirmacion />} />
                     <Route path="/Shopping/Cancelado" element={<Cancelado />} />
                     {/* 404 */}
-                    <Route path="/notFound" element={<notFound />} />
+                    <Route path="/notFound" element={<NotFound />} />
                 </Routes>
             </div>
         </>
