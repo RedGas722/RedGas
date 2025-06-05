@@ -44,7 +44,7 @@ export const CostumerServices = () => {
         <p>{user}</p>
         <p>{address}</p>
         <p>{phone}</p>
-        <pre className="whitespace-pre-line"> {solutions}</pre>
+        <p className="whitespace-pre-line"> {solutions}</p>
       </div>
     </section>
   );
