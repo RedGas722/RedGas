@@ -10,6 +10,7 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
   const [imagenNueva, setImagenNueva] = useState(null);
   const [imagenActual, setImagenActual] = useState(null);
   const [categorias, setCategorias] = useState([]);
+  const [categoriaSeleccionada, setCategoriaSeleccionada] = useState('');
   let nombreBusqueda = nombreProducto;
 
   const URL_GET = 'https://redgas.onrender.com/ProductoGet';
@@ -93,8 +94,9 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
         stock: data.data.stock,
         descuento: data.data.descuento,
         fechaDescuento: convertirFecha(data.data.fecha_descuento),
-        categoriaSeleccionada: categoriaObj ? String(categoriaObj.id_categoria) : '', 
+        categoriaSeleccionada: categoriaObj ? String(categoriaObj.id_categoria) : ''
       });
+      setCategoriaSeleccionada(categoriaObj ? String(categoriaObj.id_categoria) : '');
 
       if (data.data.imagen) {
         setImagenActual(`data:image/jpeg;base64,${data.data.imagen}`);
@@ -174,14 +176,10 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
       }
 
       // Actualizar la categoría mediante la ruta separada
-      // const categoriaObj = categorias.find(
-      //   (cat) =>
-      //     cat.nombre_categoria.toLowerCase() !== 'ofertas' &&
-      //     cat.nombre_categoria === data.data.categorias[0]
-      // );
-      // if (producto.categoriaSeleccionada != categoriaObj ? String(categoriaObj.id_categoria) : '') {
+      if (producto.categoriaSeleccionada != categoriaSeleccionada) {
+      console.log("validacion exitosa")
       await actualizarRelacionCategoria();
-      // }
+      }
       if (parseInt(producto.descuento) > 0) {
         await agregarRelacionCategoriaOfertas(nombreBusqueda, categorias);
       } else if (parseInt(producto.descuento) === 0) {
