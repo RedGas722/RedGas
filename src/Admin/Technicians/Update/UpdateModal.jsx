@@ -12,7 +12,7 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
   let correoActualBusqueda = correoBusqueda
 
   const URL_GET = 'https://redgas.onrender.com/TecnicoGet';
-  const URL_UPDATE = 'https://redgas.onrender.com/TecnicoUpdateNI'; 
+  const URL_UPDATE = 'https://redgas.onrender.com/TecnicoDataUpdateNI'; 
   const URL_UPDATE_IMAGEN = 'https://redgas.onrender.com/TecnicoDataUpdate'; 
 
   // Validar campos
@@ -52,7 +52,7 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
         telefono: data.data.telefono_tecnico,
       })
       if (data.data.imagen) {
-        setImagenActual(`data:image/jpegbase64,${data.data.imagen}`)
+      setImagenActual(`data:image/jpeg;base64,${data.data.imagen}`)
         setImagenNueva(null)
       }
       setEditando(true)
@@ -93,6 +93,7 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
         correoActualBusqueda = tecnico.nuevoCorreo
         await handleBuscar()
         setMensaje('Técnico e imagen actualizados exitosamente.')
+        if (setRefrescar) setRefrescar(true)
       } catch (err) {
         setMensaje('Error al actualizar: ' + err.message)
       }
@@ -150,7 +151,7 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
 
   return (
     <div className="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-2xl p-6 shadow-lg w-[340px] flex flex-col gap-4 relative text-black">
+      <div className="bg-white rounded-2xl p-6 shadow-lg w-[340px] flex flex-col gap-4 relative text-[var(--main-color)]">
         <button
           className="absolute top-2 right-3 text-gray-600 text-lg"
           onClick={onClose}
@@ -174,11 +175,6 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
 
         {editando && tecnico && (
           <>
-
-
-            <InputLabel type="6" value={tecnico.telefono} onChange={(e) => setTecnico({ ...tecnico, telefono: e.target.value })} placeholder="Teléfono nuevo del Técnico" />
-
-
             <InputLabel type="1" value={tecnico.nuevoNombre} onChange={(e) => setTecnico({ ...tecnico, nuevoNombre: e.target.value })} placeholder="Nombre del Técnico" />
             {errores.nuevoNombre && <p className="text-red-600 text-sm">{errores.nuevoNombre}</p>}
             <InputLabel type="2" value={tecnico.nuevoCorreo} onChange={(e) => setTecnico({ ...tecnico, nuevoCorreo: e.target.value })} placeholder="Correo nuevo del Técnico" />

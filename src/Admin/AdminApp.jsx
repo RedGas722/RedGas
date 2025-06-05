@@ -15,7 +15,7 @@ export const AdminApp = () => {
                     <ButtonSide to='/Admin/Categories' children='Categorias' imgBtn='../../src/Admin/Assets/Icons/Categories.png' />
                     <ButtonSide to='/Admin/Services' children='Servicios' imgBtn='../../src/Admin/Assets/Icons/Services.png' />
                     <ButtonSide to='/Admin/Admins' children='Admin' imgBtn='../../src/Admin/Assets/Icons/Admin.png' />
-                    <ButtonSide to='/Admin/Contracts' children='Contratos' imgBtn='../../src/Admin/Assets/Icons/Admin.png' />
+                    <ButtonSide to='/Admin/Contracts' children='Contratos' imgBtn='../../src/Admin/Assets/Icons/Contract.png' />
                 </section>
             </div>
         </>

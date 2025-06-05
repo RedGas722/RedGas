@@ -14,18 +14,33 @@ export const ProductBack = () => {
   const [productos, setProductos] = useState([]);
   const [categorias, setCategorias] = useState([]);
   const [refrescar, setRefrescar] = useState(false);
+  const [mensaje, setMensaje] = useState(''); // Estado para mostrar mensajes
 
   async function fetchProductos() {
     try {
       const res = await fetch('https://redgas.onrender.com/ProductoGetAll');
       if (!res.ok) throw new Error('Error al obtener productos y categorías');
       const data = await res.json();
-      // data.data es un objeto con { productos, categorias }
       setProductos(data.data.productos || []);
       setCategorias(data.data.categorias || []);
-
     } catch (error) {
       console.error(error);
+    }
+  }
+
+  async function resetearDescuentosPrueba() {
+    setMensaje(''); // Limpiar mensaje previo
+    try {
+      const res = await fetch('https://redgas.onrender.com/prueba', {
+        method: 'PUT',
+      });
+      if (!res.ok) throw new Error('Error al resetear descuentos');
+      const data = await res.json();
+      setMensaje(data.mensaje || 'Descuentos reseteados correctamente');
+      setRefrescar(true); // refrescar lista luego de resetear
+    } catch (error) {
+      console.error(error);
+      setMensaje('Error al resetear descuentos');
     }
   }
 
@@ -48,7 +63,23 @@ export const ProductBack = () => {
         <ButtonBack ClickMod={() => setShowGetModal(true)} Child="Consultar" />
         <ButtonBack ClickMod={() => setShowUpdateModal(true)} Child="Actualizar" />
         <ButtonBack ClickMod={() => setShowDeleteModal(true)} Child="Eliminar" />
+
+        {/* Nuevo botón para resetear descuentos */}
+        <button
+          onClick={resetearDescuentosPrueba}
+          className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+          type="button"
+        >
+          Resetear descuentos (prueba)
+        </button>
       </div>
+
+      {/* Mensaje de resultado */}
+      {mensaje && (
+        <div className="mt-2 text-sm text-center text-green-600 font-semibold">
+          {mensaje}
+        </div>
+      )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {productos.map(producto => (
@@ -59,9 +90,6 @@ export const ProductBack = () => {
       {showRegisterModal && (
         <RegisterModal
           onClose={() => setShowRegisterModal(false)}
-          onProductoRegistrado={(nuevoProducto) => {
-            setProductos(prev => [nuevoProducto, ...prev]);
-          }}
           setRefrescar={setRefrescar}
         />
       )}
@@ -81,6 +109,5 @@ export const ProductBack = () => {
     </div>
   );
 };
-
 
 export default ProductBack;

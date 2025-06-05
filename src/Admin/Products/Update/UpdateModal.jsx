@@ -48,8 +48,11 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
     ) {
       errores.descuento = 'Descuento no puede ser menor a 0 o mayor a 100';
     }    
-    if (!producto.fechaDescuento || producto.fechaDescuento < new Date().toISOString().slice(0, 10)) {
-      errores.fechaDescuento = 'Fecha de descuento no puede ser anterior a hoy';
+    if (parseInt(producto.descuento) > 0) {
+      const hoy = new Date().toISOString().slice(0, 10);
+      if (!producto.fechaDescuento || producto.fechaDescuento <= hoy) {
+        errores.fechaDescuento = 'Fecha de descuento debe ser posterior a hoy';
+      }
     }
     if (!producto.categoriaSeleccionada) errores.categoriaSeleccionada = 'Seleccione una categoría';
     return errores;
@@ -226,12 +229,10 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
   };
 
   const convertirFecha = (fechaConvertir) => {
-    const fecha = new Date(fechaConvertir);
-    const año = fecha.getFullYear();
-    const mes = String(fecha.getMonth() + 1).padStart(2, '0');
-    const día = String(fecha.getDate()).padStart(2, '0');
-    return `${año}-${mes}-${día}`; // <-- formato correcto para input type="date"
+    // Solo extraemos la fecha YYYY-MM-DD directamente
+    return fechaConvertir ? fechaConvertir.slice(0, 10) : '';
   };
+
 
   const esCategoriaOfertas = () => {
     const ofertaCategoria = categorias.find(

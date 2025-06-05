@@ -106,38 +106,40 @@ import {
   faCartShopping,
 } from '@fortawesome/free-solid-svg-icons';
 
-    async function agregarAlCarrito(item) {
-    const token = localStorage.getItem("token");
-    console.log(token);
-    if (!token) {
-        alert("Debes iniciar sesión para agregar al carrito");
-        return null;
-    }
-    const res = await fetch("http://localhost:10101/CartAdd", {
+
+async function agregarAlCarrito(item) {
+  const token = localStorage.getItem("token");
+  console.log(token);
+  if (!token) {
+    alert("Debes iniciar sesión para agregar al carrito");
+    return null;
+  }
+  const res = await fetch("https://redgas.onrender.com/CartAdd", {
     method: "POST",
     headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`, 
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`,
     },
-    body: JSON.stringify(item), 
-    });
+    body: JSON.stringify(item),
+  });
 
 
-    if (!res.ok) {
-        const error = await res.json();
-        throw new Error(error.message || "Error al agregar al carrito");
-    }
-    return await res.json();
-    }
+  if (!res.ok) {
+    const error = await res.json();
+    throw new Error(error.message || "Error al agregar al carrito");
+  }
+  return await res.json();
+}
 
 export const CardsOffers = ({ uniqueId, productos = [] }) => {
 
   const handleAddToCart = async (producto) => {
     const item = {
-    productId: producto.id_producto,
-    productName: producto.nombre_producto,  
-    quantity: 1,
-    price: producto.precio_producto,
+      productId: producto.id_producto,
+      productName: producto.nombre_producto,
+      quantity: 1,
+      price: producto.precio_producto,
+      discount: producto.descuento || 0
     };
 
     try {
@@ -173,7 +175,7 @@ export const CardsOffers = ({ uniqueId, productos = [] }) => {
             <div className="flex justify-center justify-self-center h-fit p-[25px_0_25px_0] items-center w-fit">
               <div className="card NeoSubContainer_outset_TL">
                 <div className="card-img">
-                  <div className="img">
+                  <div className="img h-full">
                     <img
                       src={producto.imagen ? `data:image/jpeg;base64,${producto.imagen}` : "https://via.placeholder.com/150"}
                       alt={producto.nombre_producto || "Producto"}
@@ -190,9 +192,9 @@ export const CardsOffers = ({ uniqueId, productos = [] }) => {
                 <hr className="card-divider" />
                 <div className="card-footer">
                   <div className="card-price">
-                    <span>$</span> {(parseFloat(producto.precio_producto) - (parseFloat(producto.precio_producto)*(producto.descuento/100))).toLocaleString()}
+                    <span>$</span> {(parseFloat(producto.precio_producto) - (parseFloat(producto.precio_producto) * (producto.descuento / 100))).toLocaleString()}
                     <div className="beforePrice text-[15px] text-[var(--main-color-sub)] line-through">
-                    <span>$</span> {(parseFloat(producto.precio_producto)).toLocaleString()} {producto.descuento}%
+                      <span>$</span> {(parseFloat(producto.precio_producto)).toLocaleString()} {producto.descuento}%
                     </div>
                   </div>
                   <button
@@ -211,12 +213,12 @@ export const CardsOffers = ({ uniqueId, productos = [] }) => {
       <div className="flex flex-col justify-center items-center self-center w-fit p-[10px] NeoSubContainer_outset_TL text-[var(--main-color)]">
         <div className="flex justify-center items-center gap-[20px]">
           <button
-            className={`buttonTL arrow NeoSubContainer_outset_TL p-[7px] swiper-button-prev-${uniqueId} cursor-pointer`}
+            className={`buttonTL arrow-left NeoSubContainer_outset_TL p-[7px] swiper-button-prev-${uniqueId} cursor-pointer`}
           >
             <FontAwesomeIcon icon={faArrowLeft} className="faArrowLeft text-[30px]" />
           </button>
           <button
-            className={`buttonTL arrow NeoSubContainer_outset_TL p-[7px] swiper-button-next-${uniqueId} cursor-pointer`}
+            className={`buttonTL arrow-right NeoSubContainer_outset_TL p-[7px] swiper-button-next-${uniqueId} cursor-pointer`}
           >
             <FontAwesomeIcon icon={faArrowRight} className="faArrowRight text-[30px]" />
           </button>

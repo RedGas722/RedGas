@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { InputLabel } from '../../../UI/Login_Register/InputLabel/InputLabel'
 
-export const RegisterModal = ({ onClose, onTecnicoRegistrado }) => {
+export const RegisterModal = ({ onClose, setRefrescar }) => {
     const [nombre, setNombre] = useState('')
     const [apellido, setApellido] = useState('')
     const [correo, setCorreo] = useState('')
@@ -49,8 +49,7 @@ export const RegisterModal = ({ onClose, onTecnicoRegistrado }) => {
         setMensaje(''); // Limpiar mensajes de error si todo es válido
 
         const formData = new FormData();
-        formData.append('nombre_tecnico', nombre);
-        formData.append('apellido_tecnico', apellido);
+        formData.append('nombre_tecnico', nombre + ' ' + apellido);
         formData.append('correo_tecnico', correo);
         formData.append('telefono_tecnico', telefono);
         formData.append('contrasena_tecnico', contrasena);
@@ -68,13 +67,7 @@ export const RegisterModal = ({ onClose, onTecnicoRegistrado }) => {
             const data = await res.json();
             console.log('Técnico registrado: ', data);
             setMensaje('Técnico registrado exitosamente.');
-            if (onTecnicoRegistrado) onTecnicoRegistrado(data.data || {
-                nombre_tecnico: nombre,
-                apellido_tecnico: apellido,
-                correo_tecnico: correo,
-                telefono_tecnico: telefono,
-                imagen: data.data?.imagen || null
-            });
+            setRefrescar(true); // Actualizar la lista de técnicos
         } catch (err) {
             console.log('Error al registrar técnico: ', err);
             setMensaje('Error al registrar: ' + err.message);
