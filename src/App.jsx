@@ -5,7 +5,7 @@ import { Routes, Route } from 'react-router-dom'
 import { MainPage } from './Pages/MainPage/MainPage'
 import { CostumerServices } from './Pages/Costumer/CostumerServices'
 import { ServicesInfo } from './Pages/Services/Services.jsx'
-import { ServicesInfo } from './Pages/Services/Services.jsx'
+// import { ServicesInfo } from './Pages/Services/Services.jsx'
 import { TechniciansPage } from './Pages/Technicians/TechniciansPage'
 import { Shopping } from './Pages/Shopping/Shopping.jsx'
 import { Register } from './Pages/Register/Register'
@@ -26,15 +26,11 @@ import { AdminsBack } from './Admin/Admins/AdminsBack'
 import { ContractsBack } from './Admin/Contracts/ContractsBack.jsx'
 import { Cancelado } from './Pages/Shopping/Cancelado.jsx'
 import { Confirmacion } from './Pages/Shopping/Confirmacion.jsx'
-<<<<<<< HEAD
 import { NotFound } from './Pages/NotFound/NotFound.jsx'
-=======
-import { notFound } from './Pages/NotFound/notFound.jsx'
 
 // Login Client, Technician
 import { LoginClient } from './Pages/Login/LoginClient.jsx'
 import { LoginTechnician } from './Pages/Login/LoginTechnician.jsx'
->>>>>>> 0856ce26ddb7f38dcf96de0c0940a7a73ff1a312
 
 export function App() {
     return (

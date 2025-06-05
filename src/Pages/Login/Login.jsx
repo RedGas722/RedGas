@@ -1,15 +1,32 @@
-import { useState } from "react"
-import { Outlet, NavLink } from "react-router-dom"
+import { useState, useEffect } from "react"
+import { Outlet, useNavigate, useLocation } from "react-router-dom"
 import { BtnBack } from "../../UI/Login_Register/BtnBack"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faScrewdriverWrench, faUser } from "@fortawesome/free-solid-svg-icons"
 import './Login.css'
 
 export const Login = () => {
-    const [login, setLogin] = useState(null)
+    const navigate = useNavigate()
+    const location = useLocation()
+    const [login, setLogin] = useState(false)
 
-    const handleLogin = () => {
-        setLogin(login.target.checked)
+    // Sync checkbox with current route
+    useEffect(() => {
+        if (location.pathname === "/Login/LoginTechnician") {
+            setLogin(true)
+        } else {
+            setLogin(false)
+        }
+    }, [location.pathname])
+
+    const handleLogin = (e) => {
+        const isChecked = e.target.checked
+        setLogin(isChecked)
+        if (isChecked) {
+            navigate("/Login/LoginTechnician")
+        } else {
+            navigate("/Login") // or just navigate("") if that's intended
+        }
     }
 
     return (
@@ -20,9 +37,14 @@ export const Login = () => {
                     <FontAwesomeIcon icon={faScrewdriverWrench} className="absolute left-2 z-[3] text-[var(--main-color)]" />
                     <FontAwesomeIcon icon={faUser} className="absolute right-2 z-[3] text-[var(--main-color)]" />
                     <div className="toggle z-[2] NeoContainer_outset_BR">
-                        <NavLink className='pp' to={`${login ? '/Login/LoginTechnician' : ''}`}>
-                            <input className="toggle-state" type="checkbox" name="check" value="check" checked={login} onChange={handleLogin} />
-                        </NavLink>
+                        <input
+                            className="toggle-state"
+                            type="checkbox"
+                            name="check"
+                            value="check"
+                            checked={login}
+                            onChange={handleLogin}
+                        />
                         <div className="indicator"></div>
                     </div>
                 </label>
