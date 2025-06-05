@@ -26,7 +26,7 @@ import { AdminsBack } from './Admin/Admins/AdminsBack'
 import { ContractsBack } from './Admin/Contracts/ContractsBack.jsx'
 import { Cancelado } from './Pages/Shopping/Cancelado.jsx'
 import { Confirmacion } from './Pages/Shopping/Confirmacion.jsx'
-import { NotFound } from './Pages/NotFound/NotFound.jsx'
+import { NotFound } from './Pages/NotFound/notFound.jsx'
 
 // Login Client, Technician
 import { LoginClient } from './Pages/Login/LoginClient.jsx'
