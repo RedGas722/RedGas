@@ -123,7 +123,8 @@ export const LoginTechnician = () => {
                     .then((result) => {
                         if (result.isConfirmed) {
                             navigate('/')
-                            emailinput.value = ''
+                            emailInput.value = ''
+                            passwordInput.value = ''
                         }
                     })
                 break
@@ -142,7 +143,8 @@ export const LoginTechnician = () => {
                     .then((result) => {
                         if (result.isConfirmed) {
                             navigate('/')
-                            emailinput.value = ''
+                            emailInput.value = ''
+                            passwordInput.value = ''
                         }
                     })
                 break
