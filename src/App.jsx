@@ -66,7 +66,7 @@ export function App() {
                     <Route path="/Shopping/Confirmacion" element={<Confirmacion />} />
                     <Route path="/Shopping/Cancelado" element={<Cancelado />} />
                     {/* 404 */}
-                    <Route path="/notFound" element={<NotFound />} />
+                    <Route path="/NotFound" element={<NotFound />} />
                 </Routes>
             </div>
         </>
