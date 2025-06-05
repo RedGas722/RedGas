@@ -1,3 +1,4 @@
+// Delete.jsx
 import { useState, useEffect } from 'react';
 import { RegisterModal } from './Register/RegisterModal';
 import { GetModal } from './Get/GetModal';

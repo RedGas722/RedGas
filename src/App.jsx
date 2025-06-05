@@ -21,7 +21,7 @@ import { CategoriesBack } from './Admin/Categories/CategoriesBack'
 import { TechniciansBack } from './Admin/Technicians/TechniciansBack'
 import { ServicesBack } from './Admin/Services/ServicesBack'
 import { AdminsBack } from './Admin/Admins/AdminsBack'
-import { ContractsBack } from './Admin/Contracts/ContractsBack.jsx'
+import  ContractsBack from './Admin/Contracts/ContractsBack.jsx'
 
 export function App() {
     return (
