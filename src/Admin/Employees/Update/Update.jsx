@@ -1,16 +1,14 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import Inputs from "../../UI/Inputs/Inputs"; 
 
-export const UpdateModal = ({ onClose, setRefrescar }) => {
-  const [correoBuscar, setCorreoBuscar] = useState("");
-  const [cliente, setCliente] = useState(null);
+export const UpdateModal = ({ onClose, setRefrescar, empleadoCarta }) => {
+  const [empleado, setEmpleado] = useState(null);
   const [nuevoCorreo, setNuevoCorreo] = useState("");
+  const [correoParaBusqueda, setCorreoParaBusqueda] = useState(""); // correo para buscar empleado en backend
   const [mensaje, setMensaje] = useState("");
   const [errores, setErrores] = useState({});
-  const [editando, setEditando] = useState(false);
   const [nombre, setNombre] = useState("");
   const [apellido, setApellido] = useState("");
-  let correoBusqueda = correoBuscar;
 
   const validarCampos = () => {
     const errores = {};
@@ -25,60 +23,34 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
       errores.nuevoCorreo = "Correo inválido.";
     }
 
-    if (!cliente?.telefono_cliente?.trim()) {
-      errores.telefono_cliente = "El teléfono es obligatorio.";
+    if (!empleado?.telefono_empleado?.trim()) {
+      errores.telefono_empleado = "El teléfono es obligatorio.";
     } else if (
-      cliente.telefono_cliente.length !== 10 ||
-      !/^\d+$/.test(cliente.telefono_cliente)
+      empleado.telefono_empleado.length !== 10 ||
+      !/^\d+$/.test(empleado.telefono_empleado)
     ) {
-      errores.telefono_cliente = "Teléfono debe tener 10 dígitos numéricos.";
+      errores.telefono_empleado = "Teléfono debe tener 10 dígitos numéricos.";
     }
 
     return errores;
   };
 
-  const buscarCliente = async () => {
-    setMensaje("");
-    setErrores({});
-    setCorreoBuscar(correoBusqueda);
+  useEffect(() => {
+    if (empleadoCarta) {
+      setEmpleado(empleadoCarta);
+      setNuevoCorreo(empleadoCarta.correo_empleado);
+      setCorreoParaBusqueda(empleadoCarta.correo_empleado); // Inicialmente, el correo para búsqueda es el actual
 
-    const correoRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const partesNombre = empleadoCarta.nombre_empleado.split(' ');
+      const nombre = partesNombre.slice(0, Math.ceil(partesNombre.length / 2)).join(' ');
+      const apellido = partesNombre.slice(Math.ceil(partesNombre.length / 2)).join(' ');
 
-    if (!correoBuscar.trim()) {
-      setErrores({ correoBuscar: "Ingresa un correo para buscar" });
-      return;
+        setNombre(nombre || "");
+        setApellido(apellido || "");
     }
+  }, [empleadoCarta]);
 
-    if (!correoRegex.test(correoBuscar)) {
-      setErrores({ correoBuscar: "Correo inválido" });
-      return;
-    }
-
-    try {
-      const res = await fetch(`https://redgas.onrender.com/ClienteGet?correo_cliente=${correoBusqueda}`);
-      const data = await res.json();
-
-      if (res.ok && data.data) {
-        setCliente(data.data);
-        setNuevoCorreo(data.data.correo_cliente);
-        setEditando(true);
-
-        const partes = data.data.nombre_cliente.split(" ");
-        setNombre(partes[0] || "");
-        setApellido(partes.slice(1).join(" ") || "");
-      } else {
-        setCliente(null);
-        setEditando(false);
-        setMensaje(data.status || "Cliente no encontrado.");
-      }
-    } catch {
-      setCliente(null);
-      setEditando(false);
-      setMensaje("Error al buscar cliente.");
-    }
-  };
-
-  const actualizarCliente = async () => {
+  const actualizarEmpleado = async () => {
     const erroresValidados = validarCampos();
     if (Object.keys(erroresValidados).length > 0) {
       setErrores(erroresValidados);
@@ -88,31 +60,34 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
     setErrores({});
     setMensaje("");
 
-    const direccionActualizada = cliente.direccion_cliente?.trim() === "" ? "sin direccion" : cliente.direccion_cliente;
+    const direccionActualizada = empleado.direccion_empleado?.trim() === "" ? "sin direccion" : empleado.direccion_empleado;
 
     const body = {
-      nombre_cliente: `${nombre.trim()} ${apellido.trim()}`,
-      nuevo_correo_cliente: nuevoCorreo,
-      telefono_cliente: cliente.telefono_cliente,
-      direccion_cliente: direccionActualizada,
-      correo_cliente: correoBuscar,
+      nombre_empleado: `${nombre.trim()} ${apellido.trim()}`,
+      nuevo_correo_empleado: nuevoCorreo,
+      telefono_empleado: empleado.telefono_empleado,
+      direccion_empleado: direccionActualizada,
+      correo_empleado: correoParaBusqueda, // Usamos correo para buscar empleado (puede ser diferente al nuevoCorreo)
     };
 
     try {
-      const res = await fetch("https://redgas.onrender.com/ClienteDataUpdate", {
+      const res = await fetch("https://redgas.onrender.com/EmpleadoDataUpdate", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
 
       if (res.ok) {
-        setMensaje("Cliente actualizado exitosamente.");
+        setMensaje("Empleado actualizado exitosamente.");
         setRefrescar(true);
-        correoBusqueda = nuevoCorreo;
-        await buscarCliente();
+
+        // Actualizar correoParaBusqueda solo si el correo nuevo cambió respecto al usado para buscar
+        if (correoParaBusqueda !== nuevoCorreo) {
+          setCorreoParaBusqueda(nuevoCorreo);
+        }
       } else {
         const data = await res.json();
-        setMensaje(data.errorInfo || "Error al actualizar cliente.");
+        setMensaje(data.errorInfo || "Error al actualizar empleado.");
       }
     } catch {
       setMensaje("Error de red al actualizar.");
@@ -120,14 +95,14 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
   };
 
   const cancelarEdicion = () => {
-    setCliente(null);
-    setCorreoBuscar("");
+    setEmpleado(null);
     setNuevoCorreo("");
-    setEditando(false);
+    setCorreoParaBusqueda("");
     setMensaje("");
     setErrores({});
     setNombre("");
     setApellido("");
+    onClose();
   };
 
   return (
@@ -141,34 +116,9 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
           ✕
         </button>
 
-        <h2 className="text-xl font-bold text-center">Actualizar Cliente</h2>
+        <h2 className="text-xl font-bold text-center">Actualizar Empleado</h2>
 
-        {!editando && (
-          <>
-            <Inputs
-              Type="2"
-              Place="Correo del cliente a buscar"
-              Value={correoBuscar}
-              onChange={(e) => {
-                setCorreoBuscar(e.target.value);
-                setErrores((prev) => ({ ...prev, correoBuscar: null }));
-              }}
-              className="w-full"
-            />
-            {errores.correoBuscar && (
-              <p className="text-red-600 text-sm">{errores.correoBuscar}</p>
-            )}
-
-            <button
-              onClick={buscarCliente}
-              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
-            >
-              Buscar
-            </button>
-          </>
-        )}
-
-        {editando && cliente && (
+        {empleado && (
           <>
             <Inputs
               Type="1"
@@ -209,22 +159,22 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
             <Inputs
               Type="6"
               Place="Teléfono"
-              Value={cliente.telefono_cliente}
+              Value={empleado.telefono_empleado}
               onChange={(e) =>
-                setCliente({ ...cliente, telefono_cliente: e.target.value })
+                setEmpleado({ ...empleado, telefono_empleado: e.target.value })
               }
               className="w-full"
             />
-            {errores.telefono_cliente && (
-              <p className="text-red-600 text-sm">{errores.telefono_cliente}</p>
+            {errores.telefono_empleado && (
+              <p className="text-red-600 text-sm">{errores.telefono_empleado}</p>
             )}
 
             <Inputs
               Type="1"
               Place="Dirección"
-              Value={cliente.direccion_cliente}
+              Value={empleado.direccion_empleado}
               onChange={(e) =>
-                setCliente({ ...cliente, direccion_cliente: e.target.value })
+                setEmpleado({ ...empleado, direccion_empleado: e.target.value })
               }
               className="w-full"
             />
@@ -238,7 +188,7 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
               </button>
 
               <button
-                onClick={actualizarCliente}
+                onClick={actualizarEmpleado}
                 className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded"
               >
                 Actualizar
