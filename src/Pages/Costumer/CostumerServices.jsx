@@ -49,7 +49,7 @@ export const CostumerServices = () => {
           <div>
             <FontAwesomeIcon icon={faUser} className="text-[var(--Font-Nav-shadow)] text-5xl" />
           </div>
-          <div className="flex flex-col font-light leading-[20px]">
+          <div className="flex flex-col justify-center font-light leading-[20px]">
             <p className="text-2xl font-bold text-[var(--main-color)]">{user}</p>
             <p className="text-[1rem]">{phone}</p>
             <p className="text-[1rem]">mztytft</p>
