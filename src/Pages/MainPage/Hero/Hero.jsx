@@ -8,8 +8,8 @@ export const Hero = () => {
     const logoRef = useRef(null)
     const titleRef = useRef(null)
     const paragraph1Ref = useRef(null)
-    const paragraph2Ref = useRef(null)
-    const quoteRef = useRef(null)
+    // const paragraph2Ref = useRef(null)
+    // const quoteRef = useRef(null)
 
     useEffect(() => {
         const tl = gsap.timeline({ defaults: { ease: 'power4.in', duration: 0.6 } })
@@ -17,7 +17,7 @@ export const Hero = () => {
         tl.fromTo(
             sectionRef.current,
             { scale: 0.92 },
-            { scale: 1}
+            { scale: 1 }
         )
             .fromTo(
                 logoRef.current,
@@ -36,18 +36,18 @@ export const Hero = () => {
                 { x: 0, opacity: 1 },
                 "-=0.4"
             )
-            .fromTo(
-                paragraph2Ref.current,
-                { x: 100, opacity: 0 },
-                { x: 0, opacity: 1 },
-                "-=0.5"
-            )
-            .fromTo(
-                quoteRef.current,
-                { y: 30, opacity: 0 },
-                { y: 0, opacity: 1 },
-                "-=0.6"
-            )
+            // .fromTo(
+            //     paragraph2Ref.current,
+            //     { x: 100, opacity: 0 },
+            //     { x: 0, opacity: 1 },
+            //     "-=0.5"
+            // )
+            // .fromTo(
+            //     quoteRef.current,
+            //     { y: 30, opacity: 0 },
+            //     { y: 0, opacity: 1 },
+            //     "-=0.6"
+            // )
     }, [])
 
     return (
@@ -60,16 +60,16 @@ export const Hero = () => {
             <h1 ref={titleRef} className='text-6xl text-center font-bold text-[var(--Font-Nav)]'>RedGas</h1>
             <div className='text-[20px] flex flex-col gap-[50px]'>
                 <div ref={paragraph1Ref} className='flex flex-col items-center justify-center text-center'>
-                    <p className='max-w-[810px]'>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi eligendi eius, doloribus voluptas error accusantium in dignissimos, ipsam architecto labore rerum vel cum natus repellat esse beatae nostrum. Ratione, recusandae?
+                    <p className='max-w-[810px]'>   
+                    <span className='font-bold text-[var(--Font-Nav-shadow)]'>Compromiso, calidad y confianza en cada servicio </span>Somos un equipo de expertos en equipos a gas, comprometidos con la excelencia, la seguridad y la satisfacción de nuestros clientes. Nuestra integridad y profesionalismo nos permiten ofrecer soluciones eficientes y confiables, brindando la tranquilidad que mereces en tu hogar o negocio.
                     </p>
                 </div>
-                <div ref={paragraph2Ref} className='flex flex-col items-end justify-center text-right'>
+                {/* <div ref={paragraph2Ref} className='flex flex-col items-end justify-center text-right'>
                     <p>
                         Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt facere quae provident qui reprehenderit dignissimos animi com.
                     </p>
                     <span ref={quoteRef}>-Pepe</span>
-                </div>
+                </div> */}
             </div>
         </section>
     )
