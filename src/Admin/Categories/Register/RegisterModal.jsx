@@ -57,7 +57,7 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
     }
   };
 
-  const cancelarEdicion = () => {
+  const cancelarRegistro = () => {
     setNombre("");
     setErrores({});
     setMensaje("");
@@ -82,7 +82,7 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
 
         <div className="flex justify-between gap-2">
           <button
-            onClick={cancelarEdicion}
+            onClick={cancelarRegistro}
             className="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded"
           >
             Cancelar
