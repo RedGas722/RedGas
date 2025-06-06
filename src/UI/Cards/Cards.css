@@ -19,11 +19,7 @@
 }
 
 .arrow:hover {
-    color: var(--Font-Nav);
-}
-
-.arrow:hover {
-    color: var(--Font-Nav);
+    color: var(--Font-Nav-shadow);
 }
 
 .card {
@@ -79,12 +75,10 @@
 .card-price {
     font-size: 20px;
     font-weight: 500;
-    color: var(--main-color);
 }
 
 .card-price span {
     font-weight: 500;
-    color: var(--main-color-sub);
 }
 
 .card-btn,
@@ -109,16 +103,16 @@
 }
 
 .card-btn:hover {
-    border: 2px solid var(--Font-Nav);
+    border: 2px solid var(--Font-Nav-shadow);
     color: var(--Font-Nav);
 }
 
 .card-btn_Offer:hover {
-    border: 2px solid var(--Font-Nav2);
+    border: 2px solid var(--Font-Nav2-shadow);
     color: var(--Font-Nav2);
 }
 
 .card-btn:active,
 .card-btn_Offer:active {
-    transform: translateY(3px);
+    transform: translateY(5px);
 }

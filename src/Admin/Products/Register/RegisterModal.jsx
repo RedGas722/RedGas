@@ -23,83 +23,52 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
     const fetchCategorias = async () => {
       try {
         const res = await fetch(URL_CATEGORIAS);
-        if (res.ok) {
-          const data = await res.json();
-          setCategorias(data?.data || []);
-        } else {
-          console.warn('Error al obtener categorías:', res.status);
-        }
+        const data = await res.json();
+        setCategorias(data?.data || []);
       } catch (error) {
         console.error('Error al cargar categorías:', error);
       }
     };
-
     fetchCategorias();
   }, []);
 
   const validarCampos = () => {
     const errores = {};
     const tiposPermitidos = ['image/jpeg', 'image/png', 'image/webp'];
-    const maxSize = 8 * 1024 * 1024; // 8MB
+    const maxSize = 8 * 1024 * 1024;
 
-    if (!nombre.trim()) {
-      errores.nombre = 'El nombre es obligatorio.';
-    } else if (nombre.length > 100) {
-      errores.nombre = 'El nombre debe tener como máximo 100 caracteres.';
-    }
+    if (!nombre.trim()) errores.nombre = 'El nombre es obligatorio.';
+    else if (nombre.length > 100) errores.nombre = 'Máximo 100 caracteres.';
 
-    if (!precio.trim()) {
-      errores.precio = 'El precio es obligatorio.';
-    } else if (isNaN(precio) || !/^\d+(\.\d{1,2})?$/.test(precio)) {
-      errores.precio = 'El precio debe ser un número decimal válido.';
-    }
+    if (!precio.trim()) errores.precio = 'El precio es obligatorio.';
+    else if (isNaN(precio) || !/^\d+(\.\d{1,2})?$/.test(precio)) errores.precio = 'Número decimal válido.';
 
-    if (!descripcion.trim()) {
-      errores.descripcion = 'La descripción es obligatoria.';
-    }
+    if (!descripcion.trim()) errores.descripcion = 'La descripción es obligatoria.';
 
-    if (!stock.trim()) {
-      errores.stock = 'El stock es obligatorio.';
-    } else if (!/^\d+$/.test(stock) || parseInt(stock) <= 0) {
-      errores.stock = 'El stock debe ser un número entero mayor que 0.';
-    }
+    if (!stock.trim()) errores.stock = 'El stock es obligatorio.';
+    else if (!/^\d+$/.test(stock) || parseInt(stock) <= 0) errores.stock = 'Debe ser un número mayor que 0.';
 
-    if (!/^\d+(\.\d{1,2})?$/.test(descuento) || parseFloat(descuento) < 0 || parseFloat(descuento) > 100) {
-        errores.descuento = 'El descuento debe ser un número decimal entre 0 y 100.';
-    }
-
-    if (!fechaDescuento.trim()) {
-      errores.fechaDescuento = 'La fecha de descuento es obligatoria.';
-    }
-
-    if (!imagen) {
-      errores.imagen = 'La imagen es obligatoria.';
-    } else {
-      if (!tiposPermitidos.includes(imagen.type)) {
-        errores.imagen = 'Tipo de imagen no permitido. Solo JPG, PNG o WEBP.';
-      }
-      if (imagen.size > maxSize) {
-        errores.imagen = 'La imagen no debe superar los 8MB.';
-      }
-    }
-
-    if (!categoriaId) {
-      errores.categoria = 'Debe seleccionar una categoría.';
-    }
+    if (!/^\d+(\.\d{1,2})?$/.test(descuento) || parseFloat(descuento) < 0 || parseFloat(descuento) > 100)
+      errores.descuento = 'Descuento entre 0 y 100.';
 
     const hoy = new Date().toISOString().slice(0, 10);
-    if (!fechaDescuento.trim()) {
-      errores.fechaDescuento = 'La fecha de descuento es obligatoria.';
-    } else if (fechaDescuento < hoy) {
-      errores.fechaDescuento = 'La fecha de descuento debe ser posterior a hoy.';
+    if (parseFloat(descuento) > 0 && (!fechaDescuento.trim() || fechaDescuento < hoy))
+      errores.fechaDescuento = 'Fecha futura requerida.';
+
+    if (!imagen) errores.imagen = 'La imagen es obligatoria.';
+    else {
+      if (!tiposPermitidos.includes(imagen.type)) errores.imagen = 'Solo JPG, PNG o WEBP.';
+      if (imagen.size > maxSize) errores.imagen = 'Máximo 8MB.';
     }
+
+    if (!categoriaId) errores.categoria = 'Debe seleccionar una categoría.';
+
     return errores;
   };
 
   const handleRegister = async (e) => {
     e.preventDefault();
     const erroresValidados = validarCampos();
-
     if (Object.keys(erroresValidados).length > 0) {
       setErrores(erroresValidados);
       setMensaje('');
@@ -111,12 +80,10 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
 
     try {
       const resCheck = await fetch(`${URL_GET}?nombre_producto=${encodeURIComponent(nombre)}`);
-      if (resCheck.ok) {
-        const dataCheck = await resCheck.json();
-        if (dataCheck?.data?.length > 0) {
-          setMensaje('Ya existe un producto con ese nombre.');
-          return;
-        }
+      const dataCheck = await resCheck.json();
+      if (dataCheck?.data?.length > 0) {
+        setMensaje('Ya existe un producto con ese nombre.');
+        return;
       }
 
       const formData = new FormData();
@@ -134,47 +101,39 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
       });
 
       if (!resRegister.ok) {
-        if (resRegister.status === 500) {
-          setMensaje('Error: Ya existe un producto con ese nombre.');
-        } else {
-          const errorData = await resRegister.json();
-          setMensaje('Error al registrar: ' + (errorData?.errors?.[0]?.msg || 'Datos inválidos.'));
-        }
+        const errorData = await resRegister.json();
+        setMensaje('Error al registrar: ' + (errorData?.errors?.[0]?.msg || 'Datos inválidos.'));
         return;
       }
 
-      const resNuevo = await fetch(`${URL_GET}?nombre_producto=${encodeURIComponent(nombre)}`);
-      if (resNuevo.ok) {
-        const dataNuevo = await resNuevo.json();
-        if (dataNuevo?.data) {
-          const producto = dataNuevo.data;
-          const idProducto = producto.id_producto;
+      // Registrar la categoría seleccionada
+      await fetch(URL_SE_ENCUENTRA, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          nombre_producto: nombre,
+          id_categoria: parseInt(categoriaId),
+        }),
+      });
 
-          // Registrar relación en SeEncuentra
-          try {
-            const resSeEncuentra = await fetch(URL_SE_ENCUENTRA, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                id_producto: idProducto,
-                id_categoria: parseInt(categoriaId),
-              }),
-            });
+      // Si hay descuento > 0, registrar también la categoría "Ofertas"
+      if (parseFloat(descuento) > 0) {
+        const categoriaOferta = categorias.find(
+          (cat) => cat.nombre_categoria.toLowerCase() === 'ofertas'
+        );
 
-            if (!resSeEncuentra.ok) {
-              console.warn('Error al registrar en SeEncuentra:', resSeEncuentra.status);
-            }
-          } catch (error) {
-            console.error('Error de red al registrar en SeEncuentra:', error);
-          }
+        if (categoriaOferta) {
+          await fetch(URL_SE_ENCUENTRA, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              nombre_producto: nombre,
+              id_categoria: categoriaOferta.id_categoria,
+            }),
+          });
         }
-      } else if (resNuevo.status === 404) {
-        console.warn('Producto registrado, pero no se pudo obtener con GET (404).');
-      } else {
-        console.warn('Error inesperado al obtener el producto:', resNuevo.status);
       }
+
       setMensaje('Producto registrado exitosamente.');
       if (setRefrescar) setRefrescar(true);
     } catch (err) {
@@ -182,7 +141,7 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
     }
   };
 
-  const handleCancel = () => {
+  const cancelarRegistro = () => {
     setNombre('');
     setPrecio('');
     setDescripcion('');
@@ -193,6 +152,7 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
     setCategoriaId('');
     setMensaje('');
     setErrores({});
+    onClose();
   };
 
   const handleImageChange = (e) => {
@@ -203,13 +163,6 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
   return (
     <div className="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-2xl p-6 shadow-lg w-[320px] flex flex-col gap-4 relative text-black">
-        <button
-          className="absolute top-2 right-3 text-gray-600 text-lg"
-          onClick={onClose}
-        >
-          ✕
-        </button>
-
         <h2 className="text-xl font-bold text-center">Registrar Producto</h2>
 
         <Inputs Type="1" Place="Nombre del Producto" Value={nombre} onChange={(e) => setNombre(e.target.value)} />
@@ -218,47 +171,16 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
         <Inputs Type="5" Place="Precio del Producto" Value={precio} onChange={(e) => setPrecio(e.target.value)} />
         {errores.precio && <p className="text-red-600 text-sm">{errores.precio}</p>}
 
-        <textarea
-          placeholder="Descripción"
-          value={descripcion}
-          onChange={(e) => setDescripcion(e.target.value)}
-          className="border rounded p-2"
-        />
+        <textarea placeholder="Descripción" value={descripcion} onChange={(e) => setDescripcion(e.target.value)} className="border rounded p-2" />
         {errores.descripcion && <p className="text-red-600 text-sm">{errores.descripcion}</p>}
 
         <Inputs Type="5" Place="Stock" Value={stock} onChange={(e) => setStock(e.target.value)} />
         {errores.stock && <p className="text-red-600 text-sm">{errores.stock}</p>}
 
-        <Inputs
-          Type="5"
-          Place="Descuento"
-          Value={descuento}
-          onChange={(e) => {
-            const inputValue = e.target.value;
-
-            if (/^\d{0,3}$/.test(inputValue)) {
-              const descuentoNum = parseInt(inputValue);
-              const ofertaCategoria = categorias.find(
-                (cat) => cat.nombre_categoria.toLowerCase() === 'ofertas'
-              );
-
-              if (inputValue === '' || descuentoNum === 0 || isNaN(descuentoNum)) {
-                // Si se borra o se pone 0, permite cambiar la categoría manualmente
-                if (ofertaCategoria && categoriaId === String(ofertaCategoria.id_categoria)) {
-                  setCategoriaId('');
-                }
-              } else if (descuentoNum > 0 && ofertaCategoria) {
-                // Si hay descuento y existe categoría "ofertas", forzamos su id
-                setCategoriaId(String(ofertaCategoria.id_categoria));
-              }
-
-              setDescuento(inputValue);
-            }
-          }}
-        />
+        <Inputs Type="5" Place="Descuento" Value={descuento} onChange={(e) => setDescuento(e.target.value)} />
         {errores.descuento && <p className="text-red-600 text-sm">{errores.descuento}</p>}
 
-        {descuento > 0 && (
+        {parseFloat(descuento) > 0 && (
           <Inputs
             Type="7"
             Place="Fecha Descuento"
@@ -272,15 +194,7 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
         <select
           value={categoriaId}
           onChange={(e) => setCategoriaId(e.target.value)}
-          className={`border rounded p-2 transition-colors duration-300 w-full ${
-            categorias.find(cat => cat.nombre_categoria.toLowerCase() === 'ofertas')?.id_categoria == categoriaId && parseInt(descuento) > 0
-              ? 'bg-gray-200 cursor-not-allowed text-gray-500'
-              : 'bg-white cursor-pointer text-black'
-          }`}
-          disabled={
-            categorias.find(cat => cat.nombre_categoria.toLowerCase() === 'ofertas')?.id_categoria == categoriaId &&
-            parseInt(descuento) > 0
-          }
+          className="border rounded p-2 w-full"
         >
           <option value="">Seleccione una categoría</option>
           {categorias.map((cat) => (
@@ -295,18 +209,8 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
         {errores.imagen && <p className="text-red-600 text-sm">{errores.imagen}</p>}
 
         <div className="flex justify-between gap-2">
-          <button
-            onClick={handleCancel}
-            className="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded"
-          >
-            Cancelar
-          </button>
-          <button
-            onClick={handleRegister}
-            className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
-          >
-            Registrar
-          </button>
+          <button onClick={cancelarRegistro} className="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded">Cancelar</button>
+          <button onClick={handleRegister} className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">Registrar</button>
         </div>
 
         {mensaje && (

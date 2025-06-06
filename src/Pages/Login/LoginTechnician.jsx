@@ -141,6 +141,7 @@ export const LoginTechnician = () => {
                         if (result.isConfirmed) {
                             navigate('/')
                             emailInput.value = ''
+                            passwordInput.value = ''
                         }
                     })
                 break
@@ -160,6 +161,7 @@ export const LoginTechnician = () => {
                         if (result.isConfirmed) {
                             navigate('/')
                             emailInput.value = ''
+                            passwordInput.value = ''
                         }
                     })
                 break

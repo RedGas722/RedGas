@@ -1,16 +1,14 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import Inputs from "../../UI/Inputs/Inputs"; 
 
-export const UpdateModal = ({ onClose, setRefrescar }) => {
-  const [correoBuscar, setCorreoBuscar] = useState("");
+export const UpdateModal = ({ onClose, setRefrescar, clienteCarta }) => {
   const [cliente, setCliente] = useState(null);
   const [nuevoCorreo, setNuevoCorreo] = useState("");
+  const [correoParaBusqueda, setCorreoParaBusqueda] = useState(""); // correo para buscar cliente en backend
   const [mensaje, setMensaje] = useState("");
   const [errores, setErrores] = useState({});
-  const [editando, setEditando] = useState(false);
   const [nombre, setNombre] = useState("");
   const [apellido, setApellido] = useState("");
-  let correoBusqueda = correoBuscar;
 
   const validarCampos = () => {
     const errores = {};
@@ -37,46 +35,21 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
     return errores;
   };
 
-  const buscarCliente = async () => {
-    setMensaje("");
-    setErrores({});
-    setCorreoBuscar(correoBusqueda);
+  useEffect(() => {
+    if (clienteCarta) {
+      setCliente(clienteCarta);
+      setNuevoCorreo(clienteCarta.correo_cliente);
+      setCorreoParaBusqueda(clienteCarta.correo_cliente); // Inicialmente, el correo para búsqueda es el actual
 
-    const correoRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const partes = clienteCarta.nombre_cliente.trim().split(/\s+/); // Maneja múltiples espacios
 
-    if (!correoBuscar.trim()) {
-      setErrores({ correoBuscar: "Ingresa un correo para buscar" });
-      return;
+        const nombre = partes.slice(0, 2).join(" "); // Primeras dos palabras como nombre
+        const apellido = partes.slice(2).join(" ");  // El resto como apellido
+
+        setNombre(nombre || "");
+        setApellido(apellido || "");
     }
-
-    if (!correoRegex.test(correoBuscar)) {
-      setErrores({ correoBuscar: "Correo inválido" });
-      return;
-    }
-
-    try {
-      const res = await fetch(`https://redgas.onrender.com/ClienteGet?correo_cliente=${correoBusqueda}`);
-      const data = await res.json();
-
-      if (res.ok && data.data) {
-        setCliente(data.data);
-        setNuevoCorreo(data.data.correo_cliente);
-        setEditando(true);
-
-        const partes = data.data.nombre_cliente.split(" ");
-        setNombre(partes[0] || "");
-        setApellido(partes.slice(1).join(" ") || "");
-      } else {
-        setCliente(null);
-        setEditando(false);
-        setMensaje(data.status || "Cliente no encontrado.");
-      }
-    } catch {
-      setCliente(null);
-      setEditando(false);
-      setMensaje("Error al buscar cliente.");
-    }
-  };
+  }, [clienteCarta]);
 
   const actualizarCliente = async () => {
     const erroresValidados = validarCampos();
@@ -95,7 +68,7 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
       nuevo_correo_cliente: nuevoCorreo,
       telefono_cliente: cliente.telefono_cliente,
       direccion_cliente: direccionActualizada,
-      correo_cliente: correoBuscar,
+      correo_cliente: correoParaBusqueda, // Usamos correo para buscar cliente (puede ser diferente al nuevoCorreo)
     };
 
     try {
@@ -108,8 +81,11 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
       if (res.ok) {
         setMensaje("Cliente actualizado exitosamente.");
         setRefrescar(true);
-        correoBusqueda = nuevoCorreo;
-        await buscarCliente();
+
+        // Actualizar correoParaBusqueda solo si el correo nuevo cambió respecto al usado para buscar
+        if (correoParaBusqueda !== nuevoCorreo) {
+          setCorreoParaBusqueda(nuevoCorreo);
+        }
       } else {
         const data = await res.json();
         setMensaje(data.errorInfo || "Error al actualizar cliente.");
@@ -121,54 +97,21 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
 
   const cancelarEdicion = () => {
     setCliente(null);
-    setCorreoBuscar("");
     setNuevoCorreo("");
-    setEditando(false);
+    setCorreoParaBusqueda("");
     setMensaje("");
     setErrores({});
     setNombre("");
     setApellido("");
+    onClose();
   };
 
   return (
     <div className="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-2xl p-6 shadow-lg w-[340px] flex flex-col gap-4 relative text-black">
-        <button
-          className="absolute top-2 right-3 text-gray-600 text-lg"
-          onClick={onClose}
-          aria-label="Cerrar"
-        >
-          ✕
-        </button>
-
         <h2 className="text-xl font-bold text-center">Actualizar Cliente</h2>
 
-        {!editando && (
-          <>
-            <Inputs
-              Type="2"
-              Place="Correo del cliente a buscar"
-              Value={correoBuscar}
-              onChange={(e) => {
-                setCorreoBuscar(e.target.value);
-                setErrores((prev) => ({ ...prev, correoBuscar: null }));
-              }}
-              className="w-full"
-            />
-            {errores.correoBuscar && (
-              <p className="text-red-600 text-sm">{errores.correoBuscar}</p>
-            )}
-
-            <button
-              onClick={buscarCliente}
-              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
-            >
-              Buscar
-            </button>
-          </>
-        )}
-
-        {editando && cliente && (
+        {cliente && (
           <>
             <Inputs
               Type="1"

@@ -70,12 +70,13 @@ export const RegisterModal = ({ onClose, setRefrescar, onFacturaRegistrada }) =>
     }
   };
 
-  const handleCancel = () => {
+  const cancelarRegistro = () => {
     setIDcliente('');
     setIDempleado('');
     setFecha(new Date().toISOString().slice(0, 10));
     setMensaje('');
     setErrores({});
+    onClose();
   };
 
   return (
@@ -122,7 +123,7 @@ export const RegisterModal = ({ onClose, setRefrescar, onFacturaRegistrada }) =>
 
         <div className="flex justify-between gap-2">
           <button
-            onClick={handleCancel}
+            onClick={cancelarRegistro}
             className="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded"
           >
             Cancelar

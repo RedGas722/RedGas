@@ -7,10 +7,15 @@ export const GetModal = ({ onClose }) => {
 
   const URL = 'http://localhost:10101/AdminGet';
 
+
   const handleGet = async (e) => {
     e.preventDefault();
     try {
-      console.log(`Fetching: ${URL}?correo_admin=${encodeURIComponent(correo)}`); // Log the GET request
+      if (!correo || correo.trim() === '') {
+        setMensaje({ error: 'Por favor, introduce un correo válido.' });
+        return;
+      }
+
       const res = await fetch(`${URL}?correo_admin=${encodeURIComponent(correo)}`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
@@ -73,7 +78,7 @@ export const GetModal = ({ onClose }) => {
         )}
         {mensaje && mensaje.data && mensaje.data.length === 0 && (
           <div className="bg-yellow-100 p-3 rounded mt-2 text-sm text-yellow-700">
-            No se encontró el administrador solicitado.
+        
           </div>
         )}
       </div>
