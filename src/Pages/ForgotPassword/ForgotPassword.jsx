@@ -52,7 +52,7 @@ export const ForgotPassword = () => {
                             'Hemos enviado un enlace a tu correo electrónico para que puedas restablecer tu contraseña.'
                         );
                         setTimeout(() => {
-                            navigate('/');
+                            navigate('/Login');
                         }, 4000);
                     })
                     .catch(() => {

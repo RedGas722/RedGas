@@ -1,5 +1,7 @@
-import { useState, useEffect } from "react"
-import { jwtDecode } from "jwt-decode"
+import { useState, useEffect, use } from "react";
+import { jwtDecode } from "jwt-decode";
+
+const URL = 'http://localhost:10101/ClienteServicesGet'
 
 export const CostumerServices = () => {
   const [user, setUser] = useState('')
@@ -9,30 +11,42 @@ export const CostumerServices = () => {
   const [solutions, setSolutions] = useState('')
 
   useEffect(() => {
-    const token = localStorage.getItem('token')
-    const data = JSON.parse(localStorage.getItem("data"))
+    const token = localStorage.getItem('token');
 
-    if (token || data) {
+    if (token) {
+      const decoded = jwtDecode(token);
+      const userId = decoded.data.id;
 
-      const labelInfo = data.resultado.etiqueta
-      const soluciones = data.resultado.posibles_soluciones
+      const fetchData = async () => {
+        try {
+          const response = await fetch(`${URL}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ userId: userId }),
+          });
 
-      const solucionesTexto = Array.isArray(soluciones)
-        ? soluciones.join('\n')
-        : soluciones
+          if (!response.ok) {
+            throw new Error('Error fetching data');
+          }
 
-      const decoded = jwtDecode(token)
-      const userInfo = decoded.data.name
-      const phoneInfo = decoded.data.telefono
-      const addressInfo = decoded.data.direccion
+          const datainfo = await response.json();
+          const firstParse = JSON.parse(datainfo.get);
+          const secondParse = JSON.parse(JSON.parse(firstParse.item));
+          const solutionsWithHyphens = secondParse.resultado.posibles_soluciones.map(sol => `- ${sol}`);
+          
+          setUser(firstParse.userName);
+          setPhone(firstParse.userPhone);
+          setAddress(firstParse.userAddress);
+          setLabel(secondParse.resultado.etiqueta);
+          setSolutions(solutionsWithHyphens.join('\n'));
 
-      setUser(userInfo)
-      setPhone(phoneInfo)
-      setAddress(addressInfo)
-      setLabel(labelInfo)
-      setSolutions(solucionesTexto)
-
-
+        } catch (error) {
+          console.error('Error:', error);
+        }
+      };
+      fetchData();
     }
 
   }, [])
