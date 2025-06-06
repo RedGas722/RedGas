@@ -136,6 +136,7 @@ export const ForgotPassword = () => {
                 });
 
                 emailinput.style.border = '2px solid #FF0000'
+                emailinput.value = ''
                 break;
 
             case 402:

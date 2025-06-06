@@ -9,7 +9,7 @@ import withReactContent from 'sweetalert2-react-content'
 import Swal from 'sweetalert2'
 import './Login.css'
 
-const URL = 'https://redgas.onrender.com/ClienteLogin'
+const URL = 'http://localhost:10101/TecnicoLogin'
 
 export const LoginTechnician = () => {
     const navigate = useNavigate()
@@ -182,7 +182,7 @@ export const LoginTechnician = () => {
                     </section>
                     <div className="flex flex-col gap-2.5 items-center justify-center">
                         <Buttons type="submit" nameButton="Iniciar" />
-                        <Text Have="No tienes cuenta?" GoTo="Regístrate aquí" nav='/Register' />
+                        {/* <Text Have="No tienes cuenta?" GoTo="Regístrate aquí" nav='/Register' /> */}
                     </div>
                 </form>
             </div>

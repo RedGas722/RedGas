@@ -88,6 +88,9 @@ export const RecoveryPassword = () => {
                     allowEnterKey: false,
                     showConfirmButton: true,
                     confirmButtonText: 'volver al login',
+                    customClass: {
+                        confirmButton: 'my-confirm-button'
+                    }
                 })
                     .then((result) => {
                         if (result.isConfirmed) {

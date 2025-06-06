@@ -76,7 +76,7 @@ export const LoginClient = () => {
                     allowEscapeKey: false,
                     allowEnterKey: false,
                     showConfirmButton: false,
-                    timer: 2000,
+                    timer: 10,
                     timerProgressBar: true,
                 })
                 emailInput.value = ''

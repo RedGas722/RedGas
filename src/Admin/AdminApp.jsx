@@ -1,10 +1,15 @@
 import ButtonSide from './UI/ButtonSide'
+import { BtnBack } from "../UI/Login_Register/BtnBack"
 import './AdminStyles.css'
 
 export const AdminApp = () => {
     return (
         <>
-            <h2 className='font-bold text-4xl text-[var(--Font-Nav)] fixed top-5 left-5'>Admin Page</h2>
+            
+            <div className='btnDown fixed flex-col'>
+                <h2 className=' font-bold text-4xl text-[var(--Font-Nav)] fixed top-5 left-5 text-shadow'>ADMINISTRADOR</h2>
+                <BtnBack To='/' className='btnDown' />
+            </div>
             <div className="Admin p-[2%_0_2%_1%] w-dvw h-dvh bg-[var(--Bacground-Admin)] flex items-center justify-center">
                 <section id="sideBarr" className="h-fit p-[0_30px] gap-10 justify-center justify-self-center self-center flex flex-wrap">
                     <ButtonSide to='/Admin/Technicians' children='Técnicos' imgBtn='../../src/Admin/Assets/Icons/Tecnic.png' />
