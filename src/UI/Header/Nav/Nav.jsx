@@ -11,7 +11,7 @@ export const Navs = ({ className, ref1, ref2, ref3, ref4 }) => {
     }, [])
 
     const getLinkClass = (id) =>
-        `text-[var(--main-color)] cursor-pointer transition-colors duration-300 ${active === id ? '!text-[var(--Font-Nav)] font-bold' : ''
+        `text-[var(--main-color)] cursor-pointer transition-colors duration-300 ${active === id ? '!text-[var(--Font-Nav2)] font-bold' : ''
         }`
 
     return (
@@ -23,7 +23,7 @@ export const Navs = ({ className, ref1, ref2, ref3, ref4 }) => {
                     duration={500}
                     id="HomeLink"
                     className={`${getLinkClass("Hero")} NeoSubContainer_outset_TL p-[5px_10px]`}
-                    activeClass="!text-[var(--Font-Nav)] font-bold"
+                    activeClass="!text-[var(--Font-Nav2)] font-bold"
                     spy={true}
                     onSetActive={() => setActive("Hero")}
                 >
@@ -36,7 +36,7 @@ export const Navs = ({ className, ref1, ref2, ref3, ref4 }) => {
                     smooth={true}
                     duration={500}
                     className={`${getLinkClass("ProductCategory")} NeoSubContainer_outset_TL p-[5px_10px]`}
-                    activeClass="!text-[var(--Font-Nav)] font-bold"
+                    activeClass="!text-[var(--Font-Nav2)] font-bold"
                     spy={true}
                     onSetActive={() => setActive("ProductCategory")}
                 >
@@ -49,7 +49,7 @@ export const Navs = ({ className, ref1, ref2, ref3, ref4 }) => {
                     smooth={true}
                     duration={500}
                     className={`${getLinkClass("OffersSect")} NeoSubContainer_outset_TL p-[5px_10px]`}
-                    activeClass="!text-[var(--Font-Nav)] font-bold"
+                    activeClass="!text-[var(--Font-Nav2)] font-bold"
                     spy={true}
                     onSetActive={() => setActive("OffersSect")}
                 >

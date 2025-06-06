@@ -106,39 +106,40 @@ import {
   faCartShopping,
 } from '@fortawesome/free-solid-svg-icons';
 
-    async function agregarAlCarrito(item) {
-    const token = localStorage.getItem("token");
-    console.log(token);
-    if (!token) {
-        alert("Debes iniciar sesión para agregar al carrito");
-        return null;
-    }
-    const res = await fetch("https://redgas.onrender.com/CartAdd", {
+
+async function agregarAlCarrito(item) {
+  const token = localStorage.getItem("token");
+  console.log(token);
+  if (!token) {
+    alert("Debes iniciar sesión para agregar al carrito");
+    return null;
+  }
+  const res = await fetch("https://redgas.onrender.com/CartAdd", {
     method: "POST",
     headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`, 
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`,
     },
-    body: JSON.stringify(item), 
-    });
+    body: JSON.stringify(item),
+  });
 
 
-    if (!res.ok) {
-        const error = await res.json();
-        throw new Error(error.message || "Error al agregar al carrito");
-    }
-    return await res.json();
-    }
+  if (!res.ok) {
+    const error = await res.json();
+    throw new Error(error.message || "Error al agregar al carrito");
+  }
+  return await res.json();
+}
 
 export const CardsOffers = ({ uniqueId, productos = [] }) => {
 
   const handleAddToCart = async (producto) => {
     const item = {
-    productId: producto.id_producto,
-    productName: producto.nombre_producto,  
-    quantity: 1,
-    price: producto.precio_producto,
-    discount: producto.descuento || 0
+      productId: producto.id_producto,
+      productName: producto.nombre_producto,
+      quantity: 1,
+      price: producto.precio_producto,
+      discount: producto.descuento || 0
     };
 
     try {
@@ -191,13 +192,13 @@ export const CardsOffers = ({ uniqueId, productos = [] }) => {
                 <hr className="card-divider" />
                 <div className="card-footer">
                   <div className="card-price">
-                    <span>$</span> {(parseFloat(producto.precio_producto) - (parseFloat(producto.precio_producto)*(producto.descuento/100))).toLocaleString()}
-                    <div className="beforePrice text-[15px] text-[var(--main-color-sub)] line-through">
-                    <span>$</span> {(parseFloat(producto.precio_producto)).toLocaleString()} {producto.descuento}%
+                    <p className="text-[var(--Font-Nav2)]"><span className="text-[var(--Font-Nav2-shadow)]">$</span>{(parseFloat(producto.precio_producto) - (parseFloat(producto.precio_producto) * (producto.descuento / 100))).toLocaleString()} </p>
+                    <div className="text-[15px] text-[var(--Font-Nav)] line-through">
+                      <p><span className="text-[var(--Font-Nav-shadow)]">$</span> {(parseFloat(producto.precio_producto)).toLocaleString()} {producto.descuento}% </p>
                     </div>
                   </div>
                   <button
-                    className="card-btn hover:text-[#ffff]"
+                    className="card-btn_Offer"
                     onClick={() => handleAddToCart(producto)}
                   >
                     <FontAwesomeIcon icon={faCartShopping} />
