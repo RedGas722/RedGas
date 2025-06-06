@@ -193,8 +193,8 @@ export const CardsOffers = ({ uniqueId, productos = [] }) => {
                 <div className="card-footer">
                   <div className="card-price">
                     <p className="text-[var(--Font-Nav2)]"><span className="text-[var(--Font-Nav2-shadow)]">$</span>{(parseFloat(producto.precio_producto) - (parseFloat(producto.precio_producto) * (producto.descuento / 100))).toLocaleString()} </p>
-                    <div className="text-[15px] text-[var(--Font-Nav)] line-through">
-                      <p><span className="text-[var(--Font-Nav-shadow)]">$</span> {(parseFloat(producto.precio_producto)).toLocaleString()} {producto.descuento}% </p>
+                    <div className="text-[15px] text-[var(--Font-Nav)] ">
+                      <p className="text-[var(--Font-Nav-shadow)]">$ <span className="line-through">{(parseFloat(producto.precio_producto)).toLocaleString()}</span> <span className="text-[18px] font-bold">{producto.descuento}%</span> </p>
                     </div>
                   </div>
                   <button
