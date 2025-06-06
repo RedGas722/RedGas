@@ -1,4 +1,4 @@
-import { DeleteEmployee } from '../Delete/DeleteModal';
+import { DeleteEmployee } from '../Delete/Delete';
 
 const CardEmployeesBack = ({ empleado, setRefrescar, onUpdateClick }) => {
   const handleDelete = async () => {

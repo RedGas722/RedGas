@@ -57,21 +57,16 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
     }
   };
 
-  const handleCancel = () => {
-    setNombre('');
-    setMensaje('');
+  const cancelarEdicion = () => {
+    setNombre("");
     setErrores({});
+    setMensaje("");
+    onClose();
   };
 
   return (
     <div className="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-2xl p-6 shadow-lg w-[320px] flex flex-col gap-4 relative text-black">
-        <button
-          className="absolute top-2 right-3 text-gray-600 text-lg"
-          onClick={onClose}
-        >
-          ✕
-        </button>
 
         <h2 className="text-xl font-bold text-center">Registrar Categoría</h2>
 
@@ -87,7 +82,7 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
 
         <div className="flex justify-between gap-2">
           <button
-            onClick={handleCancel}
+            onClick={cancelarEdicion}
             className="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded"
           >
             Cancelar

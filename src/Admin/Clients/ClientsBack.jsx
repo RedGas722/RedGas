@@ -4,6 +4,7 @@ import { UpdateModal } from './Update/Update';
 import { ButtonBack } from '../UI/ButtonBack/ButtonBack';
 import CardClientsBack from './Get/CardClientsBack';
 import { buscarClientePorCorreo } from './Get/Get';
+import Inputs from '../UI/Inputs/Inputs';
 
 export const ClientsBack = () => {
   const [showRegisterModal, setShowRegisterModal] = useState(false);
@@ -77,8 +78,8 @@ export const ClientsBack = () => {
         <h1 className="font-bold text-[20px]">Cliente BACK-OFFICE</h1>
           {/* Barra de búsqueda para consultar cliente */}
           <div className="flex items-center gap-2 border border-gray-300 rounded px-2 py-1">
-            <input
-              type="text"
+            <Inputs
+              type="1"
               placeholder="Correo del cliente"
               value={correoBusqueda}
               onChange={(e) => setCorreoBusqueda(e.target.value)}

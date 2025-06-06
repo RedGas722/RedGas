@@ -109,14 +109,6 @@ export const UpdateModal = ({ onClose, setRefrescar, clienteCarta }) => {
   return (
     <div className="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-2xl p-6 shadow-lg w-[340px] flex flex-col gap-4 relative text-black">
-        <button
-          className="absolute top-2 right-3 text-gray-600 text-lg"
-          onClick={onClose}
-          aria-label="Cerrar"
-        >
-          ✕
-        </button>
-
         <h2 className="text-xl font-bold text-center">Actualizar Cliente</h2>
 
         {cliente && (

@@ -4,6 +4,7 @@ import { UpdateModal } from './Update/Update';
 import { ButtonBack } from '../UI/ButtonBack/ButtonBack';
 import { buscarEmpleadoPorCorreo } from './Get/Get';
 import CardEmployeesBack from './Get/CardEmployeesBack';
+import Inputs from '../UI/Inputs/Inputs';
 
 export const EmployeesBack = () => {
   const [showRegisterModal, setShowRegisterModal] = useState(false);
@@ -77,8 +78,8 @@ export const EmployeesBack = () => {
         <h1 className="font-bold text-[20px]">Empleado BACK-OFFICE</h1>
           {/* Barra de búsqueda para consultar empleado */}
           <div className="flex items-center gap-2 border border-gray-300 rounded px-2 py-1">
-            <input
-              type="text"
+            <Inputs
+              type="1"
               placeholder="Correo del empleado"
               value={correoBusqueda}
               onChange={(e) => setCorreoBusqueda(e.target.value)}
