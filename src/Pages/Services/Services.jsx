@@ -2,7 +2,7 @@ import { useState } from "react"
 import { Buttons } from "../../UI/Login_Register/Buttons"
 
 const URL_IA = 'https://redgas.onrender.com/Diagnostic'
-const URL_REDIS = 'http://localhost:10101/ClienteServicesAdd'
+const URL_REDIS = 'https://redgas.onrender.com/ClienteServicesAdd'
 
 
 export const ServicesInfo = () => {

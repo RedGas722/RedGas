@@ -1,7 +1,7 @@
 import { useState, useEffect, use } from "react";
 import { jwtDecode } from "jwt-decode";
 
-const URL = 'http://localhost:10101/ClienteServicesGet'
+const URL = 'https://redgas.onrender.com/ClienteServicesGet'
 
 export const CostumerServices = () => {
   const [user, setUser] = useState('')
