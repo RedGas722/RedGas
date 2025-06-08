@@ -16,7 +16,7 @@ import { RecoveryPassword } from './Pages/RecoveryPassword/RecoveryPassword'
 import { AdminApp } from './Admin/AdminApp'
 // -Imports Backs-
 import { ClientsBack } from './Admin/Clients/ClientsBack'
-import { ProductBack } from './Admin/Products/ProductBack'
+import { ProductsBack } from './Admin/Products/ProductsBack'
 import { EmployeesBack } from './Admin/Employees/EmployeesBack'
 import { FacturesBack } from './Admin/Factures/FacturesBack'
 import { CategoriesBack } from './Admin/Categories/CategoriesBack'
@@ -56,7 +56,7 @@ export function App() {
                     <Route path='/Admin/Technicians' element={<TechniciansBack />} />
                     <Route path="/Admin/Clients" element={<ClientsBack />} />
                     <Route path="/Admin/Employees" element={<EmployeesBack />} />
-                    <Route path="/Admin/Products" element={<ProductBack />} />
+                    <Route path="/Admin/Products" element={<ProductsBack />} />
                     <Route path="/Admin/Factures" element={<FacturesBack />} />
                     <Route path="/Admin/Categories" element={<CategoriesBack />} />
                     <Route path="/Admin/Services" element={<ServicesBack />} />
@@ -66,7 +66,7 @@ export function App() {
                     <Route path="/Shopping/Confirmacion" element={<Confirmacion />} />
                     <Route path="/Shopping/Cancelado" element={<Cancelado />} />
                     {/* 404 */}
-                    <Route path="/notFound" element={<NotFound />} />
+                    <Route path="/NotFound" element={<NotFound />} />
                 </Routes>
             </div>
         </>

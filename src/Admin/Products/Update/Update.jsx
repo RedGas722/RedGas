@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Inputs } from '../../UI/Inputs/Inputs';
 
-export const UpdateModal = ({ onClose, setRefrescar }) => {
-  const [nombreProducto, setNombreProducto] = useState('');
+export const UpdateModal = ({ onClose, setRefrescar, productoCarta }) => {
   const [producto, setProducto] = useState(null);
   const [mensaje, setMensaje] = useState('');
   const [errores, setErrores] = useState({});
-  const [editando, setEditando] = useState(false);
   const [imagenNueva, setImagenNueva] = useState(null);
   const [imagenActual, setImagenActual] = useState(null);
   const [categorias, setCategorias] = useState([]);
-  let nombreBusqueda = nombreProducto;
+  const [categoriaSeleccionada, setCategoriaSeleccionada] = useState('');
+  const [nombreActualDb, setNombreActualDb] = useState(''); // ← Para mantener el nombre actualizado
 
-  const URL_GET = 'https://redgas.onrender.com/ProductoGet';
   const URL_UPDATE = 'https://redgas.onrender.com/ProductoUpdateNI';
   const URL_UPDATE_IMAGEN = 'https://redgas.onrender.com/ProductoUpdate';
   const URL_SE_ENCUENTRA_UPDATE = 'https://redgas.onrender.com/SeEncuentraUpdate';
@@ -52,62 +50,65 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
     }    
     if (parseInt(producto.descuento) > 0) {
       const hoy = new Date().toISOString().slice(0, 10);
-      if (!producto.fechaDescuento || producto.fechaDescuento <= hoy) {
+      if (!producto.fechaDescuento || producto.fechaDescuento < hoy) {
         errores.fechaDescuento = 'Fecha de descuento debe ser posterior a hoy';
       }
     }
     if (!producto.categoriaSeleccionada) errores.categoriaSeleccionada = 'Seleccione una categoría';
     return errores;
   };
+  // establecer el producto como el traido de la carta
+  useEffect(() => {
+    if (productoCarta) {
+      setErrores({});
+      const nombreInicial = productoCarta.nombre_producto || '';
+      const fechaOriginal = convertirFecha(productoCarta.fecha_descuento);
+      const hoy = new Date().toISOString().slice(0, 10);
+      const fechaFinal = fechaOriginal && fechaOriginal < hoy ? hoy : fechaOriginal;
 
-  // Buscar producto
-  const handleBuscar = async () => {
-    if (!editando) setMensaje('');
-    setErrores({});
+      setProducto({
+        nuevoNombre: nombreInicial,
+        nombreProducto: nombreInicial,
+        precio: productoCarta.precio_producto || '',
+        descripcion: productoCarta.descripcion_producto || '',
+        stock: productoCarta.stock || '',
+        descuento: productoCarta.descuento || 0,
+        fechaDescuento: fechaFinal || hoy,
+        categoriaSeleccionada: '',
+      });
 
-    if (!nombreProducto.trim()) {
-      setErrores({ nombreProducto: 'El nombre del producto es obligatorio' });
-      return;
+      setNombreActualDb(nombreInicial);
+
+      if (productoCarta.imagen) {
+        setImagenActual(`data:image/jpeg;base64,${productoCarta.imagen}`);
+        setImagenNueva(null);
+      } else {
+        setImagenActual(null);
+        setImagenNueva(null);
+      }
     }
+  }, [productoCarta]);
 
-    try {
-      const res = await fetch(`${URL_GET}?nombre_producto=${encodeURIComponent(nombreBusqueda)}`);
-      if (!res.ok) throw new Error('Producto no encontrado');
-
-      const data = await res.json();
-      if (!data.data) throw new Error('Producto no existe');
-
-      // Buscar id_categoria por nombre_categoria
-      const nombreCategoriaValida = data.data.categorias.find(
+  // actualizar la categoria traida
+  useEffect(() => {
+    if (categorias.length > 0 && productoCarta) {
+      const nombreCategoriaValida = productoCarta.categorias?.find(
         (nombre_categoria) => nombre_categoria.toLowerCase() !== 'ofertas'
       );
 
       const categoriaObj = categorias.find(
         (cat) => cat.nombre_categoria === nombreCategoriaValida
       );
-      console.log('Categoría encontrada:', data.data.categorias[0]);
-      setProducto({
-        nombreProducto: data.data.nombre_producto,
-        nuevoNombre: data.data.nombre_producto,
-        precio: data.data.precio_producto,
-        descripcion: data.data.descripcion_producto,
-        stock: data.data.stock,
-        descuento: data.data.descuento,
-        fechaDescuento: convertirFecha(data.data.fecha_descuento),
-        categoriaSeleccionada: categoriaObj ? String(categoriaObj.id_categoria) : '', 
-      });
 
-      if (data.data.imagen) {
-        setImagenActual(`data:image/jpeg;base64,${data.data.imagen}`);
-        setImagenNueva(null);
-      }
-      setEditando(true);
-    } catch (err) {
-      setMensaje('Error al buscar producto: ' + err.message);
+      const nuevaCategoria = categoriaObj ? String(categoriaObj.id_categoria) : '';
+
+      setProducto((prev) => ({
+        ...prev,
+        categoriaSeleccionada: nuevaCategoria,
+      }));
     }
-  };
+  }, [categorias, productoCarta]); // ← ya no depende de producto
 
-  // Actualizar producto y categoría
   const handleActualizar = async () => {
     const erroresValidados = validarCampos();
     if (Object.keys(erroresValidados).length > 0) {
@@ -117,12 +118,14 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
 
     setErrores({});
     const hayImagen = !!imagenNueva;
+    const nombreOriginal = nombreActualDb;
+    const nombreFinal = producto.nuevoNombre;
 
     try {
       if (hayImagen) {
         const formData = new FormData();
-        formData.append('nombre_producto', producto.nombreProducto);
-        formData.append('nuevo_nombre_producto', producto.nuevoNombre);
+        formData.append('nombre_producto', nombreOriginal);
+        formData.append('nuevo_nombre_producto', nombreFinal);
         formData.append('precio_producto', parseFloat(producto.precio));
         formData.append('descripcion_producto', producto.descripcion);
         formData.append('stock', parseInt(producto.stock));
@@ -146,8 +149,8 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
         }
       } else {
         const jsonData = {
-          nombre_producto: producto.nombreProducto,
-          nuevo_nombre_producto: producto.nuevoNombre,
+          nombre_producto: nombreOriginal,
+          nuevo_nombre_producto: nombreFinal,
           precio_producto: parseFloat(producto.precio),
           descripcion_producto: producto.descripcion,
           stock: parseInt(producto.stock),
@@ -157,9 +160,7 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
 
         const res = await fetch(URL_UPDATE, {
           method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(jsonData),
         });
 
@@ -174,24 +175,21 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
         }
       }
 
-      // Actualizar la categoría mediante la ruta separada
-      // const categoriaObj = categorias.find(
-      //   (cat) =>
-      //     cat.nombre_categoria.toLowerCase() !== 'ofertas' &&
-      //     cat.nombre_categoria === data.data.categorias[0]
-      // );
-      // if (producto.categoriaSeleccionada != categoriaObj ? String(categoriaObj.id_categoria) : '') {
-      await actualizarRelacionCategoria();
-      // }
+      // ¡Actualizamos el nombre real del producto en el estado!
+      setNombreActualDb(nombreFinal);
+
+      // Actualizamos relación de categoría
+      if (producto.categoriaSeleccionada !== categoriaSeleccionada) {
+        await actualizarRelacionCategoria(nombreFinal);
+      }
+
       if (parseInt(producto.descuento) > 0) {
-        await agregarRelacionCategoriaOfertas(nombreBusqueda, categorias);
-      } else if (parseInt(producto.descuento) === 0) {
-        await eliminarRelacionCategoriaOfertas(nombreBusqueda, categorias);
+        await agregarRelacionCategoriaOfertas(nombreFinal, categorias);
+      } else {
+        await eliminarRelacionCategoriaOfertas(nombreFinal, categorias);
       }
 
       if (setRefrescar) setRefrescar(true);
-      nombreBusqueda = producto.nuevoNombre;
-      await handleBuscar();
       setMensaje('Producto actualizado exitosamente.');
     } catch (err) {
       setMensaje('Error al actualizar: ' + err.message);
@@ -199,14 +197,13 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
   };
 
   // Cancelar edición
-  const handleCancelar = () => {
-    setNombreProducto('');
+  const cancelarEdicion = () => {
     setProducto(null);
-    setEditando(false);
     setMensaje('');
     setErrores({});
     setImagenActual(null);
     setImagenNueva(null);
+    onClose();
   };
 
   // Cambiar imagen
@@ -214,23 +211,25 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
     const file = e.target.files[0];
     if (file) {
       setImagenNueva(file);
+      const previewURL = URL.createObjectURL(file); // ← genera vista previa
+      setImagenActual(previewURL); // ← actualiza la imagen actual por la nueva
     } else {
       setImagenNueva(null);
+      setImagenActual(null);
     }
   };
 
   const convertirFecha = (fechaConvertir) => {
-    // Solo extraemos la fecha YYYY-MM-DD directamente
-    return fechaConvertir ? fechaConvertir.slice(0, 10) : '';
+  return fechaConvertir ? fechaConvertir.slice(0, 10) : '';
   };
 
-  const actualizarRelacionCategoria = async () => {
+  const actualizarRelacionCategoria = async (nombreFinal) => {
     try {
       const res = await fetch(URL_SE_ENCUENTRA_UPDATE, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          nombre_producto: nombreBusqueda,
+          nombre_producto: nombreFinal, // ¡ya es el nuevo nombre!
           id_categoria: producto.categoriaSeleccionada,
         }),
       });
@@ -245,9 +244,9 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
         }
         throw new Error(data?.errors?.[0]?.msg || 'Error al actualizar categoría');
       }
-    } catch (error) {
-      throw error;
-    }
+      } catch (error) {
+        throw error;
+      }
   };
 
   const agregarRelacionCategoriaOfertas = async (nombreProducto, categorias) => {
@@ -316,34 +315,9 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
   return (
     <div className="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-2xl p-6 shadow-lg w-[340px] flex flex-col gap-4 relative text-black">
-        <button className="absolute top-2 right-3 text-gray-600 text-lg" onClick={onClose}>
-          ✕
-        </button>
-
         <h2 className="text-xl font-bold text-center">Actualizar Producto</h2>
 
-        {!editando && (
-          <>
-            <Inputs
-              Type="1"
-              Place="Nombre del Producto"
-              Value={nombreProducto}
-              onChange={(e) => setNombreProducto(e.target.value)}
-            />
-            {errores.nombreProducto && (
-              <p className="text-red-600 text-sm">{errores.nombreProducto}</p>
-            )}
-
-            <button
-              onClick={handleBuscar}
-              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
-            >
-              Buscar
-            </button>
-          </>
-        )}
-
-        {editando && producto && (
+        {producto && (
           <>
             <Inputs
               Type="1"
@@ -442,7 +416,7 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
 
             <div className="flex justify-between gap-2">
               <button
-                onClick={handleCancelar}
+                onClick={cancelarEdicion}
                 className="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded"
               >
                 Cancelar

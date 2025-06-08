@@ -1,23 +1,21 @@
-import React, { useState } from "react";
-import Inputs from "../../UI/Inputs/Inputs";
+import { useState, useEffect } from "react";
+import Inputs from "../../UI/Inputs/Inputs"; 
 
-export const UpdateModal = ({ onClose, setRefrescar }) => {
-  const [correoBuscar, setCorreoBuscar] = useState("");
+export const UpdateModal = ({ onClose, setRefrescar, empleadoCarta }) => {
   const [empleado, setEmpleado] = useState(null);
   const [nuevoCorreo, setNuevoCorreo] = useState("");
+  const [correoParaBusqueda, setCorreoParaBusqueda] = useState(""); // correo para buscar empleado en backend
   const [mensaje, setMensaje] = useState("");
   const [errores, setErrores] = useState({});
-  const [editando, setEditando] = useState(false);
   const [nombre, setNombre] = useState("");
   const [apellido, setApellido] = useState("");
-  let CorreoBusqueda = correoBuscar;
 
   const validarCampos = () => {
     const errores = {};
     const correoRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    if (!nombre.trim()) errores.nombre = "El nombre es obligatorio.";
-    if (!apellido.trim()) errores.apellido = "El apellido es obligatorio.";
+    if (!nombre.trim()) errores.nombre = "El nombre es obligatorio";
+    if (!apellido.trim()) errores.apellido = "El apellido es obligatorio";
 
     if (!nuevoCorreo.trim()) {
       errores.nuevoCorreo = "El correo es obligatorio.";
@@ -37,42 +35,20 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
     return errores;
   };
 
-  const buscarEmpleado = async () => {
-    setErrores({});
-    setCorreoBuscar(CorreoBusqueda);
-    const correoRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!correoBuscar.trim()) {
-      setErrores({ correoBuscar: "Ingresa un correo para buscar" });
-      return;
-    }
+  useEffect(() => {
+    if (empleadoCarta) {
+      setEmpleado(empleadoCarta);
+      setNuevoCorreo(empleadoCarta.correo_empleado);
+      setCorreoParaBusqueda(empleadoCarta.correo_empleado); // Inicialmente, el correo para búsqueda es el actual
 
-    if (!correoRegex.test(correoBuscar)) {
-      setErrores({ correoBuscar: "Correo inválido" });
-      return;
-    }
+      const partesNombre = empleadoCarta.nombre_empleado.split(' ');
+      const nombre = partesNombre.slice(0, Math.ceil(partesNombre.length / 2)).join(' ');
+      const apellido = partesNombre.slice(Math.ceil(partesNombre.length / 2)).join(' ');
 
-    try {
-      const res = await fetch(`https://redgas.onrender.com/EmpleadoGet?correo_empleado=${CorreoBusqueda}`);
-      const data = await res.json();
-      if (res.ok && data.data) {
-        setEmpleado(data.data);
-        setNuevoCorreo(data.data.correo_empleado);
-        setEditando(true);
-
-        const partes = data.data.nombre_empleado.split(" ");
-        setNombre(partes[0] || "");
-        setApellido(partes.slice(1).join(" ") || "");
-      } else {
-        setEmpleado(null);
-        setEditando(false);
-        setMensaje(data.status || "Empleado no encontrado.");
-      }
-    } catch {
-      setEmpleado(null);
-      setEditando(false);
-      setMensaje("Error al buscar empleado.");
+        setNombre(nombre || "");
+        setApellido(apellido || "");
     }
-  };
+  }, [empleadoCarta]);
 
   const actualizarEmpleado = async () => {
     const erroresValidados = validarCampos();
@@ -91,7 +67,7 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
       nuevo_correo_empleado: nuevoCorreo,
       telefono_empleado: empleado.telefono_empleado,
       direccion_empleado: direccionActualizada,
-      correo_empleado: correoBuscar,
+      correo_empleado: correoParaBusqueda, // Usamos correo para buscar empleado (puede ser diferente al nuevoCorreo)
     };
 
     try {
@@ -104,8 +80,11 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
       if (res.ok) {
         setMensaje("Empleado actualizado exitosamente.");
         setRefrescar(true);
-        CorreoBusqueda = nuevoCorreo; 
-        await buscarEmpleado(); 
+
+        // Actualizar correoParaBusqueda solo si el correo nuevo cambió respecto al usado para buscar
+        if (correoParaBusqueda !== nuevoCorreo) {
+          setCorreoParaBusqueda(nuevoCorreo);
+        }
       } else {
         const data = await res.json();
         setMensaje(data.errorInfo || "Error al actualizar empleado.");
@@ -117,54 +96,21 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
 
   const cancelarEdicion = () => {
     setEmpleado(null);
-    setCorreoBuscar("");
     setNuevoCorreo("");
-    setEditando(false);
+    setCorreoParaBusqueda("");
     setMensaje("");
     setErrores({});
     setNombre("");
     setApellido("");
+    onClose();
   };
 
   return (
     <div className="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-2xl p-6 shadow-lg w-[340px] flex flex-col gap-4 relative text-black">
-        <button
-          className="absolute top-2 right-3 text-gray-600 text-lg"
-          onClick={onClose}
-          aria-label="Cerrar"
-        >
-          ✕
-        </button>
-
         <h2 className="text-xl font-bold text-center">Actualizar Empleado</h2>
 
-        {!editando && (
-          <>
-            <Inputs
-              Type="2"
-              Place="Correo del empleado a buscar"
-              Value={correoBuscar}
-              onChange={(e) => {
-                setCorreoBuscar(e.target.value);
-                setErrores((prev) => ({ ...prev, correoBuscar: null }));
-              }}
-              className="w-full"
-            />
-            {errores.correoBuscar && (
-              <p className="text-red-600 text-sm">{errores.correoBuscar}</p>
-            )}
-
-            <button
-              onClick={buscarEmpleado}
-              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
-            >
-              Buscar
-            </button>
-          </>
-        )}
-
-        {editando && empleado && (
+        {empleado && (
           <>
             <Inputs
               Type="1"
@@ -173,7 +119,9 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
               onChange={(e) => setNombre(e.target.value)}
               className="w-full"
             />
-            {errores.nombre && <p className="text-red-600 text-sm">{errores.nombre}</p>}
+            {errores.nombre && (
+              <p className="text-red-600 text-sm">{errores.nombre}</p>
+            )}
 
             <Inputs
               Type="1"
@@ -182,7 +130,9 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
               onChange={(e) => setApellido(e.target.value)}
               className="w-full"
             />
-            {errores.apellido && <p className="text-red-600 text-sm">{errores.apellido}</p>}
+            {errores.apellido && (
+              <p className="text-red-600 text-sm">{errores.apellido}</p>
+            )}
 
             <Inputs
               Type="2"
@@ -194,7 +144,9 @@ export const UpdateModal = ({ onClose, setRefrescar }) => {
               }}
               className="w-full"
             />
-            {errores.nuevoCorreo && <p className="text-red-600 text-sm">{errores.nuevoCorreo}</p>}
+            {errores.nuevoCorreo && (
+              <p className="text-red-600 text-sm">{errores.nuevoCorreo}</p>
+            )}
 
             <Inputs
               Type="6"

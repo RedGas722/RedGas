@@ -1,18 +1,26 @@
 import { useState, useEffect } from 'react';
 import { RegisterModal } from './Register/RegisterModal';
-import { GetModal } from './Get/GetModal';
-import { UpdateModal } from './Update/UpdateModal';
-import { DeleteModal } from './Delete/DeleteModal';
+import { UpdateModal } from './Update/Update';
 import { ButtonBack } from '../UI/ButtonBack/ButtonBack';
-import CardsEmployeesBack from './Get/CardEmployeesBack';
+import { buscarEmpleadoPorCorreo } from './Get/Get';
+import CardEmployeesBack from './Get/CardEmployeesBack';
+import Inputs from '../UI/Inputs/Inputs';
 
 export const EmployeesBack = () => {
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [showGetModal, setShowGetModal] = useState(false);
   const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [empleados, setEmpleados] = useState([]);
   const [refrescar, setRefrescar] = useState(false);
+
+  // Estado para el empleado que se va a actualizar
+  const [empleadoSeleccionado, setEmpleadoSeleccionado] = useState(null);
+
+  // Estado para la búsqueda de empleado por correo
+  const [correoBusqueda, setCorreoBusqueda] = useState('');
+  const [empleadoBuscado, setEmpleadoBuscado] = useState(null);
+  const [errorBusqueda, setErrorBusqueda] = useState('');
+
+  const URL = 'https://redgas.onrender.com/EmpleadoGet';
 
   async function fetchEmpleados() {
     try {
@@ -33,52 +41,96 @@ export const EmployeesBack = () => {
     if (refrescar) {
       fetchEmpleados();
       setRefrescar(false);
+      // Al refrescar la lista, limpiamos la búsqueda y error para mostrar todas las tarjetas
+      setEmpleadoBuscado(null);
+      setErrorBusqueda('');
+      setCorreoBusqueda('');
     }
   }, [refrescar]);
+
+  // Función para abrir el modal de actualización con empleado seleccionado
+  const abrirModalActualizar = (empleado) => {
+    setEmpleadoSeleccionado(empleado);
+    setShowUpdateModal(true);
+  };
+
+  // Función para cerrar modal actualización y limpiar estado
+  const cerrarModal = () => {
+    setShowUpdateModal(false);
+    setEmpleadoSeleccionado(null);
+  };
+
+  const buscarEmpleado = async () => {
+    setErrorBusqueda('');
+    setEmpleadoBuscado(null);
+
+    try {
+      const resultado = await buscarEmpleadoPorCorreo(correoBusqueda);
+      setEmpleadoBuscado(resultado);
+    } catch (error) {
+      setErrorBusqueda(error.message);
+    }
+  };
 
   return (
     <div className="p-[20px] flex flex-col gap-[20px]">
       <div className="flex items-center gap-[20px]">
         <h1 className="font-bold text-[20px]">Empleado BACK-OFFICE</h1>
-        <ButtonBack ClickMod={() => setShowRegisterModal(true)} Child="Registrar" />
-        <ButtonBack ClickMod={() => setShowGetModal(true)} Child="Consultar" />
-        <ButtonBack ClickMod={() => setShowUpdateModal(true)} Child="Actualizar" />
-        <ButtonBack ClickMod={() => setShowDeleteModal(true)} Child="Eliminar" />
+          {/* Barra de búsqueda para consultar empleado */}
+          <div className="flex items-center gap-2 border border-gray-300 rounded px-2 py-1">
+            <Inputs
+              type="1"
+              placeholder="Correo del empleado"
+              value={correoBusqueda}
+              onChange={(e) => setCorreoBusqueda(e.target.value)}
+              className="outline-none"
+            />
+            <button
+              onClick={buscarEmpleado}
+              aria-label="Buscar empleado"
+              className="text-gray-600 hover:text-gray-900"
+            >
+              🔍
+            </button>
+          </div>
+        <ButtonBack ClickMod={() => setShowRegisterModal(true)} Child="Registrar" />        
       </div>
+
+      {/* Mostrar mensaje de error */}
+      {errorBusqueda && <p className="text-red-600 text-sm">{errorBusqueda}</p>}
 
       {/* Sección de empleados */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {empleados.map(empleado => (
-          <CardsEmployeesBack key={empleado.id_empleado} empleado={empleado} />
-        ))}
+        {empleadoBuscado
+          ? (
+            <CardEmployeesBack
+              key={empleadoBuscado.id_empleado}
+              empleado={empleadoBuscado}
+              setRefrescar={setRefrescar}
+              onUpdateClick={abrirModalActualizar}
+            />
+          )
+          : empleados.map((empleado) => (
+              <CardEmployeesBack
+                key={empleado.id_empleado}
+                empleado={empleado}
+                setRefrescar={setRefrescar}
+                onUpdateClick={abrirModalActualizar}
+              />
+            ))
+        }
       </div>
 
       {/* Modales */}
       {showRegisterModal && (
-        <RegisterModal
-          onClose={() => setShowRegisterModal(false)}
-          onEmpleadoRegistrado={(nuevoEmpleado) => {
-            setEmpleados(prev => [nuevoEmpleado, ...prev]);
-          }}
-          setRefrescar={setRefrescar}
-        />
+        <RegisterModal onClose={() => setShowRegisterModal(false)} setRefrescar={setRefrescar} />
       )}
 
-      {showGetModal && (
-        <GetModal onClose={() => setShowGetModal(false)} />
-      )}
-
-      {showUpdateModal && (
+      {showUpdateModal && empleadoSeleccionado && (
         <UpdateModal
-          onClose={() => setShowUpdateModal(false)}
+          onClose={cerrarModal}
           setRefrescar={setRefrescar}
-        />
-      )}
-
-      {showDeleteModal && (
-        <DeleteModal
-          onClose={() => setShowDeleteModal(false)}
-          setRefrescar={setRefrescar}
+          empleadoCarta={empleadoSeleccionado}
         />
       )}
     </div>
