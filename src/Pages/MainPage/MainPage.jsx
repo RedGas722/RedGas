@@ -7,20 +7,26 @@ import { ToolsSect } from './Tools/Tools'
 import { SpaerPartsSect } from "./SpareParts/SparePart"
 import { AccessoriesSect } from "./Accessories/Accessories"
 import { ShopCart } from "../../UI/ShopCart/ShopCart"
+import { Footer } from "./Footer/Footer"
 import './MainPage.css'
 
 export const MainPage = () => {
     return (
-        <div className="MainPageContainer flex flex-col gap-[50px]">
-            <Header />
-            <Hero />
-            <ProductCategory />
-            <OffersSect />
-            <HeatersSect />
-            <ToolsSect />
-            <SpaerPartsSect />
-            <AccessoriesSect />
-            <ShopCart />
+        <div className="">
+            <div className="MainPageContainer gap-[50px]">
+                <Header />
+                <div className="flex flex-col gap-[50px]">
+                    <Hero />
+                    <ProductCategory />
+                    <OffersSect />
+                    <HeatersSect />
+                    <ToolsSect />
+                    <SpaerPartsSect />
+                    <AccessoriesSect />
+                    <ShopCart />
+                </div>
+            </div>
+            <Footer />
         </div>
     )
 }

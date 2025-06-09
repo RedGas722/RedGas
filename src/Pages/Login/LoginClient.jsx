@@ -162,19 +162,19 @@ export const LoginClient = () => {
 
                     {/* Password */}
                     <InputLabel type='3' ForID='Password' childLabel='Contraseña' placeholder='**********' value={contrasena} onChange={e => setContrasena(e.target.value)} required />
-                    <section className="flex gap-[5px] items-center justify-between w-full">
+                    <section className="flex gap-[10px] items-center justify-between w-full">
                         <label className="flex gap-[5px] items-center justify-center cursor-pointer text-[var(--main-color-sub)]">
                             <label className="flex items-center justify-center">
                                 <input type="checkbox" className="input" />
                                 <span className="custom-checkbox"></span>
                             </label>
-                            <div>
+                            <div className="text-[var(--main-color)] hover:text-[var(--Font-Nav)] text-[14px]">
                                 <p>Recordarme</p>
                             </div>
                         </label>
-                        <div className="text-[var(--main-focus)]">
+                        <div className="text-[var(--Font-Nav)] text-[14px]">
                             <Link to="/Login/ForgotPassword">
-                                <button className="cursor-pointer hover:text-[var(--Font-Nav)]">
+                                <button className="cursor-pointer hover:text-[var(--Font-Nav-shadow)]">
                                     <p >Olvidaste tu contraseña?</p>
                                 </button>
                             </Link>
