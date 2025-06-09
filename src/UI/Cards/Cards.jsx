@@ -90,7 +90,7 @@ export const Cards = ({ uniqueId, productos = [] }) => {
                 <hr className="card-divider" />
                 <div className="card-footer">
                   <div className="card-price">
-                    <p><span className="text-[var(--Font-Nav-shadow)]">$</span> {(parseFloat(producto.precio_producto) || 0).toLocaleString()} </p>
+                    <p><span className="text-[var(--Font-Nav-shadow)]">$</span> {(parseFloat(producto.precio_producto) || 0).toLocaleString()} <span className="text-[var(--main-color-sub)] text-[12px]">Cop</span> </p>
                   </div>
                   <button
                     className="card-btn"

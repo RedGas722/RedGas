@@ -100,11 +100,7 @@ import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faArrowRight,
-  faArrowLeft,
-  faCartShopping,
-} from '@fortawesome/free-solid-svg-icons';
+import { faArrowRight, faArrowLeft, faCartShopping, faTags } from '@fortawesome/free-solid-svg-icons';
 
 
 async function agregarAlCarrito(item) {
@@ -171,7 +167,7 @@ export const CardsOffers = ({ uniqueId, productos = [] }) => {
         className="w-[100%] flex justify-center items-center"
       >
         {productos.map((producto, index) => (
-          <SwiperSlide key={index}>
+          <SwiperSlide key={index} className="relative">
             <div className="flex justify-center justify-self-center h-fit p-[25px_0_25px_0] items-center w-fit">
               <div className="card NeoSubContainer_outset_TL">
                 <div className="card-img">
@@ -192,9 +188,9 @@ export const CardsOffers = ({ uniqueId, productos = [] }) => {
                 <hr className="card-divider" />
                 <div className="card-footer">
                   <div className="card-price">
-                    <p className="text-[var(--Font-Nav2)]"><span className="text-[var(--Font-Nav2-shadow)]">$</span>{(parseFloat(producto.precio_producto) - (parseFloat(producto.precio_producto) * (producto.descuento / 100))).toLocaleString()} </p>
+                    <p className="text-[var(--Font-Nav2)]"><span className="text-[var(--Font-Nav2-shadow)]">$</span>{(parseFloat(producto.precio_producto) - (parseFloat(producto.precio_producto) * (producto.descuento / 100))).toLocaleString()} <span className="text-[var(--main-color-sub)] text-[12px]">Cop</span> </p>
                     <div className="text-[15px] text-[var(--Font-Nav)] ">
-                      <p className="text-[var(--Font-Nav-shadow)]">$ <span className="line-through">{(parseFloat(producto.precio_producto)).toLocaleString()}</span> <span className="text-[18px] font-bold">{producto.descuento}%</span> </p>
+                      <p className="text-[var(--Font-Nav-shadow)]">$ <span className="line-through decoration-[1.5px] decoration-[var(--Font-Nav2)]">{(parseFloat(producto.precio_producto)).toLocaleString()}</span></p>
                     </div>
                   </div>
                   <button
@@ -204,6 +200,12 @@ export const CardsOffers = ({ uniqueId, productos = [] }) => {
                     <FontAwesomeIcon icon={faCartShopping} />
                   </button>
                 </div>
+              </div>
+            </div>
+            <div className="absolute top-[25px] -left-2">
+              <div className="relative flex items-center text-[var(--main-color)]">
+                <FontAwesomeIcon icon={faTags} className="text-6xl text rotate-90" />
+                <p className="text-[18px] flex text-[var(--Font-Nav)] absolute left-4 top-4 font-bold">{producto.descuento} <span className="text-[12px]">%</span> </p>
               </div>
             </div>
           </SwiperSlide>

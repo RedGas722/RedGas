@@ -22,7 +22,7 @@ export const ToolsSect = () => {
 
   return (
     <section id="ToolsSect" className="NeoContainer_outset_TL flex flex-col p-[15px] gap-[20px] text-[var(--Font-Nav)]">
-      <TitleSectCategory iconCategory={faWrench} nameCategory="Herramientas" className='flex flex-row justify-start items-center gap-[8px]' />
+      <TitleSectCategory IconClass='text-[var(--Font-Nav-shadow)]' iconCategory={faWrench} nameCategory="Herramientas" className='flex flex-row justify-start items-center gap-[8px]' />
       <Cards
         uniqueId="tools"
         productos={herramientas}
