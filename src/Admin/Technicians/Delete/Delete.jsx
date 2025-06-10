@@ -3,60 +3,50 @@ import { InputLabel } from '../../../UI/Login_Register/InputLabel/InputLabel'
 
 const URL = 'https://redgas.onrender.com/TecnicoDelete'
 
+export const DeleteTechnician = async (correo_tecnico) => {
+  try {
+    const res = await fetch(`${URL}?correo_tecnico=${encodeURIComponent(correo_tecnico)}`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+    });
+    if (!res.ok) {
+      const errorText = await res.text();
+      throw new Error(errorText || 'Error al eliminar técnico');
+    }
+    return { success: true, message: 'Técnico eliminado con éxito' };
+  } catch (error) {
+    return { success: false, message: error.message };
+  }
+};
+
 export const DeleteModal = ({ onClose, setRefrescar }) => {
   const [correo, setCorreo] = useState('');
   const [mensaje, setMensaje] = useState('');
 
   const validarCorreo = (correo) => {
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/ // Expresión regular para validar correos
-    return regex.test(correo)
-  }
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(correo);
+  };
 
   const handleDelete = async (e) => {
-    e.preventDefault()
-
+    e.preventDefault();
     if (!correo.trim()) {
       setMensaje('Por favor, ingrese un correo.');
       return;
     }
-
     if (!validarCorreo(correo)) {
       setMensaje('Por favor, ingrese un correo válido.');
       return;
     }
-
-    try {
-      const res = await fetch(`${URL}?correo_tecnico=${encodeURIComponent(correo)}`, {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-      })
-
-      if (!res.ok) {
-        const errorData = await res.json();
-        if (errorData.message === 'Correo no encontrado') {
-          setMensaje('El correo no se encuentra registrado.');
-          return;
-        }
-        setMensaje('Error al eliminar: ' + (errorData.message || 'Error desconocido del servidor'));
-        return;
-      }
-
-      const data = await res.json();
-      if (data && typeof data.message === 'string' && data.message === 'Correo no encontrado') {
-        setMensaje('El correo no se encuentra registrado.');
-        return;
-      }
-      setMensaje('Eliminación exitosa');
-      setRefrescar(true)
-    } catch (err) {
-      setMensaje('Error al eliminar: ' + err.message)
-    }
-  }
+    const { success, message } = await DeleteTechnician(correo);
+    setMensaje(message);
+    if (success && setRefrescar) setRefrescar(true);
+  };
 
   const handleCancel = () => {
-    setCorreo('')
-    setMensaje('')
-  }
+    setCorreo('');
+    setMensaje('');
+  };
 
   return (
     <div className="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50">
@@ -65,16 +55,14 @@ export const DeleteModal = ({ onClose, setRefrescar }) => {
           className="absolute top-2 right-3 text-gray-600 text-lg"
           onClick={onClose}
         >✕</button>
-
-        <h2 className="text-xl font-bold text-center">Eliminación de Tecnico</h2>
+        <h2 className="text-xl font-bold text-center">Eliminación de Técnico</h2>
         <InputLabel
           type='2'
-          placeholder='Correo del tecnico'
+          placeholder='Correo del técnico'
           value={correo}
           onChange={(e) => setCorreo(e.target.value)}
           required={true}
         />
-
         <div className="flex justify-between gap-2">
           <button
             onClick={handleCancel}
@@ -85,14 +73,14 @@ export const DeleteModal = ({ onClose, setRefrescar }) => {
             className="NeoContainer_Admin_outset_TL bg-[var(--Font-Nav)] hover:bg-[var(--main-color)] BTN text-[var(--main-color)]"
           >Confirmar</button>
         </div>
-
         {mensaje && (
-          <p className={`text-center ${/error|por favor/i.test(mensaje) ? 'text-red-600' : 'text-green-600'} font-semibold`}>
+          <p className={`text-center ${/éxito|exito|éxito|exitoso/i.test(mensaje) ? 'text-green-600' : 'text-red-600'} font-semibold`}>
             {mensaje}
           </p>
         )}
       </div>
     </div>
-  )
-}
-export default DeleteModal
+  );
+};
+
+export default DeleteModal;
