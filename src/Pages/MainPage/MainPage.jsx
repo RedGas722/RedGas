@@ -13,18 +13,16 @@ import './MainPage.css'
 export const MainPage = () => {
     return (
         <div className="">
-            <div className="MainPageContainer gap-[50px]">
+            <div className="MainPageContainer flex flex-col gap-[50px]">
                 <Header />
-                <div className="flex flex-col gap-[50px]">
-                    <Hero />
-                    <ProductCategory />
-                    <OffersSect />
-                    <HeatersSect />
-                    <ToolsSect />
-                    <SpaerPartsSect />
-                    <AccessoriesSect />
-                    <ShopCart />
-                </div>
+                <Hero />
+                <ProductCategory />
+                <OffersSect />
+                <HeatersSect />
+                <ToolsSect />
+                <SpaerPartsSect />
+                <AccessoriesSect />
+                <ShopCart />
             </div>
             <Footer />
         </div>
