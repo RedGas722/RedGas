@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { RegisterModal } from './Register/RegisterModal';
 import { UpdateModal } from './Update/Update';
 import { ButtonBack } from '../UI/ButtonBack/ButtonBack';
@@ -12,17 +12,16 @@ export const ClientsBack = () => {
   const [clientes, setClientes] = useState([]);
   const [refrescar, setRefrescar] = useState(false);
 
-  // Estado para el cliente que se va a actualizar
   const [clienteSeleccionado, setClienteSeleccionado] = useState(null);
 
-  // Estado para la búsqueda de cliente por correo
   const [correoBusqueda, setCorreoBusqueda] = useState('');
   const [clienteBuscado, setClienteBuscado] = useState(null);
   const [errorBusqueda, setErrorBusqueda] = useState('');
+  const [sugerencias, setSugerencias] = useState([]);
 
-  const URL = 'https://redgas.onrender.com/ClienteGet';
+  const contenedorRef = useRef(null);
 
-  async function fetchClientes() {
+  const fetchClientes = async () => {
     try {
       const res = await fetch('https://redgas.onrender.com/ClienteGetAll');
       if (!res.ok) throw new Error('Error al obtener clientes');
@@ -31,7 +30,7 @@ export const ClientsBack = () => {
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   useEffect(() => {
     fetchClientes();
@@ -41,20 +40,17 @@ export const ClientsBack = () => {
     if (refrescar) {
       fetchClientes();
       setRefrescar(false);
-      // Al refrescar la lista, limpiamos la búsqueda y error para mostrar todas las tarjetas
       setClienteBuscado(null);
       setErrorBusqueda('');
       setCorreoBusqueda('');
     }
   }, [refrescar]);
 
-  // Función para abrir el modal de actualización con cliente seleccionado
   const abrirModalActualizar = (cliente) => {
     setClienteSeleccionado(cliente);
     setShowUpdateModal(true);
   };
 
-  // Función para cerrar modal actualización y limpiar estado
   const cerrarModal = () => {
     setShowUpdateModal(false);
     setClienteSeleccionado(null);
@@ -67,17 +63,48 @@ export const ClientsBack = () => {
     try {
       const resultado = await buscarClientePorCorreo(correoBusqueda);
       setClienteBuscado(resultado);
+      setSugerencias([]);
     } catch (error) {
       setErrorBusqueda(error.message);
     }
   };
 
+  // 🧠 Autocomplete filtrando localmente
+  useEffect(() => {
+  if ((correoBusqueda || '').trim() === '') {
+    setSugerencias([]);
+    return;
+  }
+
+  const filtrados = clientes.filter((cliente) =>
+    (cliente.correo_cliente || '').toLowerCase().includes(correoBusqueda.toLowerCase())
+  );
+  setSugerencias(filtrados.slice(0, 5));
+  }, [correoBusqueda, clientes]);
+
+  // 🧽 Cerrar sugerencias si se hace clic fuera
+  useEffect(() => {
+    const manejarClickFuera = (event) => {
+      if (
+        contenedorRef.current &&
+        !contenedorRef.current.contains(event.target)
+      ) {
+        setSugerencias([]);
+      }
+    };
+
+    document.addEventListener('mousedown', manejarClickFuera);
+    return () => document.removeEventListener('mousedown', manejarClickFuera);
+  }, []);
+
   return (
     <div className="p-[20px] flex flex-col gap-[20px]">
-      <div className="flex items-center gap-[20px]">
+      <div className="flex items-center gap-[20px] flex-wrap">
         <h1 className="font-bold text-[20px]">Cliente BACK-OFFICE</h1>
-          {/* Barra de búsqueda para consultar cliente */}
-          <div className="flex items-center gap-2 border border-gray-300 rounded px-2 py-1">
+
+        {/* Búsqueda con autocomplete */}
+        <div className="relative" ref={contenedorRef}>
+          <div className="flex items-center gap-2 border border-gray-300 rounded px-2 py-1 bg-white">
             <Inputs
               type="1"
               placeholder="Correo del cliente"
@@ -93,37 +120,56 @@ export const ClientsBack = () => {
               🔍
             </button>
           </div>
-        <ButtonBack ClickMod={() => setShowRegisterModal(true)} Child="Registrar" />        
+
+          {sugerencias.length > 0 && (
+            <ul className="absolute z-10 bg-white border border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto w-full shadow">
+              {sugerencias.map((cliente) => (
+                <li
+                  key={cliente.id_cliente}
+                  onClick={() => {
+                    setClienteBuscado(cliente);
+                    setCorreoBusqueda(cliente.correo_cliente);
+                    setSugerencias([]);
+                  }}
+                  className="p-2 hover:bg-gray-100 cursor-pointer"
+                >
+                  {cliente.correo_cliente}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+
+        <ButtonBack ClickMod={() => setShowRegisterModal(true)} Child="Registrar" />
       </div>
 
-      {/* Mostrar mensaje de error */}
       {errorBusqueda && <p className="text-red-600 text-sm">{errorBusqueda}</p>}
 
-      {/* Sección de clientes */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {clienteBuscado
-          ? (
+        {clienteBuscado ? (
+          <CardClientsBack
+            key={clienteBuscado.id_cliente}
+            cliente={clienteBuscado}
+            setRefrescar={setRefrescar}
+            onUpdateClick={abrirModalActualizar}
+          />
+        ) : (
+          clientes.map((cliente) => (
             <CardClientsBack
-              key={clienteBuscado.id_cliente}
-              cliente={clienteBuscado}
+              key={cliente.id_cliente}
+              cliente={cliente}
               setRefrescar={setRefrescar}
               onUpdateClick={abrirModalActualizar}
             />
-          )
-          : clientes.map((cliente) => (
-              <CardClientsBack
-                key={cliente.id_cliente}
-                cliente={cliente}
-                setRefrescar={setRefrescar}
-                onUpdateClick={abrirModalActualizar}
-              />
-            ))
-        }
+          ))
+        )}
       </div>
 
-      {/* Modales */}
       {showRegisterModal && (
-        <RegisterModal onClose={() => setShowRegisterModal(false)} setRefrescar={setRefrescar} />
+        <RegisterModal
+          onClose={() => setShowRegisterModal(false)}
+          setRefrescar={setRefrescar}
+        />
       )}
 
       {showUpdateModal && clienteSeleccionado && (

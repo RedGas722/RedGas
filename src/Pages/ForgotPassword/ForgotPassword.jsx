@@ -40,7 +40,7 @@ export const ForgotPassword = () => {
                     company: 'RED-GAS',
                     user: user || 'Usuario',
                     message: 'Hemos recibido su solicitud de cambio de contraseña, haga click en el siguiente enlace:',
-                    link: `https://red-gas-kevins-projects-666a0731.vercel.app/Login/ForgotPassword/Recovery/${token}`,
+                    link: `http://localhost:5173/Login/ForgotPassword/Recovery/${token}`,
                 }
                 
                 alertSendForm('wait', 'Enviando correo de recuperación...')
@@ -136,6 +136,7 @@ export const ForgotPassword = () => {
                 });
 
                 emailinput.style.border = '2px solid #FF0000'
+                emailinput.value = ''
                 break;
 
             case 402:

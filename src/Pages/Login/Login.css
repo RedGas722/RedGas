@@ -111,3 +111,12 @@
 .toggle-state:checked~.indicator {
     transform: translate3d(25%, 0, 0);
 }
+
+.swal2-timer-progress-bar {
+  background: var(--Font-Nav) !important; 
+  height: 6px !important; 
+  border-radius: 3px;     
+}
+.swal2-loader {
+  border-color: var(--Font-Nav) transparent var(--Font-Nav) transparent !important;
+}

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { RegisterModal } from './Register/RegisterModal';
 import { UpdateModal } from './Update/Update';
 import { ButtonBack } from '../UI/ButtonBack/ButtonBack';
@@ -12,26 +12,24 @@ export const CategoriesBack = () => {
   const [categorias, setCategorias] = useState([]);
   const [refrescar, setRefrescar] = useState(false);
 
-  // Estado para el categoria que se va a actualizar
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState(null);
-
-  // Estado para la búsqueda de categoria por correo
   const [nombreBusqueda, setNombreBusqueda] = useState('');
   const [categoriaBuscada, setCategoriaBuscada] = useState(null);
   const [errorBusqueda, setErrorBusqueda] = useState('');
+  const [sugerencias, setSugerencias] = useState([]);
 
-  const URL = 'https://redgas.onrender.com/CategoriaGet';
+  const contenedorRef = useRef(null);
 
-  async function fetchCategorias() {
+  const fetchCategorias = async () => {
     try {
       const res = await fetch('https://redgas.onrender.com/CategoriaGetAll');
-      if (!res.ok) throw new Error('Error al obtener categorias');
+      if (!res.ok) throw new Error('Error al obtener categorías');
       const data = await res.json();
       setCategorias(data.data || []);
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   useEffect(() => {
     fetchCategorias();
@@ -41,20 +39,17 @@ export const CategoriesBack = () => {
     if (refrescar) {
       fetchCategorias();
       setRefrescar(false);
-      // Al refrescar la lista, limpiamos la búsqueda y error para mostrar todas las tarjetas
       setCategoriaBuscada(null);
       setErrorBusqueda('');
       setNombreBusqueda('');
     }
   }, [refrescar]);
 
-  // Función para abrir el modal de actualización con categoria seleccionado
   const abrirModalActualizar = (categoria) => {
     setCategoriaSeleccionada(categoria);
     setShowUpdateModal(true);
   };
 
-  // Función para cerrar modal actualización y limpiar estado
   const cerrarModal = () => {
     setShowUpdateModal(false);
     setCategoriaSeleccionada(null);
@@ -67,17 +62,43 @@ export const CategoriesBack = () => {
     try {
       const resultado = await buscarCategoriaPorNombre(nombreBusqueda);
       setCategoriaBuscada(resultado);
+      setSugerencias([]);
     } catch (error) {
       setErrorBusqueda(error.message);
     }
   };
 
+  useEffect(() => {
+    if ((nombreBusqueda || '').trim() === '') {
+      setSugerencias([]);
+      return;
+    }
+
+    const filtradas = categorias.filter((cat) =>
+      (cat.nombre_categoria || '').toLowerCase().includes(nombreBusqueda.toLowerCase())
+    );
+    setSugerencias(filtradas.slice(0, 5));
+  }, [nombreBusqueda, categorias]);
+
+  useEffect(() => {
+    const manejarClickFuera = (e) => {
+      if (contenedorRef.current && !contenedorRef.current.contains(e.target)) {
+        setSugerencias([]);
+      }
+    };
+
+    document.addEventListener('mousedown', manejarClickFuera);
+    return () => document.removeEventListener('mousedown', manejarClickFuera);
+  }, []);
+
   return (
     <div className="p-[20px] flex flex-col gap-[20px]">
-      <div className="flex items-center gap-[20px]">
-        <h1 className="font-bold text-[20px]">Categoria BACK-OFFICE</h1>
-          {/* Barra de búsqueda para consultar categoria */}
-          <div className="flex items-center gap-2 border border-gray-300 rounded px-2 py-1">
+      <div className="flex items-center gap-[20px] flex-wrap">
+        <h1 className="font-bold text-[20px]">Categoría BACK-OFFICE</h1>
+
+        {/* Input de búsqueda con sugerencias */}
+        <div className="relative" ref={contenedorRef}>
+          <div className="flex items-center gap-2 border border-gray-300 rounded px-2 py-1 bg-white">
             <Inputs
               type="1"
               placeholder="Nombre de la categoría"
@@ -87,41 +108,57 @@ export const CategoriesBack = () => {
             />
             <button
               onClick={buscarCategoria}
-              aria-label="Buscar categoria"
+              aria-label="Buscar categoría"
               className="text-gray-600 hover:text-gray-900"
             >
               🔍
             </button>
           </div>
-        <ButtonBack ClickMod={() => setShowRegisterModal(true)} Child="Registrar" />        
+
+          {sugerencias.length > 0 && (
+            <ul className="absolute z-10 bg-white border border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto w-full shadow">
+              {sugerencias.map((categoria) => (
+                <li
+                  key={categoria.id_categoria}
+                  onClick={() => {
+                    setCategoriaBuscada(categoria);
+                    setNombreBusqueda(categoria.nombre_categoria);
+                    setSugerencias([]);
+                  }}
+                  className="p-2 hover:bg-gray-100 cursor-pointer"
+                >
+                  {categoria.nombre_categoria}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+
+        <ButtonBack ClickMod={() => setShowRegisterModal(true)} Child="Registrar" />
       </div>
 
-      {/* Mostrar mensaje de error */}
       {errorBusqueda && <p className="text-red-600 text-sm">{errorBusqueda}</p>}
 
-      {/* Sección de categorias */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {categoriaBuscada
-          ? (
+        {categoriaBuscada ? (
+          <CardCategoriesBack
+            key={categoriaBuscada.id_categoria}
+            categoria={categoriaBuscada}
+            setRefrescar={setRefrescar}
+            onUpdateClick={abrirModalActualizar}
+          />
+        ) : (
+          categorias.map((categoria) => (
             <CardCategoriesBack
-              key={categoriaBuscada.id_categoria}
-              categoria={categoriaBuscada}
+              key={categoria.id_categoria}
+              categoria={categoria}
               setRefrescar={setRefrescar}
               onUpdateClick={abrirModalActualizar}
             />
-          )
-          : categorias.map((categoria) => (
-              <CardCategoriesBack
-                key={categoria.id_categoria}
-                categoria={categoria}
-                setRefrescar={setRefrescar}
-                onUpdateClick={abrirModalActualizar}
-              />
-            ))
-        }
+          ))
+        )}
       </div>
 
-      {/* Modales */}
       {showRegisterModal && (
         <RegisterModal onClose={() => setShowRegisterModal(false)} setRefrescar={setRefrescar} />
       )}
