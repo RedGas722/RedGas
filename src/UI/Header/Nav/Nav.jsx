@@ -75,11 +75,8 @@ export const Navs = ({ className, ref1, ref2, ref3, ref4 }) => {
                 </NavLink>
             )}
 
-            <NavLink to="/Costumer">
-                Cliente
-            </NavLink>
-            <NavLink to="/Services">
-                Servicios
+            <NavLink to="/CostumerMyServices">
+                Mi Servicio
             </NavLink>
         </div>
     )

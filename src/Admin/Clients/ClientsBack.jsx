@@ -4,6 +4,7 @@ import { UpdateModal } from './Update/Update';
 import { ButtonBack } from '../UI/ButtonBack/ButtonBack';
 import CardClientsBack from './Get/CardClientsBack';
 import { buscarClientePorCorreo } from './Get/Get';
+import { BtnBack } from "../../UI/Login_Register/BtnBack";
 import Inputs from '../UI/Inputs/Inputs';
 
 export const ClientsBack = () => {
@@ -71,15 +72,15 @@ export const ClientsBack = () => {
 
   // 🧠 Autocomplete filtrando localmente
   useEffect(() => {
-  if ((correoBusqueda || '').trim() === '') {
-    setSugerencias([]);
-    return;
-  }
+    if ((correoBusqueda || '').trim() === '') {
+      setSugerencias([]);
+      return;
+    }
 
-  const filtrados = clientes.filter((cliente) =>
-    (cliente.correo_cliente || '').toLowerCase().includes(correoBusqueda.toLowerCase())
-  );
-  setSugerencias(filtrados.slice(0, 5));
+    const filtrados = clientes.filter((cliente) =>
+      (cliente.correo_cliente || '').toLowerCase().includes(correoBusqueda.toLowerCase())
+    );
+    setSugerencias(filtrados.slice(0, 5));
   }, [correoBusqueda, clientes]);
 
   // 🧽 Cerrar sugerencias si se hace clic fuera
@@ -100,7 +101,10 @@ export const ClientsBack = () => {
   return (
     <div className="p-[20px] flex flex-col gap-[20px]">
       <div className="flex items-center gap-[20px] flex-wrap">
-        <h1 className="font-bold text-[20px]">Cliente BACK-OFFICE</h1>
+        <div>
+          <h1 className="font-bold text-[20px]">Cliente BACK-OFFICE</h1>
+          <BtnBack To='/Admin' className='btnDown' />
+        </div>
 
         {/* Búsqueda con autocomplete */}
         <div className="relative" ref={contenedorRef}>

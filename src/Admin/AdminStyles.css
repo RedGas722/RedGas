@@ -1,21 +1,28 @@
+.btnDown-left {
+    margin-top: 65px;
+    margin-left: 10px;
+}
 .btnDown {
     margin-top: 65px;
 }
 .text-shadow {
-  text-shadow: 0px 0px 0px rgba(0,0,0,0.7);
+    text-shadow: 0px 0px 0px rgba(0, 0, 0, 0.7);
 }
+
 /* .Admin{
     padding: 2% 0 2% 1%;
 } */
-.SectionSIde{
+.SectionSIde {
     overflow-y: scroll;
 }
-#sideBarr{
+
+#sideBarr {
     display: flex;
     flex-wrap: wrap;
     min-width: 120px;
     max-width: calc((6.5rem * 5) + (2.5rem * (5 - 1)));
 }
+
 .BTN {
     padding: 5px 20px;
     cursor: pointer;
@@ -27,6 +34,7 @@
     border-radius: 20px;
     box-shadow: inset -9.91px -9.91px 15px #CACACA, inset 9.91px 9.91px 15px #F2F2F2;
 }
+
 .BTN:hover {
     color: var(--Font-Nav);
 }

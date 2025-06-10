@@ -2,8 +2,9 @@ import { useState, useEffect, useRef } from 'react';
 import { RegisterModal } from './Register/RegisterModal';
 import { UpdateModal } from './Update/Update';
 import { ButtonBack } from '../UI/ButtonBack/ButtonBack';
-import CardCategoriesBack from './Get/CardCategoriesBack';
 import { buscarCategoriaPorNombre } from './Get/Get';
+import { BtnBack } from "../../UI/Login_Register/BtnBack";
+import CardCategoriesBack from './Get/CardCategoriesBack';
 import Inputs from '../UI/Inputs/Inputs';
 
 export const CategoriesBack = () => {
@@ -94,7 +95,10 @@ export const CategoriesBack = () => {
   return (
     <div className="p-[20px] flex flex-col gap-[20px]">
       <div className="flex items-center gap-[20px] flex-wrap">
-        <h1 className="font-bold text-[20px]">Categoría BACK-OFFICE</h1>
+        <div>
+          <h1 className="font-bold text-[20px]">Categoría BACK-OFFICE</h1>
+          <BtnBack To='/Admin' className='btnDown' />
+        </div>
 
         {/* Input de búsqueda con sugerencias */}
         <div className="relative" ref={contenedorRef}>

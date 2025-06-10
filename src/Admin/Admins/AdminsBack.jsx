@@ -3,6 +3,7 @@ import { RegisterModal } from './Register/RegisterModal';
 import { GetModal } from './Get/GetModal';
 import { UpdateModal } from './Update/UpdateModal';
 import { DeleteModal } from './Delete/DeleteModal';
+import { BtnBack } from '../../UI/Login_Register/BtnBack';
 import ButtonBack from '../UI/ButtonBack/ButtonBack';
 import CardAdminsBack from './Get/CardAdminsBack';
 
@@ -40,7 +41,10 @@ export const AdminsBack = () => {
   return (
     <div className="p-[20px] flex flex-col gap-[20px]">
       <div className="flex items-center gap-[20px]">
-        <h1 className="font-bold text-[20px]">Admin BACK-OFFICE</h1>
+        <div>
+          <h1 className="font-bold text-[20px]">Admin BACK-OFFICE</h1>
+          <BtnBack To='/Admin' className='btnDown' />
+        </div>
         <ButtonBack ClickMod={() => setShowRegisterModal(true)} Child="Registrar" />
         <ButtonBack ClickMod={() => setShowGetModal(true)} Child="Consultar" />
         <ButtonBack ClickMod={() => setShowUpdateModal(true)} Child="Actualizar" />

@@ -4,6 +4,7 @@ import { GetModal } from './Get/GetModal'
 import { UpdateModal } from './Update/UpdateModal'
 import { DeleteModal } from './Delete/DeleteModal'
 import { ButtonBack } from '../UI/ButtonBack/ButtonBack'
+import { BtnBack } from "../../UI/Login_Register/BtnBack"
 import CardContractsBack from './Get/CardContractsBack'
 
 export const ContractsBack = () => {
@@ -41,7 +42,10 @@ export const ContractsBack = () => {
         <div className="flex flex-row h-screen p-[40px_0_0_40px] gap-[40px]">
             {/* Panel lateral izquierdo: Backoffice y botones */}
             <div className='flex flex-col items-start gap-[30px] min-w-[320px]'>
-                <h1 className='font-bold text-[22px] mb-2'>Contrato BACK-OFFICE</h1>
+                <div>
+                    <h1 className='font-bold text-[22px] mb-2'>Contrato BACK-OFFICE</h1>
+                    <BtnBack To='/Admin' className='btnDown' />
+                </div>
                 <ButtonBack ClickMod={() => setShowRegisterModal(true)} Child='Registrar' />
                 <ButtonBack ClickMod={() => setShowGetModal(true)} Child='Consultar' />
                 <ButtonBack ClickMod={() => setShowUpdateModal(true)} Child='Actualizar' />

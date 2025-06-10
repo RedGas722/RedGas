@@ -2,9 +2,10 @@ import { useState, useEffect, useRef } from 'react';
 import { RegisterModal } from './Register/RegisterModal';
 import { UpdateModal } from './Update/Update';
 import { ButtonBack } from '../UI/ButtonBack/ButtonBack';
+import { BtnBack } from "../../UI/Login_Register/BtnBack";
+import { buscarProductoPorNombre } from './Get/Get';
 import CardsProductsBack from './Get/CardProductsBack';
 import Inputs from '../UI/Inputs/Inputs';
-import { buscarProductoPorNombre } from './Get/Get';
 
 export const ProductsBack = () => {
   const [showRegisterModal, setShowRegisterModal] = useState(false);
@@ -104,7 +105,10 @@ export const ProductsBack = () => {
   return (
     <div className="p-[20px] flex flex-col gap-[20px]">
       <div className="flex items-center gap-[20px] flex-wrap">
-        <h1 className="font-bold text-[20px]">Producto BACK-OFFICE</h1>
+        <div>
+          <h1 className="font-bold text-[20px]">Producto BACK-OFFICE</h1>
+          <BtnBack To='/Admin' className='btnDown' />
+        </div>
 
         {/* Búsqueda con autocomplete */}
         <div className="relative" ref={contenedorRef}>
