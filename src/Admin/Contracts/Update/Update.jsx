@@ -54,7 +54,7 @@ export const UpdateModal = ({ onClose, setRefrescar, contratoCarta }) => {
       id_empleado: idEmpleado ? Number(idEmpleado) : null,
     };
     try {
-      const res = await fetch('http://localhost:10101/ContratoDataUpdate', {
+      const res = await fetch('https://redgas.onrender.com/ContratoDataUpdate', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),

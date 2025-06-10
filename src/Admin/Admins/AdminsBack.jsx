@@ -17,11 +17,11 @@ export const AdminsBack = () => {
   const [errorBusqueda, setErrorBusqueda] = useState('');
   const [showGetModal, setShowGetModal] = useState(false);
 
-  const URL = 'http://localhost:10101/AdminGet';
+  const URL = 'https://redgas.onrender.com/AdminGet';
 
   async function fetchAdmins() {
     try {
-      const res = await fetch('http://localhost:10101/AdminGetAll');
+      const res = await fetch('https://redgas.onrender.com/AdminGetAll');
       if (!res.ok) throw new Error('Error al obtener administradores');
       const data = await res.json();
       setAdmins(data.data || []);

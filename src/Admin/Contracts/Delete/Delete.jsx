@@ -1,5 +1,5 @@
 export const DeleteContract = async (id_empleado) => {
-  const URL = 'http://localhost:10101/ContratoDelete';
+  const URL = 'https://redgas.onrender.com/ContratoDelete';
 
   try {
     // Validar que el campo exista y sea numérico

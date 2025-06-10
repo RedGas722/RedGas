@@ -5,7 +5,7 @@ export const GetModal = ({ onClose }) => {
   const [correo, setCorreo] = useState('');
   const [mensaje, setMensaje] = useState(null);
 
-  const URL = 'http://localhost:10101/AdminGet';
+  const URL = 'https://redgas.onrender.com/AdminGet';
 
 
   const handleGet = async (e) => {
