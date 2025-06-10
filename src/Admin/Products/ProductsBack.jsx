@@ -56,22 +56,6 @@ export const ProductsBack = () => {
     setShowUpdateModal(false);
   };
 
-  const resetearDescuentosPrueba = async () => {
-    setMensaje('');
-    try {
-      const res = await fetch('https://redgas.onrender.com/prueba', {
-        method: 'PUT',
-      });
-      if (!res.ok) throw new Error('Error al resetear descuentos');
-      const data = await res.json();
-      setMensaje(data.mensaje || 'Descuentos reseteados correctamente');
-      setRefrescar(true);
-    } catch (error) {
-      console.error(error);
-      setMensaje('Error al resetear descuentos');
-    }
-  };
-
   const buscarProducto = async () => {
     setErrorBusqueda('');
     setProductoBuscado(null);
@@ -108,14 +92,6 @@ export const ProductsBack = () => {
         </div>
 
         <ButtonBack ClickMod={() => setShowRegisterModal(true)} Child="Registrar" />
-
-        <button
-          onClick={resetearDescuentosPrueba}
-          className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-          type="button"
-        >
-          Resetear descuentos (prueba)
-        </button>
       </div>
 
       {/* Mensaje de error */}

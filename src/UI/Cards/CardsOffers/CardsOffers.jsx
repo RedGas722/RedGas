@@ -9,7 +9,6 @@ import { faArrowRight, faArrowLeft, faCartShopping, faTags } from '@fortawesome/
 
 async function agregarAlCarrito(item) {
   const token = localStorage.getItem("token");
-  console.log(token);
   if (!token) {
     alert("Debes iniciar sesión para agregar al carrito");
     return null;
