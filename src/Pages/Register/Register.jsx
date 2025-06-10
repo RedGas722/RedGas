@@ -185,7 +185,7 @@ export const Register = () => {
 
 
     return (
-        <div className="w-full gap-[40px] text-[var(--main-color)] h-dvh ">
+        <div className="sectionLoginRegister w-full gap-[40px] text-[var(--main-color)] h-dvh ">
             <BtnBack To='/' />
             <div className="divForm NeoContainer_outset_TL p-[30px_15px_15px_15px] flex flex-col items-center w-fit justify-self-center gap-[20px]">
                 <h1 className="text-center text-4xl">¡Bienvenido!</h1>

@@ -168,13 +168,13 @@ export const LoginTechnician = () => {
                                 <input type="checkbox" className="input" />
                                 <span className="custom-checkbox"></span>
                             </label>
-                            <div>
+                            <div className="text-[var(--main-color)] hover:text-[var(--Font-Nav)] text-[14px]">
                                 <p>Recordarme</p>
                             </div>
                         </label>
-                        <div className="text-[var(--main-focus)]">
+                        <div className="text-[var(--Font-Nav)] text-[14px]">
                             <Link to="/Login/ForgotPassword">
-                                <button className="cursor-pointer hover:text-[var(--Font-Nav)]">
+                                <button className="cursor-pointer hover:text-[var(--Font-Nav-shadow)]">
                                     <p >Olvidaste tu contraseña?</p>
                                 </button>
                             </Link>

@@ -7,3 +7,7 @@
 .cardCategory:hover {
     transform: scale(1.05);
 }
+.cardCategory:hover .icon {
+    color: var(--Font-Nav-shadow);
+}
+

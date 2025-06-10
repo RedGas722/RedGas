@@ -25,17 +25,17 @@ export const Login = () => {
         if (isChecked) {
             navigate("/Login/LoginTechnician")
         } else {
-            navigate("/Login") // or just navigate("") if that's intended
+            navigate("/Login")
         }
     }
 
     return (
-        <section className="sectionLogin text-[var(--main-color)] w-full h-dvh ">
+        <section className="sectionLoginRegister text-[var(--main-color)] w-full h-dvh ">
             <div className="flex items-center justify-between w-full">
                 <BtnBack To='/' />
                 <label className="label relative z-[2]">
-                    <FontAwesomeIcon icon={faScrewdriverWrench} className="absolute left-2 z-[3] text-[var(--main-color)]" />
-                    <FontAwesomeIcon icon={faUser} className="absolute right-2 z-[3] text-[var(--main-color)]" />
+                    <FontAwesomeIcon icon={faScrewdriverWrench} className="absolute left-2 z-[3] text-[var(--Font-Nav-shadow)]" />
+                    <FontAwesomeIcon icon={faUser} className="absolute right-2 z-[3] text-[var(--Font-Nav-shadow)]" />
                     <div className="toggle z-[2] NeoContainer_outset_BR">
                         <input
                             className="toggle-state"

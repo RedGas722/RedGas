@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import './ButtonSide.css'
 
-export const ButtonSide = ({ to, children, imgBtn }) => {
+export const ButtonAdmin = ({ to, children, imgBtn }) => {
     return (
         <div>
             <NavLink to={to} className="hover:text-[var(--Font-Nav)] gap-2 text-[var(--main-color)] w-full flex flex-col items-center">
@@ -13,4 +13,4 @@ export const ButtonSide = ({ to, children, imgBtn }) => {
         </div>
     )
 }
-export default ButtonSide
+export default ButtonAdmin

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { RegisterModal } from './Register/RegisterModal';
 import { UpdateModal } from './Update/Update';
 import { ButtonBack } from '../UI/ButtonBack/ButtonBack';
@@ -13,17 +13,16 @@ export const EmployeesBack = () => {
   const [empleados, setEmpleados] = useState([]);
   const [refrescar, setRefrescar] = useState(false);
 
-  // Estado para el empleado que se va a actualizar
   const [empleadoSeleccionado, setEmpleadoSeleccionado] = useState(null);
 
-  // Estado para la búsqueda de empleado por correo
   const [correoBusqueda, setCorreoBusqueda] = useState('');
   const [empleadoBuscado, setEmpleadoBuscado] = useState(null);
   const [errorBusqueda, setErrorBusqueda] = useState('');
+  const [sugerencias, setSugerencias] = useState([]);
 
-  const URL = 'https://redgas.onrender.com/EmpleadoGet';
+  const contenedorRef = useRef(null);
 
-  async function fetchEmpleados() {
+  const fetchEmpleados = async () => {
     try {
       const res = await fetch('https://redgas.onrender.com/EmpleadoGetAll');
       if (!res.ok) throw new Error('Error al obtener empleados');
@@ -32,7 +31,7 @@ export const EmployeesBack = () => {
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   useEffect(() => {
     fetchEmpleados();
@@ -42,20 +41,17 @@ export const EmployeesBack = () => {
     if (refrescar) {
       fetchEmpleados();
       setRefrescar(false);
-      // Al refrescar la lista, limpiamos la búsqueda y error para mostrar todas las tarjetas
       setEmpleadoBuscado(null);
       setErrorBusqueda('');
       setCorreoBusqueda('');
     }
   }, [refrescar]);
 
-  // Función para abrir el modal de actualización con empleado seleccionado
   const abrirModalActualizar = (empleado) => {
     setEmpleadoSeleccionado(empleado);
     setShowUpdateModal(true);
   };
 
-  // Función para cerrar modal actualización y limpiar estado
   const cerrarModal = () => {
     setShowUpdateModal(false);
     setEmpleadoSeleccionado(null);
@@ -68,10 +64,38 @@ export const EmployeesBack = () => {
     try {
       const resultado = await buscarEmpleadoPorCorreo(correoBusqueda);
       setEmpleadoBuscado(resultado);
+      setSugerencias([]);
     } catch (error) {
       setErrorBusqueda(error.message);
     }
   };
+
+  // Autocompletado en vivo
+  useEffect(() => {
+    if ((correoBusqueda || '').trim() === '') {
+      setSugerencias([]);
+      return;
+    }
+
+    const filtrados = empleados.filter((empleado) =>
+      (empleado.correo_empleado || '')
+        .toLowerCase()
+        .includes(correoBusqueda.toLowerCase())
+    );
+    setSugerencias(filtrados.slice(0, 5));
+  }, [correoBusqueda, empleados]);
+
+  // Cerrar sugerencias si se hace clic fuera
+  useEffect(() => {
+    const manejarClickFuera = (e) => {
+      if (contenedorRef.current && !contenedorRef.current.contains(e.target)) {
+        setSugerencias([]);
+      }
+    };
+
+    document.addEventListener('mousedown', manejarClickFuera);
+    return () => document.removeEventListener('mousedown', manejarClickFuera);
+  }, []);
 
   return (
     <div className="p-[20px] flex flex-col gap-[20px]">
@@ -100,10 +124,8 @@ export const EmployeesBack = () => {
         <ButtonBack ClickMod={() => setShowRegisterModal(true)} Child="Registrar" />
       </div >
 
-      {/* Mostrar mensaje de error */}
       {errorBusqueda && <p className="text-red-600 text-sm">{errorBusqueda}</p>}
 
-      {/* Sección de empleados */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {empleadoBuscado
           ? (
