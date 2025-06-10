@@ -1,6 +1,6 @@
 import { SearchBarr } from "../../UI/Header/SearchBarr/SearchBarr"
 import { Navs } from "../../UI/Header/Nav/Nav"
-import { ProfilePhoto } from "../../UI/Header/ProfilePhoto/ProfilePhoto"
+// import { ProfilePhoto } from "../../UI/Header/ProfilePhoto/ProfilePhoto"
 import { useNavigate } from "react-router-dom"
 import { useState, useEffect, useRef } from 'react'
 import { gsap } from 'gsap'
@@ -90,7 +90,7 @@ export const Header = () => {
         }
     }, [hamburger])
 
-
+    const navigate = useNavigate()
     return (
         <div
             ref={headerRef}
@@ -125,10 +125,9 @@ export const Header = () => {
 
             <SearchBarr className={`flex-1 items-center justify-center md:flex ${hamburger ? '' : 'hidden'}`} />
             <Navs ref1={navRef1} ref2={navRef2} ref3={navRef3} ref4={navRef4} className={`flex-1 items-center justify-center md:flex ${hamburger ? '' : 'hidden'}`} />
-            {/* <button onClick={() => navigate('/Login')} className={`flex-1 justify-self-end text-[var(--Font-Nav-shadow)] justify-center md:flex ${hamburger ? '' : 'hidden'}`} >
-                Iniciar/Registrarse
-            </button> */}
-            <ProfilePhoto className={`flex-1 items-center justify-center md:flex ${hamburger ? '' : 'hidden'}`} />
+            <button onClick={() => navigate('/Login')} className={`flex-1 justify-self-end text-[var(--Font-Nav-shadow)] justify-center md:flex ${hamburger ? '' : 'hidden'}`} >
+                
+            </button>
         </div>
     )
 }
