@@ -90,7 +90,6 @@ export const Header = () => {
         }
     }, [hamburger])
 
-    const navigate = useNavigate()
 
     return (
         <div

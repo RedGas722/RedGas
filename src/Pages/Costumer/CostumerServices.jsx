@@ -1,4 +1,4 @@
-import { useState, useEffect, use } from "react"
+import { useState, useEffect } from "react"
 import { jwtDecode } from "jwt-decode"
 import { faUser, faTools, faPlug, faGears } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -8,7 +8,7 @@ const URL = 'https://redgas.onrender.com/ClienteServicesGet'
 export const CostumerServices = () => {
   const [user, setUser] = useState('')
   const [phone, setPhone] = useState('')
-  // const [address, setAddress] = useState('')
+  const [address, setAddress] = useState('')
   const [label, setLabel] = useState('')
   const [solutions, setSolutions] = useState('')
 
@@ -63,7 +63,7 @@ const getIconByLabel = (label) => {
       <div className="flex flex-col flex-wrap justify-center max-w-[400px] min-w-0 NeoContainer_outset_TL p-5">
         <div className="text-[var(--Font-Nav)] flex items-center gap-2">
           <FontAwesomeIcon icon={getIconByLabel(label)} className="text-4xl" />
-          <p className="text-3xl font-bold">Reparación {/*{label}*/}</p>
+          <p className="text-3xl font-bold">{label}</p>
         </div>
 
         <div className="text-[var(--main-color-sub)] pl-2 gap-2 flex items-center font-bold w-fit">
@@ -71,7 +71,7 @@ const getIconByLabel = (label) => {
           <div className="flex flex-col justify-center font-light leading-[20px]">
             <p className="text-2xl font-bold text-[var(--main-color)]">{user}</p>
             <p className="text-[1rem]">{phone}</p>
-            <p className="text-[1rem]">MzA hjhdjs jhsjhd jhsdjhsj</p>
+            <p className="text-[1rem]">{address}</p>
           </div>
         </div>
 
