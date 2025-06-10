@@ -5,13 +5,17 @@ import { useEffect, useState } from "react"
 
 export const Navs = ({ className, ref1, ref2, ref3, ref4 }) => {
     const [active, setActive] = useState("Header")
+    const [tipoUsuario, setTipoUsuario] = useState(null)
 
     useEffect(() => {
         setActive("Header")
+        const tipo = localStorage.getItem('tipo_usuario')
+        setTipoUsuario(tipo ? parseInt(tipo) : null)
     }, [])
 
     const getLinkClass = (id) =>
-        `text-[var(--main-color)] cursor-pointer transition-colors duration-300 ${active === id ? '!text-[var(--Font-Nav2)] font-bold' : ''
+        `text-[var(--main-color)] cursor-pointer transition-colors duration-300 ${
+            active === id ? '!text-[var(--Font-Nav2)] font-bold' : ''
         }`
 
     return (
@@ -63,9 +67,14 @@ export const Navs = ({ className, ref1, ref2, ref3, ref4 }) => {
             >
                 Técnicos
             </NavLink>
-            <NavLink to="/Admin">
-                Admin
-            </NavLink>
+
+            {/* Mostrar solo si está logueado como admin o empleado */}
+            {(tipoUsuario === 1 || tipoUsuario === 3) && (
+                <NavLink to="/Admin">
+                    Admin
+                </NavLink>
+            )}
+
             <NavLink to="/Costumer">
                 Cliente
             </NavLink>
@@ -75,4 +84,5 @@ export const Navs = ({ className, ref1, ref2, ref3, ref4 }) => {
         </div>
     )
 }
+
 export default Navs
