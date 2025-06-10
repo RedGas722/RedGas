@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { RegisterModal } from './Register/RegisterModal';
 import { UpdateModal } from './Update/Update';
 import { ButtonBack } from '../UI/ButtonBack/ButtonBack';
 import CardsFacturesBack from './Get/CardFacturesBack';
 import Inputs from '../UI/Inputs/Inputs';
-import { buscarFacturaPorID } from './Get/Get'; // ✅ importar desde el archivo externo
+import { buscarFacturaPorID } from './Get/Get';
 
 export const FacturesBack = () => {
   const [showRegisterModal, setShowRegisterModal] = useState(false);
@@ -18,6 +18,9 @@ export const FacturesBack = () => {
   const [idBusqueda, setIdBusqueda] = useState('');
   const [facturaBuscada, setFacturaBuscada] = useState(null);
   const [errorBusqueda, setErrorBusqueda] = useState('');
+  const [sugerencias, setSugerencias] = useState([]);
+
+  const contenedorRef = useRef(null);
 
   const fetchFacturas = async () => {
     try {
@@ -49,18 +52,21 @@ export const FacturesBack = () => {
     }
   };
 
-  // ✅ Buscar usando la función reutilizable
   const handleBuscarFactura = async () => {
     setErrorBusqueda('');
     setFacturaBuscada(null);
 
+    if (!idBusqueda.trim()) {
+      // Si el campo está vacío, solo mostramos todas las facturas
+      setFacturaBuscada(null);
+      setSugerencias([]);
+      return;
+    }
+
     try {
       const resultado = await buscarFacturaPorID(idBusqueda);
-      if (!resultado) {
-        setErrorBusqueda('Por favor, introduce un ID de factura.');
-        return;
-      }
       setFacturaBuscada(resultado);
+      setSugerencias([]);
     } catch (err) {
       setErrorBusqueda(err.message);
     }
@@ -92,26 +98,70 @@ export const FacturesBack = () => {
     }
   }, [refrescar]);
 
+  useEffect(() => {
+    if (!idBusqueda.trim()) {
+      setSugerencias([]);
+      return;
+    }
+
+    const filtradas = facturas.filter((f) =>
+      f.id_factura.toString().includes(idBusqueda.trim())
+    );
+    setSugerencias(filtradas.slice(0, 5)); // máximo 5 sugerencias
+  }, [idBusqueda, facturas]);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (contenedorRef.current && !contenedorRef.current.contains(e.target)) {
+        setSugerencias([]);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
   return (
     <div className="p-[20px] flex flex-col gap-[20px]">
-      <div className="flex items-center gap-[20px]">
+      <div className="flex items-center gap-[20px] flex-wrap">
         <h1 className="font-bold text-[20px]">Factura BACK-OFFICE</h1>
 
-        <div className="flex items-center gap-2 border border-gray-300 rounded px-2 py-1">
-          <Inputs
-            type="1"
-            placeholder="ID de la factura"
-            value={idBusqueda}
-            onChange={(e) => setIdBusqueda(e.target.value)}
-            className="outline-none"
-          />
-          <button
-            onClick={handleBuscarFactura}
-            aria-label="Buscar factura"
-            className="text-gray-600 hover:text-gray-900"
-          >
-            🔍
-          </button>
+        {/* Buscador con sugerencias */}
+        <div className="relative" ref={contenedorRef}>
+          <div className="flex items-center gap-2 border border-gray-300 rounded px-2 py-1 bg-white">
+            <Inputs
+              type="1"
+              placeholder="ID de la factura"
+              value={idBusqueda}
+              onChange={(e) => setIdBusqueda(e.target.value)}
+              className="outline-none"
+            />
+            <button
+              onClick={handleBuscarFactura}
+              aria-label="Buscar factura"
+              className="text-gray-600 hover:text-gray-900"
+            >
+              🔍
+            </button>
+          </div>
+
+          {sugerencias.length > 0 && (
+            <ul className="absolute z-10 bg-white border border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto w-full shadow">
+              {sugerencias.map((factura) => (
+                <li
+                  key={factura.id_factura}
+                  onClick={() => {
+                    setFacturaBuscada(factura);
+                    setIdBusqueda(factura.id_factura.toString());
+                    setSugerencias([]);
+                  }}
+                  className="p-2 hover:bg-gray-100 cursor-pointer"
+                >
+                  ID: {factura.id_factura}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
 
         <ButtonBack ClickMod={() => setShowRegisterModal(true)} Child="Registrar" />
