@@ -1,5 +1,5 @@
 import React from 'react';
-import { DeleteContract } from "../Delete/DeleteModal";
+import { DeleteContract } from "../Delete/Delete";
 
 const CardContractsBack = ({ contrato, setRefrescar, onUpdateClick }) => {
   // Si no hay id_empleado válido, mostrar advertencia y no permitir eliminar

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { RegisterModal } from './Register/RegisterModal';
-import { UpdateModal } from './Update/UpdateModal';
+import { UpdateModal } from './Update/Update';
 import ButtonBack from '../UI/ButtonBack/ButtonBack';
 import CardContractsBack from './Get/CardContractsBack';
 import Inputs from '../UI/Inputs/Inputs';
