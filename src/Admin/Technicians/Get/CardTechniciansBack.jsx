@@ -1,3 +1,6 @@
+import React from 'react';
+import { DeleteTechnician } from '../Delete/Delete';
+
 const convertirBase64AUrl = (imagen) => {
   if (!imagen) return null;
   if (typeof imagen === 'string') return `data:image/png;base64,${imagen}`;
@@ -9,8 +12,22 @@ const convertirBase64AUrl = (imagen) => {
   return null;
 }
 
-const CardTechniciansBack = ({ tecnico }) => {
+const CardTechniciansBack = ({ tecnico, setRefrescar, onUpdateClick }) => {
   const imageUrl = convertirBase64AUrl(tecnico.imagen);
+
+  const handleDelete = async () => {
+    const confirmar = window.confirm(`¿Seguro que quieres eliminar al técnico ${tecnico.nombre_tecnico}?`);
+    if (!confirmar) return;
+
+    const { success, message } = await DeleteTechnician(tecnico.correo_tecnico);
+
+    if (success) {
+      alert(message);
+      setRefrescar && setRefrescar(true);
+    } else {
+      alert(`Error: ${message}`);
+    }
+  };
 
   return (
     <div className="NeoContainer_outset_TL p-4 w-fit h-fit flex flex-col justify-start overflow-hidden">
@@ -43,6 +60,23 @@ const CardTechniciansBack = ({ tecnico }) => {
           <span className="font-semibold">Teléfono:</span>
           <span className="break-words">{tecnico.telefono_tecnico}</span>
         </p>
+      </div>
+
+      <div className="mt-4 flex flex-col gap-2">
+        <button
+          onClick={handleDelete}
+          className="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded"
+        >
+          Eliminar
+        </button>
+        {onUpdateClick && (
+          <button
+            onClick={() => onUpdateClick(tecnico)}
+            className="bg-yellow-500 hover:bg-yellow-600 text-white py-1 px-3 rounded"
+          >
+            Actualizar
+          </button>
+        )}
       </div>
     </div>
   );

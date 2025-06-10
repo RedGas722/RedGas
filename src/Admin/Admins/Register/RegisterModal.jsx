@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Inputs } from '../../UI/Inputs/Inputs';
 
 export const RegisterModal = ({ onClose, setRefrescar }) => {
@@ -10,32 +10,7 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
   const [errores, setErrores] = useState({});
 
   const URL_GET = 'http://localhost:10101/AdminGet';
-  const URL = 'http://localhost:10101/AdminRegister';
-
-  useEffect(() => {
-    // Traer datos al abrir modal
-    const fetchAdmin = async () => {
-      try {
-        const res = await fetch(URL_GET);
-        if (!res.ok) throw new Error('Error al obtener admin');
-        const data = await res.json();
-
-        if (data.data && data.data.length > 0) {
-          // Asumiendo que data.data es un array de admins, tomamos el primero
-          const admin = data.data[0];
-
-          setNombre(admin.nombre_admin || '');
-          setCorreo(admin.correo_admin || '');
-          setTelefono(admin.telefono_admin || '');
-          // Nota: por seguridad no traemos contraseña, queda vacía
-        }
-      } catch (error) {
-        console.error('Error fetching admin:', error.message);
-      }
-    };
-
-    fetchAdmin();
-  }, []);
+  const URL_POST = 'http://localhost:10101/AdminRegister';
 
   const validarCampos = () => {
     const errores = {};
@@ -49,10 +24,23 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
     return errores;
   };
 
+  // Verificar si ya existe el correo
+  const verificarCorreoExistente = async (correo) => {
+    try {
+      const res = await fetch(`${URL_GET}?correo_admin=${encodeURIComponent(correo)}`);
+      if (!res.ok) throw new Error('Error al verificar el correo');
+      const data = await res.json();
+      return data?.data?.length > 0; // true si ya existe
+    } catch (err) {
+      console.error('Error verificando el correo:', err.message);
+      return false;
+    }
+  };
+
   const handleRegister = async (e) => {
     e.preventDefault();
-    const erroresValidados = validarCampos();
 
+    const erroresValidados = validarCampos();
     if (Object.keys(erroresValidados).length > 0) {
       setErrores(erroresValidados);
       setMensaje('');
@@ -62,8 +50,15 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
     setErrores({});
     setMensaje('');
 
+    // Verificar si el correo ya está registrado
+    const existe = await verificarCorreoExistente(correo.trim());
+    if (existe) {
+      setMensaje('❌ El correo ya está registrado.');
+      return;
+    }
+
     try {
-      const res = await fetch(URL, {
+      const res = await fetch(URL_POST, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -76,10 +71,10 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
 
       if (!res.ok) throw new Error('Error en el registro');
       await res.json();
-      setMensaje('Registro exitoso.');
+      setMensaje('✅ Registro exitoso.');
       if (setRefrescar) setRefrescar(true);
     } catch (err) {
-      setMensaje('Error al registrar: ' + err.message);
+      setMensaje('❌ Error al registrar: ' + err.message);
     }
   };
 

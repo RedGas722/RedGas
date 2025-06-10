@@ -62,8 +62,10 @@ export const LoginGeneral = () => {
 
             const data = await res.json()
             const token = data.token
+            // Detecta tipo_usuario desde la respuesta o el token
+            const tipoUsuario = data.tipo_usuario || (token ? jwtDecode(token).data.tipo_usuario : null)
 
-            if (token) {
+            if (token && tipoUsuario) {
                 const decoded = jwtDecode(token)
                 const user = decoded.data.name
 
@@ -72,7 +74,22 @@ export const LoginGeneral = () => {
                 localStorage.setItem('tipo_usuario', userInfo.tipo_usuario)
 
                 setTimeout(() => {
-                    navigate('/')
+                    // Redirige según el tipo de usuario
+                    switch (tipoUsuario) {
+                        case 'administrador':
+                            navigate('/admin')
+                            break
+                        case 'tecnico':
+                            navigate('/tecnico')
+                            break
+                        case 'empleado':
+                            navigate('/empleado')
+                            break
+                        case 'cliente':
+                        default:
+                            navigate('/cliente')
+                            break
+                    }
                 }, 0)
             } else {
                 alertSendForm(401, 'El correo electrónico o la contraseña son incorrectos')

@@ -2,19 +2,16 @@
 import React, { useState, useEffect } from 'react';
 import { RegisterModal } from './Register/RegisterModal';
 import { UpdateModal } from './Update/UpdateModal';
-import { DeleteModal } from './Delete/DeleteModal';
-import { GetModal } from './Get/GetModal';
-import { BtnBack } from '../../UI/Login_Register/BtnBack';
 import CardServicesGetBack from './Get/CardServicesGetBack';
 import ButtonBack from '../UI/ButtonBack/ButtonBack';
 
 export const ServicesBack = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [showGetModal, setShowGetModal] = useState(false);
   const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [servicios, setServicios] = useState([]);
   const [refrescar, setRefrescar] = useState(false);
+  const [nombreBusqueda, setNombreBusqueda] = useState("");
 
   async function fetchServicios() {
     try {
@@ -39,23 +36,54 @@ export const ServicesBack = () => {
     }
   }, [refrescar]);
 
-  // Para mostrar resultados de búsqueda individual
-  const handleShowServicios = (data) => {
-    setServicios(data);
+  // Para actualizar un servicio desde la tarjeta
+  const handleUpdateClick = (servicio) => {
+    setShowUpdateModal(servicio);
+  };
+
+  // Para eliminar un servicio desde la tarjeta
+  const handleDeleteClick = (servicio) => {
+    setShowDeleteModal(servicio);
+  };
+
+  // Para buscar servicios por nombre desde el input
+  const handleBuscarServicio = async () => {
+    if (!nombreBusqueda.trim()) {
+      fetchServicios(); // Si está vacío, muestra todos
+      return;
+    }
+    try {
+      const res = await fetch(`https://redgas.onrender.com/ServicioGet?nombre_servicio=${encodeURIComponent(nombreBusqueda)}`);
+      if (!res.ok) throw new Error('No se encontró el servicio');
+      const data = await res.json();
+      setServicios(Array.isArray(data.data) ? data.data : []);
+    } catch {
+      setServicios([]);
+    }
   };
 
   return (
     <div className="flex flex-row h-screen p-[40px_0_0_40px] gap-[40px]">
       {/* Panel lateral izquierdo: Backoffice y botones */}
       <div className='flex flex-col items-start gap-[30px] min-w-[320px]'>
-        <div>
-          <h1 className='font-bold text-[22px] mb-2'>Servicio BACK-OFFICE</h1>
-          <BtnBack To='/Admin' className='btnDown' />
+        <h1 className='font-bold text-[22px] mb-2'>Servicio BACK-OFFICE</h1>
+        <div className="flex items-center gap-2 border border-gray-300 rounded px-2 py-1 mb-2">
+          <input
+            type="text"
+            placeholder="Nombre del servicio"
+            value={nombreBusqueda}
+            onChange={e => setNombreBusqueda(e.target.value)}
+            className="outline-none px-2 py-1 w-[180px]"
+          />
+          <button
+            onClick={handleBuscarServicio}
+            aria-label="Buscar servicio"
+            className="text-gray-600 hover:text-gray-900"
+          >🔍</button>
         </div>
         <ButtonBack ClickMod={() => setShowRegisterModal(true)} Child='Registrar' />
-        <ButtonBack ClickMod={() => setShowGetModal(true)} Child='Consultar' />
-        <ButtonBack ClickMod={() => setShowUpdateModal(true)} Child='Actualizar' />
-        <ButtonBack ClickMod={() => setShowDeleteModal(true)} Child='Eliminar' />
+        {/* <ButtonBack ClickMod={() => setShowGetModal(true)} Child='Consultar' /> */}
+        {/* Eliminar y Actualizar removidos porque ya están en la card y el input de consulta ya existe */}
       </div>
 
       {/* Sección de servicios, más abajo y a la derecha */}
@@ -65,6 +93,9 @@ export const ServicesBack = () => {
             <CardServicesGetBack
               key={servicio.id_servicio ? String(servicio.id_servicio) : `servicio-${idx}`}
               servicio={servicio}
+              setRefrescar={setRefrescar}
+              onUpdateClick={handleUpdateClick}
+              onDeleteClick={handleDeleteClick}
             />
           ))}
         </div>
@@ -77,19 +108,21 @@ export const ServicesBack = () => {
           setRefrescar={setRefrescar}
         />
       )}
-      {showGetModal && (
+      {/* {showGetModal && (
         <GetModal onClose={() => setShowGetModal(false)} onResult={handleShowServicios} />
-      )}
-      {showUpdateModal && (
+      )} */}
+      {typeof showUpdateModal === 'object' && showUpdateModal && (
         <UpdateModal
           onClose={() => setShowUpdateModal(false)}
           setRefrescar={setRefrescar}
+          servicioCarta={showUpdateModal}
         />
       )}
-      {showDeleteModal && (
+      {typeof showDeleteModal === 'object' && showDeleteModal && (
         <DeleteModal
           onClose={() => setShowDeleteModal(false)}
           setRefrescar={setRefrescar}
+          servicioCarta={showDeleteModal}
         />
       )}
     </div>
