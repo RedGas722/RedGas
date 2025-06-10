@@ -8,11 +8,23 @@ export const GetModal = ({ onClose, onResult }) => {
 
   const URL = 'https://redgas.onrender.com/ServicioGet';
 
+  const validarNombreServicio = (nombre) => {
+    // Permite letras, números, espacios y algunos caracteres especiales comunes
+    const regex = /^[\w\sáéíóúÁÉÍÓÚüÜñÑ.,-]+$/;
+    return regex.test(nombre);
+  };
+
   const handleGet = async (e) => {
     e.preventDefault();
 
     if (!nombre.trim()) {
       setMensaje({ error: 'Por favor, ingrese un nombre válido.' });
+      if (onResult) onResult([]);
+      return;
+    }
+
+    if (!validarNombreServicio(nombre)) {
+      setMensaje({ error: 'Por favor, introduce un nombre de servicio válido.' });
       if (onResult) onResult([]);
       return;
     }
@@ -23,7 +35,7 @@ export const GetModal = ({ onClose, onResult }) => {
         headers: { 'Content-Type': 'application/json' },
       });
 
-      if (!res.ok) throw new Error('Error al consultar el servicio');
+      if (!res.ok) throw new Error('No se encontró un servicio con este nombre.');
       const data = await res.json();
       if (data.data && Array.isArray(data.data) && data.data.length > 0) {
         setMensaje({ ...data });

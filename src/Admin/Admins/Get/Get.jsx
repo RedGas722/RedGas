@@ -2,35 +2,37 @@ import React, { useState } from 'react';
 import { Inputs } from '../../UI/Inputs/Inputs';
 
 export const GetModal = ({ onClose }) => {
-  const [IDempleado, setIDempleado] = useState('');
+  const [correo, setCorreo] = useState('');
   const [mensaje, setMensaje] = useState(null);
 
-  const URL = 'https://redgas.onrender.com/ContratoGet';
+  const URL = 'http://localhost:10101/AdminGet';
+
 
   const handleGet = async (e) => {
     e.preventDefault();
     try {
-      console.log('Consultando...');
-      const res = await fetch(`${URL}?id_empleado=${encodeURIComponent(IDempleado)}`, {
+      if (!correo || correo.trim() === '') {
+        setMensaje({ error: 'Por favor, introduce un correo válido.' });
+        return;
+      }
+
+      const res = await fetch(`${URL}?correo_admin=${encodeURIComponent(correo)}`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
       });
 
       if (!res.ok) throw new Error('Credenciales inválidas');
       const data = await res.json();
-      if (!data.data || data.data.length === 0) {
-        setMensaje({ error: 'No se encontró un contrato para ese empleado.' });
-        return;
-      }
+      console.log('Response:', data); // Log the response
       setMensaje(data);
-      console.log('Completado!');
     } catch (err) {
+      console.error('Error:', err.message); // Log the error
       setMensaje({ error: 'Error al consultar: ' + err.message });
     }
   };
 
   const handleCancel = () => {
-    setIDempleado('');
+    setCorreo('');
     setMensaje('');
   };
 
@@ -42,13 +44,13 @@ export const GetModal = ({ onClose }) => {
           onClick={onClose}
         >✕</button>
 
-        <h2 className="text-xl font-bold text-center">Consultar Contrato</h2>
+        <h2 className="text-xl font-bold text-center">Consultar Administrador</h2>
 
         <Inputs
-          Type="5"
-          Place="ID del empleado"
-          Value={IDempleado}
-          onChange={(e) => setIDempleado(e.target.value)}
+          Type="2"
+          Place="Correo del administrador"
+          Value={correo}
+          onChange={(e) => setCorreo(e.target.value)}
         />
 
         <div className="flex justify-between gap-2">
@@ -62,21 +64,22 @@ export const GetModal = ({ onClose }) => {
           >Consultar</button>
         </div>
 
+        {mensaje && mensaje.error && (
+          <div className="bg-red-100 p-3 rounded mt-2 text-sm text-red-700">
+            {mensaje.error}
+          </div>
+        )}
         {mensaje && mensaje.data && mensaje.data.length > 0 && (
         <div className="bg-gray-100 p-3 rounded mt-2 text-sm">
-            <p><strong>id_contrato:</strong> {mensaje.data[0].id_contrato}</p>
-            <p><strong>fecha_contrato:</strong> {mensaje.data[0].fecha_contrato}</p>
-            <p><strong>duracion_contrato:</strong> {mensaje.data[0].duracion_contrato}</p>
-            <p><strong>tipo_contrato:</strong> {mensaje.data[0].tipo_contrato}</p>
-            <p><strong>salario:</strong> {mensaje.data[0].salario}</p>
-            <p><strong>id_admin:</strong> {mensaje.data[0].id_admin}</p>
-            <p><strong>id_empleado:</strong> {mensaje.data[0].id_empleado}</p>
+            <p><strong>Nombre:</strong> {mensaje.data[0].nombre_admin}</p>
+            <p><strong>Correo:</strong> {mensaje.data[0].correo_admin}</p>
+            <p><strong>Teléfono:</strong> {mensaje.data[0].telefono_admin}</p>
         </div>
         )}
-        {mensaje && mensaje.error && (
-        <div className="bg-red-100 p-3 rounded mt-2 text-sm text-red-700">
-            {mensaje.error}
-        </div>
+        {mensaje && mensaje.data && mensaje.data.length === 0 && (
+          <div className="bg-yellow-100 p-3 rounded mt-2 text-sm text-yellow-700">
+        
+          </div>
         )}
       </div>
     </div>
