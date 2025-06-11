@@ -4,7 +4,6 @@ import { UpdateModal } from './Update/Update';
 import ButtonBack from '../UI/ButtonBack/ButtonBack';
 import CardAdminsBack from './Get/CardAdminsBack';
 import Inputs from '../UI/Inputs/Inputs';
-import { GetModal } from './Get/Get';
 
 export const AdminsBack = () => {
   const [showRegisterModal, setShowRegisterModal] = useState(false);
@@ -15,13 +14,12 @@ export const AdminsBack = () => {
   const [correoBusqueda, setCorreoBusqueda] = useState('');
   const [adminBuscado, setAdminBuscado] = useState(null);
   const [errorBusqueda, setErrorBusqueda] = useState('');
-  const [showGetModal, setShowGetModal] = useState(false);
 
-  const URL = 'http://localhost:10101/AdminGet';
+  const URL = 'https://redgas.onrender.com/AdminGet';
 
   async function fetchAdmins() {
     try {
-      const res = await fetch('http://localhost:10101/AdminGetAll');
+      const res = await fetch('https://redgas.onrender.com/AdminGetAll');
       if (!res.ok) throw new Error('Error al obtener administradores');
       const data = await res.json();
       setAdmins(data.data || []);
@@ -113,9 +111,6 @@ export const AdminsBack = () => {
       </div>
       {showRegisterModal && (
         <RegisterModal onClose={() => setShowRegisterModal(false)} setRefrescar={setRefrescar} />
-      )}
-      {showGetModal && (
-        <GetModal onClose={() => setShowGetModal(false)} />
       )}
       {showUpdateModal && adminSeleccionado && (
         <UpdateModal

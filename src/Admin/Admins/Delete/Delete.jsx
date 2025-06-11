@@ -1,5 +1,5 @@
 export const DeleteAdmin = async (correo_admin) => {
-  const URL = 'http://localhost:10101/AdminDelete';
+  const URL = 'https://redgas.onrender.com/AdminDelete';
 
   try {
     const res = await fetch(`${URL}?correo_admin=${encodeURIComponent(correo_admin)}`, {
