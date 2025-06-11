@@ -2,6 +2,7 @@ import { useState } from "react"
 import { Buttons } from "../../UI/Login_Register/Buttons"
 import { BtnBack } from "../../UI/Login_Register/BtnBack"
 import { useNavigate } from "react-router-dom"
+import './Services.css'
 
 const URL_IA = 'https://redgas.onrender.com/Diagnostic'
 const URL_REDIS = 'https://redgas.onrender.com/ClienteServicesAdd'
@@ -63,17 +64,19 @@ export const ServicesInfo = () => {
 
    return (
       <>
-         <div className="btnDown">
+         <div>
             <h2 className="font-bold text-4xl text-[var(--Font-Nav)] fixed top-5 left-5 text-shadow">Formulario Servicio</h2>
-            <BtnBack To='/' />
+            <div className='btnDown'>
+               <BtnBack To='/' />
+            </div>
          </div>
-      <section className="h-fit flex flex-wrap justify-center items-center gap-[20px] p-20">
-         <form onSubmit={handleServices}>
-            <p>ingrese aqui una descripcion de su necesidad - hacemos instalaciones/reparaciones/mantenimiento/otros </p>
-            <textarea ForID='Description' placeholder="mi estufa ya no enciende..." value={description} onChange={e => setDescription(e.target.value)} />
-            <Buttons type="submit" nameButton="enviar" />
-         </form>
-      </section>
+         <section className="h-fit flex flex-wrap justify-center items-center gap-[20px] p-20">
+            <form onSubmit={handleServices}>
+               <p>ingrese aqui una descripcion de su necesidad - hacemos instalaciones/reparaciones/mantenimiento/otros </p>
+               <textarea ForID='Description' placeholder="mi estufa ya no enciende..." value={description} onChange={e => setDescription(e.target.value)} />
+               <Buttons type="submit" nameButton="enviar" />
+            </form>
+         </section>
       </>
    )
 }

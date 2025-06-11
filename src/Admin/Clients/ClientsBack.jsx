@@ -103,7 +103,9 @@ export const ClientsBack = () => {
       <div className="flex items-center gap-[20px] flex-wrap">
         <div>
           <h1 className="font-bold text-[20px]">Cliente BACK-OFFICE</h1>
-          <BtnBack To='/Admin' className='btnDown' />
+          <div className='btnDown'>
+            <BtnBack To='/Admin'  />
+          </div>
         </div>
 
         {/* Búsqueda con autocomplete */}

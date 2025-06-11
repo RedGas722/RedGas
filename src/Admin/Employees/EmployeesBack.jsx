@@ -102,7 +102,9 @@ export const EmployeesBack = () => {
       <div className="flex items-center gap-[20px]">
         <div className='flex-col ali'>
           <h1 className="font-bold text-[20px]">Empleado BACK-OFFICE</h1>
-          <BtnBack To='/Admin' className='btnDown' />
+          <div className='btnDown'>
+            <BtnBack To='/Admin'  />
+          </div>
         </div>
         {/* Barra de búsqueda para consultar empleado */}
         <div className="flex items-center gap-2 border border-gray-300 rounded px-2 py-1">

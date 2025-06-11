@@ -97,7 +97,9 @@ export const CategoriesBack = () => {
       <div className="flex items-center gap-[20px] flex-wrap">
         <div>
           <h1 className="font-bold text-[20px]">Categoría BACK-OFFICE</h1>
-          <BtnBack To='/Admin' className='btnDown' />
+           <div className='btnDown'>
+            <BtnBack To='/Admin'  />
+          </div>
         </div>
 
         {/* Input de búsqueda con sugerencias */}

@@ -97,7 +97,7 @@ export const LoginGeneral = () => {
                     allowOutsideClick: false,
                     allowEscapeKey: false,
                     showConfirmButton: false,
-                    timer: 10000,
+                    timer: 5000,
                     timerProgressBar: true,
                     didOpen: () => Swal.showLoading(),
                 })
