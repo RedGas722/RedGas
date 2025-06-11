@@ -62,10 +62,8 @@ export const LoginGeneral = () => {
 
             const data = await res.json()
             const token = data.token
-            // Detecta tipo_usuario desde la respuesta o el token
-            const tipoUsuario = data.tipo_usuario || (token ? jwtDecode(token).data.tipo_usuario : null)
 
-            if (token && tipoUsuario) {
+            if (token) {
                 const decoded = jwtDecode(token)
                 const user = decoded.data.name
 
@@ -74,22 +72,7 @@ export const LoginGeneral = () => {
                 localStorage.setItem('tipo_usuario', userInfo.tipo_usuario)
 
                 setTimeout(() => {
-                    // Redirige según el tipo de usuario
-                    switch (tipoUsuario) {
-                        case 'administrador':
-                            navigate('/admin')
-                            break
-                        case 'tecnico':
-                            navigate('/tecnico')
-                            break
-                        case 'empleado':
-                            navigate('/empleado')
-                            break
-                        case 'cliente':
-                        default:
-                            navigate('/cliente')
-                            break
-                    }
+                    navigate('/')
                 }, 0)
             } else {
                 alertSendForm(401, 'El correo electrónico o la contraseña son incorrectos')
@@ -207,7 +190,7 @@ export const LoginGeneral = () => {
                 <form className="form flex flex-col gap-[30px] justify-center items-center text-start w-full " onSubmit={handleLogin}>
                     <InputLabel type='2' ForID='Email' childLabel='Correo electrónico' placeholder='example@gmail.com' value={correo} onChange={e => setCorreo(e.target.value)} required />
                     <InputLabel type='3' ForID='Password' childLabel='Contraseña' placeholder='**********' value={contrasena} onChange={e => setContrasena(e.target.value)} required />
-                    <section className="flex gap-[10px] items-center justify-between w-full">
+                    <section className="flex gap-[5px] items-center justify-between w-full">
                         <label className="flex gap-[5px] items-center justify-center cursor-pointer text-[var(--main-color-sub)]">
                             <label className="flex items-center justify-center">
                                 <input type="checkbox" className="input" />
@@ -215,7 +198,7 @@ export const LoginGeneral = () => {
                             </label>
                             <div><p>Recordarme</p></div>
                         </label>
-                        <div className="text-[var(--Font-Nav)] text-[14px]">
+                        <div className="text-[var(--main-focus)]">
                             <Link to="/Login/ForgotPassword">
                                 <button className="cursor-pointer hover:text-[var(--Font-Nav)]"><p>Olvidaste tu contraseña?</p></button>
                             </Link>
