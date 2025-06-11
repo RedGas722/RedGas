@@ -8,6 +8,8 @@ export const Shopping = () => {
   const [totalPrice, setTotalPrice] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showPseForm, setShowPseForm] = useState(false);
+  const [pseAmount, setPseAmount] = useState(0);
   const token = localStorage.getItem("token");
 
   const fetchProducts = async () => {
@@ -262,6 +264,15 @@ export const Shopping = () => {
                         </button>
                         <button
                           className='buttonTL2 NeoSubContainer_outset_TL p-[7px]'
+                          onClick={() => {
+                            setPseAmount(subtotal);
+                            setShowPseForm(true);
+                          }}
+                        >
+                          Pagar con PSE
+                        </button>
+                        <button
+                          className='buttonTL2 NeoSubContainer_outset_TL p-[7px]'
                           onClick={() => handleRemoveProduct(producto.id_producto)}
                         >
                           Eliminar
@@ -285,6 +296,15 @@ export const Shopping = () => {
             >
               Pagar Total con PayPal
             </button>
+            <button
+              className='buttonTL2 text-white font-black NeoSubContainer_outset_TL p-[7px]'
+              onClick={() => {
+                setPseAmount(totalPrice);
+                setShowPseForm(true);
+              }}
+            >
+              Pagar Total con PSE
+            </button>
             <button className='buttonTL2 active:text-[var(--main-color)] font-black NeoSubContainer_outset_TL p-[7px]'>Ver carrito</button>
             <button
               className='buttonTL2 text-white font-black NeoSubContainer_outset_TL p-[7px]'
@@ -300,6 +320,9 @@ export const Shopping = () => {
           </p>
         </footer>
       </div>
+      {showPseForm && (
+        <PsePaymentForm monto={pseAmount} onClose={() => setShowPseForm(false)} />
+      )}
     </section>
   );
 };

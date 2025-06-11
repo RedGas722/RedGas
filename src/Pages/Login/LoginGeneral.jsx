@@ -25,7 +25,7 @@ export const LoginGeneral = () => {
                 alertSendForm(401, 'El correo electrónico o la contraseña son incorrectos')
                 return
             }
-
+        
             const loginURL = `https://redgas.onrender.com/${userInfo.ruta}`
 
             // 👇 Campos dinámicos según tipo de usuario
@@ -60,10 +60,9 @@ export const LoginGeneral = () => {
                 body: JSON.stringify(bodyData)
             })
 
-            const data = await res.json()
-            const token = data.token
-            // Detecta tipo_usuario desde la respuesta o el token
-            const tipoUsuario = data.tipo_usuario || (token ? jwtDecode(token).data.tipo_usuario : null)
+            const data = await res.json();
+            const token = data.token;
+            const tipoUsuario = userInfo.tipo_usuario;
 
             if (token && tipoUsuario) {
                 const decoded = jwtDecode(token)
@@ -74,18 +73,14 @@ export const LoginGeneral = () => {
                 localStorage.setItem('tipo_usuario', userInfo.tipo_usuario)
 
                 setTimeout(() => {
-                    // Redirige según el tipo de usuario
                     switch (tipoUsuario) {
-                        case 'administrador':
+                        case 1:
                             navigate('/admin')
                             break
-                        case 'tecnico':
-                            navigate('/tecnico')
-                            break
-                        case 'empleado':
+                        case 3:
                             navigate('/empleado')
                             break
-                        case 'cliente':
+                        case 2:
                         default:
                             navigate('/cliente')
                             break
