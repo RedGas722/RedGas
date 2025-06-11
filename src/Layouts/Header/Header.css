@@ -1,13 +1,13 @@
 .Header {
     display: grid;
     place-items: center;
-    grid-template-columns: 2fr 2fr 70px;
+    grid-template-columns: 2fr 2fr 150px;
     padding: 24px 25px;
 }
 
 .Header.scrolled {
     place-items: center;
-    grid-template-columns: 1fr 2.5fr 3fr 70px;
+    grid-template-columns: 1fr 2.5fr 3fr 1fr;
 }
 
 .Header.Burguer {
@@ -31,7 +31,7 @@
     padding: 3px 15px;
     border-radius: 10px;
     height: 2.5rem;
-    width: 130px;
+    width: 150px;
     position: relative;
     cursor: pointer;
     justify-content: space-between;
@@ -104,6 +104,12 @@
     transition:
         transform 0.4s calc(var(--delay) + (var(--trdelay) * 3)),
         opacity 0.4s calc(var(--delay) + (var(--trdelay) * 3));
+}
+
+.inp:not(:checked)~.menu-container .menu-list:nth-child(5) {
+    transition:
+        transform 0.4s calc(var(--delay) + (var(--trdelay) * 4)),
+        opacity 0.4s calc(var(--delay) + (var(--trdelay) * 4));
 }
 
 .bar-inp {
