@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { RegisterModal } from './Register/RegisterModal';
 import { UpdateModal } from './Update/Update';
 import ButtonBack from '../UI/ButtonBack/ButtonBack';
 import CardContractsBack from './Get/CardContractsBack';
 import Inputs from '../UI/Inputs/Inputs';
+import { buscarContratoPorEmpleado } from './Get/Get';  
 
 export const ContractsBack = () => {
   const [showRegisterModal, setShowRegisterModal] = useState(false);
@@ -14,12 +15,15 @@ export const ContractsBack = () => {
   const [idBusqueda, setIdBusqueda] = useState('');
   const [contratoBuscado, setContratoBuscado] = useState(null);
   const [errorBusqueda, setErrorBusqueda] = useState('');
+  const [sugerencias, setSugerencias] = useState([]);
+  const contenedorRef = useRef(null);
+  const inputRef = useRef(null);
 
-  const URL = 'http://localhost:10101/ContratoGet';
+  const URL = 'https://redgas.onrender.com/ContratoGet';
 
   async function fetchContratos() {
     try {
-      const res = await fetch('http://localhost:10101/ContratoGetAll');
+      const res = await fetch('https://redgas.onrender.com/ContratoGetAll');
       if (!res.ok) throw new Error('Error al obtener contratos');
       const data = await res.json();
       setContratos(data.data || []);
@@ -42,6 +46,40 @@ export const ContractsBack = () => {
     }
   }, [refrescar]);
 
+  // 🧠 Autocomplete filtrando contratos localmente
+  useEffect(() => {
+    if (idBusqueda.trim() === '') {
+      setSugerencias([]);
+      return;
+    }
+    const filtrados = contratos.filter((contrato) =>
+      contrato.id_empleado && contrato.id_empleado.toString().includes(idBusqueda)
+    );
+    setSugerencias(filtrados.slice(0, 5));
+  }, [idBusqueda, contratos]);
+
+  // 🧽 Cierre del dropdown si se hace clic fuera
+  useEffect(() => {
+    const manejarClickFuera = (event) => {
+      if (
+        contenedorRef.current &&
+        !contenedorRef.current.contains(event.target)
+      ) {
+        setSugerencias([]);
+      }
+    };
+    document.addEventListener('mousedown', manejarClickFuera);
+    return () => document.removeEventListener('mousedown', manejarClickFuera);
+  }, []);
+
+  // Limpia contratoBuscado y errorBusqueda si el input queda vacío
+  useEffect(() => {
+    if (idBusqueda.trim() === '') {
+      setContratoBuscado(null);
+      setErrorBusqueda('');
+    }
+  }, [idBusqueda]);
+
   const abrirModalActualizar = (contrato) => {
     setContratoSeleccionado(contrato);
     setShowUpdateModal(true);
@@ -56,12 +94,8 @@ export const ContractsBack = () => {
     setErrorBusqueda('');
     setContratoBuscado(null);
     try {
-      if (!idBusqueda.trim()) throw new Error('Ingrese un ID de empleado');
-      const res = await fetch(`${URL}?id_empleado=${encodeURIComponent(idBusqueda)}`);
-      if (!res.ok) throw new Error('No se encontró el contrato');
-      const data = await res.json();
-      if (!data.data) throw new Error('No se encontró el contrato');
-      setContratoBuscado(data.data);
+      const contrato = await buscarContratoPorEmpleado(idBusqueda);
+      setContratoBuscado(contrato);
     } catch (error) {
       setErrorBusqueda(error.message);
     }
@@ -71,21 +105,41 @@ export const ContractsBack = () => {
     <div className="p-[20px] flex flex-col gap-[20px]">
       <div className="flex items-center gap-[20px]">
         <h1 className="font-bold text-[20px]">Contrato BACK-OFFICE</h1>
-        <div className="flex items-center gap-2 border border-gray-300 rounded px-2 py-1">
-          <Inputs
-            type="1"
-            placeholder="ID del empleado"
-            value={idBusqueda}
-            onChange={(e) => setIdBusqueda(e.target.value)}
-            className="outline-none"
-          />
-          <button
-            onClick={buscarContrato}
-            aria-label="Buscar contrato"
-            className="text-gray-600 hover:text-gray-900"
-          >
-            🔍
-          </button>
+        <div className="relative" ref={contenedorRef}>
+          <div className="flex items-center gap-2 border border-gray-300 rounded px-2 py-1">
+            <Inputs
+              type="1"
+              placeholder="ID del empleado"
+              value={idBusqueda}
+              onChange={(e) => setIdBusqueda(e.target.value)}
+              className="outline-none"
+              ref={inputRef}
+            />
+            <button
+              onClick={buscarContrato}
+              aria-label="Buscar contrato"
+              className="text-gray-600 hover:text-gray-900"
+            >
+              🔍
+            </button>
+          </div>
+          {sugerencias.length > 0 && (
+            <ul className="absolute z-10 bg-white border border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto w-full shadow">
+              {sugerencias.map((contrato) => (
+                <li
+                  key={contrato.id_contrato}
+                  onClick={() => {
+                    setContratoBuscado(contrato);
+                    setIdBusqueda(contrato.id_empleado.toString());
+                    setSugerencias([]);
+                  }}
+                  className="p-2 hover:bg-gray-100 cursor-pointer"
+                >
+                  {contrato.id_empleado}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
         <ButtonBack ClickMod={() => setShowRegisterModal(true)} Child="Registrar" />
       </div>

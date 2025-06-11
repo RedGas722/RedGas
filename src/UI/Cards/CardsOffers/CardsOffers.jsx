@@ -5,6 +5,8 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight, faArrowLeft, faCartShopping, faTags } from '@fortawesome/free-solid-svg-icons';
+import Swal from 'sweetalert2'
+import { useNavigate } from "react-router-dom";
 
 
 async function agregarAlCarrito(item) {
@@ -31,8 +33,25 @@ async function agregarAlCarrito(item) {
 }
 
 export const CardsOffers = ({ uniqueId, productos = [] }) => {
+  const navigate = useNavigate();
 
   const handleAddToCart = async (producto) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'No estás logueado',
+        text: 'Debes iniciar sesión para agregar productos al carrito.',
+        showCancelButton: true,
+        confirmButtonText: 'Ir al login',
+        cancelButtonText: 'Cancelar'
+      }).then((result) => {
+        if(result.isConfirmed){
+          navigate("/Login");
+        }
+      });
+      return;
+    }
     const item = {
       productId: producto.id_producto,
       productName: producto.nombre_producto,
@@ -43,10 +62,18 @@ export const CardsOffers = ({ uniqueId, productos = [] }) => {
 
     try {
       await agregarAlCarrito(item);
-      alert(`"${producto.nombre_producto}" fue agregado al carrito`);
+      Swal.fire({
+        icon: 'success',
+        title: 'Producto agregado',
+        text: `"${producto.nombre_producto}" fue agregado al carrito`
+      });
     } catch (error) {
       console.error("Error al agregar al carrito", error);
-      alert("Ocurrió un error al agregar al carrito");
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: "Ocurrió un error al agregar al carrito"
+      });
     }
   };
 
@@ -70,9 +97,9 @@ export const CardsOffers = ({ uniqueId, productos = [] }) => {
         className="w-[100%] flex justify-center items-center"
       >
         {productos.map((producto, index) => (
-          <SwiperSlide key={index} className="relative">
+          <SwiperSlide key={index}>
             <div className="flex justify-center justify-self-center h-fit p-[25px_0_25px_0] items-center w-fit">
-              <div className="card NeoSubContainer_outset_TL">
+              <div className="card relative NeoSubContainer_outset_TL">
                 <div className="card-img">
                   <div className="img h-full">
                     <img
@@ -103,12 +130,12 @@ export const CardsOffers = ({ uniqueId, productos = [] }) => {
                     <FontAwesomeIcon icon={faCartShopping} />
                   </button>
                 </div>
-              </div>
-            </div>
-            <div className="absolute top-[25px] -left-2">
-              <div className="relative flex items-center text-[var(--main-color)]">
-                <FontAwesomeIcon icon={faTags} className="text-6xl text rotate-90" />
-                <p className="text-[18px] flex text-[var(--Font-Nav)] absolute left-4 top-4 font-bold">{producto.descuento} <span className="text-[12px]">%</span> </p>
+                <div className="absolute top-0 -right-1">
+                  <div className="relative flex items-center text-[var(--main-color)]">
+                    <FontAwesomeIcon icon={faTags} className="text-6xl text rotate-90" />
+                    <p className="text-[18px] flex text-[var(--Font-Nav)] absolute left-4 top-4 font-bold">{producto.descuento} <span className="text-[12px]">%</span> </p>
+                  </div>
+                </div>
               </div>
             </div>
           </SwiperSlide>

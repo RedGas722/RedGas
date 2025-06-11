@@ -9,8 +9,8 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
   const [mensaje, setMensaje] = useState('');
   const [errores, setErrores] = useState({});
 
-  const URL_GET = 'http://localhost:10101/AdminGet';
-  const URL_POST = 'http://localhost:10101/AdminRegister';
+  const URL_GET = 'https://redgas.onrender.com/AdminGet';
+  const URL_POST = 'https://redgas.onrender.com/AdminRegister';
 
   const validarCampos = () => {
     const errores = {};

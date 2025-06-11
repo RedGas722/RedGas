@@ -67,7 +67,7 @@ export const UpdateModal = ({ onClose, setRefrescar, adminCarta }) => {
     };
 
     try {
-      const res = await fetch('http://localhost:10101/AdminDataUpdate', {
+      const res = await fetch('https://redgas.onrender.com/AdminDataUpdate', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),

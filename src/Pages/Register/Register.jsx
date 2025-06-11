@@ -46,7 +46,7 @@ export const Register = () => {
             const data = await res.json()
             alertSendForm(200, 'Registro exitoso', 'Tu cuenta ha sido creada con éxito. Ahora puedes iniciar sesión.')
             setTimeout(() => {
-            navigate('/login')
+                navigate('/login')
             }, 0)
         } catch (err) {
             alertSendForm(502, 'Error al registrar usuario', 'Ocurrió un error al registrar tu cuenta. Por favor, intenta nuevamente más tarde.')
@@ -180,44 +180,85 @@ export const Register = () => {
                     })
                 break
         }
-
     }
 
-
     return (
-        <div className="sectionLoginRegister w-full gap-[40px] text-[var(--main-color)] h-dvh ">
+        <div className="w-full h-[100%] p-[10px_0_0_10px] gap-10 grid grid-cols-2 text-[var(--main-color)]">
             <BtnBack To='/' />
-            <div className="divForm NeoContainer_outset_TL p-[30px_15px_15px_15px] flex flex-col items-center w-fit justify-self-center gap-[20px]">
-                <h1 className="text-center text-4xl">¡Bienvenido!</h1>
-                <form className="flex flex-col gap-[15px] justify-center items-center text-start w-fit" onSubmit={handleRegister}>
-                    {/* Name, LastName */}
-                    <div className="flex gap-[15px]">
-                        <div className="flex flex-col">
-                            <InputLabel type='1' ForID='Name' childLabel='Nombre' placeholder='Nombre' value={nombre} onChange={e => setNombre(e.target.value)} />
-                        </div>
-                        <div className="flex flex-col">
-                            <InputLabel type='1' ForID='LastName' childLabel='Apellido' placeholder='Apellido' value={apellido} onChange={e => setApellido(e.target.value)} />
-                        </div>
+            <div className="divForm NeoContainer_outset_TL p-6 flex flex-col items-center w-full max-w-3xl gap-4">
+                <h1 className="text-center text-3xl md:text-4xl">¡Bienvenido!</h1>
+                <form className="flex flex-col gap-6 w-full" onSubmit={handleRegister}>
+                    {/* Name & LastName */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <InputLabel
+                            type="1"
+                            ForID="Name"
+                            childLabel="Nombre"
+                            placeholder="Nombre"
+                            value={nombre}
+                            onChange={e => setNombre(e.target.value)}
+                        />
+                        <InputLabel
+                            type="1"
+                            ForID="LastName"
+                            childLabel="Apellido"
+                            placeholder="Apellido"
+                            value={apellido}
+                            onChange={e => setApellido(e.target.value)}
+                        />
                     </div>
 
-                    {/* Phone */}
-                    <InputLabel type='6' ForID='Phone' childLabel='Telefono' placeholder='3*********' value={telefono} onChange={e => setTelefono(e.target.value)} />
+                    {/* Phone & Address */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <InputLabel
+                            type="6"
+                            ForID="Phone"
+                            childLabel="Teléfono"
+                            placeholder="3*********"
+                            value={telefono}
+                            onChange={e => setTelefono(e.target.value)}
+                        />
+                        <InputLabel
+                            type="1"
+                            ForID="Address"
+                            childLabel="Dirección"
+                            placeholder="Cra 22 #19 ******"
+                            value={direccion}
+                            onChange={e => setDireccion(e.target.value)}
+                        />
+                    </div>
 
-                    {/* Address */}
-                    <InputLabel type='1' ForID='Address' childLabel='Dirección' placeholder='Cra 22 #19 ******' value={direccion} onChange={e => setDireccion(e.target.value)} />
+                    {/* Email */}
+                    <InputLabel
+                        type="2"
+                        ForID="email"
+                        childLabel="Correo electrónico"
+                        placeholder="example@gmail.com"
+                        value={correo}
+                        onChange={e => setCorreo(e.target.value)}
+                    />
 
-                    {/* E-mail */}
-                    <InputLabel type='2' ForID='email' childLabel='Correo electrónico' placeholder='example@gmail.com' value={correo} onChange={e => setCorreo(e.target.value)} />
+                    {/* Password & Confirm */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <InputLabel
+                            type="3"
+                            ForID="password"
+                            childLabel="Contraseña"
+                            placeholder="Contraseña"
+                            value={contrasena}
+                            onChange={e => setContrasena(e.target.value)}
+                        />
+                        <InputLabel
+                            type="3"
+                            ForID="passwordConfirm"
+                            childLabel="Confirmar contraseña"
+                            placeholder="Confirmar contraseña"
+                        />
+                    </div>
 
-                    {/* Password */}
-                    <InputLabel type='3' ForID='password' childLabel='Contraseña' placeholder='hola' value={contrasena} onChange={e => setContrasena(e.target.value)} />
-
-                    {/* Confirm Password */}
-                    <InputLabel type='3' ForID='passwordConfirm' childLabel='Confirmar contraseña' placeholder='holas' />
-
-                    <div className="flex flex-col items-center">
+                    <div className="flex flex-col items-center gap-3">
                         <Buttons nameButton="Register" />
-                        <Text Have="Tienes cuenta?" GoTo="Inicia sesión aquí" nav='/Login' />
+                        <Text Have="¿Tienes cuenta?" GoTo="Inicia sesión aquí" nav="/Login" />
                     </div>
                 </form>
             </div>

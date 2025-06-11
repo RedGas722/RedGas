@@ -5,49 +5,78 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight, faArrowLeft, faCartShopping } from '@fortawesome/free-solid-svg-icons';
+import { useNavigate } from "react-router-dom";
+import Swal from 'sweetalert2';
 
 async function agregarAlCarrito(item) {
-  const token = localStorage.getItem("token");
-  if (!token) {
-    alert("Debes iniciar sesión para agregar al carrito");
-    return null;
-  }
-  const res = await fetch("https://redgas.onrender.com/CartAdd", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}`,
-    },
-    body: JSON.stringify(item),
-  });
-
-
-  if (!res.ok) {
-    const error = await res.json();
-    throw new Error(error.message || "Error al agregar al carrito");
-  }
-  return await res.json();
-}
-
-export const Cards = ({ uniqueId, productos = [] }) => {
-
-  const handleAddToCart = async (producto) => {
-    const item = {
-      productId: producto.id_producto,
-      productName: producto.nombre_producto,
-      quantity: 1,
-      price: producto.precio_producto,
-      discount: producto.descuento || 0
-    };
-
-    try {
-      await agregarAlCarrito(item);
-      alert(`"${producto.nombre_producto}" fue agregado al carrito`);
-    } catch (error) {
-      console.error("Error al agregar al carrito", error);
-      alert("Ocurrió un error al agregar al carrito");
+    const token = localStorage.getItem("token");
+    if (!token) {
+        // Se comprobará en handleAddToCart
+        return null;
     }
-  };
+    const res = await fetch("https://redgas.onrender.com/CartAdd", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      },
+      body: JSON.stringify(item),
+    });
+  
+    if (!res.ok) {
+      const error = await res.json();
+      throw new Error(error.message || "Error al agregar al carrito");
+    }
+    return await res.json();
+}
+  
+export const Cards = ({ uniqueId, productos = [] }) => {
+    const navigate = useNavigate();
+
+    const handleAddToCart = async (producto) => {
+        const token = localStorage.getItem("token");
+        if (!token) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'No estás logueado',
+                text: 'Debes iniciar sesión para agregar productos al carrito.',
+                showCancelButton: true,
+                confirmButtonText: 'Ir al login',
+                cancelButtonText: 'Cancelar',
+                allowOutsideClick: false,
+                allowEscapeKey: false
+            }).then((result) => {
+                if(result.isConfirmed){
+                    navigate("/Login");
+                }
+            });
+            return;
+        }
+
+        const item = {
+            productId: producto.id_producto,
+            productName: producto.nombre_producto,
+            quantity: 1,
+            price: producto.precio_producto,
+            discount: producto.descuento || 0
+        };
+
+        try {
+            await agregarAlCarrito(item);
+            Swal.fire({
+                icon: 'success',
+                title: 'Producto agregado',
+                text: `"${producto.nombre_producto}" fue agregado al carrito`
+            });
+        } catch (error) {
+            console.error("Error al agregar al carrito", error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: "Ocurrió un error al agregar al carrito"
+            });
+        }
+    };
 
   return (
     <section id={`CardSect-${uniqueId}`} className="flex flex-col gap-[10px] h-fit w-[100%]">
@@ -66,7 +95,7 @@ export const Cards = ({ uniqueId, productos = [] }) => {
           320: { slidesPerView: 1, spaceBetween: 5 },
         }}
         id={`cardContainer-${uniqueId}`}
-        className="w-[100%] flex justify-center items-center"
+        className="w-[100%] flex justify-center items-center p-[0_20px_0_20px] "
       >
         {productos.map((producto, index) => (
           <SwiperSlide key={index}>

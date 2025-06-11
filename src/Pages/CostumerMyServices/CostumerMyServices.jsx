@@ -43,7 +43,9 @@ export const CostumerMyServices = () => {
           }
 
           const datainfo = await response.json()
+          console.log(datainfo);
           
+
           if (!datainfo.get) {
             navigate('/Services')
           }
@@ -66,6 +68,7 @@ export const CostumerMyServices = () => {
   }, [])
   
   const handleChangeService = async () => {
+    
     try {
       const responseChange = await fetch(`${URL_DELETE}`, {
         method: 'DELETE',
