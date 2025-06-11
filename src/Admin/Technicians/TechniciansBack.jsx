@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { RegisterModal } from './Register/RegisterModal'
 import { UpdateModal } from './Update/Update'
 import { DeleteModal } from './Delete/Delete'
@@ -50,39 +50,95 @@ export const TechniciansBack = () => {
 
   // Para buscar técnicos por correo desde el input
   const [correoBusqueda, setCorreoBusqueda] = useState("");
-const handleBuscarTecnico = async () => {
-  if (!correoBusqueda.trim()) {
-    fetchTecnicos(); // Si está vacío, muestra todos
-    return;
-  }
+  const [sugerencias, setSugerencias] = useState([]);
+  const contenedorRef = useRef(null);
+  const inputRef = useRef(null);
 
-  try {
-    const resultados = await buscarTecnicoPorCorreo(correoBusqueda);
-    setTecnicos(resultados);
-  } catch (error) {
-    console.error(error);
-    setTecnicos([]);
-  }
-};
+  const handleBuscarTecnico = async () => {
+    if (!correoBusqueda.trim()) {
+      fetchTecnicos(); // Si está vacío, muestra todos
+      return;
+    }
 
+    try {
+      const resultados = await buscarTecnicoPorCorreo(correoBusqueda);
+      setTecnicos(resultados);
+    } catch (error) {
+      console.error(error);
+      setTecnicos([]);
+    }
+  };
+
+  // Autocomplete: filtra técnicos por correo
+  useEffect(() => {
+    if (correoBusqueda.trim() === '') {
+      setSugerencias([]);
+      return;
+    }
+    const filtrados = tecnicos.filter((tecnico) =>
+      tecnico.correo_tecnico && tecnico.correo_tecnico.toLowerCase().includes(correoBusqueda.toLowerCase())
+    );
+    setSugerencias(filtrados.slice(0, 5));
+  }, [correoBusqueda, tecnicos]);
+
+  // Cierre del dropdown si se hace clic fuera
+  useEffect(() => {
+    const manejarClickFuera = (event) => {
+      if (
+        contenedorRef.current &&
+        !contenedorRef.current.contains(event.target)
+      ) {
+        setSugerencias([]);
+      }
+    };
+    document.addEventListener('mousedown', manejarClickFuera);
+    return () => document.removeEventListener('mousedown', manejarClickFuera);
+  }, []);
+
+  // Limpia técnicos si el input queda vacío
+  useEffect(() => {
+    if (correoBusqueda.trim() === '') {
+      fetchTecnicos();
+    }
+  }, [correoBusqueda]);
 
   return (
     <div className="p-[20px] h-full flex flex-col gap-[20px]">
       <div className='NeoContainer_outset_TL flex flex-col w-fit p-[0_0_0_20px]'>
         <h1 className="font-bold text-[20px] text-[var(--main-color)]">Técnicos</h1>
-        <div className="flex items-center gap-2 border border-gray-300 rounded px-2 py-1 mb-2">
-          <input
-            type="text"
-            placeholder="Correo del técnico"
-            value={correoBusqueda}
-            onChange={e => setCorreoBusqueda(e.target.value)}
-            className="outline-none px-2 py-1 w-[180px]"
-          />
-          <button
-            onClick={handleBuscarTecnico}
-            aria-label="Buscar técnico"
-            className="text-gray-600 hover:text-gray-900"
-          >🔍</button>
+        <div className="relative" ref={contenedorRef}>
+          <div className="flex items-center gap-2 border border-gray-300 rounded px-2 py-1 mb-2">
+            <input
+              type="text"
+              placeholder="Correo del técnico"
+              value={correoBusqueda}
+              onChange={e => setCorreoBusqueda(e.target.value)}
+              className="outline-none px-2 py-1 w-[180px]"
+              ref={inputRef}
+            />
+            <button
+              onClick={handleBuscarTecnico}
+              aria-label="Buscar técnico"
+              className="text-gray-600 hover:text-gray-900"
+            >🔍</button>
+          </div>
+          {sugerencias.length > 0 && (
+            <ul className="absolute z-10 bg-white border border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto w-full shadow">
+              {sugerencias.map((tecnico) => (
+                <li
+                  key={tecnico.id_tecnico || tecnico.correo_tecnico}
+                  onClick={() => {
+                    setCorreoBusqueda(tecnico.correo_tecnico);
+                    setSugerencias([]);
+                    setTecnicos([tecnico]);
+                  }}
+                  className="p-2 hover:bg-gray-100 cursor-pointer"
+                >
+                  {tecnico.correo_tecnico}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
         <div className="flex p-[20px] w-fit h-fit flex-wrap justify-center justify-self-center items-center gap-[20px]">
           <ButtonBack ClickMod={() => setShowRegisterModal(true)} Child="Registrar" />

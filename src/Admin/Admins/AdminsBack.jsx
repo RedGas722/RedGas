@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { RegisterModal } from './Register/RegisterModal';
 import { buscarAdminPorCorreo } from './Get/Get';
 import { UpdateModal } from './Update/Update';
@@ -15,6 +15,9 @@ export const AdminsBack = () => {
   const [correoBusqueda, setCorreoBusqueda] = useState('');
   const [adminBuscado, setAdminBuscado] = useState(null);
   const [errorBusqueda, setErrorBusqueda] = useState('');
+  const [sugerencias, setSugerencias] = useState([]);
+  const contenedorRef = useRef(null);
+  const inputRef = useRef(null);
 
   const URL = 'https://redgas.onrender.com/AdminGet';
 
@@ -53,36 +56,93 @@ export const AdminsBack = () => {
     setAdminSeleccionado(null);
   };
 
-const buscarAdmin = async () => {
-  setErrorBusqueda('');
-  setAdminBuscado(null);
-  try {
-    const admin = await buscarAdminPorCorreo(correoBusqueda);
-    setAdminBuscado(admin);
-  } catch (error) {
-    setErrorBusqueda(error.message);
-  }
-};
+  const buscarAdmin = async () => {
+    setErrorBusqueda('');
+    setAdminBuscado(null);
+    try {
+      const admin = await buscarAdminPorCorreo(correoBusqueda);
+      setAdminBuscado(admin);
+    } catch (error) {
+      setErrorBusqueda(error.message);
+    }
+  };
 
+  // 🧠 Autocomplete filtrando productos localmente
+  useEffect(() => {
+    if (correoBusqueda.trim() === '') {
+      setSugerencias([]);
+      return;
+    }
+
+    const filtrados = admins.filter((admin) =>
+      admin.correo_admin.toLowerCase().includes(correoBusqueda.toLowerCase())
+    );
+    setSugerencias(filtrados.slice(0, 5));
+  }, [correoBusqueda, admins]);
+
+  // 🧽 Cierre del dropdown si se hace clic fuera
+  useEffect(() => {
+    const manejarClickFuera = (event) => {
+      if (
+        contenedorRef.current &&
+        !contenedorRef.current.contains(event.target)
+      ) {
+        setSugerencias([]);
+      }
+    };
+
+    document.addEventListener('mousedown', manejarClickFuera);
+    return () => document.removeEventListener('mousedown', manejarClickFuera);
+  }, []);
+
+  // Limpia adminBuscado y errorBusqueda si el input queda vacío
+  useEffect(() => {
+    if (correoBusqueda.trim() === '') {
+      setAdminBuscado(null);
+      setErrorBusqueda('');
+    }
+  }, [correoBusqueda]);
+
+  // Mueve el input y el botón dentro del contenedorRef para que el click fuera funcione correctamente
   return (
     <div className="p-[20px] flex flex-col gap-[20px]">
       <div className="flex items-center gap-[20px]">
         <h1 className="font-bold text-[20px]">Admin BACK-OFFICE</h1>
-        <div className="flex items-center gap-2 border border-gray-300 rounded px-2 py-1">
-          <Inputs
-            type="1"
-            placeholder="Correo del administrador"
-            value={correoBusqueda}
-            onChange={(e) => setCorreoBusqueda(e.target.value)}
-            className="outline-none"
-          />
-          <button
-            onClick={buscarAdmin}
-            aria-label="Buscar admin"
-            className="text-gray-600 hover:text-gray-900"
-          >
-            🔍
-          </button>
+        <div className="relative" ref={contenedorRef}>
+          <div className="flex items-center gap-2 border border-gray-300 rounded px-2 py-1">
+            <Inputs
+              type="1"
+              placeholder="Correo del administrador"
+              value={correoBusqueda}
+              onChange={(e) => setCorreoBusqueda(e.target.value)}
+              className="outline-none"
+              ref={inputRef}
+            />
+            <button
+              onClick={buscarAdmin}
+              aria-label="Buscar admin"
+              className="text-gray-600 hover:text-gray-900"
+            >
+              🔍
+            </button>
+          </div>
+          {sugerencias.length > 0 && (
+            <ul className="absolute z-10 bg-white border border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto w-full shadow">
+              {sugerencias.map((admin) => (
+                <li
+                  key={admin.id_admin}
+                  onClick={() => {
+                    setAdminBuscado(admin);
+                    setCorreoBusqueda(admin.correo_admin);
+                    setSugerencias([]);
+                  }}
+                  className="p-2 hover:bg-gray-100 cursor-pointer"
+                >
+                  {admin.correo_admin}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
         <ButtonBack ClickMod={() => setShowRegisterModal(true)} Child="Registrar" />
       </div>
@@ -98,13 +158,13 @@ const buscarAdmin = async () => {
             />
           )
           : admins.map((admin) => (
-              <CardAdminsBack
-                key={admin.id_admin}
-                admin={admin}
-                setRefrescar={setRefrescar}
-                onUpdateClick={abrirModalActualizar}
-              />
-            ))
+            <CardAdminsBack
+              key={admin.id_admin}
+              admin={admin}
+              setRefrescar={setRefrescar}
+              onUpdateClick={abrirModalActualizar}
+            />
+          ))
         }
       </div>
       {showRegisterModal && (
