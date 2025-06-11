@@ -34,13 +34,13 @@ export const InputLabel = ({ type, ForID, placeholder, childLabel, value, onChan
         placeholder
 
     return (
-        <div className="w-full flex flex-col gap-2 ">
-            <label htmlFor={ForID} className="text-[var(--main-color)] text-2xl w-full">{childLabel}</label>
+        <div className="min-w-[230px] w-full flex flex-col gap-2 ">
+            <label htmlFor={ForID} className="text-[var(--main-color)] text-[18px] w-full">{childLabel}</label>
             <div className="relative w-full ">
                 {inputType !== "file" ? (
                     <input
                         type={inputType}
-                        className="NeoSubContainer_inset_TOTAL inputs relative text-[var(--main-color)] w-full p-[10px_0_10px_15px] placeholder:text-[var(--main-color-sub)] border-0 outline-0"
+                        className="NeoSubContainer_inset_TOTAL inputs relative text-[var(--main-color)] w-full p-[10px_10px_10px_15px] placeholder:text-[var(--main-color-sub)] border-0 outline-0"
                         value={value}
                         id={ForID}
                         onChange={onChange}
@@ -50,7 +50,7 @@ export const InputLabel = ({ type, ForID, placeholder, childLabel, value, onChan
                 ) : (
                     <input
                         type="file"
-                        className="NeoSubContainer_inset_TOTAL inputs relative text-[var(--main-color)] w-full p-[10px_0_10px_15px] placeholder:text-[var(--main-color-sub)] border-0 outline-0"
+                        className="NeoSubContainer_inset_TOTAL inputs relative text-[var(--main-color)] w-full p-[10px_10px_10px_15px] placeholder:text-[var(--main-color-sub)] border-0 outline-0"
                         id={ForID}
                         onChange={onChange}
                         placeholder={placeholderText}
