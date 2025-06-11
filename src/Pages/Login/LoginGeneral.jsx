@@ -74,6 +74,7 @@ export const LoginGeneral = () => {
                 setTimeout(() => {
                     navigate('/')
                 }, 0)
+
             } else {
                 alertSendForm(401, 'El correo electrónico o la contraseña son incorrectos')
             }
@@ -97,7 +98,7 @@ export const LoginGeneral = () => {
                     allowOutsideClick: false,
                     allowEscapeKey: false,
                     showConfirmButton: false,
-                    timer: 5000,
+                    timer: 6000,
                     timerProgressBar: true,
                     didOpen: () => Swal.showLoading(),
                 })

@@ -90,7 +90,7 @@ export const ForgotPassword = () => {
                     allowOutsideClick: false,
                     allowEscapeKey: false,
                     showConfirmButton: false,
-                    timer: 3000,
+                    timer: 6000,
                     timerProgressBar: true,
                     didOpen: () => {
                         Swal.showLoading();

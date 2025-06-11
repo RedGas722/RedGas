@@ -1,19 +1,44 @@
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, use } from 'react';
 import { gsap } from 'gsap';
-import './Header.css';
 import { SearchBarr } from "../../UI/Header/SearchBarr/SearchBarr"
 import { Navs } from "../../UI/Header/Nav/Nav"
+import { jwtDecode } from "jwt-decode";
 // import { ProfilePhoto } from "../../UI/Header/ProfilePhoto/ProfilePhoto"
 import './Header.css'
 
 export const Header = () => {
+    const navigate = useNavigate();
+    const token = localStorage.getItem('token');
+    const [userName, setUserName] = useState('');
     const [productos, setProductos] = useState([]);
     const [scrolled, setScrolled] = useState(false)
     const [hamburger, setHamburger] = useState(false)
     const [isChecked, setIsChecked] = useState(true);
 
     const isDesktop = () => window.innerWidth >= 768;
+
+    // Verificar si el usuario está autenticado
+    useEffect(() => {
+        if (token) {
+            const decoded = jwtDecode(token);
+            const names = decoded.data.name.split(' ')
+            const firstLetter = names[0].toUpperCase()
+            console.log(firstLetter.length);
+
+
+            if (firstLetter.length > 6) {
+                const secondLetter = names[1].toUpperCase().slice(0, 1)
+                setUserName(firstLetter.slice(0, 1) + secondLetter);
+            } else {
+                setUserName(firstLetter)
+            }
+        } else {
+            setUserName('Iniciar')
+        }
+
+
+    }, []);
 
     // Cargar productos al iniciar
     useEffect(() => {
@@ -84,6 +109,11 @@ export const Header = () => {
         setIsChecked(prev => !prev)
     }
 
+    const handSignOut = () => {
+        localStorage.removeItem('token');
+        window.location.href = '/';
+    }
+
     // GSAP
     const headerRef = useRef(null)
     const navRef1 = useRef(null)
@@ -100,10 +130,9 @@ export const Header = () => {
                 .fromTo(navRef2.current, { x: -300, opacity: 0 }, { x: 0, opacity: 1 })
                 .fromTo(navRef3.current, { x: -400, opacity: 0 }, { x: 0, opacity: 1 })
                 .fromTo(navRef4.current, { x: -500, opacity: 0 }, { x: 0, opacity: 1 })
+                .fromTo(navRef5.current, { x: -600, opacity: 0 }, { x: 0, opacity: 1 })
         }
     }, [hamburger]);
-
-    const navigate = useNavigate();
 
     return (
         <div ref={headerRef}
@@ -141,7 +170,7 @@ export const Header = () => {
             <Navs ref1={navRef1} ref2={navRef2} ref3={navRef3} ref4={navRef4} className={`flex-1 items-center justify-center md:flex ${hamburger ? '' : 'hidden'}`} />
             {/* <ProfilePhoto className={`flex-1 items-center justify-center md:flex ${hamburger ? '' : 'hidden'}`} /> */}
             <label className={`dropdown flex-1 flex justify-self-end items-center text-[var(--Font-Nav)] justify-between md:flex ${hamburger ? '' : 'hidden'}`} >
-                Iniciar
+                {userName}
                 <input
                     className="inp"
                     type="checkbox"
@@ -154,15 +183,24 @@ export const Header = () => {
                     <span className="bottom bar-list"></span>
                 </div>
                 <section className="menu-container bg-[var(--main-color)] text-white text-[14px]">
-                    <div onClick={() => navigate('/Login')} className="menu-list">Iniciar sesion</div>
-                    <div onClick={() => navigate('/Register')} className="menu-list">Registro</div>
-                    <div onClick={() => navigate('/CostumerMyServices')} className="menu-list">Mi servicio</div>
-                    <div onClick={() => navigate('/Shopping')} className="menu-list">Carrito</div>
+                    {!token && (
+                        <>
+                            <div onClick={() => navigate('/Login')} className="menu-list">Iniciar Sesion</div>
+                            <div onClick={() => navigate('/Register')} className="menu-list">Registro</div>
+                        </>
+                    )}
+
+                    {token && (
+                        <>
+                            <div onClick={() => navigate('/Login')} className="menu-list">Perfil</div>
+                            <div onClick={() => navigate('/CostumerMyServices')} className="menu-list">Mi Servicio</div>
+                            <div onClick={() => navigate('/Shopping')} className="menu-list">Carrito</div>
+                            <div onClick={() => navigate('/Login')} className="menu-list">Cambiar Cuenta</div>
+                            <div onClick={() => handSignOut()} className="menu-list">Cerrar Sesion</div>
+                        </>
+                    )}
                 </section>
             </label>
-            {/* <button onClick={() => navigate('/Login')} className={`flex-1 justify-self-end text-[var(--Font-Nav-shadow)] justify-center md:flex ${hamburger ? '' : 'hidden'}`} >
-                    Iniciar
-                </button> */}
         </div>
     );
 };
