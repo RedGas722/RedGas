@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { RegisterModal } from './Register/RegisterModal';
-import { GetModal } from './Get/GetModal';
 import { UpdateModal } from './Update/UpdateModal';
 import { DeleteModal } from './Delete/DeleteModal';
 import { BtnBack } from '../../UI/Login_Register/BtnBack';
