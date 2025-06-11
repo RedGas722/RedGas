@@ -1,12 +1,13 @@
+import { useNavigate } from "react-router-dom"
 
-import { NavLink } from "react-router-dom"
-
-export const BtnBack = ({To}) => {
+export const BtnBack = ({ To }) => {
+    const navigate = useNavigate()
     return (
-        <NavLink to={To}>
+        <>
             <button
-                className="btnBack NeoContainer_outset_TL cursor-pointer text-center w-40 h-10 relative text-white text-[16px] font-semibold group"
+                className="btnBack NeoContainer_outset_TL flex items-center justify-center justify-self-start self-start z-20 cursor-pointer text-center w-40 h-10 relative text-white text-[16px] font-semibold group"
                 type="button"
+                onClick={() => navigate(To)}
             >
                 <div
                     className="NeoSubContainer_outset_TL h-8 w-1/4 flex items-center justify-center absolute left-1 top-[4px] group-hover:w-38 group-hover:bg-[var(--Font-Nav)] z-10 duration-500"
@@ -29,7 +30,7 @@ export const BtnBack = ({To}) => {
                 </div>
                 <p className="text-[var(--main-color)] translate-x-2">Inicio</p>
             </button>
-        </NavLink>
+        </>
 
     )
 }

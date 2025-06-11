@@ -112,7 +112,7 @@ export const LoginGeneral = () => {
                     allowEscapeKey: false,
                     allowEnterKey: false,
                     showConfirmButton: false,
-                    timer: 2000,
+                    timer: 10,
                     timerProgressBar: true,
                 })
                 emailInput.value = ''
@@ -187,7 +187,7 @@ export const LoginGeneral = () => {
             <div id='divAlert' />
             <div className="divForm p-[30px_15px_15px_15px] z-50 shadow_box_RL NeoContainer_outset_TL rounded-3xl flex flex-col items-center w-fit justify-self-center gap-[20px]">
                 <h1 className="text-center text-4xl">¡Bienvenido Cliente!</h1>
-                <form className="form flex flex-col gap-[30px] justify-center items-center text-start w-full " onSubmit={handleLogin}>
+                <form className="form flex flex-col gap-2.5 justify-center items-center text-start w-full " onSubmit={handleLogin}>
                     <InputLabel type='2' ForID='Email' childLabel='Correo electrónico' placeholder='example@gmail.com' value={correo} onChange={e => setCorreo(e.target.value)} required />
                     <InputLabel type='3' ForID='Password' childLabel='Contraseña' placeholder='**********' value={contrasena} onChange={e => setContrasena(e.target.value)} required />
                     <section className="flex gap-[5px] items-center justify-between w-full">

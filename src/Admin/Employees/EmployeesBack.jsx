@@ -3,6 +3,7 @@ import { RegisterModal } from './Register/RegisterModal';
 import { UpdateModal } from './Update/Update';
 import { ButtonBack } from '../UI/ButtonBack/ButtonBack';
 import { buscarEmpleadoPorCorreo } from './Get/Get';
+import { BtnBack } from "../../UI/Login_Register/BtnBack"
 import CardEmployeesBack from './Get/CardEmployeesBack';
 import Inputs from '../UI/Inputs/Inputs';
 
@@ -98,62 +99,44 @@ export const EmployeesBack = () => {
 
   return (
     <div className="p-[20px] flex flex-col gap-[20px]">
-      <div className="flex items-center gap-[20px] flex-wrap">
-        <h1 className="font-bold text-[20px]">Empleado BACK-OFFICE</h1>
-
-        {/* Búsqueda con autocompletado */}
-        <div className="relative" ref={contenedorRef}>
-          <div className="flex items-center gap-2 border border-gray-300 rounded px-2 py-1 bg-white">
-            <Inputs
-              type="1"
-              placeholder="Correo del empleado"
-              value={correoBusqueda}
-              onChange={(e) => setCorreoBusqueda(e.target.value)}
-              className="outline-none"
-            />
-            <button
-              onClick={buscarEmpleado}
-              aria-label="Buscar empleado"
-              className="text-gray-600 hover:text-gray-900"
-            >
-              🔍
-            </button>
-          </div>
-
-          {sugerencias.length > 0 && (
-            <ul className="absolute z-10 bg-white border border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto w-full shadow">
-              {sugerencias.map((empleado) => (
-                <li
-                  key={empleado.id_empleado}
-                  onClick={() => {
-                    setEmpleadoBuscado(empleado);
-                    setCorreoBusqueda(empleado.correo_empleado);
-                    setSugerencias([]);
-                  }}
-                  className="p-2 hover:bg-gray-100 cursor-pointer"
-                >
-                  {empleado.correo_empleado}
-                </li>
-              ))}
-            </ul>
-          )}
+      <div className="flex items-center gap-[20px]">
+        <div className='flex-col ali'>
+          <h1 className="font-bold text-[20px]">Empleado BACK-OFFICE</h1>
+          <BtnBack To='/Admin' className='btnDown' />
         </div>
-
+        {/* Barra de búsqueda para consultar empleado */}
+        <div className="flex items-center gap-2 border border-gray-300 rounded px-2 py-1">
+          <Inputs
+            type="1"
+            placeholder="Correo del empleado"
+            value={correoBusqueda}
+            onChange={(e) => setCorreoBusqueda(e.target.value)}
+            className="outline-none"
+          />
+          <button
+            onClick={buscarEmpleado}
+            aria-label="Buscar empleado"
+            className="text-gray-600 hover:text-gray-900"
+          >
+            🔍
+          </button>
+        </div>
         <ButtonBack ClickMod={() => setShowRegisterModal(true)} Child="Registrar" />
-      </div>
+      </div >
 
       {errorBusqueda && <p className="text-red-600 text-sm">{errorBusqueda}</p>}
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {empleadoBuscado ? (
-          <CardEmployeesBack
-            key={empleadoBuscado.id_empleado}
-            empleado={empleadoBuscado}
-            setRefrescar={setRefrescar}
-            onUpdateClick={abrirModalActualizar}
-          />
-        ) : (
-          empleados.map((empleado) => (
+        {empleadoBuscado
+          ? (
+            <CardEmployeesBack
+              key={empleadoBuscado.id_empleado}
+              empleado={empleadoBuscado}
+              setRefrescar={setRefrescar}
+              onUpdateClick={abrirModalActualizar}
+            />
+          )
+          : empleados.map((empleado) => (
             <CardEmployeesBack
               key={empleado.id_empleado}
               empleado={empleado}
@@ -161,24 +144,26 @@ export const EmployeesBack = () => {
               onUpdateClick={abrirModalActualizar}
             />
           ))
-        )}
+        }
       </div>
 
-      {showRegisterModal && (
-        <RegisterModal
-          onClose={() => setShowRegisterModal(false)}
-          setRefrescar={setRefrescar}
-        />
-      )}
+      {/* Modales */}
+      {
+        showRegisterModal && (
+          <RegisterModal onClose={() => setShowRegisterModal(false)} setRefrescar={setRefrescar} />
+        )
+      }
 
-      {showUpdateModal && empleadoSeleccionado && (
-        <UpdateModal
-          onClose={cerrarModal}
-          setRefrescar={setRefrescar}
-          empleadoCarta={empleadoSeleccionado}
-        />
-      )}
-    </div>
+      {
+        showUpdateModal && empleadoSeleccionado && (
+          <UpdateModal
+            onClose={cerrarModal}
+            setRefrescar={setRefrescar}
+            empleadoCarta={empleadoSeleccionado}
+          />
+        )
+      }
+    </div >
   );
 };
 

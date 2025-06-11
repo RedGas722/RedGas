@@ -50,17 +50,6 @@
     opacity: 1;
 }
 
-.sectionLoginRegister {
-    display: grid;
-    place-items: center;
-    grid-template-rows: 100px 50dvh;
-}
-
-.sectionLoginRegister:nth-child(1) {
-    place-items: start;
-    padding: 10px 10px;
-}
-
 #divAlert {
     display: flex;
     justify-content: center;
@@ -110,4 +99,14 @@
 
 .toggle-state:checked~.indicator {
     transform: translate3d(25%, 0, 0);
+}
+
+.swal2-timer-progress-bar {
+    background: var(--Font-Nav) !important;
+    height: 6px !important;
+    border-radius: 3px;
+}
+
+.swal2-loader {
+    border-color: var(--Font-Nav) transparent var(--Font-Nav) transparent !important;
 }

@@ -1,3 +1,9 @@
+.btnDown {
+    margin-top: 65px;
+}
+.text-shadow {
+  text-shadow: 0px 0px 0px rgba(0,0,0,0.7);
+}
 /* .Admin{
     padding: 2% 0 2% 1%;
 } */
