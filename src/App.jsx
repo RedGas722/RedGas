@@ -17,12 +17,14 @@ import { CategoriesBack } from './Admin/Categories/CategoriesBack'
 import { TechniciansBack } from './Admin/Technicians/TechniciansBack'
 import { ServicesBack } from './Admin/Services/ServicesBack'
 import { AdminsBack } from './Admin/Admins/AdminsBack'
-import { ContractsBack } from './Admin/Contracts/ContractsBack.jsx'
+import  ContractsBack from './Admin/Contracts/ContractsBack.jsx'
 import { Cancelado } from './Pages/Shopping/Cancelado.jsx'
 import { Confirmacion } from './Pages/Shopping/Confirmacion.jsx'
 import { NotFound } from './Pages/NotFound/NotFound.jsx'
 import { LoginGeneral } from './Pages/Login/LoginGeneral.jsx'
 import { LoginTechnician } from './Pages/Login/LoginTechnician.jsx'
+import { SearchPage } from './Pages/SearchPage/SearchPage.jsx';
+
 
 // 👇 Importar ruta protegida
 import { ProtectedRoute } from './Pages/Login/ProtectedRoutes.jsx'
@@ -38,7 +40,7 @@ export function App() {
                     <Route path="/Technic" element={<TechniciansPage />} />
                     <Route path="/Shopping" element={<Shopping />} />
                     <Route path='/Register' element={<Register />} />
-                    
+                    <Route path="/SearchPage" element={<SearchPage />} />
                     {/* Login's Route */}
                     <Route path='/Login' element={<Login />} >
                         <Route index element={<LoginGeneral />} />

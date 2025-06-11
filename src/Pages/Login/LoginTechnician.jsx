@@ -28,20 +28,37 @@ export const LoginTechnician = () => {
 
             const data = await res.json()
             const token = data.token
+            // Detecta tipo_usuario desde la respuesta o el token
+            const tipoUsuario = data.tipo_usuario || (token ? jwtDecode(token).data.tipo_usuario : null)
 
-            if (token) {
+            if (token && tipoUsuario) {
                 const decoded = jwtDecode(token)
                 const user = decoded.data.name
-
                 alertSendForm(200, 'Inicio de sesión exitoso', 'Bienvenido de nuevo' + ` ${user || 'Usuario'}`)
                 localStorage.setItem('token', token)
+                localStorage.setItem('tipo_usuario', tipoUsuario)
                 setTimeout(() => {
-                    navigate('/')
+                    // Redirige según el tipo de usuario
+                    switch (tipoUsuario) {
+                        case 'administrador':
+                            navigate('/admin')
+                            break
+                        case 'tecnico':
+                            navigate('/tecnico')
+                            break
+                        case 'empleado':
+                            navigate('/empleado')
+                            break
+                        case 'cliente':
+                        default:
+                            navigate('/cliente')
+                            break
+                    }
                 }, 0)
             } else {
                 alertSendForm(401, 'El correo electrónico o la contraseña son incorrectos')
             }
-        } catch (err) {
+        } catch {
             alertSendForm(502, 'Error al iniciar sesión', 'Ocurrió un error al iniciar sesión. Por favor, intenta nuevamente más tarde.')
         }
 
