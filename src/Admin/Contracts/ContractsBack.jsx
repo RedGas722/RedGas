@@ -1,10 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 import { RegisterModal } from './Register/RegisterModal';
 import { UpdateModal } from './Update/Update';
+import { buscarContratoPorEmpleado } from './Get/Get';
+import { BtnBack } from '../../UI/Login_Register/BtnBack';
 import ButtonBack from '../UI/ButtonBack/ButtonBack';
 import CardContractsBack from './Get/CardContractsBack';
 import Inputs from '../UI/Inputs/Inputs';
-import { buscarContratoPorEmpleado } from './Get/Get';  
 
 export const ContractsBack = () => {
   const [showRegisterModal, setShowRegisterModal] = useState(false);
@@ -104,7 +105,12 @@ export const ContractsBack = () => {
   return (
     <div className="p-[20px] flex flex-col gap-[20px]">
       <div className="flex items-center gap-[20px]">
-        <h1 className="font-bold text-[20px]">Contrato BACK-OFFICE</h1>
+        <div>
+          <h1 className="font-bold text-[20px]">Contrato BACK-OFFICE</h1>
+          <div className='btnDown'>
+            <BtnBack To='/Admin' />
+          </div>
+        </div>
         <div className="relative" ref={contenedorRef}>
           <div className="flex items-center gap-2 border border-gray-300 rounded px-2 py-1">
             <Inputs
@@ -148,19 +154,19 @@ export const ContractsBack = () => {
         {contratoBuscado && (Array.isArray(contratoBuscado) ? contratoBuscado.length > 0 : contratoBuscado.id_contrato) ? (
           Array.isArray(contratoBuscado)
             ? contratoBuscado.map((contrato) => (
-                <CardContractsBack
-                  key={contrato.id_contrato}
-                  contrato={contrato}
-                  setRefrescar={setRefrescar}
-                  onUpdateClick={abrirModalActualizar}
-                />
-              ))
-            : <CardContractsBack
-                key={contratoBuscado.id_contrato}
-                contrato={contratoBuscado}
+              <CardContractsBack
+                key={contrato.id_contrato}
+                contrato={contrato}
                 setRefrescar={setRefrescar}
                 onUpdateClick={abrirModalActualizar}
               />
+            ))
+            : <CardContractsBack
+              key={contratoBuscado.id_contrato}
+              contrato={contratoBuscado}
+              setRefrescar={setRefrescar}
+              onUpdateClick={abrirModalActualizar}
+            />
         ) : contratoBuscado && (Array.isArray(contratoBuscado) ? contratoBuscado.length === 0 : !contratoBuscado.id_contrato) ? (
           <div className="col-span-full text-yellow-700 bg-yellow-100 p-4 rounded text-center font-semibold">
             No se encontró contrato para este empleado.

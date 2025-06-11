@@ -156,6 +156,8 @@ export const Header = () => {
                 <section className="menu-container bg-[var(--main-color)] text-white text-[14px]">
                     <div onClick={() => navigate('/Login')} className="menu-list">Iniciar sesion</div>
                     <div onClick={() => navigate('/Register')} className="menu-list">Registro</div>
+                    <div onClick={() => navigate('/CostumerMyServices')} className="menu-list">Mi servicio</div>
+                    <div onClick={() => navigate('/Shopping')} className="menu-list">Carrito</div>
                 </section>
             </label>
             {/* <button onClick={() => navigate('/Login')} className={`flex-1 justify-self-end text-[var(--Font-Nav-shadow)] justify-center md:flex ${hamburger ? '' : 'hidden'}`} >
