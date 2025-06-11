@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { RegisterModal } from './Register/RegisterModal';
+import { buscarAdminPorCorreo } from './Get/Get';
 import { UpdateModal } from './Update/Update';
 import ButtonBack from '../UI/ButtonBack/ButtonBack';
 import CardAdminsBack from './Get/CardAdminsBack';
 import Inputs from '../UI/Inputs/Inputs';
-import { GetModal } from './Get/Get';
+// import { GetModal } from './Get/Get';
 
 export const AdminsBack = () => {
   const [showRegisterModal, setShowRegisterModal] = useState(false);
@@ -54,19 +55,16 @@ export const AdminsBack = () => {
     setAdminSeleccionado(null);
   };
 
-  const buscarAdmin = async () => {
-    setErrorBusqueda('');
-    setAdminBuscado(null);
-    try {
-      const res = await fetch(`${URL}?correo_admin=${encodeURIComponent(correoBusqueda)}`);
-      if (!res.ok) throw new Error('No se encontró el administrador');
-      const data = await res.json();
-      if (!data.data) throw new Error('No se encontró el administrador');
-      setAdminBuscado(data.data);
-    } catch (error) {
-      setErrorBusqueda(error.message);
-    }
-  };
+const buscarAdmin = async () => {
+  setErrorBusqueda('');
+  setAdminBuscado(null);
+  try {
+    const admin = await buscarAdminPorCorreo(correoBusqueda);
+    setAdminBuscado(admin);
+  } catch (error) {
+    setErrorBusqueda(error.message);
+  }
+};
 
   return (
     <div className="p-[20px] flex flex-col gap-[20px]">

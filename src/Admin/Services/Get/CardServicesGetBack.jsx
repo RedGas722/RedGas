@@ -1,5 +1,5 @@
 import React from 'react';
-import { DeleteService } from '../Delete/DeleteModal';
+import { DeleteService } from '../Delete/Delete';
 
 const CardServicesGetBack = ({ servicio, setRefrescar, onUpdateClick }) => {
   if (!servicio) return null;

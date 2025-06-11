@@ -4,6 +4,7 @@ import { UpdateModal } from './Update/Update'
 import { DeleteModal } from './Delete/Delete'
 import { ButtonBack } from '../UI/ButtonBack/ButtonBack'
 import CardTechniciansBack from './Get/CardTechniciansBack'
+import { buscarTecnicoPorCorreo } from './Get/Get'
 
 
 export const TechniciansBack = () => {
@@ -49,20 +50,21 @@ export const TechniciansBack = () => {
 
   // Para buscar técnicos por correo desde el input
   const [correoBusqueda, setCorreoBusqueda] = useState("");
-  const handleBuscarTecnico = async () => {
-    if (!correoBusqueda.trim()) {
-      fetchTecnicos(); // Si está vacío, muestra todos
-      return;
-    }
-    try {
-      const res = await fetch(`https://redgas.onrender.com/TecnicoGet?correo_tecnico=${encodeURIComponent(correoBusqueda)}`);
-      if (!res.ok) throw new Error('No se encontró el técnico');
-      const data = await res.json();
-      setTecnicos(data.data ? [data.data] : []);
-    } catch {
-      setTecnicos([]);
-    }
-  };
+const handleBuscarTecnico = async () => {
+  if (!correoBusqueda.trim()) {
+    fetchTecnicos(); // Si está vacío, muestra todos
+    return;
+  }
+
+  try {
+    const resultados = await buscarTecnicoPorCorreo(correoBusqueda);
+    setTecnicos(resultados);
+  } catch (error) {
+    console.error(error);
+    setTecnicos([]);
+  }
+};
+
 
   return (
     <div className="p-[20px] h-full flex flex-col gap-[20px]">

@@ -4,6 +4,7 @@ import { UpdateModal } from './Update/Update';
 import ButtonBack from '../UI/ButtonBack/ButtonBack';
 import CardContractsBack from './Get/CardContractsBack';
 import Inputs from '../UI/Inputs/Inputs';
+import { buscarContratoPorEmpleado } from './Get/Get';  
 
 export const ContractsBack = () => {
   const [showRegisterModal, setShowRegisterModal] = useState(false);
@@ -52,20 +53,17 @@ export const ContractsBack = () => {
     setContratoSeleccionado(null);
   };
 
-  const buscarContrato = async () => {
-    setErrorBusqueda('');
-    setContratoBuscado(null);
-    try {
-      if (!idBusqueda.trim()) throw new Error('Ingrese un ID de empleado');
-      const res = await fetch(`${URL}?id_empleado=${encodeURIComponent(idBusqueda)}`);
-      if (!res.ok) throw new Error('No se encontró el contrato');
-      const data = await res.json();
-      if (!data.data) throw new Error('No se encontró el contrato');
-      setContratoBuscado(data.data);
-    } catch (error) {
-      setErrorBusqueda(error.message);
-    }
-  };
+const buscarContrato = async () => {
+  setErrorBusqueda('');
+  setContratoBuscado(null);
+  try {
+    const contrato = await buscarContratoPorEmpleado(idBusqueda);
+    setContratoBuscado(contrato);
+  } catch (error) {
+    setErrorBusqueda(error.message);
+  }
+};
+
 
   return (
     <div className="p-[20px] flex flex-col gap-[20px]">

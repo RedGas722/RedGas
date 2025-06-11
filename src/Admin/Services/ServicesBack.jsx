@@ -1,9 +1,10 @@
 // Delete.jsx
 import React, { useState, useEffect } from 'react';
 import { RegisterModal } from './Register/RegisterModal';
-import { UpdateModal } from './Update/UpdateModal';
+import { UpdateModal } from './Update/Update';
 import CardServicesGetBack from './Get/CardServicesGetBack';
 import ButtonBack from '../UI/ButtonBack/ButtonBack';
+import { buscarServicioPorNombre } from './Get/Get';
 
 export const ServicesBack = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -47,20 +48,21 @@ export const ServicesBack = () => {
   };
 
   // Para buscar servicios por nombre desde el input
-  const handleBuscarServicio = async () => {
-    if (!nombreBusqueda.trim()) {
-      fetchServicios(); // Si está vacío, muestra todos
-      return;
-    }
-    try {
-      const res = await fetch(`https://redgas.onrender.com/ServicioGet?nombre_servicio=${encodeURIComponent(nombreBusqueda)}`);
-      if (!res.ok) throw new Error('No se encontró el servicio');
-      const data = await res.json();
-      setServicios(Array.isArray(data.data) ? data.data : []);
-    } catch {
-      setServicios([]);
-    }
-  };
+ const handleBuscarServicio = async () => {
+  if (!nombreBusqueda.trim()) {
+    fetchServicios(); // Si no hay búsqueda, se recargan todos
+    return;
+  }
+
+  try {
+    const resultados = await buscarServicioPorNombre(nombreBusqueda);
+    setServicios(resultados);
+  } catch (error) {
+    console.error(error);
+    setServicios([]);
+  }
+};
+
 
   return (
     <div className="flex flex-row h-screen p-[40px_0_0_40px] gap-[40px]">
