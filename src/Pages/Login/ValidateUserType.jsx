@@ -8,11 +8,22 @@ export const validateUserType = async (correo) => {
     for (const { url, key, tipo, ruta } of urls) {
         try {
             const res = await fetch(`${url}?${key}=${encodeURIComponent(correo)}`);
+
+            // Manejo si el servidor devuelve error (como 404)
+            if (!res.ok) continue;
+
             const data = await res.json();
 
-            if (data?.status === 'get ok' && data?.data) {
+            // Verifica que la respuesta contenga datos reales
+            if ((data?.status === 'get ok' || data?.status === 'success') &&
+                (
+                    (Array.isArray(data.data) && data.data.length > 0) || 
+                    (typeof data.data === 'object' && Object.keys(data.data).length > 0)
+                )
+            ) {
                 return { tipo_usuario: tipo, ruta };
             }
+
         } catch (err) {
             console.error(`Error consultando ${url}:`, err);
         }
