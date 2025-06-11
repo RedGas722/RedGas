@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { RegisterModal } from './Register/RegisterModal';
 import { UpdateModal } from './Update/Update';
 import { ButtonBack } from '../UI/ButtonBack/ButtonBack';
@@ -12,17 +12,16 @@ export const EmployeesBack = () => {
   const [empleados, setEmpleados] = useState([]);
   const [refrescar, setRefrescar] = useState(false);
 
-  // Estado para el empleado que se va a actualizar
   const [empleadoSeleccionado, setEmpleadoSeleccionado] = useState(null);
 
-  // Estado para la búsqueda de empleado por correo
   const [correoBusqueda, setCorreoBusqueda] = useState('');
   const [empleadoBuscado, setEmpleadoBuscado] = useState(null);
   const [errorBusqueda, setErrorBusqueda] = useState('');
+  const [sugerencias, setSugerencias] = useState([]);
 
-  const URL = 'https://redgas.onrender.com/EmpleadoGet';
+  const contenedorRef = useRef(null);
 
-  async function fetchEmpleados() {
+  const fetchEmpleados = async () => {
     try {
       const res = await fetch('https://redgas.onrender.com/EmpleadoGetAll');
       if (!res.ok) throw new Error('Error al obtener empleados');
@@ -31,7 +30,7 @@ export const EmployeesBack = () => {
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   useEffect(() => {
     fetchEmpleados();
@@ -41,20 +40,17 @@ export const EmployeesBack = () => {
     if (refrescar) {
       fetchEmpleados();
       setRefrescar(false);
-      // Al refrescar la lista, limpiamos la búsqueda y error para mostrar todas las tarjetas
       setEmpleadoBuscado(null);
       setErrorBusqueda('');
       setCorreoBusqueda('');
     }
   }, [refrescar]);
 
-  // Función para abrir el modal de actualización con empleado seleccionado
   const abrirModalActualizar = (empleado) => {
     setEmpleadoSeleccionado(empleado);
     setShowUpdateModal(true);
   };
 
-  // Función para cerrar modal actualización y limpiar estado
   const cerrarModal = () => {
     setShowUpdateModal(false);
     setEmpleadoSeleccionado(null);
@@ -67,17 +63,47 @@ export const EmployeesBack = () => {
     try {
       const resultado = await buscarEmpleadoPorCorreo(correoBusqueda);
       setEmpleadoBuscado(resultado);
+      setSugerencias([]);
     } catch (error) {
       setErrorBusqueda(error.message);
     }
   };
 
+  // Autocompletado en vivo
+  useEffect(() => {
+    if ((correoBusqueda || '').trim() === '') {
+      setSugerencias([]);
+      return;
+    }
+
+    const filtrados = empleados.filter((empleado) =>
+      (empleado.correo_empleado || '')
+        .toLowerCase()
+        .includes(correoBusqueda.toLowerCase())
+    );
+    setSugerencias(filtrados.slice(0, 5));
+  }, [correoBusqueda, empleados]);
+
+  // Cerrar sugerencias si se hace clic fuera
+  useEffect(() => {
+    const manejarClickFuera = (e) => {
+      if (contenedorRef.current && !contenedorRef.current.contains(e.target)) {
+        setSugerencias([]);
+      }
+    };
+
+    document.addEventListener('mousedown', manejarClickFuera);
+    return () => document.removeEventListener('mousedown', manejarClickFuera);
+  }, []);
+
   return (
     <div className="p-[20px] flex flex-col gap-[20px]">
-      <div className="flex items-center gap-[20px]">
+      <div className="flex items-center gap-[20px] flex-wrap">
         <h1 className="font-bold text-[20px]">Empleado BACK-OFFICE</h1>
-          {/* Barra de búsqueda para consultar empleado */}
-          <div className="flex items-center gap-2 border border-gray-300 rounded px-2 py-1">
+
+        {/* Búsqueda con autocompletado */}
+        <div className="relative" ref={contenedorRef}>
+          <div className="flex items-center gap-2 border border-gray-300 rounded px-2 py-1 bg-white">
             <Inputs
               type="1"
               placeholder="Correo del empleado"
@@ -93,37 +119,56 @@ export const EmployeesBack = () => {
               🔍
             </button>
           </div>
-        <ButtonBack ClickMod={() => setShowRegisterModal(true)} Child="Registrar" />        
+
+          {sugerencias.length > 0 && (
+            <ul className="absolute z-10 bg-white border border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto w-full shadow">
+              {sugerencias.map((empleado) => (
+                <li
+                  key={empleado.id_empleado}
+                  onClick={() => {
+                    setEmpleadoBuscado(empleado);
+                    setCorreoBusqueda(empleado.correo_empleado);
+                    setSugerencias([]);
+                  }}
+                  className="p-2 hover:bg-gray-100 cursor-pointer"
+                >
+                  {empleado.correo_empleado}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+
+        <ButtonBack ClickMod={() => setShowRegisterModal(true)} Child="Registrar" />
       </div>
 
-      {/* Mostrar mensaje de error */}
       {errorBusqueda && <p className="text-red-600 text-sm">{errorBusqueda}</p>}
 
-      {/* Sección de empleados */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {empleadoBuscado
-          ? (
+        {empleadoBuscado ? (
+          <CardEmployeesBack
+            key={empleadoBuscado.id_empleado}
+            empleado={empleadoBuscado}
+            setRefrescar={setRefrescar}
+            onUpdateClick={abrirModalActualizar}
+          />
+        ) : (
+          empleados.map((empleado) => (
             <CardEmployeesBack
-              key={empleadoBuscado.id_empleado}
-              empleado={empleadoBuscado}
+              key={empleado.id_empleado}
+              empleado={empleado}
               setRefrescar={setRefrescar}
               onUpdateClick={abrirModalActualizar}
             />
-          )
-          : empleados.map((empleado) => (
-              <CardEmployeesBack
-                key={empleado.id_empleado}
-                empleado={empleado}
-                setRefrescar={setRefrescar}
-                onUpdateClick={abrirModalActualizar}
-              />
-            ))
-        }
+          ))
+        )}
       </div>
 
-      {/* Modales */}
       {showRegisterModal && (
-        <RegisterModal onClose={() => setShowRegisterModal(false)} setRefrescar={setRefrescar} />
+        <RegisterModal
+          onClose={() => setShowRegisterModal(false)}
+          setRefrescar={setRefrescar}
+        />
       )}
 
       {showUpdateModal && empleadoSeleccionado && (

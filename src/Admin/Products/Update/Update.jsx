@@ -57,12 +57,14 @@ export const UpdateModal = ({ onClose, setRefrescar, productoCarta }) => {
     if (!producto.categoriaSeleccionada) errores.categoriaSeleccionada = 'Seleccione una categoría';
     return errores;
   };
-
+  // establecer el producto como el traido de la carta
   useEffect(() => {
     if (productoCarta) {
       setErrores({});
-
       const nombreInicial = productoCarta.nombre_producto || '';
+      const fechaOriginal = convertirFecha(productoCarta.fecha_descuento);
+      const hoy = new Date().toISOString().slice(0, 10);
+      const fechaFinal = fechaOriginal && fechaOriginal < hoy ? hoy : fechaOriginal;
 
       setProducto({
         nuevoNombre: nombreInicial,
@@ -71,11 +73,11 @@ export const UpdateModal = ({ onClose, setRefrescar, productoCarta }) => {
         descripcion: productoCarta.descripcion_producto || '',
         stock: productoCarta.stock || '',
         descuento: productoCarta.descuento || 0,
-        fechaDescuento: convertirFecha(productoCarta.fecha_descuento) || new Date().toISOString().slice(0, 10),
+        fechaDescuento: fechaFinal || hoy,
         categoriaSeleccionada: '',
       });
 
-      setNombreActualDb(nombreInicial); // ← Aquí guardamos el nombre original
+      setNombreActualDb(nombreInicial);
 
       if (productoCarta.imagen) {
         setImagenActual(`data:image/jpeg;base64,${productoCarta.imagen}`);
@@ -87,6 +89,7 @@ export const UpdateModal = ({ onClose, setRefrescar, productoCarta }) => {
     }
   }, [productoCarta]);
 
+  // actualizar la categoria traida
   useEffect(() => {
     if (categorias.length > 0 && productoCarta) {
       const nombreCategoriaValida = productoCarta.categorias?.find(
@@ -105,7 +108,6 @@ export const UpdateModal = ({ onClose, setRefrescar, productoCarta }) => {
       }));
     }
   }, [categorias, productoCarta]); // ← ya no depende de producto
-
 
   const handleActualizar = async () => {
     const erroresValidados = validarCampos();
@@ -209,8 +211,11 @@ export const UpdateModal = ({ onClose, setRefrescar, productoCarta }) => {
     const file = e.target.files[0];
     if (file) {
       setImagenNueva(file);
+      const previewURL = URL.createObjectURL(file); // ← genera vista previa
+      setImagenActual(previewURL); // ← actualiza la imagen actual por la nueva
     } else {
       setImagenNueva(null);
+      setImagenActual(null);
     }
   };
 

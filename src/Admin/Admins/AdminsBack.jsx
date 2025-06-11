@@ -5,7 +5,6 @@ import { UpdateModal } from './Update/Update';
 import ButtonBack from '../UI/ButtonBack/ButtonBack';
 import CardAdminsBack from './Get/CardAdminsBack';
 import Inputs from '../UI/Inputs/Inputs';
-// import { GetModal } from './Get/Get';
 
 export const AdminsBack = () => {
   const [showRegisterModal, setShowRegisterModal] = useState(false);
@@ -16,7 +15,6 @@ export const AdminsBack = () => {
   const [correoBusqueda, setCorreoBusqueda] = useState('');
   const [adminBuscado, setAdminBuscado] = useState(null);
   const [errorBusqueda, setErrorBusqueda] = useState('');
-  const [showGetModal, setShowGetModal] = useState(false);
 
   const URL = 'https://redgas.onrender.com/AdminGet';
 
@@ -111,9 +109,6 @@ const buscarAdmin = async () => {
       </div>
       {showRegisterModal && (
         <RegisterModal onClose={() => setShowRegisterModal(false)} setRefrescar={setRefrescar} />
-      )}
-      {showGetModal && (
-        <GetModal onClose={() => setShowGetModal(false)} />
       )}
       {showUpdateModal && adminSeleccionado && (
         <UpdateModal

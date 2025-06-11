@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { RegisterModal } from './Register/RegisterModal';
 import { UpdateModal } from './Update/Update';
 import { ButtonBack } from '../UI/ButtonBack/ButtonBack';
 import CardsProductsBack from './Get/CardProductsBack';
 import Inputs from '../UI/Inputs/Inputs';
-import { buscarProductoPorNombre } from './Get/Get'; // <-- Importación agregada
+import { buscarProductoPorNombre } from './Get/Get';
 
 export const ProductsBack = () => {
   const [showRegisterModal, setShowRegisterModal] = useState(false);
@@ -14,10 +14,14 @@ export const ProductsBack = () => {
   const [productoSeleccionado, setProductoSeleccionado] = useState(null);
   const [mensaje, setMensaje] = useState('');
 
-  // Estados para búsqueda por nombre
+  // Estados para búsqueda
   const [nombreBusqueda, setNombreBusqueda] = useState('');
   const [productoBuscado, setProductoBuscado] = useState(null);
   const [errorBusqueda, setErrorBusqueda] = useState('');
+  const [sugerencias, setSugerencias] = useState([]);
+
+  const inputRef = useRef(null);
+  const contenedorRef = useRef(null);
 
   const URL_ALL = 'https://redgas.onrender.com/ProductoGetAll';
 
@@ -56,22 +60,6 @@ export const ProductsBack = () => {
     setShowUpdateModal(false);
   };
 
-  const resetearDescuentosPrueba = async () => {
-    setMensaje('');
-    try {
-      const res = await fetch('https://redgas.onrender.com/prueba', {
-        method: 'PUT',
-      });
-      if (!res.ok) throw new Error('Error al resetear descuentos');
-      const data = await res.json();
-      setMensaje(data.mensaje || 'Descuentos reseteados correctamente');
-      setRefrescar(true);
-    } catch (error) {
-      console.error(error);
-      setMensaje('Error al resetear descuentos');
-    }
-  };
-
   const buscarProducto = async () => {
     setErrorBusqueda('');
     setProductoBuscado(null);
@@ -79,43 +67,85 @@ export const ProductsBack = () => {
     try {
       const resultado = await buscarProductoPorNombre(nombreBusqueda);
       setProductoBuscado(resultado);
+      setSugerencias([]);
     } catch (error) {
       setErrorBusqueda(error.message);
     }
   };
+
+  // 🧠 Autocomplete filtrando productos localmente
+  useEffect(() => {
+    if (nombreBusqueda.trim() === '') {
+      setSugerencias([]);
+      return;
+    }
+
+    const filtrados = productos.filter((producto) =>
+      producto.nombre_producto.toLowerCase().includes(nombreBusqueda.toLowerCase())
+    );
+    setSugerencias(filtrados.slice(0, 5));
+  }, [nombreBusqueda, productos]);
+
+  // 🧽 Cierre del dropdown si se hace clic fuera
+  useEffect(() => {
+    const manejarClickFuera = (event) => {
+      if (
+        contenedorRef.current &&
+        !contenedorRef.current.contains(event.target)
+      ) {
+        setSugerencias([]);
+      }
+    };
+
+    document.addEventListener('mousedown', manejarClickFuera);
+    return () => document.removeEventListener('mousedown', manejarClickFuera);
+  }, []);
 
   return (
     <div className="p-[20px] flex flex-col gap-[20px]">
       <div className="flex items-center gap-[20px] flex-wrap">
         <h1 className="font-bold text-[20px]">Producto BACK-OFFICE</h1>
 
-        {/* Búsqueda por nombre */}
-        <div className="flex items-center gap-2 border border-gray-300 rounded px-2 py-1">
-          <Inputs
-            type="1"
-            placeholder="Nombre del producto"
-            value={nombreBusqueda}
-            onChange={(e) => setNombreBusqueda(e.target.value)}
-            className="outline-none"
-          />
-          <button
-            onClick={buscarProducto}
-            aria-label="Buscar producto"
-            className="text-gray-600 hover:text-gray-900"
-          >
-            🔍
-          </button>
+        {/* Búsqueda con autocomplete */}
+        <div className="relative" ref={contenedorRef}>
+          <div className="flex items-center gap-2 border border-gray-300 rounded px-2 py-1 bg-white">
+            <Inputs
+              type="1"
+              placeholder="Nombre del producto"
+              value={nombreBusqueda}
+              onChange={(e) => setNombreBusqueda(e.target.value)}
+              className="outline-none"
+              ref={inputRef}
+            />
+            <button
+              onClick={buscarProducto}
+              aria-label="Buscar producto"
+              className="text-gray-600 hover:text-gray-900"
+            >
+              🔍
+            </button>
+          </div>
+
+          {sugerencias.length > 0 && (
+            <ul className="absolute z-10 bg-white border border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto w-full shadow">
+              {sugerencias.map((producto) => (
+                <li
+                  key={producto.id_producto}
+                  onClick={() => {
+                    setProductoBuscado(producto);
+                    setNombreBusqueda(producto.nombre_producto);
+                    setSugerencias([]);
+                  }}
+                  className="p-2 hover:bg-gray-100 cursor-pointer"
+                >
+                  {producto.nombre_producto}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
 
         <ButtonBack ClickMod={() => setShowRegisterModal(true)} Child="Registrar" />
-
-        <button
-          onClick={resetearDescuentosPrueba}
-          className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-          type="button"
-        >
-          Resetear descuentos (prueba)
-        </button>
       </div>
 
       {/* Mensaje de error */}
@@ -123,7 +153,7 @@ export const ProductsBack = () => {
         <p className="text-red-600 text-sm">{errorBusqueda}</p>
       )}
 
-      {/* Mensaje de reset */}
+      {/* Mensaje de éxito */}
       {mensaje && (
         <div className="mt-2 text-sm text-center text-green-600 font-semibold">
           {mensaje}

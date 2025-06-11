@@ -7,7 +7,7 @@ import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
 import './RecoveryPassword.css'
 
-const URL = 'http://localhost:10101/ClienteChangePassword'
+const URL = 'https://redgas.onrender.com/ClienteChangePassword'
 
 export const RecoveryPassword = () => {
     const [password, setPassword] = useState('')

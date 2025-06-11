@@ -2,12 +2,15 @@ import { useEffect, useState } from "react";
 import { Header } from '../../Layouts/Header/Header';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
+import PsePaymentForm from "./PsEForm";
 
 export const Shopping = () => {
   const [products, setProducts] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showPseForm, setShowPseForm] = useState(false);
+  const [pseAmount, setPseAmount] = useState(0);
   const token = localStorage.getItem("token");
 
   const fetchProducts = async () => {
@@ -155,7 +158,7 @@ export const Shopping = () => {
     }
   };
 
-  const handlePayWithPaypal = async () => {
+  const handlePayWithPaypal = async (monto = totalPrice) => {
     try {
       if (!token) {
         alert("Debes iniciar sesión para pagar con PayPal");
@@ -163,7 +166,7 @@ export const Shopping = () => {
       }
 
       const body = {
-        cantidad: totalPrice.toFixed(0), // solo envías lo necesario
+        cantidad: monto.toFixed(0),
         referencia: `ORD-${Date.now()}`
       };
 
@@ -180,12 +183,10 @@ export const Shopping = () => {
 
       if (!res.ok) throw new Error(data.errorInfo || "Error al iniciar el pago");
 
-      // Buscar el link de aprobación
       const approvalLink = data.data.links.find(link => link.rel === "approve");
 
       if (!approvalLink) throw new Error("No se encontró el link de aprobación de PayPal");
 
-      // Redirigir al link de PayPal
       window.location.href = approvalLink.href;
 
     } catch (error) {
@@ -258,9 +259,18 @@ export const Shopping = () => {
                         </button>
                         <button
                           className='buttonTL2 NeoSubContainer_outset_TL p-[7px]'
-                          onClick={handlePayWithPaypal}
+                          onClick={() => handlePayWithPaypal(subtotal)}
                         >
                           Pagar con PayPal
+                        </button>
+                        <button
+                          className='buttonTL2 NeoSubContainer_outset_TL p-[7px]'
+                          onClick={() => {
+                            setPseAmount(subtotal);
+                            setShowPseForm(true);
+                          }}
+                        >
+                          Pagar con PSE
                         </button>
                         <button
                           className='buttonTL2 NeoSubContainer_outset_TL p-[7px]'
@@ -283,9 +293,18 @@ export const Shopping = () => {
             <button className='buttonTL2 active:text-[var(--main-color)] font-black NeoSubContainer_outset_TL p-[7px]'>Comprar todo</button>
             <button
               className='buttonTL2 text-white font-black NeoSubContainer_outset_TL p-[7px]'
-              onClick={handlePayWithPaypal}
+              onClick={() => handlePayWithPaypal()}
             >
-              Pagar con PayPal
+              Pagar Total con PayPal
+            </button>
+            <button
+              className='buttonTL2 text-white font-black NeoSubContainer_outset_TL p-[7px]'
+              onClick={() => {
+                setPseAmount(totalPrice);
+                setShowPseForm(true);
+              }}
+            >
+              Pagar Total con PSE
             </button>
             <button className='buttonTL2 active:text-[var(--main-color)] font-black NeoSubContainer_outset_TL p-[7px]'>Ver carrito</button>
             <button
@@ -302,6 +321,9 @@ export const Shopping = () => {
           </p>
         </footer>
       </div>
+      {showPseForm && (
+        <PsePaymentForm monto={pseAmount} onClose={() => setShowPseForm(false)} />
+      )}
     </section>
   );
 };

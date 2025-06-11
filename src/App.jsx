@@ -1,20 +1,14 @@
-// Import Router
-import { Routes, Route, Navigate } from 'react-router-dom'
-// ---Import Components---
-// -Import Pages: MainPage/Register/Login/ForgotPassword/RecoveryPassword/ShopCart-
+import { Routes, Route } from 'react-router-dom'
 import { MainPage } from './Pages/MainPage/MainPage'
 import { CostumerServices } from './Pages/Costumer/CostumerServices'
 import { ServicesInfo } from './Pages/Services/Services.jsx'
-// import { ServicesInfo } from './Pages/Services/Services.jsx'
 import { TechniciansPage } from './Pages/Technicians/TechniciansPage'
 import { Shopping } from './Pages/Shopping/Shopping.jsx'
 import { Register } from './Pages/Register/Register'
 import { Login } from './Pages/Login/Login'
 import { ForgotPassword } from './Pages/ForgotPassword/ForgotPassword'
 import { RecoveryPassword } from './Pages/RecoveryPassword/RecoveryPassword'
-// -Import Admin-
 import { AdminApp } from './Admin/AdminApp'
-// -Imports Backs-
 import { ClientsBack } from './Admin/Clients/ClientsBack'
 import { ProductsBack } from './Admin/Products/ProductsBack'
 import { EmployeesBack } from './Admin/Employees/EmployeesBack'
@@ -27,10 +21,13 @@ import  ContractsBack from './Admin/Contracts/ContractsBack.jsx'
 import { Cancelado } from './Pages/Shopping/Cancelado.jsx'
 import { Confirmacion } from './Pages/Shopping/Confirmacion.jsx'
 import { NotFound } from './Pages/NotFound/NotFound.jsx'
-
-// Login Client, Technician
-import { LoginClient } from './Pages/Login/LoginClient.jsx'
+import { LoginGeneral } from './Pages/Login/LoginGeneral.jsx'
 import { LoginTechnician } from './Pages/Login/LoginTechnician.jsx'
+import { SearchPage } from './Pages/SearchPage/SearchPage.jsx';
+
+
+// 👇 Importar ruta protegida
+import { ProtectedRoute } from './Pages/Login/ProtectedRoutes.jsx'
 
 export function App() {
     return (
@@ -43,28 +40,76 @@ export function App() {
                     <Route path="/Technic" element={<TechniciansPage />} />
                     <Route path="/Shopping" element={<Shopping />} />
                     <Route path='/Register' element={<Register />} />
+                    <Route path="/SearchPage" element={<SearchPage />} />
                     {/* Login's Route */}
                     <Route path='/Login' element={<Login />} >
-                        <Route index element={<LoginClient />} />
-                        <Route path='LoginClient' element={<LoginClient />} />
+                        <Route index element={<LoginGeneral />} />
+                        <Route path='LoginGeneral' element={<LoginGeneral />} />
                         <Route path='LoginTechnician' element={<LoginTechnician />} />
                     </Route>
+                    
                     <Route path='/Login/ForgotPassword' element={<ForgotPassword />} />
                     <Route path='/Login/ForgotPassword/Recovery/:token' element={<RecoveryPassword />} />
-                    {/* ADMIN */}
-                    <Route path="/Admin" element={<AdminApp />} />
-                    <Route path='/Admin/Technicians' element={<TechniciansBack />} />
-                    <Route path="/Admin/Clients" element={<ClientsBack />} />
-                    <Route path="/Admin/Employees" element={<EmployeesBack />} />
-                    <Route path="/Admin/Products" element={<ProductsBack />} />
-                    <Route path="/Admin/Factures" element={<FacturesBack />} />
-                    <Route path="/Admin/Categories" element={<CategoriesBack />} />
-                    <Route path="/Admin/Services" element={<ServicesBack />} />
-                    <Route path="/Admin/Admins" element={<AdminsBack />} />
-                    <Route path="/Admin/Contracts" element={<ContractsBack />} />
-                    {/*Rutas de Pago*/}
+
+                    {/* ADMIN (tipoUsuario === 1) */}
+                    <Route path="/Admin/Clients" element={
+                    <ProtectedRoute requiredTypes={[1]}>
+                        <ClientsBack />
+                    </ProtectedRoute>
+                    } />
+                    <Route path="/Admin/Employees" element={
+                    <ProtectedRoute requiredTypes={[1]}>
+                        <EmployeesBack />
+                    </ProtectedRoute>
+                    } />
+                    <Route path="/Admin/Factures" element={
+                    <ProtectedRoute requiredTypes={[1]}>
+                        <FacturesBack />
+                    </ProtectedRoute>
+                    } />
+                    <Route path="/Admin/Categories" element={
+                    <ProtectedRoute requiredTypes={[1]}>
+                        <CategoriesBack />
+                    </ProtectedRoute>
+                    } />
+                    <Route path="/Admin/Admins" element={
+                    <ProtectedRoute requiredTypes={[1]}>
+                        <AdminsBack />
+                    </ProtectedRoute>
+                    } />
+                    <Route path="/Admin/Contracts" element={
+                    <ProtectedRoute requiredTypes={[1]}>
+                        <ContractsBack />
+                    </ProtectedRoute>
+                    } />
+                    <Route path="/Admin/Technicians" element={
+                    <ProtectedRoute requiredTypes={[1]}>
+                        <TechniciansBack />
+                    </ProtectedRoute>
+                    } />
+
+                    {/* ADMIN (tipoUsuario === 1 y 3) */}
+                    <Route path="/Admin" element={
+                    <ProtectedRoute requiredTypes={[1, 3]}>
+                        <AdminApp />
+                    </ProtectedRoute>
+                    } />
+
+                    <Route path="/Admin/Products" element={
+                    <ProtectedRoute requiredTypes={[1, 3]}>
+                        <ProductsBack />
+                    </ProtectedRoute>
+                    } />
+                    <Route path="/Admin/Services" element={
+                    <ProtectedRoute requiredTypes={[1, 3]}>
+                        <ServicesBack />
+                    </ProtectedRoute>
+                    } />
+
+                    {/* Rutas de Pago */}
                     <Route path="/Shopping/Confirmacion" element={<Confirmacion />} />
                     <Route path="/Shopping/Cancelado" element={<Cancelado />} />
+
                     {/* 404 */}
                     <Route path="/NotFound" element={<NotFound />} />
                 </Routes>

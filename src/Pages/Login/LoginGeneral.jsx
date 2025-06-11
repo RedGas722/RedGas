@@ -8,10 +8,9 @@ import { useState } from "react"
 import withReactContent from 'sweetalert2-react-content'
 import Swal from 'sweetalert2'
 import './Login.css'
+import { validateUserType } from './ValidateUserType'
 
-const URL = 'https://redgas.onrender.com/ClienteLogin'
-
-export const LoginClient = () => {
+export const LoginGeneral = () => {
     const navigate = useNavigate()
     const [correo, setCorreo] = useState('')
     const [contrasena, setContrasena] = useState('')
@@ -19,55 +18,77 @@ export const LoginClient = () => {
     const handleLogin = async (e) => {
         e.preventDefault()
         alertSendForm('wait', 'Iniciando sesión...')
+
         try {
-            const res = await fetch(URL, {
+            const userInfo = await validateUserType(correo)
+            if (!userInfo) {
+                alertSendForm(401, 'El correo electrónico o la contraseña son incorrectos')
+                return
+            }
+
+            const loginURL = `https://redgas.onrender.com/${userInfo.ruta}`
+
+            // 👇 Campos dinámicos según tipo de usuario
+            let bodyData = {}
+            switch (userInfo.tipo_usuario) {
+                case 1: // Admin
+                    bodyData = {
+                        correo_admin: correo,
+                        contraseña_admin: contrasena
+                    }
+                    break
+                case 2: // Cliente
+                    bodyData = {
+                        correo_cliente: correo,
+                        contraseña_cliente: contrasena
+                    }
+                    break
+                case 3: // Empleado
+                    bodyData = {
+                        correo_empleado: correo,
+                        contraseña_empleado: contrasena
+                    }
+                    break
+                default:
+                    alertSendForm(401, 'Tipo de usuario no válido')
+                    return
+            }
+
+            const res = await fetch(loginURL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ correo_cliente: correo, contraseña_cliente: contrasena }),
+                body: JSON.stringify(bodyData)
             })
 
             const data = await res.json()
             const token = data.token
-            // Detecta tipo_usuario desde la respuesta o el token
-            const tipoUsuario = data.tipo_usuario || (token ? jwtDecode(token).data.tipo_usuario : null)
 
-            if (token && tipoUsuario) {
+            if (token) {
                 const decoded = jwtDecode(token)
                 const user = decoded.data.name
-                alertSendForm(200, 'Inicio de sesión exitoso', 'Bienvenido de nuevo' + ` ${user || 'Usuario'}`)
+
+                alertSendForm(200, 'Inicio de sesión exitoso', `Bienvenido de nuevo ${user || 'Usuario'}`)
                 localStorage.setItem('token', token)
-                localStorage.setItem('tipo_usuario', tipoUsuario)
+                localStorage.setItem('tipo_usuario', userInfo.tipo_usuario)
+
                 setTimeout(() => {
-                    // Redirige según el tipo de usuario
-                    switch (tipoUsuario) {
-                        case 'administrador':
-                            navigate('/admin')
-                            break
-                        case 'tecnico':
-                            navigate('/tecnico')
-                            break
-                        case 'empleado':
-                            navigate('/empleado')
-                            break
-                        case 'cliente':
-                        default:
-                            navigate('/cliente')
-                            break
-                    }
+                    navigate('/')
                 }, 0)
             } else {
                 alertSendForm(401, 'El correo electrónico o la contraseña son incorrectos')
             }
-        } catch {
+
+        } catch (err) {
+            console.error(err)
             alertSendForm(502, 'Error al iniciar sesión', 'Ocurrió un error al iniciar sesión. Por favor, intenta nuevamente más tarde.')
         }
-
     }
 
     const alertSendForm = (status, title, message) => {
         const emailInput = document.getElementById('Email')
         const passwordInput = document.getElementById('Password')
         const MySwal = withReactContent(Swal)
+
         switch (status) {
             case 'wait':
                 Swal.fire({
@@ -78,9 +99,7 @@ export const LoginClient = () => {
                     showConfirmButton: false,
                     timer: 3000,
                     timerProgressBar: true,
-                    didOpen: () => {
-                        Swal.showLoading()
-                    },
+                    didOpen: () => Swal.showLoading(),
                 })
                 break
 
@@ -103,17 +122,15 @@ export const LoginClient = () => {
             case 401:
                 MySwal.fire({
                     html: `
-                            <div style="display: flex align-items: center">
-                            <div style="font-size: 30px color: #3498db margin-right: 15px">
-                                ℹ️
-                            </div>
+                        <div style="display: flex; align-items: center">
+                            <div style="font-size: 30px; color: #3498db; margin-right: 15px">ℹ️</div>
                             <div style="text-align: left">
-                                <h3 style="margin: 0 font-size: 16px font-weight: 600 color: #2c3e50">
-                                ${title || 'usuario no encontrado'}
+                                <h3 style="margin: 0; font-size: 16px; font-weight: 600; color: #2c3e50">
+                                    ${title || 'usuario no encontrado'}
                                 </h3>
                             </div>
-                            </div>
-                        `,
+                        </div>
+                    `,
                     showConfirmButton: false,
                     position: 'top-end',
                     width: '350px',
@@ -121,7 +138,6 @@ export const LoginClient = () => {
                     timerProgressBar: true,
                     background: '#ffffff',
                 })
-
                 emailInput.style.border = '2px solid #FF0000'
                 passwordInput.style.border = '2px solid #FF0000'
                 break
@@ -136,14 +152,13 @@ export const LoginClient = () => {
                     allowEnterKey: false,
                     showConfirmButton: true,
                     confirmButtonText: 'Cerrar',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        navigate('/')
+                        emailInput.value = ''
+                        passwordInput.value = ''
+                    }
                 })
-                    .then((result) => {
-                        if (result.isConfirmed) {
-                            navigate('/')
-                            emailInput.value = ''
-                            passwordInput.value = ''
-                        }
-                    })
                 break
 
             default:
@@ -156,14 +171,13 @@ export const LoginClient = () => {
                     allowEnterKey: false,
                     showConfirmButton: true,
                     confirmButtonText: 'Cerrar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        navigate('/')
+                        emailInput.value = ''
+                        passwordInput.value = ''
+                    }
                 })
-                    .then((result) => {
-                        if (result.isConfirmed) {
-                            navigate('/')
-                            emailInput.value = ''
-                            passwordInput.value = ''
-                        }
-                    })
                 break
         }
     }
@@ -174,10 +188,7 @@ export const LoginClient = () => {
             <div className="divForm p-[30px_15px_15px_15px] z-50 shadow_box_RL NeoContainer_outset_TL rounded-3xl flex flex-col items-center w-fit justify-self-center gap-[20px]">
                 <h1 className="text-center text-4xl">¡Bienvenido Cliente!</h1>
                 <form className="form flex flex-col gap-[30px] justify-center items-center text-start w-full " onSubmit={handleLogin}>
-                    {/* E-mail */}
                     <InputLabel type='2' ForID='Email' childLabel='Correo electrónico' placeholder='example@gmail.com' value={correo} onChange={e => setCorreo(e.target.value)} required />
-
-                    {/* Password */}
                     <InputLabel type='3' ForID='Password' childLabel='Contraseña' placeholder='**********' value={contrasena} onChange={e => setContrasena(e.target.value)} required />
                     <section className="flex gap-[5px] items-center justify-between w-full">
                         <label className="flex gap-[5px] items-center justify-center cursor-pointer text-[var(--main-color-sub)]">
@@ -185,15 +196,11 @@ export const LoginClient = () => {
                                 <input type="checkbox" className="input" />
                                 <span className="custom-checkbox"></span>
                             </label>
-                            <div>
-                                <p>Recordarme</p>
-                            </div>
+                            <div><p>Recordarme</p></div>
                         </label>
                         <div className="text-[var(--main-focus)]">
                             <Link to="/Login/ForgotPassword">
-                                <button className="cursor-pointer hover:text-[var(--Font-Nav)]">
-                                    <p >Olvidaste tu contraseña?</p>
-                                </button>
+                                <button className="cursor-pointer hover:text-[var(--Font-Nav)]"><p>Olvidaste tu contraseña?</p></button>
                             </Link>
                         </div>
                     </section>
@@ -207,4 +214,4 @@ export const LoginClient = () => {
     )
 }
 
-export default LoginClient
+export default LoginGeneral

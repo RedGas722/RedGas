@@ -116,3 +116,8 @@
 .card-btn_Offer:active {
     transform: translateY(5px);
 }
+
+.swiper-wrapper > .swiper-slide{
+    width: 240px !important;
+    margin: 0 0 0 20px;
+}

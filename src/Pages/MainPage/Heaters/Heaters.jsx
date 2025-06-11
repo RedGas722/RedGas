@@ -22,7 +22,7 @@ export const HeatersSect = () => {
 
   return (
     <section id="HeatersSect" className="NeoContainer_outset_TL flex flex-col p-[15px] gap-[20px] text-[var(--Font-Nav)]">
-      <TitleSectCategory iconCategory={faWater} nameCategory="Calentadores" className='flex flex-row justify-start items-center gap-[8px]' />
+      <TitleSectCategory IconClass='text-[var(--Font-Nav-shadow)]' iconCategory={faWater} nameCategory="Calentadores" className='flex flex-row justify-start items-center gap-[8px]' />
       <Cards
         uniqueId="heaters"
         productos={calentadores}
