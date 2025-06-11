@@ -17,13 +17,14 @@ import { CategoriesBack } from './Admin/Categories/CategoriesBack'
 import { TechniciansBack } from './Admin/Technicians/TechniciansBack'
 import { ServicesBack } from './Admin/Services/ServicesBack'
 import { AdminsBack } from './Admin/Admins/AdminsBack'
-import  ContractsBack from './Admin/Contracts/ContractsBack.jsx'
+import { ContractsBack } from './Admin/Contracts/ContractsBack.jsx'
 import { Cancelado } from './Pages/Shopping/Cancelado.jsx'
 import { Confirmacion } from './Pages/Shopping/Confirmacion.jsx'
 import { NotFound } from './Pages/NotFound/NotFound.jsx'
 import { LoginGeneral } from './Pages/Login/LoginGeneral.jsx'
 import { LoginTechnician } from './Pages/Login/LoginTechnician.jsx'
-import { SearchPage } from './Pages/SearchPage/SearchPage.jsx';
+import { SearchPage } from './Pages/SearchPage/SearchPage.jsx'
+import { ProductInfo } from './Pages/ProductInfo/ProductInfo.jsx'
 
 
 // 👇 Importar ruta protegida
@@ -47,63 +48,64 @@ export function App() {
                         <Route path='LoginGeneral' element={<LoginGeneral />} />
                         <Route path='LoginTechnician' element={<LoginTechnician />} />
                     </Route>
-                    
+                    <Route path='/ProductInfo' element={<ProductInfo />} />
+                    {/* Rutas de recuperación de contraseña */}
                     <Route path='/Login/ForgotPassword' element={<ForgotPassword />} />
                     <Route path='/Login/ForgotPassword/Recovery/:token' element={<RecoveryPassword />} />
 
                     {/* ADMIN (tipoUsuario === 1) */}
                     <Route path="/Admin/Clients" element={
-                    <ProtectedRoute requiredTypes={[1]}>
-                        <ClientsBack />
-                    </ProtectedRoute>
+                        <ProtectedRoute requiredTypes={[1]}>
+                            <ClientsBack />
+                        </ProtectedRoute>
                     } />
                     <Route path="/Admin/Employees" element={
-                    <ProtectedRoute requiredTypes={[1]}>
-                        <EmployeesBack />
-                    </ProtectedRoute>
+                        <ProtectedRoute requiredTypes={[1]}>
+                            <EmployeesBack />
+                        </ProtectedRoute>
                     } />
                     <Route path="/Admin/Factures" element={
-                    <ProtectedRoute requiredTypes={[1]}>
-                        <FacturesBack />
-                    </ProtectedRoute>
+                        <ProtectedRoute requiredTypes={[1]}>
+                            <FacturesBack />
+                        </ProtectedRoute>
                     } />
                     <Route path="/Admin/Categories" element={
-                    <ProtectedRoute requiredTypes={[1]}>
-                        <CategoriesBack />
-                    </ProtectedRoute>
+                        <ProtectedRoute requiredTypes={[1]}>
+                            <CategoriesBack />
+                        </ProtectedRoute>
                     } />
                     <Route path="/Admin/Admins" element={
-                    <ProtectedRoute requiredTypes={[1]}>
-                        <AdminsBack />
-                    </ProtectedRoute>
+                        <ProtectedRoute requiredTypes={[1]}>
+                            <AdminsBack />
+                        </ProtectedRoute>
                     } />
                     <Route path="/Admin/Contracts" element={
-                    <ProtectedRoute requiredTypes={[1]}>
-                        <ContractsBack />
-                    </ProtectedRoute>
+                        <ProtectedRoute requiredTypes={[1]}>
+                            <ContractsBack />
+                        </ProtectedRoute>
                     } />
                     <Route path="/Admin/Technicians" element={
-                    <ProtectedRoute requiredTypes={[1]}>
-                        <TechniciansBack />
-                    </ProtectedRoute>
+                        <ProtectedRoute requiredTypes={[1]}>
+                            <TechniciansBack />
+                        </ProtectedRoute>
                     } />
 
                     {/* ADMIN (tipoUsuario === 1 y 3) */}
                     <Route path="/Admin" element={
-                    <ProtectedRoute requiredTypes={[1, 3]}>
-                        <AdminApp />
-                    </ProtectedRoute>
+                        <ProtectedRoute requiredTypes={[1, 3]}>
+                            <AdminApp />
+                        </ProtectedRoute>
                     } />
 
                     <Route path="/Admin/Products" element={
-                    <ProtectedRoute requiredTypes={[1, 3]}>
-                        <ProductsBack />
-                    </ProtectedRoute>
+                        <ProtectedRoute requiredTypes={[1, 3]}>
+                            <ProductsBack />
+                        </ProtectedRoute>
                     } />
                     <Route path="/Admin/Services" element={
-                    <ProtectedRoute requiredTypes={[1, 3]}>
-                        <ServicesBack />
-                    </ProtectedRoute>
+                        <ProtectedRoute requiredTypes={[1, 3]}>
+                            <ServicesBack />
+                        </ProtectedRoute>
                     } />
 
                     {/* Rutas de Pago */}
