@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Header } from '../../Layouts/Header/Header';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
+import PsePaymentForm from "./PsEForm";
 
 export const Shopping = () => {
   const [products, setProducts] = useState([]);

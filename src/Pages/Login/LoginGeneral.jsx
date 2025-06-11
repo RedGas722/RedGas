@@ -25,7 +25,7 @@ export const LoginGeneral = () => {
                 alertSendForm(401, 'El correo electrónico o la contraseña son incorrectos')
                 return
             }
-        
+
             const loginURL = `https://redgas.onrender.com/${userInfo.ruta}`
 
             // 👇 Campos dinámicos según tipo de usuario
@@ -60,11 +60,10 @@ export const LoginGeneral = () => {
                 body: JSON.stringify(bodyData)
             })
 
-            const data = await res.json();
-            const token = data.token;
-            const tipoUsuario = userInfo.tipo_usuario;
+            const data = await res.json()
+            const token = data.token
 
-            if (token && tipoUsuario) {
+            if (token) {
                 const decoded = jwtDecode(token)
                 const user = decoded.data.name
 
@@ -73,18 +72,7 @@ export const LoginGeneral = () => {
                 localStorage.setItem('tipo_usuario', userInfo.tipo_usuario)
 
                 setTimeout(() => {
-                    switch (tipoUsuario) {
-                        case 1:
-                            navigate('/admin')
-                            break
-                        case 3:
-                            navigate('/empleado')
-                            break
-                        case 2:
-                        default:
-                            navigate('/cliente')
-                            break
-                    }
+                    navigate('/')
                 }, 0)
             } else {
                 alertSendForm(401, 'El correo electrónico o la contraseña son incorrectos')
@@ -202,7 +190,7 @@ export const LoginGeneral = () => {
                 <form className="form flex flex-col gap-[30px] justify-center items-center text-start w-full " onSubmit={handleLogin}>
                     <InputLabel type='2' ForID='Email' childLabel='Correo electrónico' placeholder='example@gmail.com' value={correo} onChange={e => setCorreo(e.target.value)} required />
                     <InputLabel type='3' ForID='Password' childLabel='Contraseña' placeholder='**********' value={contrasena} onChange={e => setContrasena(e.target.value)} required />
-                    <section className="flex gap-[10px] items-center justify-between w-full">
+                    <section className="flex gap-[5px] items-center justify-between w-full">
                         <label className="flex gap-[5px] items-center justify-center cursor-pointer text-[var(--main-color-sub)]">
                             <label className="flex items-center justify-center">
                                 <input type="checkbox" className="input" />
@@ -210,7 +198,7 @@ export const LoginGeneral = () => {
                             </label>
                             <div><p>Recordarme</p></div>
                         </label>
-                        <div className="text-[var(--Font-Nav)] text-[14px]">
+                        <div className="text-[var(--main-focus)]">
                             <Link to="/Login/ForgotPassword">
                                 <button className="cursor-pointer hover:text-[var(--Font-Nav)]"><p>Olvidaste tu contraseña?</p></button>
                             </Link>

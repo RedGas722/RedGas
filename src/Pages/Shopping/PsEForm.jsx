@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Inputs from '../../Admin/UI/Inputs/Inputs';
+import { jwtDecode } from 'jwt-decode';
 
 const PsePaymentForm = ({ monto, onClose }) => {
   const [formData, setFormData] = useState({
@@ -16,7 +16,20 @@ const PsePaymentForm = ({ monto, onClose }) => {
   });
 
   useEffect(() => {
-    setFormData(prev => ({ ...prev, value: monto }));
+    const token = localStorage.getItem("token");
+    if (token) {
+      const decoded = jwtDecode(token);
+      const user = decoded?.data;
+
+      setFormData(prev => ({
+        ...prev,
+        value: monto,
+        name: user?.name || '',
+        email: user?.email || '',
+        telefono: user?.telefono || '',
+        direccion: user?.direccion || ''
+      }));
+    }
   }, [monto]);
 
   const handleChange = (e) => {
@@ -34,7 +47,7 @@ const PsePaymentForm = ({ monto, onClose }) => {
     }
 
     try {
-      const response = await fetch('https://redgas.onrender.com/generar-pago-pse', {
+      const response = await fetch('https://redgas.onrender.com/PagoPSE', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -57,26 +70,80 @@ const PsePaymentForm = ({ monto, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
-      <div className="bg-white p-6 rounded-lg w-[400px]">
+    <div className="fixed inset-0 flex justify-center items-center z-50">
+      <div className="bg-white p-6 rounded-lg w-[400px] shadow-lg">
         <form onSubmit={handleSubmit}>
           <h2 className="text-xl font-bold mb-4">Pago PSE</h2>
 
-          <Inputs Type="1" Place="Nombre" Value={formData.name} onChange={handleChange} name="name" />
-          <Inputs Type="2" Place="Correo" Value={formData.email} onChange={handleChange} name="email" />
-          <Inputs Type="6" Place="Teléfono" Value={formData.telefono} onChange={handleChange} name="telefono" />
-          <Inputs Type="1" Place="Dirección" Value={formData.direccion} onChange={handleChange} name="direccion" />
-          <Inputs Type="1" Place="Número de documento" Value={formData.doc_number} onChange={handleChange} name="doc_number" />
+          {/* Datos informativos sin input */}
+          <div className="mb-2">
+            <p className="font-semibold mb-1">Nombre:</p>
+            <p>{formData.name}</p>
+          </div>
 
-          <select name="type_person" value={formData.type_person} onChange={handleChange} required>
+          <div className="mb-2">
+            <p className="font-semibold mb-1">Correo:</p>
+            <p>{formData.email}</p>
+          </div>
+
+          <div className="mb-2">
+            <p className="font-semibold mb-1">Teléfono:</p>
+            <p>{formData.telefono}</p>
+          </div>
+
+          {/* Dirección editable con input nativo */}
+          <div className="mb-2">
+            <input
+              type="text"
+              placeholder="Dirección"
+              name="direccion"
+              value={formData.direccion}
+              onChange={handleChange}
+              required
+              className="border rounded p-2 w-full"
+            />
+          </div>
+
+          {/* Documento editable con input nativo */}
+          <div className="mb-2">
+            <input
+              type="number"
+              placeholder="Número de documento"
+              name="doc_number"
+              value={formData.doc_number}
+              onChange={handleChange}
+              required
+              className="border rounded p-2 w-full"
+            />
+          </div>
+
+          {/* Tipo de persona */}
+          <select
+            name="type_person"
+            value={formData.type_person}
+            onChange={handleChange}
+            required
+            className="w-full p-2 border rounded mb-2"
+          >
             <option value="">Tipo de Persona</option>
             <option value="0">Natural</option>
             <option value="1">Jurídica</option>
           </select>
 
-          <Inputs Type="5" Place="Valor a pagar" Value={formData.value} onChange={handleChange} name="value" />
+          {/* Valor a pagar como texto */}
+          <div className="mb-2">
+            <p className="font-semibold mb-1">Valor a pagar:</p>
+            <p>{formData.value}</p>
+          </div>
 
-          <select name="bank" value={formData.bank} onChange={handleChange} required>
+          {/* Bancos */}
+          <select
+            name="bank"
+            value={formData.bank}
+            onChange={handleChange}
+            required
+            className="w-full p-2 border rounded mb-2"
+          >
             <option value="">Selecciona tu banco</option>
             <option value="1022">Banco de Bogotá</option>
             <option value="1052">Bancolombia</option>
