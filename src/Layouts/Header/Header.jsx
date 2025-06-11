@@ -4,7 +4,6 @@ import { gsap } from 'gsap';
 import { SearchBarr } from "../../UI/Header/SearchBarr/SearchBarr"
 import { Navs } from "../../UI/Header/Nav/Nav"
 import { jwtDecode } from "jwt-decode";
-// import { ProfilePhoto } from "../../UI/Header/ProfilePhoto/ProfilePhoto"
 import './Header.css'
 
 export const Header = () => {
