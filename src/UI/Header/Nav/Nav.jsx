@@ -19,7 +19,7 @@ export const Navs = ({ className, ref1, ref2, ref3, ref4 }) => {
         }`
 
     return (
-        <div className={`flex gap-[15px] flex-col md:flex-wrap md:flex-row text-center justify-center items-center text-[15px] ${className}`}>
+        <div className={`flex gap-[15px] flex-col md:flex-wrap md:flex-row text-center justify-start items-center text-[15px] ${className}`}>
             <span ref={ref1}>
                 <Link
                     to="Hero"

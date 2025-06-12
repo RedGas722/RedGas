@@ -2,7 +2,7 @@ import { useState } from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons"
 
-export const InputLabel = ({ type, ForID, placeholder, childLabel, value, onChange, required }) => {
+export const InputLabel = ({ type, ForID, placeholder, childLabel, value, onChange, required, autoComplete }) => {
     const [showPassword, setShowPassword] = useState(false)
     const [showCapPassword, setShowCapPassword] = useState(false)
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)
@@ -45,6 +45,7 @@ export const InputLabel = ({ type, ForID, placeholder, childLabel, value, onChan
                         id={ForID}
                         onChange={onChange}
                         placeholder={placeholderText}
+                        autoComplete={autoComplete}
                         required={required}
                     />
                 ) : (
