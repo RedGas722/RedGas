@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { jwtDecode } from "jwt-decode"
-import { faUser, faTools, faPlug, faGears } from "@fortawesome/free-solid-svg-icons"
+import { faUser, faTools, faPlug, faGears, faQuestion } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
@@ -16,7 +16,6 @@ const style = {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    // width: 400,
     boxShadow: 24,
     p: 2,
 };
@@ -72,7 +71,8 @@ export const CostumerServices = () => {
     const getIconByLabel = (label) => {
         if (label === 'Reparación') return faTools
         if (label === 'Instalación') return faPlug
-        return faGears
+        if (label === 'Mantenimiento') return faGears
+        return faQuestion
     }
 
     const [open, setOpen] = useState(false);
@@ -101,11 +101,13 @@ export const CostumerServices = () => {
                             <p className="text-[1rem]">{phone}</p>
                             <p className="text-[1rem]">{address}</p>
                         </div>
-
+                        
                         {/* Modal */}
                         <Modal
                             open={open}
                             onClose={handleClose}
+                            aria-labelledby="modal-modal-title"
+                            aria-describedby="modal-modal-description"
                         >
                             <Box sx={style} className="flex flex-col items-center justify-center gap-4 NeoContainer_outset_TL">
                                 <div className="text-[var(--Font-Nav)] flex items-center gap-4">
