@@ -5,13 +5,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useNavigate } from "react-router-dom"
 import { BtnBack } from "../../UI/Login_Register/BtnBack"
 import { Buttons } from "../../UI/Login_Register/Buttons"
-import './CostumerMyServices.css'
+import './CostumerMyService.css'
 
 const URL_GET = 'https://redgas.onrender.com/ClienteServicesGet'
 const URL_DELETE = 'http://localhost:10101/ClienteServicesDelete'
 
-export const CostumerMyServices = () => {
-  
+export const CostumerMyService = () => {
+
   const navigate = useNavigate()
   const [id, setId] = useState('')
   const [user, setUser] = useState('')
@@ -43,8 +43,6 @@ export const CostumerMyServices = () => {
           }
 
           const datainfo = await response.json()
-          console.log(datainfo);
-          
 
           if (!datainfo.get) {
             navigate('/Services')
@@ -66,9 +64,9 @@ export const CostumerMyServices = () => {
     }
 
   }, [])
-  
+
   const handleChangeService = async () => {
-    
+
     try {
       const responseChange = await fetch(`${URL_DELETE}`, {
         method: 'DELETE',
@@ -82,8 +80,8 @@ export const CostumerMyServices = () => {
         throw new Error('Error al eliminar el servicio')
       }
       const dataChange = await responseChange.json()
-      
-      if(dataChange.status = 'Service info Deleted') {
+
+      if (dataChange.status = 'Service info Deleted') {
         navigate('/Services')
       }
 
@@ -106,8 +104,8 @@ export const CostumerMyServices = () => {
         throw new Error('Error al eliminar el servicio')
       }
       const dataDelete = await responseDelete.json()
-      
-      if(dataDelete.status = 'Service info Deleted') {
+
+      if (dataDelete.status = 'Service info Deleted') {
         setTimeout(() => {
           alert('Servicio eliminado correctamente')
           navigate('/')
@@ -154,4 +152,4 @@ export const CostumerMyServices = () => {
   )
 }
 
-export default CostumerMyServices
+export default CostumerMyService
