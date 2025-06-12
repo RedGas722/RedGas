@@ -6,26 +6,39 @@ const ConfirmacionPse = () => {
   const [searchParams] = useSearchParams();
   const [estadoPago, setEstadoPago] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [errorMsg, setErrorMsg] = useState('');
 
   const refPayco = searchParams.get("x_ref_payco");
 
   useEffect(() => {
     const obtenerEstadoPago = async () => {
+      if (!refPayco) {
+        setErrorMsg("No se encontró el parámetro x_ref_payco en la URL");
+        setEstadoPago(null);
+        setLoading(false);
+        return;
+      }
+
       try {
-        if (!refPayco) {
-          throw new Error("Referencia Payco no encontrada");
+        // Cambia esta URL por la de tu backend que implementa la consulta
+        const response = await fetch(`http://localhost:10101/ObtenerEstadoPago/${refPayco}`);
+        
+        if (!response.ok) {
+          throw new Error(`Error en la respuesta del servidor: ${response.status}`);
         }
 
-        // Llamada directa al API de ePayco para consultar el estado del pago
-        const response = await fetch(`https://secure.epayco.co/validation/v1/reference/${refPayco}`);
         const data = await response.json();
 
-        console.log("Respuesta de ePayco:", data);
+        if (!data) {
+          throw new Error("No se encontraron datos en la respuesta del servidor");
+        }
 
-        setEstadoPago(data.data);
+        setEstadoPago(data);
+        setErrorMsg('');
       } catch (err) {
         console.error("Error al consultar estado de pago:", err);
         setEstadoPago(null);
+        setErrorMsg(err.message || "Error desconocido");
       } finally {
         setLoading(false);
       }
@@ -47,6 +60,18 @@ const ConfirmacionPse = () => {
         <Header />
         <div className="MainPageContainer text-[var(--main-color)] p-8">
           <h1 className="text-3xl font-bold mb-4">Consultando estado de pago...</h1>
+        </div>
+      </section>
+    );
+  }
+
+  if (errorMsg) {
+    return (
+      <section className="Distribution">
+        <Header />
+        <div className="MainPageContainer text-[var(--main-color)] p-8">
+          <h1 className="text-3xl font-bold mb-4">Error: {errorMsg}</h1>
+          <a href="/" className="mt-4 inline-block bg-blue-500 text-white px-4 py-2 rounded">Volver al inicio</a>
         </div>
       </section>
     );
