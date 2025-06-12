@@ -30,7 +30,7 @@ export const Login = () => {
     }
 
     return (
-        <section className="sectionLoginRegister text-[var(--main-color)] w-full h-dvh ">
+        <section className="sectionLoginRegister text-[var(--main-color)] w-full h-dvh p-[10px_10px_0_10px]">
             <div className="flex items-center justify-between w-full">
                 <BtnBack To='/' />
                 <label className="label relative z-[2]">

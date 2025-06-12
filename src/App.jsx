@@ -1,6 +1,6 @@
 import { Routes, Route } from 'react-router-dom'
 import { MainPage } from './Pages/MainPage/MainPage'
-import { CostumerServices } from './Pages/Costumer/CostumerServices'
+import { CostumerMyServices } from './Pages/CostumerMyServices/CostumerMyServices'
 import { ServicesInfo } from './Pages/Services/Services.jsx'
 import { TechniciansPage } from './Pages/Technicians/TechniciansPage'
 import { Shopping } from './Pages/Shopping/Shopping.jsx'
@@ -36,7 +36,7 @@ export function App() {
             <div>
                 <Routes>
                     <Route path="/" element={<MainPage />} />
-                    <Route path="/Costumer" element={<CostumerServices />} />
+                    <Route path="/CostumerMyServices" element={<CostumerMyServices />} />
                     <Route path="/Services" element={<ServicesInfo />} />
                     <Route path="/Technic" element={<TechniciansPage />} />
                     <Route path="/Shopping" element={<Shopping />} />

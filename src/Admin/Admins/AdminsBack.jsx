@@ -107,6 +107,10 @@ export const AdminsBack = () => {
   return (
     <div className="p-[20px] flex flex-col gap-[20px]">
       <div className="flex items-center gap-[20px]">
+        <div>
+          <h1 className="font-bold text-[20px]">Admin BACK-OFFICE</h1>
+          <BtnBack To='/Admin' className='btnDown' />
+        </div>
         <h1 className="font-bold text-[20px]">Admin BACK-OFFICE</h1>
         <div className="relative" ref={contenedorRef}>
           <div className="flex items-center gap-2 border border-gray-300 rounded px-2 py-1">

@@ -70,17 +70,12 @@ export const Navs = ({ className, ref1, ref2, ref3, ref4 }) => {
 
             {/* Mostrar solo si está logueado como admin o empleado */}
             {(tipoUsuario === 1 || tipoUsuario === 3) && (
-                <NavLink to="/Admin">
+                <NavLink to="/Admin" 
+                className='NeoSubContainer_outset_TL p-[5px_10px]'
+                >
                     Admin
                 </NavLink>
             )}
-
-            <NavLink to="/Costumer">
-                Cliente
-            </NavLink>
-            <NavLink to="/Services">
-                Servicios
-            </NavLink>
         </div>
     )
 }

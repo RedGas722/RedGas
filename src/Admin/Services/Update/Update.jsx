@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Inputs } from '../../UI/Inputs/Inputs';
 
 export const UpdateModal = ({ onClose, setRefrescar, servicioCarta }) => {
