@@ -81,7 +81,7 @@ const PsePaymentForm = ({ monto, onClose }) => {
         direccion: userData.direccion
       };
 
-      const response = await fetch('http://localhost:10101/PagoPSE', {
+      const response = await fetch('https://redgas.onrender.com/PagoPSE', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

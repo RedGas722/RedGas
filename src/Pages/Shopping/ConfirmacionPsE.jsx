@@ -21,19 +21,19 @@ const ConfirmacionPse = () => {
 
       try {
         // Cambia esta URL por la de tu backend que implementa la consulta
-        const response = await fetch(`http://localhost:10101/ObtenerEstadoPago/${refPayco}`);
+        const response = await fetch(`https://redgas.onrender.com/ObtenerEstadoPago/${refPayco}`);
         
         if (!response.ok) {
           throw new Error(`Error en la respuesta del servidor: ${response.status}`);
         }
 
         const data = await response.json();
-
+        console.log("🔎 Respuesta del backend:", data);
         if (!data) {
           throw new Error("No se encontraron datos en la respuesta del servidor");
         }
 
-        setEstadoPago(data);
+        setEstadoPago(data.data);
         setErrorMsg('');
       } catch (err) {
         console.error("Error al consultar estado de pago:", err);
