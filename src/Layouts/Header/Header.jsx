@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect, useRef, use } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { SearchBarr } from "../../UI/Header/SearchBarr/SearchBarr"
 import { Navs } from "../../UI/Header/Nav/Nav"
@@ -38,7 +38,7 @@ export const Header = () => {
         }
 
 
-    }, []);
+    }, [token]);
 
     // Cargar productos al iniciar
     useEffect(() => {
@@ -130,7 +130,7 @@ export const Header = () => {
                 .fromTo(navRef2.current, { x: -300, opacity: 0 }, { x: 0, opacity: 1 })
                 .fromTo(navRef3.current, { x: -400, opacity: 0 }, { x: 0, opacity: 1 })
                 .fromTo(navRef4.current, { x: -500, opacity: 0 }, { x: 0, opacity: 1 })
-                .fromTo(navRef5.current, { x: -600, opacity: 0 }, { x: 0, opacity: 1 })
+                // .fromTo(navRef5.current, { x: -600, opacity: 0 }, { x: 0, opacity: 1 })
         }
     }, [hamburger]);
 

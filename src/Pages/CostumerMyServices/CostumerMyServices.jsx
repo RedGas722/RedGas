@@ -1,6 +1,6 @@
-import { useState, useEffect, use } from "react"
+import { useState, useEffect} from "react"
 import { jwtDecode } from "jwt-decode"
-import { faUser, faTools, faPlug, faGears } from "@fortawesome/free-solid-svg-icons"
+import { faUser } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useNavigate } from "react-router-dom"
 import { BtnBack } from "../../UI/Login_Register/BtnBack"

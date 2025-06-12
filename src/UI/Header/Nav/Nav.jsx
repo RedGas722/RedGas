@@ -67,6 +67,13 @@ export const Navs = ({ className, ref1, ref2, ref3, ref4 }) => {
             >
                 Técnicos
             </NavLink>
+            <NavLink
+                ref={ref4}
+                to="/CostumerServices"
+                className='NeoSubContainer_outset_TL p-[5px_10px]'
+            >
+                Servi
+            </NavLink>
 
             {/* Mostrar solo si está logueado como admin o empleado */}
             {(tipoUsuario === 1 || tipoUsuario === 3) && (
