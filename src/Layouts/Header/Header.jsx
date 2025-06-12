@@ -110,6 +110,7 @@ export const Header = () => {
 
     const handSignOut = () => {
         localStorage.removeItem('token');
+        localStorage.removeItem('tipo_usuario')
         window.location.href = '/';
     }
 
