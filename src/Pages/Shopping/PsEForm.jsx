@@ -1,7 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { jwtDecode } from 'jwt-decode';
 
 const PsePaymentForm = ({ monto, onClose }) => {
+
+  const [bancos, setBancos] = useState([]);
+
+  useEffect(() => {
+    const cargarBancos = async () => {
+      try {
+        const res = await fetch("https://redgas.onrender.com/BancosPSE");
+        const data = await res.json();
+        setBancos(data.data);  // ePayco devuelve {data: [...]}
+      } catch (err) {
+        console.error("Error cargando bancos PSE:", err);
+      }
+    };
+
+    cargarBancos();
+  }, []);
+
   const [formData, setFormData] = useState({
     bank: '',
     invoice: `INV-${Date.now()}`,
@@ -75,7 +92,6 @@ const PsePaymentForm = ({ monto, onClose }) => {
         <form onSubmit={handleSubmit}>
           <h2 className="text-xl font-bold mb-4">Pago PSE</h2>
 
-          {/* Datos informativos sin input */}
           <div className="mb-2">
             <p className="font-semibold mb-1">Nombre:</p>
             <p>{formData.name}</p>
@@ -91,7 +107,6 @@ const PsePaymentForm = ({ monto, onClose }) => {
             <p>{formData.telefono}</p>
           </div>
 
-          {/* Dirección editable con input nativo */}
           <div className="mb-2">
             <input
               type="text"
@@ -104,7 +119,6 @@ const PsePaymentForm = ({ monto, onClose }) => {
             />
           </div>
 
-          {/* Documento editable con input nativo */}
           <div className="mb-2">
             <input
               type="number"
@@ -117,7 +131,6 @@ const PsePaymentForm = ({ monto, onClose }) => {
             />
           </div>
 
-          {/* Tipo de persona */}
           <select
             name="type_person"
             value={formData.type_person}
@@ -130,13 +143,11 @@ const PsePaymentForm = ({ monto, onClose }) => {
             <option value="1">Jurídica</option>
           </select>
 
-          {/* Valor a pagar como texto */}
           <div className="mb-2">
             <p className="font-semibold mb-1">Valor a pagar:</p>
             <p>{formData.value}</p>
           </div>
 
-          {/* Bancos */}
           <select
             name="bank"
             value={formData.bank}
@@ -145,9 +156,11 @@ const PsePaymentForm = ({ monto, onClose }) => {
             className="w-full p-2 border rounded mb-2"
           >
             <option value="">Selecciona tu banco</option>
-            <option value="1022">Banco de Bogotá</option>
-            <option value="1052">Bancolombia</option>
-            <option value="1066">Davivienda</option>
+            {bancos.map((banco) => (
+              <option key={banco.financial_code} value={banco.financial_code}>
+                {banco.description}
+              </option>
+            ))}
           </select>
 
           <div className="flex justify-between mt-4">

@@ -112,6 +112,22 @@ export const Shopping = () => {
 
   const handleUpdateQuantity = async (productId, newQuantity) => {
     try {
+      const producto = products.find(p => p.id_producto === productId);
+      if (!producto) {
+        alert("Producto no encontrado");
+        return;
+      }
+
+      if (newQuantity > producto.stock) {
+        alert(`No puedes agregar más de ${producto.stock} unidades. Stock máximo alcanzado.`);
+        return;
+      }
+
+      if (newQuantity < 1) {
+        alert("La cantidad mínima es 1.");
+        return;
+      }
+
       const res = await fetch("https://redgas.onrender.com/CartUpdateQuantity", {
         method: "PUT",
         headers: {

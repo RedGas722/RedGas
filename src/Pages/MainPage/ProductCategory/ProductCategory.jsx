@@ -1,19 +1,30 @@
-import { faWater } from '@fortawesome/free-solid-svg-icons'
-import { faWrench } from '@fortawesome/free-solid-svg-icons';
-import { faGear } from '@fortawesome/free-solid-svg-icons';
-import { faShower } from '@fortawesome/free-solid-svg-icons';
-import './ProductCategory.css'
-import { PrpoductCatergories } from "../../../UI/PrpoductCatergories/PrpoductCatergories"
-
+import { faWater, faWrench, faGear, faShower } from '@fortawesome/free-solid-svg-icons';
+import './ProductCategory.css';
+import { PrpoductCatergories } from "../../../UI/PrpoductCatergories/PrpoductCatergories";
+import { useNavigate } from 'react-router-dom';
 
 export const ProductCategory = () => {
+    const navigate = useNavigate();
+
+    const handleCategoryClick = (category) => {
+        navigate(`/SearchPage?category=${category}`);
+    }
+
     return (
         <section id="ProductCategory" className="NeoContainer_outset_TL cardCategoryContainer p-[30px]">
-            <PrpoductCatergories imgCategory={faWater} nameCategory="Calentadores" />
-            <PrpoductCatergories imgCategory={faWrench} nameCategory="Herramientas" />
-            <PrpoductCatergories imgCategory={faGear} nameCategory="Repuestos" />
-            <PrpoductCatergories imgCategory={faShower} nameCategory="Accesorios" />
+            <div onClick={() => handleCategoryClick("Calentadores")}>
+                <PrpoductCatergories imgCategory={faWater} nameCategory="Calentadores" />
+            </div>
+            <div onClick={() => handleCategoryClick("Herramientas")}>
+                <PrpoductCatergories imgCategory={faWrench} nameCategory="Herramientas" />
+            </div>
+            <div onClick={() => handleCategoryClick("Repuestos")}>
+                <PrpoductCatergories imgCategory={faGear} nameCategory="Repuestos" />
+            </div>
+            <div onClick={() => handleCategoryClick("Accesorios")}>
+                <PrpoductCatergories imgCategory={faShower} nameCategory="Accesorios" />
+            </div>
         </section>
     )
 }
-export default ProductCategory
+export default ProductCategory;

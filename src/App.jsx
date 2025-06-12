@@ -19,7 +19,8 @@ import { ServicesBack } from './Admin/Services/ServicesBack'
 import { AdminsBack } from './Admin/Admins/AdminsBack'
 import  ContractsBack from './Admin/Contracts/ContractsBack.jsx'
 import { Cancelado } from './Pages/Shopping/Cancelado.jsx'
-import { Confirmacion } from './Pages/Shopping/Confirmacion.jsx'
+import ConfirmacionPayPal from './Pages/Shopping/ConfirmacionPayPal.jsx'
+import ConfirmacionPsE from './Pages/Shopping/ConfirmacionPsE.jsx'
 import { NotFound } from './Pages/NotFound/NotFound.jsx'
 import { LoginGeneral } from './Pages/Login/LoginGeneral.jsx'
 import { LoginTechnician } from './Pages/Login/LoginTechnician.jsx'
@@ -107,7 +108,8 @@ export function App() {
                     } />
 
                     {/* Rutas de Pago */}
-                    <Route path="/Shopping/Confirmacion" element={<Confirmacion />} />
+                    <Route path="/Shopping/ConfirmacionPayPal" element={<ConfirmacionPayPal />} />
+                    <Route path="/Shopping/ConfirmacionPsE" element={<ConfirmacionPsE />} />
                     <Route path="/Shopping/Cancelado" element={<Cancelado />} />
 
                     {/* 404 */}
