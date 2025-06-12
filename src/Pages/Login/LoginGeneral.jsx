@@ -49,6 +49,12 @@ export const LoginGeneral = () => {
                         contraseña_empleado: contrasena
                     }
                     break
+                case 4: // Tecnico
+                    bodyData = {
+                        correo_tecnico: correo,
+                        contraseña_tecnico: contrasena
+                    }
+                    break
                 default:
                     alertSendForm(401, 'Tipo de usuario no válido')
                     return

@@ -71,14 +71,15 @@ export const Navs = ({ className, ref1, ref2, ref3, ref4 }) => {
                 Técnicos
             </NavLink>
 
-            <NavLink
-                ref={ref4}
-                to="/CostumersServices"
-                className='NeoSubContainer_outset_TL p-[5px_10px]'
-            >
-                Servicios
-            </NavLink>
-
+            {(tipoUsuario === 1 || tipoUsuario === 2 || tipoUsuario === 3 || tipoUsuario === 4) && (
+                <NavLink
+                    ref={ref4}
+                    to="/CostumersServices"
+                    className='NeoSubContainer_outset_TL p-[5px_10px]'
+                >
+                    Servicios
+                </NavLink>
+            )}
             {/* Mostrar solo si está logueado como admin o empleado */}
             {(tipoUsuario === 1 || tipoUsuario === 3) && (
                 <NavLink to="/Admin"

@@ -1,8 +1,9 @@
 export const validateUserType = async (correo) => {
     const urls = [
         { url: 'https://redgas.onrender.com/AdminGet', key: 'correo_admin', tipo: 1, ruta: 'AdminLogin' },
+        { url: 'https://redgas.onrender.com/ClienteGet', key: 'correo_cliente', tipo: 2, ruta: 'ClienteLogin' },
         { url: 'https://redgas.onrender.com/EmpleadoGet', key: 'correo_empleado', tipo: 3, ruta: 'EmpleadoLogin' },
-        { url: 'https://redgas.onrender.com/ClienteGet', key: 'correo_cliente', tipo: 2, ruta: 'ClienteLogin' }
+        { url: 'http://localhost:10101/TecnicoLogin', key: 'correo_tecnico', tipo: 4, ruta: 'TecnicoLogin' }
     ];
 
     for (const { url, key, tipo, ruta } of urls) {
