@@ -1,6 +1,8 @@
 import "./CardsOffers.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCartShopping, faTags } from '@fortawesome/free-solid-svg-icons';
+import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
 
 async function agregarAlCarrito(item) {
   const token = localStorage.getItem("token");
@@ -25,8 +27,26 @@ async function agregarAlCarrito(item) {
 }
 
 export const CardsOffersGrid = ({ productos = [] }) => {
+  const navigate = useNavigate();
 
   const handleAddToCart = async (producto) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'No estás logueado',
+        text: 'Debes iniciar sesión para agregar productos al carrito.',
+        showCancelButton: true,
+        confirmButtonText: 'Ir al login',
+        cancelButtonText: 'Cancelar'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate("/Login");
+        }
+      });
+      return;
+    }
+
     const item = {
       productId: producto.id_producto,
       productName: producto.nombre_producto,
@@ -37,18 +57,26 @@ export const CardsOffersGrid = ({ productos = [] }) => {
 
     try {
       await agregarAlCarrito(item);
-      alert(`"${producto.nombre_producto}" fue agregado al carrito`);
+      Swal.fire({
+        icon: 'success',
+        title: 'Producto agregado',
+        text: `"${producto.nombre_producto}" fue agregado al carrito`
+      });
     } catch (error) {
       console.error("Error al agregar al carrito", error);
-      alert("Ocurrió un error al agregar al carrito");
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: "Ocurrió un error al agregar al carrito"
+      });
     }
   };
 
   return (
     <section className="w-full grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
       {productos.map((producto, index) => (
-        <div key={index} className="relative flex justify-center items-center">
-          <div className="card NeoSubContainer_outset_TL w-[250px]">
+        <div key={index} className="flex justify-center items-center p-[25px_0] w-fit">
+          <div className="card relative NeoSubContainer_outset_TL">
             <div className="card-img">
               <div className="img h-full">
                 <img
@@ -69,7 +97,7 @@ export const CardsOffersGrid = ({ productos = [] }) => {
               <div className="card-price">
                 <p className="text-[var(--Font-Nav2)]">
                   <span className="text-[var(--Font-Nav2-shadow)]">$</span>
-                  {(parseFloat(producto.precio_producto) - (parseFloat(producto.precio_producto) * (producto.descuento / 100))).toLocaleString()} 
+                  {(parseFloat(producto.precio_producto) - (parseFloat(producto.precio_producto) * (producto.descuento / 100))).toLocaleString()}
                   <span className="text-[var(--main-color-sub)] text-[12px]"> Cop</span>
                 </p>
                 <div className="text-[15px] text-[var(--Font-Nav)]">
@@ -84,14 +112,15 @@ export const CardsOffersGrid = ({ productos = [] }) => {
                 <FontAwesomeIcon icon={faCartShopping} />
               </button>
             </div>
-          </div>
 
-          <div className="absolute top-[25px] -left-2">
-            <div className="relative flex items-center text-[var(--main-color)]">
-              <FontAwesomeIcon icon={faTags} className="text-6xl text rotate-90" />
-              <p className="text-[18px] flex text-[var(--Font-Nav)] absolute left-4 top-4 font-bold">
-                {producto.descuento} <span className="text-[12px]">%</span>
-              </p>
+            {/* Etiqueta de descuento */}
+            <div className="absolute top-0 -right-1">
+              <div className="relative flex items-center text-[var(--main-color)]">
+                <FontAwesomeIcon icon={faTags} className="text-6xl text rotate-90" />
+                <p className="text-[18px] flex text-[var(--Font-Nav)] absolute left-4 top-4 font-bold">
+                  {producto.descuento} <span className="text-[12px]">%</span>
+                </p>
+              </div>
             </div>
           </div>
         </div>

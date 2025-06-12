@@ -12,18 +12,10 @@ export const ProductCategory = () => {
 
     return (
         <section id="ProductCategory" className="NeoContainer_outset_TL cardCategoryContainer p-[30px]">
-            <div onClick={() => handleCategoryClick("Calentadores")}>
-                <PrpoductCatergories imgCategory={faWater} nameCategory="Calentadores" />
-            </div>
-            <div onClick={() => handleCategoryClick("Herramientas")}>
-                <PrpoductCatergories imgCategory={faWrench} nameCategory="Herramientas" />
-            </div>
-            <div onClick={() => handleCategoryClick("Repuestos")}>
-                <PrpoductCatergories imgCategory={faGear} nameCategory="Repuestos" />
-            </div>
-            <div onClick={() => handleCategoryClick("Accesorios")}>
-                <PrpoductCatergories imgCategory={faShower} nameCategory="Accesorios" />
-            </div>
+                <PrpoductCatergories imgCategory={faWater} onClick={() => handleCategoryClick("Calentadores")} nameCategory="Calentadores" />
+                <PrpoductCatergories imgCategory={faWrench} onClick={() => handleCategoryClick("Herramientas")} nameCategory="Herramientas" />
+                <PrpoductCatergories imgCategory={faGear} onClick={() => handleCategoryClick("Repuestos")} nameCategory="Repuestos" />
+                <PrpoductCatergories imgCategory={faShower} onClick={() => handleCategoryClick("Accesorios")} nameCategory="Accesorios" />
         </section>
     )
 }
