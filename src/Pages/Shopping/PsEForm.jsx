@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { jwtDecode } from 'jwt-decode';
 
 const PsePaymentForm = ({ monto, onClose }) => {
-
   const [bancos, setBancos] = useState([]);
 
   useEffect(() => {
@@ -10,26 +9,28 @@ const PsePaymentForm = ({ monto, onClose }) => {
       try {
         const res = await fetch("https://redgas.onrender.com/ListarBancosPsE");
         const data = await res.json();
-        setBancos(data.data);  // ePayco devuelve {data: [...]}
+        setBancos(data);
       } catch (err) {
         console.error("Error cargando bancos PSE:", err);
       }
     };
-
     cargarBancos();
   }, []);
 
-  const [formData, setFormData] = useState({
-    bank: '',
-    invoice: `INV-${Date.now()}`,
-    value: monto,
-    doc_type: 'CC',
-    doc_number: '',
-    type_person: '0',
+  const [userData, setUserData] = useState({
     name: '',
     email: '',
     telefono: '',
     direccion: ''
+  });
+
+  const [formData, setFormData] = useState({
+    bank: '',
+    invoice: `INV-${Date.now()}-${Math.floor(Math.random() * 10000)}`, // factura única
+    value: monto,  
+    doc_type: 'CC',
+    doc_number: '',
+    type_person: '0'
   });
 
   useEffect(() => {
@@ -38,13 +39,16 @@ const PsePaymentForm = ({ monto, onClose }) => {
       const decoded = jwtDecode(token);
       const user = decoded?.data;
 
-      setFormData(prev => ({
-        ...prev,
-        value: monto,
+      setUserData({
         name: user?.name || '',
         email: user?.email || '',
         telefono: user?.telefono || '',
         direccion: user?.direccion || ''
+      });
+
+      setFormData(prev => ({
+        ...prev,
+        value: monto  
       }));
     }
   }, [monto]);
@@ -53,6 +57,11 @@ const PsePaymentForm = ({ monto, onClose }) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
+
+  const handleDireccionChange = (e) => {
+    const { value } = e.target;
+    setUserData(prev => ({ ...prev, direccion: value }));
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -64,21 +73,32 @@ const PsePaymentForm = ({ monto, onClose }) => {
     }
 
     try {
+      const payload = {
+        ...formData,
+        name: userData.name,
+        email: userData.email,
+        telefono: userData.telefono,
+        direccion: userData.direccion
+      };
+
       const response = await fetch('https://redgas.onrender.com/PagoPSE', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(payload)
       });
 
       const data = await response.json();
 
-      if (data?.data?.processUrl) {
-        window.location.href = data.data.processUrl;
+      console.log("Respuesta del backend:", data);
+
+      // ⚠ ePayco devuelve el enlace de banco en data.data.urlbanco
+      if (data?.success && data?.data?.urlbanco) {
+        window.location.href = data.data.urlbanco;
       } else {
-        alert('Error al generar el pago');
+        alert(data?.text_response || 'Error al generar el pago');
       }
     } catch (error) {
       console.error('Error al generar el pago:', error);
@@ -94,17 +114,17 @@ const PsePaymentForm = ({ monto, onClose }) => {
 
           <div className="mb-2">
             <p className="font-semibold mb-1">Nombre:</p>
-            <p>{formData.name}</p>
+            <p>{userData.name}</p>
           </div>
 
           <div className="mb-2">
             <p className="font-semibold mb-1">Correo:</p>
-            <p>{formData.email}</p>
+            <p>{userData.email}</p>
           </div>
 
           <div className="mb-2">
             <p className="font-semibold mb-1">Teléfono:</p>
-            <p>{formData.telefono}</p>
+            <p>{userData.telefono}</p>
           </div>
 
           <div className="mb-2">
@@ -112,8 +132,8 @@ const PsePaymentForm = ({ monto, onClose }) => {
               type="text"
               placeholder="Dirección"
               name="direccion"
-              value={formData.direccion}
-              onChange={handleChange}
+              value={userData.direccion}
+              onChange={handleDireccionChange}
               required
               className="border rounded p-2 w-full"
             />
@@ -145,7 +165,7 @@ const PsePaymentForm = ({ monto, onClose }) => {
 
           <div className="mb-2">
             <p className="font-semibold mb-1">Valor a pagar:</p>
-            <p>{formData.value}</p>
+            <p>{formData.value} COP</p>
           </div>
 
           <select
@@ -157,8 +177,8 @@ const PsePaymentForm = ({ monto, onClose }) => {
           >
             <option value="">Selecciona tu banco</option>
             {bancos.map((banco) => (
-              <option key={banco.financial_code} value={banco.financial_code}>
-                {banco.description}
+              <option key={banco.bankCode} value={banco.bankCode}>
+                {banco.bankName}
               </option>
             ))}
           </select>
