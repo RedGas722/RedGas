@@ -22,7 +22,7 @@ export const MainPage = () => {
                 <ToolsSect />
                 <SpaerPartsSect />
                 <AccessoriesSect />
-                <ShopCart />
+                <div></div>
             </div>
             <Footer />
         </div>
