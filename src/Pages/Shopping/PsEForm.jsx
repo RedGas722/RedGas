@@ -8,7 +8,7 @@ const PsePaymentForm = ({ monto, onClose }) => {
   useEffect(() => {
     const cargarBancos = async () => {
       try {
-        const res = await fetch("https://redgas.onrender.com/BancosPSE");
+        const res = await fetch("https://redgas.onrender.com/ListarBancosPsE");
         const data = await res.json();
         setBancos(data.data);  // ePayco devuelve {data: [...]}
       } catch (err) {
