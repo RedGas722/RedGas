@@ -77,7 +77,7 @@ export const CostumerServices = () => {
   useEffect(() => {
     const checkHeight = () => {
       if (accordionRef.current) {
-        setIsScrollable(accordionRef.current.offsetHeight > 256);
+        setIsScrollable(accordionRef.current.offsetHeight > 240);
       }
     };
     checkHeight();
@@ -164,7 +164,7 @@ export const CostumerServices = () => {
                 {/* Accordion */}
                 <div
                   ref={accordionRef}
-                  className={`accordionContain flex NeoContainer_outset_TL max-h-[256px] flex-col gap-1 ${isScrollable ? 'overflow-y-scroll' : 'overflow-y-auto'}`}
+                  className={`accordionContain flex NeoContainer_outset_TL max-h-[256px] flex-col gap-0 ${isScrollable ? 'overflow-y-scroll' : 'overflow-y-auto'}`}
                 >
                   {solutions.map((item, index) => (
                     <Accordion key={index} expandIcon={<ExpandMoreIcon />}
