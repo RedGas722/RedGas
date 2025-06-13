@@ -72,40 +72,67 @@ export const ConfirmacionPayPal = () => {
 
         // Obtener el carrito desde Redis
         const resCart = await fetch("https://redgas.onrender.com/CartGet", {
-          headers: {
-            "Authorization": `Bearer ${tokenLocal}`,
-            "Content-Type": "application/json"
-          }
-        });
-
-        if (!resCart.ok) throw new Error("Error al obtener el carrito");
-
-        const cartData = await resCart.json();
-        console.log("Datos del carrito:", cartData);
-
-        // Procesamos cada producto del carrito (YA TENEMOS LA ID DIRECTAMENTE)
-        for (const item of cartData) {
-          const id_producto = item.productId;
-          const cantidad_producto = item.quantity;
-
-          const resPedidoProducto = await fetch("https://redgas.onrender.com/PedidoProductoRegister", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              id_factura: id_factura,
-              id_producto: id_producto,
-              estado_pedido: data.data.status, // usamos directamente el data de PayPal
-              cantidad_producto: cantidad_producto
-            })
+            headers: {
+              "Authorization": `Bearer ${tokenLocal}`,
+              "Content-Type": "application/json"
+            }
           });
 
-          const dataPedidoProducto = await resPedidoProducto.json();
-          if (!resPedidoProducto.ok) {
-            console.error("Error al registrar pedido producto:", dataPedidoProducto);
-            continue;
-          }
-        }
+          if (!resCart.ok) throw new Error("Error al obtener el carrito");
 
+          const cartData = await resCart.json();
+          console.log("Datos del carrito:", cartData);
+
+          // Verificamos si hay un productId guardado
+          const productIdFromLocalStorage = localStorage.getItem("paypal_productId");
+          localStorage.removeItem("paypal_productId"); // Limpiar después de usar
+
+          if (productIdFromLocalStorage) {
+            // Pago individual: registrar solo ese producto
+            const item = cartData.find(p => p.productId == productIdFromLocalStorage);
+
+            if (!item) throw new Error("No se encontró el producto en el carrito");
+
+            const resPedidoProducto = await fetch("https://redgas.onrender.com/PedidoProductoRegister", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                id_factura,
+                id_producto: item.productId,
+                estado_pedido: resultado.data.status,
+                cantidad_producto: item.quantity
+              })
+            });
+
+            const dataPedidoProducto = await resPedidoProducto.json();
+            if (!resPedidoProducto.ok) {
+              console.error("Error al registrar pedido producto:", dataPedidoProducto);
+            }
+
+          } else {
+            // Pago total: registrar todos los productos
+            for (const item of cartData) {
+              const id_producto = item.productId;
+              const cantidad_producto = item.quantity;
+
+              const resPedidoProducto = await fetch("https://redgas.onrender.com/PedidoProductoRegister", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  id_factura,
+                  id_producto: id_producto,
+                  estado_pedido: resultado.data.status,
+                  cantidad_producto: cantidad_producto
+                })
+              });
+
+              const dataPedidoProducto = await resPedidoProducto.json();
+              if (!resPedidoProducto.ok) {
+                console.error("Error al registrar pedido producto:", dataPedidoProducto);
+              }
+            }
+          }
+        // Marcar factura como generada
         setFacturaGenerada(true);
       } catch (err) {
         setError(err.message || "Error desconocido al confirmar el pago");

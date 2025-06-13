@@ -174,7 +174,7 @@ export const Shopping = () => {
     }
   };
 
-  const handlePayWithPaypal = async (monto = totalPrice) => {
+  const handlePayWithPaypal = async (monto = totalPrice, productId = null) => {
     try {
       if (!token) {
         alert("Debes iniciar sesión para pagar con PayPal");
@@ -202,6 +202,13 @@ export const Shopping = () => {
       const approvalLink = data.data.links.find(link => link.rel === "approve");
 
       if (!approvalLink) throw new Error("No se encontró el link de aprobación de PayPal");
+
+      // Aquí es donde guardamos el id del producto (si es un pago individual)
+      if (productId) {
+        localStorage.setItem("paypal_productId", productId);
+      } else {
+        localStorage.removeItem("paypal_productId"); // limpiar si es pago total
+      }
 
       window.location.href = approvalLink.href;
 
@@ -275,7 +282,7 @@ export const Shopping = () => {
                         </button>
                         <button
                           className='buttonTL2 NeoSubContainer_outset_TL p-[7px]'
-                          onClick={() => handlePayWithPaypal(subtotal)}
+                          onClick={() => handlePayWithPaypal(subtotal, producto.id_producto)}
                         >
                           Pagar con PayPal
                         </button>
