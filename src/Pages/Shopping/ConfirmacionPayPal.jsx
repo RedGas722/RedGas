@@ -63,11 +63,12 @@ export const ConfirmacionPayPal = () => {
         });
 
         const dataFactura = await resFactura.json();
-        console.log(dataFactura);
-        if (!dataFactura?.data?.id_factura) {
-          throw new Error("El backend no devolvió el id de la factura");
-        }
+        console.log("Respuesta completa de la factura:", dataFactura);
 
+        if (!dataFactura?.data?.id_factura) {
+          throw new Error("Backend no devolvió id_factura, respuesta: " + JSON.stringify(dataFactura));
+        }
+        console.log("ID de factura:", dataFactura.data.id_factura);
         const id_factura = dataFactura.data.id_factura;
 
         // Ahora obtenemos el carrito desde Redis
@@ -92,6 +93,7 @@ export const ConfirmacionPayPal = () => {
           if (!resProducto.ok) throw new Error(`Error al obtener el producto: ${item.productName}`);
 
           const dataProducto = await resProducto.json();
+          console.log("Respuesta completa del producto:", dataProducto.data.id_producto);
           const id_producto = dataProducto.data.id_producto;
 
           // Insertamos en PedidoProducto
