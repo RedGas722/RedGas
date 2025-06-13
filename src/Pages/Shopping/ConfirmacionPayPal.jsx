@@ -63,9 +63,12 @@ export const ConfirmacionPayPal = () => {
         });
 
         const dataFactura = await resFactura.json();
-        if (!resFactura.ok) throw new Error(dataFactura.error || "No se pudo registrar la factura");
+        console.log(dataFactura);
+        if (!dataFactura?.data?.id_factura) {
+          throw new Error("El backend no devolvió el id de la factura");
+        }
 
-        const id_factura = dataFactura.data.id_factura; // Aquí obtenemos el id_factura generado
+        const id_factura = dataFactura.data.id_factura;
 
         // Ahora obtenemos el carrito desde Redis
         const resCart = await fetch("https://redgas.onrender.com/CartGet", {
