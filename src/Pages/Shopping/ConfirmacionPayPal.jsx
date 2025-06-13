@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import { Header } from '../../Layouts/Header/Header';
+import Header from '../../Layouts/Header/Header';
 
 export const ConfirmacionPayPal = () => {
   const [searchParams] = useSearchParams();
@@ -20,7 +20,7 @@ export const ConfirmacionPayPal = () => {
 
     const capturarPago = async () => {
       try {
-        // Capturamos el pago de PayPal
+        // Capturar el pago de PayPal
         const res = await fetch("https://redgas.onrender.com/CapturarPago", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -32,7 +32,7 @@ export const ConfirmacionPayPal = () => {
 
         setResultado(data);
 
-        // Obtenemos id_cliente desde el token de localStorage
+        // Extraer datos de cliente desde el token de localStorage
         const tokenLocal = localStorage.getItem("token");
         if (!tokenLocal) throw new Error("Token de cliente no encontrado en localStorage");
 
@@ -40,20 +40,17 @@ export const ConfirmacionPayPal = () => {
         const id_cliente = decoded?.data?.id;
         if (!id_cliente) throw new Error("No se pudo extraer el id_cliente del token");
 
-        // Obtenemos el id_empleado de "virtual@gmail.com"
+        // Obtener id_empleado de virtual@gmail.com
         const resEmpleado = await fetch("https://redgas.onrender.com/EmpleadoGet?correo_empleado=virtual@gmail.com");
         const dataEmpleado = await resEmpleado.json();
         if (!resEmpleado.ok) throw new Error(dataEmpleado.error || "No se pudo obtener el empleado virtual");
 
         const id_empleado = dataEmpleado.data.id_empleado;
 
-        // Obtenemos fecha actual
-        const fecha_factura = new Date().toISOString().split('T')[0]; // formato yyyy-mm-dd
-
-        // Obtenemos el total desde el pago de PayPal
+        const fecha_factura = new Date().toISOString().split('T')[0];
         const total = parseFloat(data.data.purchase_units[0].payments.captures[0].amount.value);
 
-        // Registramos la factura
+        // Registrar la factura
         const resFactura = await fetch("https://redgas.onrender.com/FacturaRegister", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -67,6 +64,48 @@ export const ConfirmacionPayPal = () => {
 
         const dataFactura = await resFactura.json();
         if (!resFactura.ok) throw new Error(dataFactura.error || "No se pudo registrar la factura");
+
+        const id_factura = dataFactura.data.id_factura; // Aquí obtenemos el id_factura generado
+
+        // Ahora obtenemos el carrito desde Redis
+        const resCart = await fetch("https://redgas.onrender.com/CartGet", {
+          headers: {
+            "Authorization": `Bearer ${tokenLocal}`,
+            "Content-Type": "application/json"
+          }
+        });
+
+        if (!resCart.ok) throw new Error("Error al obtener el carrito");
+
+        const cartData = await resCart.json();
+
+        // Procesamos cada producto del carrito
+        for (const item of cartData) {
+          const resProducto = await fetch(`https://redgas.onrender.com/ProductoGet?nombre_producto=${encodeURIComponent(item.productName)}`, {
+            method: "GET",
+            headers: { "Content-Type": "application/json" }
+          });
+
+          if (!resProducto.ok) throw new Error(`Error al obtener el producto: ${item.productName}`);
+
+          const dataProducto = await resProducto.json();
+          const id_producto = dataProducto.data.id_producto;
+
+          // Insertamos en PedidoProducto
+          const resPedidoProducto = await fetch("https://redgas.onrender.com/PedidoProductoRegister", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              id_factura,
+              id_producto,
+              estado_pedido: resultado.data.status, // aquí defines el estado deseado
+              cantidad_producto: item.quantity
+            })
+          });
+
+          const dataPedidoProducto = await resPedidoProducto.json();
+          if (!resPedidoProducto.ok) throw new Error(dataPedidoProducto.error || "No se pudo registrar el pedido producto");
+        }
 
         setFacturaGenerada(true);
       } catch (err) {
@@ -98,7 +137,7 @@ export const ConfirmacionPayPal = () => {
               {resultado.data.purchase_units[0].payments.captures[0].amount.currency_code}
             </p>
             {facturaGenerada && (
-              <p className="text-green-600 font-semibold mt-4">Factura generada correctamente.</p>
+              <p className="text-green-600 font-semibold mt-4">Factura generada correctamente y productos asociados.</p>
             )}
           </>
         )}
