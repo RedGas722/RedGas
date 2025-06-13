@@ -162,9 +162,15 @@ export const ConfirmacionPayPal = () => {
               {resultado.data.purchase_units[0].payments.captures[0].amount.value}{" "}
               {resultado.data.purchase_units[0].payments.captures[0].amount.currency_code}
             </p>
-            {facturaGenerada && (
-              <p className="text-green-600 font-semibold mt-4">Factura generada correctamente y productos asociados.</p>
-            )}
+
+            <div className="mt-6">
+              <button
+                className="buttonTL2 NeoSubContainer_outset_TL p-3 text-white font-bold"
+                onClick={() => window.location.href = '/'}
+              >
+                Volver a la página principal
+              </button>
+            </div>
           </>
         )}
       </div>
