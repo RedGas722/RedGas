@@ -37,8 +37,7 @@ export const ConfirmacionPayPal = () => {
         if (!tokenLocal) throw new Error("Token de cliente no encontrado en localStorage");
 
         const decoded = jwtDecode(tokenLocal);
-        const id_cliente = decoded?.data?.id_cliente;
-        console.log(decoded);
+        const id_cliente = decoded?.data?.id;
         if (!id_cliente) throw new Error("No se pudo extraer el id_cliente del token");
 
         // Obtenemos el id_empleado de "virtual@gmail.com"
