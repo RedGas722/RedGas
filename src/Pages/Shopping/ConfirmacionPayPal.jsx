@@ -96,8 +96,8 @@ export const ConfirmacionPayPal = () => {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-              id_factura,
-              id_producto,
+              id_factura: id_factura,
+              id_producto: id_producto,
               estado_pedido: resultado.data.status, // aquí defines el estado deseado
               cantidad_producto: item.quantity
             })
