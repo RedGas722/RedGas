@@ -1,8 +1,8 @@
 import { Routes, Route } from 'react-router-dom'
 import { MainPage } from './Pages/MainPage/MainPage'
-import { CostumerMyServices } from './Pages/CostumerMyServices/CostumerMyServices'
-import { CostumerServices } from './Pages/CostumersServices/CostumerServices'
-import { ServicesInfo } from './Pages/Services/Services.jsx'
+import { CostumerMyService } from './Pages/CostumerMyService/CostumerMyService'
+import { CostumerServices } from './Pages/CostumersServices/CostumersServices'
+import { ServicesInfo } from './Pages/Services/Services'
 import { TechniciansPage } from './Pages/Technicians/TechniciansPage'
 import { Shopping } from './Pages/Shopping/Shopping.jsx'
 import { Register } from './Pages/Register/Register'
@@ -20,7 +20,8 @@ import { ServicesBack } from './Admin/Services/ServicesBack'
 import { AdminsBack } from './Admin/Admins/AdminsBack'
 import { ContractsBack } from './Admin/Contracts/ContractsBack.jsx'
 import { Cancelado } from './Pages/Shopping/Cancelado.jsx'
-import { Confirmacion } from './Pages/Shopping/Confirmacion.jsx'
+import ConfirmacionPayPal from './Pages/Shopping/ConfirmacionPayPal.jsx'
+import ConfirmacionPsE from './Pages/Shopping/ConfirmacionPsE.jsx'
 import { NotFound } from './Pages/NotFound/NotFound.jsx'
 import { LoginGeneral } from './Pages/Login/LoginGeneral.jsx'
 import { LoginTechnician } from './Pages/Login/LoginTechnician.jsx'
@@ -37,7 +38,7 @@ export function App() {
             <div>
                 <Routes>
                     <Route path="/" element={<MainPage />} />
-                    <Route path="/CostumerMyServices" element={<CostumerMyServices />} />
+                    <Route path="/CostumerMyService" element={<CostumerMyService />} />
                     <Route path="/CostumerServices" element={<CostumerServices />} />
                     <Route path="/Services" element={<ServicesInfo />} />
                     <Route path="/Technic" element={<TechniciansPage />} />
@@ -111,7 +112,8 @@ export function App() {
                     } />
 
                     {/* Rutas de Pago */}
-                    <Route path="/Shopping/Confirmacion" element={<Confirmacion />} />
+                    <Route path="/Shopping/ConfirmacionPayPal" element={<ConfirmacionPayPal />} />
+                    <Route path="/Shopping/ConfirmacionPsE" element={<ConfirmacionPsE />} />
                     <Route path="/Shopping/Cancelado" element={<Cancelado />} />
 
                     {/* 404 */}

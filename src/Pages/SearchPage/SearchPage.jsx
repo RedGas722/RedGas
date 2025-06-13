@@ -8,21 +8,33 @@ export const SearchPage = () => {
   const location = useLocation();
   const [productosConDescuento, setProductosConDescuento] = useState([]);
   const [productosSinDescuento, setProductosSinDescuento] = useState([]);
-  const [loading, setLoading] = useState(true);  // Estado de carga
+  const [loading, setLoading] = useState(true);
 
-  const query = new URLSearchParams(location.search).get("q") || "";
+  const queryParams = new URLSearchParams(location.search);
+  const query = queryParams.get("q") || "";
+  const category = queryParams.get("category") || "";
 
   useEffect(() => {
     const fetchProductos = async () => {
-      setLoading(true);  // Inicia la carga
+      setLoading(true);
       try {
         const res = await fetch("https://redgas.onrender.com/ProductoGetAll");
         const data = await res.json();
         const productos = data.data.productos;
 
-        const filtrados = productos.filter((producto) =>
-          producto.nombre_producto.toLowerCase().includes(query.toLowerCase())
-        );
+        let filtrados = productos;
+
+        if (query) {
+          filtrados = productos.filter((producto) =>
+            producto.nombre_producto.toLowerCase().includes(query.toLowerCase())
+          );
+        } else if (category) {
+          filtrados = productos.filter((producto) =>
+            producto.categorias?.some(cat =>
+              (cat || "").toLowerCase().trim() === category.toLowerCase().trim()
+            )
+          );
+        }
 
         const conDescuento = filtrados.filter(producto => producto.descuento > 0);
         const sinDescuento = filtrados.filter(producto => producto.descuento === 0);
@@ -32,19 +44,21 @@ export const SearchPage = () => {
       } catch (error) {
         console.error("Error al cargar productos:", error);
       } finally {
-        setLoading(false);  // Finaliza la carga
+        setLoading(false);
       }
     };
 
-    if (query) fetchProductos();
-  }, [query]);
+    if (query || category) fetchProductos();
+  }, [query, category]);
 
   return (
     <>
       <Header />
-      <div className="min-h-screen bg-white text-black pt-14 p-4">
+      <div className="min-h-screen bg-white text-black pt-14 px-4 sm:px-6 md:px-10 lg:px-14 xl:px-20">
         <h1 className="text-3xl font-bold mb-10">
-          Resultados para: <span className="text-[var(--main-color)]">"{query}"</span>
+          {query 
+            ? <>Resultados para: <span className="text-[var(--main-color)]">{query}</span></> 
+            : <span className="text-[var(--main-color)]">{category}</span>}
         </h1>
 
         {loading ? (
@@ -52,21 +66,21 @@ export const SearchPage = () => {
         ) : (
           <>
             {productosConDescuento.length > 0 && (
-              <>
+              <section className="mb-24">
                 <h2 className="text-2xl font-semibold text-[var(--main-color)] mb-8 mt-12">Ofertas:</h2>
-                <div className="mt-10 mb-24">
+                <div className="mt-10">
                   <CardsOffersGrid productos={productosConDescuento} />
                 </div>
-              </>
+              </section>
             )}
 
             {productosSinDescuento.length > 0 && (
-              <>
+              <section className="mb-24">
                 <h2 className="text-2xl font-semibold text-[var(--Font-Nav)] mb-8 mt-12">Productos:</h2>
-                <div className="mt-10 mb-24">
+                <div className="mt-10">
                   <CardsGrid productos={productosSinDescuento} />
                 </div>
-              </>
+              </section>
             )}
 
             {productosConDescuento.length === 0 && productosSinDescuento.length === 0 && (

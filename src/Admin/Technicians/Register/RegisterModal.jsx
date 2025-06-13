@@ -86,10 +86,6 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
   return (
     <div className="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50">
       <div className="NeoContainer_Admin_outset_TL p-6 w-[320px] flex flex-col gap-4 relative text-[var(--main-color)]">
-        <button
-          className="absolute top-2 right-3 text-[var(--main-color)] text-lg"
-          onClick={onClose}
-        >✕</button>
         <h2 className="text-xl font-bold text-center">Registrar Técnico</h2>
         <InputLabel type='1' placeholder='Nombre del Técnico' value={nombre} onChange={(e) => setNombre(e.target.value)} />
         {errores.nombre && <p className="text-red-600 text-sm">{errores.nombre}</p>}

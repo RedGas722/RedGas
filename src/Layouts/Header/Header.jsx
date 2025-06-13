@@ -18,14 +18,12 @@ export const Header = () => {
 
     const isDesktop = () => window.innerWidth >= 768;
 
-    // Verificar si el usuario está autenticado
+    // Verificar si el usuario está autenticado para el nombre de usuario
     useEffect(() => {
         if (token) {
             const decoded = jwtDecode(token);
             const names = decoded.data.name.split(' ')
             const firstLetter = names[0].toUpperCase()
-            console.log(firstLetter.length);
-
 
             if (firstLetter.length > 6) {
                 const secondLetter = names[1].toUpperCase().slice(0, 1)
@@ -111,6 +109,7 @@ export const Header = () => {
 
     const handSignOut = () => {
         localStorage.removeItem('token');
+        localStorage.removeItem('tipo_usuario');
         window.location.href = '/';
     }
 
@@ -193,7 +192,7 @@ export const Header = () => {
                     {token && (
                         <>
                             <div onClick={() => navigate('/Login')} className="menu-list">Perfil</div>
-                            <div onClick={() => navigate('/CostumerMyServices')} className="menu-list">Mi Servicio</div>
+                            <div onClick={() => navigate('/CostumerMyService')} className="menu-list">Mi Servicio</div>
                             <div onClick={() => navigate('/Shopping')} className="menu-list">Carrito</div>
                             <div onClick={() => navigate('/Login')} className="menu-list">Cambiar Cuenta</div>
                             <div onClick={() => handSignOut()} className="menu-list">Cerrar Sesion</div>

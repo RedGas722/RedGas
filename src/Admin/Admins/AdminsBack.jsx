@@ -2,9 +2,10 @@ import { useState, useEffect, useRef } from 'react';
 import { RegisterModal } from './Register/RegisterModal';
 import { buscarAdminPorCorreo } from './Get/Get';
 import { UpdateModal } from './Update/Update';
-import ButtonBack from '../UI/ButtonBack/ButtonBack';
 import CardAdminsBack from './Get/CardAdminsBack';
 import Inputs from '../UI/Inputs/Inputs';
+import { BtnBack } from "../../UI/Login_Register/BtnBack";
+import ButtonBack from '../UI/ButtonBack/ButtonBack';
 
 export const AdminsBack = () => {
   const [showRegisterModal, setShowRegisterModal] = useState(false);
@@ -104,16 +105,16 @@ export const AdminsBack = () => {
   }, [correoBusqueda]);
 
   // Mueve el input y el botón dentro del contenedorRef para que el click fuera funcione correctamente
-  return (
+   return (
     <div className="p-[20px] flex flex-col gap-[20px]">
-      <div className="flex items-center gap-[20px]">
+      <div className="flex items-center gap-[20px] flex-wrap">
         <div>
           <h1 className="font-bold text-[20px]">Admin BACK-OFFICE</h1>
           <BtnBack To='/Admin' className='btnDown' />
         </div>
-        <h1 className="font-bold text-[20px]">Admin BACK-OFFICE</h1>
+
         <div className="relative" ref={contenedorRef}>
-          <div className="flex items-center gap-2 border border-gray-300 rounded px-2 py-1">
+          <div className="flex items-center gap-2 border border-gray-300 rounded px-2 py-1 bg-white">
             <Inputs
               type="1"
               placeholder="Correo del administrador"
@@ -148,20 +149,24 @@ export const AdminsBack = () => {
             </ul>
           )}
         </div>
+
+        {/* Aquí agregamos el botón para abrir el modal Registrar */}
         <ButtonBack ClickMod={() => setShowRegisterModal(true)} Child="Registrar" />
       </div>
+
+      {/* resto del código igual */}
       {errorBusqueda && <p className="text-red-600 text-sm">{errorBusqueda}</p>}
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {adminBuscado
-          ? (
-            <CardAdminsBack
-              key={adminBuscado.id_admin}
-              admin={adminBuscado}
-              setRefrescar={setRefrescar}
-              onUpdateClick={abrirModalActualizar}
-            />
-          )
-          : admins.map((admin) => (
+        {adminBuscado ? (
+          <CardAdminsBack
+            key={adminBuscado.id_admin}
+            admin={adminBuscado}
+            setRefrescar={setRefrescar}
+            onUpdateClick={abrirModalActualizar}
+          />
+        ) : (
+          admins.map((admin) => (
             <CardAdminsBack
               key={admin.id_admin}
               admin={admin}
@@ -169,11 +174,13 @@ export const AdminsBack = () => {
               onUpdateClick={abrirModalActualizar}
             />
           ))
-        }
+        )}
       </div>
+
       {showRegisterModal && (
         <RegisterModal onClose={() => setShowRegisterModal(false)} setRefrescar={setRefrescar} />
       )}
+
       {showUpdateModal && adminSeleccionado && (
         <UpdateModal
           onClose={cerrarModal}
@@ -184,5 +191,6 @@ export const AdminsBack = () => {
     </div>
   );
 };
+
 
 export default AdminsBack;

@@ -14,8 +14,7 @@ export const Navs = ({ className, ref1, ref2, ref3, ref4 }) => {
     }, [])
 
     const getLinkClass = (id) =>
-        `text-[var(--main-color)] cursor-pointer transition-colors duration-300 ${
-            active === id ? '!text-[var(--Font-Nav2)] font-bold' : ''
+        `text-[var(--main-color)] cursor-pointer transition-colors duration-300 ${active === id ? '!text-[var(--Font-Nav2)] font-bold' : ''
         }`
 
     return (
@@ -34,6 +33,7 @@ export const Navs = ({ className, ref1, ref2, ref3, ref4 }) => {
                     Inicio
                 </Link>
             </span>
+
             <span ref={ref2}>
                 <Link
                     to="ProductCategory"
@@ -47,6 +47,7 @@ export const Navs = ({ className, ref1, ref2, ref3, ref4 }) => {
                     Productos
                 </Link>
             </span>
+
             <span ref={ref3}>
                 <Link
                     to="OffersSect"
@@ -60,6 +61,7 @@ export const Navs = ({ className, ref1, ref2, ref3, ref4 }) => {
                     Ofertas
                 </Link>
             </span>
+
             <NavLink
                 ref={ref4}
                 to="/Technic"
@@ -77,8 +79,8 @@ export const Navs = ({ className, ref1, ref2, ref3, ref4 }) => {
 
             {/* Mostrar solo si está logueado como admin o empleado */}
             {(tipoUsuario === 1 || tipoUsuario === 3) && (
-                <NavLink to="/Admin" 
-                className='NeoSubContainer_outset_TL p-[5px_10px]'
+                <NavLink to="/Admin"
+                    className='NeoSubContainer_outset_TL p-[5px_10px]'
                 >
                     Admin
                 </NavLink>

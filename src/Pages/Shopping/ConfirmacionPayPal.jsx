@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Header } from '../../Layouts/Header/Header';
 
-export const Confirmacion = () => {
+export const ConfirmacionPayPal = () => {
   const [searchParams] = useSearchParams();
   const [resultado, setResultado] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -64,4 +64,4 @@ export const Confirmacion = () => {
   );
 };
 
-export default Confirmacion;
+export default ConfirmacionPayPal;
