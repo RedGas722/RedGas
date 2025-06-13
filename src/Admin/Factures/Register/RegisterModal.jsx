@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { Inputs } from '../../UI/Inputs/Inputs';
 
-export const RegisterModal = ({ onClose, setRefrescar, onFacturaRegistrada }) => {
+export const RegisterModal = ({ onClose, setRefrescar }) => {
   const [IDcliente, setIDcliente] = useState('');
   const [IDempleado, setIDempleado] = useState('');
   const [fecha, setFecha] = useState(new Date().toISOString().slice(0, 10));
+  const [totalFactura, setTotalFactura] = useState(0)
   const [mensaje, setMensaje] = useState('');
   const [errores, setErrores] = useState({});
 
@@ -31,6 +32,12 @@ export const RegisterModal = ({ onClose, setRefrescar, onFacturaRegistrada }) =>
       errores.fecha = 'Debe ser una fecha válida.';
     }
 
+    if (!total.trim()) {
+      errores.total = 'El total es obligatorio.';
+    } else if (parseInt(total) <= 0) {
+      errores.total = 'Debe ser un numero positivo';
+    }
+
     return errores;
   };
 
@@ -53,6 +60,7 @@ export const RegisterModal = ({ onClose, setRefrescar, onFacturaRegistrada }) =>
           id_cliente: parseInt(IDcliente),
           id_empleado: parseInt(IDempleado),
           fecha_factura: fecha,
+          total: parseFloat(totalFactura)
         }),
       });
 
@@ -62,9 +70,7 @@ export const RegisterModal = ({ onClose, setRefrescar, onFacturaRegistrada }) =>
       }
 
       setMensaje('Factura registrada exitosamente.');
-      if (onFacturaRegistrada) onFacturaRegistrada(); // Puedes pasar data si lo deseas
       if (setRefrescar) setRefrescar(true);
-      handleCancel(); // Limpiar campos
     } catch (err) {
       setMensaje('Error al registrar: ' + err.message);
     }
@@ -82,13 +88,6 @@ export const RegisterModal = ({ onClose, setRefrescar, onFacturaRegistrada }) =>
   return (
     <div className="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-2xl p-6 shadow-lg w-[320px] flex flex-col gap-4 relative text-black">
-        <button
-          className="absolute top-2 right-3 text-gray-600 text-lg"
-          onClick={onClose}
-        >
-          ✕
-        </button>
-
         <h2 className="text-xl font-bold text-center">Registrar Factura</h2>
 
         <Inputs
@@ -119,6 +118,16 @@ export const RegisterModal = ({ onClose, setRefrescar, onFacturaRegistrada }) =>
         />
         {errores.fecha && (
           <p className="text-red-600 text-sm">{errores.fecha}</p>
+        )}
+
+        <Inputs
+          Type="5"
+          Place="Total de la factura"
+          Value={totalFactura}
+          onChange={(e) => setTotalFactura(e.target.value)}
+        />
+        {errores.total && (
+          <p className="text-red-600 text-sm">{errores.total}</p>
         )}
 
         <div className="flex justify-between gap-2">
