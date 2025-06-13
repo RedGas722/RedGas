@@ -68,7 +68,6 @@ export const ConfirmacionPayPal = () => {
         if (!dataFactura?.data?.id_factura) {
           throw new Error("Backend no devolvió id_factura, respuesta: " + JSON.stringify(dataFactura));
         }
-        console.log("ID de factura:", dataFactura.data.id_factura);
         const id_factura = dataFactura.data.id_factura;
 
         // Ahora obtenemos el carrito desde Redis
@@ -82,7 +81,7 @@ export const ConfirmacionPayPal = () => {
         if (!resCart.ok) throw new Error("Error al obtener el carrito");
 
         const cartData = await resCart.json();
-
+        console.log("Datos del carrito:", cartData);
         // Procesamos cada producto del carrito
         for (const item of cartData) {
           const resProducto = await fetch(`https://redgas.onrender.com/ProductoGet?nombre_producto=${encodeURIComponent(item.productName)}`, {
@@ -90,10 +89,18 @@ export const ConfirmacionPayPal = () => {
             headers: { "Content-Type": "application/json" }
           });
 
-          if (!resProducto.ok) throw new Error(`Error al obtener el producto: ${item.productName}`);
+          if (!resProducto.ok) {
+            console.error(`Error al obtener el producto: ${item.productName}`);
+            continue; // si falla, saltamos este producto
+          }
 
           const dataProducto = await resProducto.json();
-          console.log("Respuesta completa del producto:", dataProducto.data.id_producto);
+
+          if (!dataProducto?.data?.id_producto) {
+            console.error(`No se encontró id_producto para: ${item.productName}`, dataProducto);
+            continue;
+          }
+
           const id_producto = dataProducto.data.id_producto;
 
           // Insertamos en PedidoProducto
@@ -103,13 +110,16 @@ export const ConfirmacionPayPal = () => {
             body: JSON.stringify({
               id_factura: id_factura,
               id_producto: id_producto,
-              estado_pedido: resultado.data.status, // aquí defines el estado deseado
+              estado_pedido: resultado.data.status,
               cantidad_producto: item.quantity
             })
           });
 
           const dataPedidoProducto = await resPedidoProducto.json();
-          if (!resPedidoProducto.ok) throw new Error(dataPedidoProducto.error || "No se pudo registrar el pedido producto");
+          if (!resPedidoProducto.ok) {
+            console.error("Error al registrar pedido producto:", dataPedidoProducto);
+            continue;
+          }
         }
 
         setFacturaGenerada(true);
