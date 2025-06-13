@@ -70,7 +70,7 @@ export const ConfirmacionPayPal = () => {
         }
         const id_factura = dataFactura.data.id_factura;
 
-        // Ahora obtenemos el carrito desde Redis
+        // Obtener el carrito desde Redis
         const resCart = await fetch("https://redgas.onrender.com/CartGet", {
           headers: {
             "Authorization": `Bearer ${tokenLocal}`,
@@ -82,28 +82,12 @@ export const ConfirmacionPayPal = () => {
 
         const cartData = await resCart.json();
         console.log("Datos del carrito:", cartData);
-        // Procesamos cada producto del carrito
+
+        // Procesamos cada producto del carrito (YA TENEMOS LA ID DIRECTAMENTE)
         for (const item of cartData) {
-          const resProducto = await fetch(`https://redgas.onrender.com/ProductoGet?nombre_producto=${encodeURIComponent(item.productName)}`, {
-            method: "GET",
-            headers: { "Content-Type": "application/json" }
-          });
+          const id_producto = item.productId;
+          const cantidad_producto = item.quantity;
 
-          if (!resProducto.ok) {
-            console.error(`Error al obtener el producto: ${item.productName}`);
-            continue; // si falla, saltamos este producto
-          }
-
-          const dataProducto = await resProducto.json();
-
-          if (!dataProducto?.data?.id_producto) {
-            console.error(`No se encontró id_producto para: ${item.productName}`, dataProducto);
-            continue;
-          }
-
-          const id_producto = dataProducto.data.id_producto;
-
-          // Insertamos en PedidoProducto
           const resPedidoProducto = await fetch("https://redgas.onrender.com/PedidoProductoRegister", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -111,7 +95,7 @@ export const ConfirmacionPayPal = () => {
               id_factura: id_factura,
               id_producto: id_producto,
               estado_pedido: resultado.data.status,
-              cantidad_producto: item.quantity
+              cantidad_producto: cantidad_producto
             })
           });
 
