@@ -94,7 +94,7 @@ export const ConfirmacionPayPal = () => {
             body: JSON.stringify({
               id_factura: id_factura,
               id_producto: id_producto,
-              estado_pedido: resultado.data.status,
+              estado_pedido: data.data.status, // usamos directamente el data de PayPal
               cantidad_producto: cantidad_producto
             })
           });
