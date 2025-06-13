@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import jwtDecode from "jwt-decode";
-import Header from '../../Layouts/Header/Header';
+import { jwtDecode } from "jwt-decode";
+import { Header } from '../../Layouts/Header/Header';
 
 export const ConfirmacionPayPal = () => {
   const [searchParams] = useSearchParams();
