@@ -23,7 +23,7 @@ export function startTokenRefresher() {
             if (response.ok) {
                 const data = await response.json();
                 localStorage.setItem('token', data.token);
-                console.log('✅ Token renovado exitosamente');
+                console.log('✅ Token renovado exitosamente.');
             } else {
                 console.warn('No se pudo renovar el token, cerrando sesión');
                 clearInterval(interval);
