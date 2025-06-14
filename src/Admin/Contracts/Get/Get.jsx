@@ -1,7 +1,7 @@
 const URL = 'https://redgas.onrender.com/ContratoGet';
 
 export const buscarContratoPorEmpleado = async (idEmpleado) => {
-  if (!idEmpleado || idEmpleado.trim() === '') {
+  if (!idEmpleado) {
     return null;
   }
 

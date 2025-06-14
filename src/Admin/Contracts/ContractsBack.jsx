@@ -11,20 +11,46 @@ export const ContractsBack = () => {
   const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [contratos, setContratos] = useState([]);
+  const [empleados, setEmpleados] = useState([]);
+  const [admins, setAdmins] = useState([]);
   const [refrescar, setRefrescar] = useState(false);
   const [contratoSeleccionado, setContratoSeleccionado] = useState(null);
-  const [idBusqueda, setIdBusqueda] = useState('');
+  const [correoBusqueda, setCorreoBusqueda] = useState('');
   const [contratoBuscado, setContratoBuscado] = useState(null);
   const [errorBusqueda, setErrorBusqueda] = useState('');
   const [sugerencias, setSugerencias] = useState([]);
   const contenedorRef = useRef(null);
   const inputRef = useRef(null);
 
-  const URL = 'https://redgas.onrender.com/ContratoGet';
+  const URL_EMPLEADOS = 'https://redgas.onrender.com/EmpleadoGetAll';
+  const URL_ADMINS = 'https://redgas.onrender.com/AdminGetAll';
+  const URL_CONTRATOS = 'https://redgas.onrender.com/ContratoGetAll';
+
+  async function fetchEmpleados() {
+    try {
+      const res = await fetch(URL_EMPLEADOS);
+      if (!res.ok) throw new Error('Error al obtener empleados');
+      const data = await res.json();
+      setEmpleados(data.data || []);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async function fetchAdmins() {
+    try {
+      const res = await fetch(URL_ADMINS);
+      if (!res.ok) throw new Error('Error al obtener admins');
+      const data = await res.json();
+      setAdmins(data.data || []);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   async function fetchContratos() {
     try {
-      const res = await fetch('https://redgas.onrender.com/ContratoGetAll');
+      const res = await fetch(URL_CONTRATOS);
       if (!res.ok) throw new Error('Error al obtener contratos');
       const data = await res.json();
       setContratos(data.data || []);
@@ -35,6 +61,8 @@ export const ContractsBack = () => {
 
   useEffect(() => {
     fetchContratos();
+    fetchEmpleados();
+    fetchAdmins();
   }, []);
 
   useEffect(() => {
@@ -43,29 +71,24 @@ export const ContractsBack = () => {
       setRefrescar(false);
       setContratoBuscado(null);
       setErrorBusqueda('');
-      setIdBusqueda('');
+      setCorreoBusqueda('');
     }
   }, [refrescar]);
 
-  // 🧠 Autocomplete filtrando contratos localmente
   useEffect(() => {
-    if (idBusqueda.trim() === '') {
+    if (correoBusqueda.trim() === '') {
       setSugerencias([]);
       return;
     }
-    const filtrados = contratos.filter((contrato) =>
-      contrato.id_empleado && contrato.id_empleado.toString().includes(idBusqueda)
+    const filtrados = empleados.filter((empleado) =>
+      empleado.correo_empleado.toLowerCase().includes(correoBusqueda.toLowerCase())
     );
     setSugerencias(filtrados.slice(0, 5));
-  }, [idBusqueda, contratos]);
+  }, [correoBusqueda, empleados]);
 
-  // 🧽 Cierre del dropdown si se hace clic fuera
   useEffect(() => {
     const manejarClickFuera = (event) => {
-      if (
-        contenedorRef.current &&
-        !contenedorRef.current.contains(event.target)
-      ) {
+      if (contenedorRef.current && !contenedorRef.current.contains(event.target)) {
         setSugerencias([]);
       }
     };
@@ -73,13 +96,12 @@ export const ContractsBack = () => {
     return () => document.removeEventListener('mousedown', manejarClickFuera);
   }, []);
 
-  // Limpia contratoBuscado y errorBusqueda si el input queda vacío
   useEffect(() => {
-    if (idBusqueda.trim() === '') {
+    if (correoBusqueda.trim() === '') {
       setContratoBuscado(null);
       setErrorBusqueda('');
     }
-  }, [idBusqueda]);
+  }, [correoBusqueda]);
 
   const abrirModalActualizar = (contrato) => {
     setContratoSeleccionado(contrato);
@@ -95,7 +117,29 @@ export const ContractsBack = () => {
     setErrorBusqueda('');
     setContratoBuscado(null);
     try {
-      const contrato = await buscarContratoPorEmpleado(idBusqueda);
+      const empleado = empleados.find(
+        (e) => e.correo_empleado.toLowerCase() === correoBusqueda.toLowerCase().trim()
+      );
+      if (!empleado) {
+        setErrorBusqueda('Empleado no encontrado');
+        return;
+      }
+      const contrato = await buscarContratoPorEmpleado(empleado.id_empleado);
+      setContratoBuscado(contrato);
+    } catch (error) {
+      setErrorBusqueda(error.message);
+    }
+  };
+
+  const buscarContratoConEmpleado = async (empleado) => {
+    setErrorBusqueda('');
+    setContratoBuscado(null);
+    try {
+      if (!empleado) {
+        setErrorBusqueda('Empleado no encontrado');
+        return;
+      }
+      const contrato = await buscarContratoPorEmpleado(empleado.id_empleado);
       setContratoBuscado(contrato);
     } catch (error) {
       setErrorBusqueda(error.message);
@@ -111,13 +155,14 @@ export const ContractsBack = () => {
             <BtnBack To='/Admin' />
           </div>
         </div>
+
         <div className="relative" ref={contenedorRef}>
           <div className="flex items-center gap-2 border border-gray-300 rounded px-2 py-1">
             <Inputs
               type="1"
-              placeholder="ID del empleado"
-              value={idBusqueda}
-              onChange={(e) => setIdBusqueda(e.target.value)}
+              placeholder="Correo del empleado"
+              value={correoBusqueda}
+              onChange={(e) => setCorreoBusqueda(e.target.value)}
               className="outline-none"
               ref={inputRef}
             />
@@ -129,48 +174,54 @@ export const ContractsBack = () => {
               🔍
             </button>
           </div>
+
           {sugerencias.length > 0 && (
             <ul className="absolute z-10 bg-white border border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto w-full shadow">
-              {sugerencias.map((contrato) => (
+              {sugerencias.map((empleado) => (
                 <li
-                  key={contrato.id_contrato}
-                  onClick={() => {
-                    setContratoBuscado(contrato);
-                    setIdBusqueda(contrato.id_empleado.toString());
+                  key={empleado.id_empleado}
+                  onClick={async () => {
+                    setCorreoBusqueda(empleado.correo_empleado);
                     setSugerencias([]);
+                    await buscarContratoConEmpleado(empleado);
                   }}
                   className="p-2 hover:bg-gray-100 cursor-pointer"
                 >
-                  {contrato.id_empleado}
+                  {empleado.nombre_empleado} - {empleado.correo_empleado}
                 </li>
               ))}
             </ul>
           )}
         </div>
+
         <ButtonBack ClickMod={() => setShowRegisterModal(true)} Child="Registrar" />
       </div>
+
       {errorBusqueda && <p className="text-red-600 text-sm">{errorBusqueda}</p>}
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {contratoBuscado && (Array.isArray(contratoBuscado) ? contratoBuscado.length > 0 : contratoBuscado.id_contrato) ? (
-          Array.isArray(contratoBuscado)
-            ? contratoBuscado.map((contrato) => (
+        {contratoBuscado ? (
+          Array.isArray(contratoBuscado) ? (
+            contratoBuscado.map((contrato) => (
               <CardContractsBack
                 key={contrato.id_contrato}
                 contrato={contrato}
                 setRefrescar={setRefrescar}
                 onUpdateClick={abrirModalActualizar}
+                empleados={empleados}
+                admins={admins}
               />
             ))
-            : <CardContractsBack
+          ) : (
+            <CardContractsBack
               key={contratoBuscado.id_contrato}
               contrato={contratoBuscado}
               setRefrescar={setRefrescar}
               onUpdateClick={abrirModalActualizar}
+              empleados={empleados}
+              admins={admins}
             />
-        ) : contratoBuscado && (Array.isArray(contratoBuscado) ? contratoBuscado.length === 0 : !contratoBuscado.id_contrato) ? (
-          <div className="col-span-full text-yellow-700 bg-yellow-100 p-4 rounded text-center font-semibold">
-            No se encontró contrato para este empleado.
-          </div>
+          )
         ) : (
           contratos.map((contrato) => (
             <CardContractsBack
@@ -178,10 +229,13 @@ export const ContractsBack = () => {
               contrato={contrato}
               setRefrescar={setRefrescar}
               onUpdateClick={abrirModalActualizar}
+              empleados={empleados}
+              admins={admins}
             />
           ))
         )}
       </div>
+
       {showRegisterModal && (
         <RegisterModal onClose={() => setShowRegisterModal(false)} setRefrescar={setRefrescar} />
       )}

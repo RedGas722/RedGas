@@ -1,8 +1,7 @@
-const CardFacturesBack = ({ factura, clientes, empleados, onUpdateClick }) => {
+const CardFacturesBack = ({ factura, clientes, empleados, onUpdateClick, onViewProductsClick }) => {
   const cliente = clientes.find(c => c.id_cliente === factura.id_cliente);
   const empleado = empleados.find(e => e.id_empleado === factura.id_empleado);
 
-  // Formateo de fecha
   const fechaISO = factura.fecha_factura;
   const fecha = new Date(fechaISO);
   const fechaSolo = fecha.toLocaleDateString('en-GB');
@@ -13,35 +12,26 @@ const CardFacturesBack = ({ factura, clientes, empleados, onUpdateClick }) => {
         <h2 className="text-xl font-semibold text-gray-800 truncate">Factura #{factura.id_factura}</h2>
 
         <div className="mt-2 space-y-1 text-sm">
-          <p className="text-gray-700 font-medium flex flex-wrap gap-2">
-            <span className="font-semibold">Cliente:</span>
-            <span className="break-words">{cliente?.nombre_cliente || 'Desconocido'}</span>
-          </p>
-          <p className="text-gray-700 font-medium flex flex-wrap gap-2">
-            <span className="font-semibold">Empleado:</span>
-            <span className="break-words">{empleado?.nombre_empleado || 'Desconocido'}</span>
-          </p>
-          <p className="text-gray-700 font-medium flex flex-wrap gap-2">
-            <span className="font-semibold">Fecha:</span>
-            <span className="break-words">{fechaSolo}</span>
-          </p>
-          <p className="text-gray-700 font-medium flex flex-wrap gap-2">
-            <span className="font-semibold">Estado:</span>
-            <span className="break-words">{factura.estado_factura}</span>
-          </p>
-          <p className="text-gray-700 font-medium flex flex-wrap gap-2">
-            <span className="font-semibold">Total:</span>
-            <span className="break-words">${factura.total}</span>
-          </p>
+          <p><span className="font-semibold">Cliente:</span> {cliente?.nombre_cliente || 'Desconocido'}</p>
+          <p><span className="font-semibold">Empleado:</span> {empleado?.nombre_empleado || 'Desconocido'}</p>
+          <p><span className="font-semibold">Fecha:</span> {fechaSolo}</p>
+          <p><span className="font-semibold">Estado:</span> {factura.estado_factura}</p>
+          <p><span className="font-semibold">Total:</span> ${factura.total}</p>
         </div>
       </div>
 
-      <div className="mt-4 flex">
+      <div className="mt-4 flex flex-col gap-2">
         <button
           onClick={() => onUpdateClick(factura)}
           className="bg-yellow-500 hover:bg-yellow-600 text-white py-1 px-3 rounded"
         >
           Actualizar Estado
+        </button>
+        <button
+          onClick={() => onViewProductsClick(factura)}
+          className="bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded"
+        >
+          Ver Productos
         </button>
       </div>
     </div>

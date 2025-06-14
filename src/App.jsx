@@ -29,6 +29,7 @@ import { SearchPage } from './Pages/SearchPage/SearchPage.jsx';
 
 // 👇 Importar ruta protegida
 import { ProtectedRoute } from './Pages/Login/ProtectedRoutes.jsx'
+import { SalesBack } from './Admin/Sales/SalesBack.jsx'
 
 export function App() {
     return (
@@ -104,6 +105,12 @@ export function App() {
                     <Route path="/Admin/Services" element={
                     <ProtectedRoute requiredTypes={[1, 3]}>
                         <ServicesBack />
+                    </ProtectedRoute>
+                    } />
+
+                    <Route path="/Admin/Sales" element={
+                    <ProtectedRoute requiredTypes={[1, 3]}>
+                        <SalesBack />
                     </ProtectedRoute>
                     } />
 
