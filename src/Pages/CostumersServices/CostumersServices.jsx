@@ -175,7 +175,7 @@ export const CostumerServices = () => {
                         aria-controls="panel2-content"
                         id="panel2-header"
                       >
-                        <p component="span">
+                        <p component="span" className="font-bold">
                           {item.titulo}
                         </p>
                       </AccordionSummary>

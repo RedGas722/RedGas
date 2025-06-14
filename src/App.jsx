@@ -31,6 +31,7 @@ import { ProductInfo } from './Pages/ProductInfo/ProductInfo.jsx'
 
 // 👇 Importar ruta protegida
 import { ProtectedRoute } from './Pages/Login/ProtectedRoutes.jsx'
+import { SalesBack } from './Admin/Sales/SalesBack.jsx'
 
 export function App() {
     return (
@@ -109,6 +110,12 @@ export function App() {
                         <ProtectedRoute requiredTypes={[1, 3]}>
                             <ServicesBack />
                         </ProtectedRoute>
+                    } />
+
+                    <Route path="/Admin/Sales" element={
+                    <ProtectedRoute requiredTypes={[1, 3]}>
+                        <SalesBack />
+                    </ProtectedRoute>
                     } />
 
                     {/* Rutas de Pago */}
