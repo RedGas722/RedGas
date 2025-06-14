@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom"
 export const Footer = () => {
     const navigate = useNavigate()
     return (
-        <footer className="py-20 bg-[var(--main-color)] text-white">
+        <footer className="footer py-20 h-350px bg-[var(--main-color)] text-white">
             <div className="flex flex-col items-center justify-center">
                 <div className="items-center flex flex-col gap-3 sm:max-w-md sm:mx-auto sm:text-center">
                     <img src={Logo} className="w-32 sm:mx-auto" />

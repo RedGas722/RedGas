@@ -129,7 +129,6 @@ export const Header = () => {
                 .fromTo(navRef2.current, { x: -300, opacity: 0 }, { x: 0, opacity: 1 })
                 .fromTo(navRef3.current, { x: -400, opacity: 0 }, { x: 0, opacity: 1 })
                 .fromTo(navRef4.current, { x: -500, opacity: 0 }, { x: 0, opacity: 1 })
-                // .fromTo(navRef5.current, { x: -600, opacity: 0 }, { x: 0, opacity: 1 })
         }
     }, [hamburger]);
 

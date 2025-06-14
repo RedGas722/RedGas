@@ -224,7 +224,7 @@ export const LoginGeneral = () => {
                         </label>
                         <div className="text-[var(--main-focus)]">
                             <Link to="/Login/ForgotPassword">
-                                <button className="cursor-pointer hover:text-[var(--Font-Nav)]"><p>Olvidaste tu contraseña?</p></button>
+                                <button type="button" className="cursor-pointer hover:text-[var(--Font-Nav)]"><p>Olvidaste tu contraseña?</p></button>
                             </Link>
                         </div>
                     </section>

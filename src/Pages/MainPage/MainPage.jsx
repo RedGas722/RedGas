@@ -6,15 +6,14 @@ import { HeatersSect } from "./Heaters/Heaters"
 import { ToolsSect } from './Tools/Tools'
 import { SpaerPartsSect } from "./SpareParts/SparePart"
 import { AccessoriesSect } from "./Accessories/Accessories"
-import { ShopCart } from "../../UI/ShopCart/ShopCart"
 import { Footer } from "./Footer/Footer"
 import './MainPage.css'
 
 export const MainPage = () => {
     return (
-        <div className="">
-            <div className="MainPageContainer flex flex-col gap-[50px]">
+        <div>
                 <Header />
+            <div className="MainPageContainer bg-[var(--background-color)] flex flex-col gap-[60px]">
                 <Hero />
                 <ProductCategory />
                 <OffersSect />

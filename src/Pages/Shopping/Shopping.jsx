@@ -1,10 +1,18 @@
 import { useEffect, useState } from "react";
 import { Header } from '../../Layouts/Header/Header';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faMinus, faMoneyBill } from '@fortawesome/free-solid-svg-icons';
+import Box from '@mui/material/Box';
+import SpeedDial from '@mui/material/SpeedDial';
+import SpeedDialIcon from '@mui/material/SpeedDialIcon';
+import SpeedDialAction from '@mui/material/SpeedDialAction';
+import SaveIcon from '@mui/icons-material/Save';
+import PrintIcon from '@mui/icons-material/Print';
+import ShareIcon from '@mui/icons-material/Share';
 import PsePaymentForm from "./PsEForm";
 
 export const Shopping = () => {
+  const [open, setOpen] = useState(false);
   const [products, setProducts] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -221,6 +229,22 @@ export const Shopping = () => {
   if (loading) return <p>Cargando productos...</p>;
   if (error) return <p>Error: {error}</p>;
 
+  const actions = [
+    {
+      icon: <FontAwesomeIcon icon={faMoneyBill} alt='Agregar' onClick={() => alert("Comprar producto aún no implementado")}  />
+      , name: 'Comprar todo'
+    },
+    { icon: <SaveIcon />, name: 'Save' },
+    { icon: <PrintIcon />, name: 'Print' },
+    { icon: <ShareIcon />, name: 'Share' },
+  ];
+
+
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+
   return (
     <section className='Distribution'>
       <Header />
@@ -329,7 +353,6 @@ export const Shopping = () => {
             >
               Pagar Total con PSE
             </button>
-            <button className='buttonTL2 active:text-[var(--main-color)] font-black NeoSubContainer_outset_TL p-[7px]'>Ver carrito</button>
             <button
               className='buttonTL2 text-white font-black NeoSubContainer_outset_TL p-[7px]'
               onClick={handleClearCart}
@@ -347,6 +370,35 @@ export const Shopping = () => {
       {showPseForm && (
         <PsePaymentForm monto={pseAmount} onClose={() => setShowPseForm(false)} />
       )}
+      <Box sx={{ height: 330, transform: 'translateZ(0px)', flexGrow: 1 }}>
+        <SpeedDial
+          ariaLabel="SpeedDial tooltip example"
+          sx={{ position: 'absolute', bottom: 16, right: 16 }}
+          icon={<SpeedDialIcon />}
+          onClose={handleClose}
+          onOpen={handleOpen}
+          open={open}
+          FabProps={{
+            sx: {
+              bgcolor: 'var(--main-color)',
+              color: 'white',
+              '&:hover': {
+                bgcolor: 'var(--main-color-sub)',
+              },
+            },
+          }}
+        >
+          {actions.map((action) => (
+            <SpeedDialAction
+              key={action.name}
+              icon={action.icon}
+              tooltipTitle={<span style={{ whiteSpace: 'nowrap' }}>{action.name}</span>}
+              tooltipOpen
+              onClick={handleClose}
+            />
+          ))}
+        </SpeedDial>
+      </Box>
     </section>
   );
 };
