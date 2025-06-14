@@ -25,13 +25,18 @@ import { NotFound } from './Pages/NotFound/NotFound.jsx'
 import { LoginGeneral } from './Pages/Login/LoginGeneral.jsx'
 import { LoginTechnician } from './Pages/Login/LoginTechnician.jsx'
 import { SearchPage } from './Pages/SearchPage/SearchPage.jsx';
-
-
+import { startTokenRefresher } from './Pages/Login/TokenRefresher.jsx';
+import { useEffect } from 'react'
 // 👇 Importar ruta protegida
 import { ProtectedRoute } from './Pages/Login/ProtectedRoutes.jsx'
 import { SalesBack } from './Admin/Sales/SalesBack.jsx'
 
 export function App() {
+
+    useEffect(() => {
+        startTokenRefresher();
+    }, []);
+    
     return (
         <>
             <div>
