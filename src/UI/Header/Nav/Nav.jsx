@@ -1,25 +1,25 @@
-import './Nav.css'
+import { useEffect, useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { Link } from 'react-scroll'
-import { useEffect, useState, useRef } from 'react'
 import Box from '@mui/material/Box'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import { tabsClasses } from '@mui/material/Tabs'
+import useMediaQuery from '@mui/material/useMediaQuery'
 
 export const Navs = ({ className, ref1, ref2, ref3, ref4 }) => {
     const [tipoUsuario, setTipoUsuario] = useState(null)
     const [tabIndex, setTabIndex] = useState(0)
     const navigate = useNavigate()
-
     const sectionIds = ['Hero', 'ProductCategory', 'OffersSect']
+
+    const isMdUp = useMediaQuery('(min-width: 768px)') // Tailwind md breakpoint
 
     useEffect(() => {
         const tipo = localStorage.getItem('tipo_usuario')
         setTipoUsuario(tipo ? parseInt(tipo) : null)
     }, [])
 
-    // OBSERVADOR DE SCROLL PARA CAMBIAR EL TAB AUTOMÁTICAMENTE
     useEffect(() => {
         const observer = new IntersectionObserver(
             entries => {
@@ -30,11 +30,7 @@ export const Navs = ({ className, ref1, ref2, ref3, ref4 }) => {
                     }
                 })
             },
-            {
-                root: null,
-                rootMargin: '-100px 0px 0px 0px',
-                threshold: 0.6, // porcentaje visible para activar
-            }
+            { rootMargin: '-100px 0px 0px 0px', threshold: 0.6 }
         )
 
         sectionIds.forEach(id => {
@@ -73,7 +69,7 @@ export const Navs = ({ className, ref1, ref2, ref3, ref4 }) => {
 
     return (
         <Box
-            className={className}
+            className={`w-full flex ${isMdUp ? 'flex-row' : 'flex-col'} ${className}`}
             sx={{
                 flexGrow: 1,
                 maxWidth: '100%',
@@ -83,12 +79,16 @@ export const Navs = ({ className, ref1, ref2, ref3, ref4 }) => {
             <Tabs
                 value={tabIndex}
                 onChange={handleTabChange}
+                orientation={isMdUp ? 'horizontal' : 'vertical'}
                 scrollButtons
                 allowScrollButtonsMobile
                 TabIndicatorProps={{
                     style: {
                         backgroundColor: '#19A9A4',
-                        height: '3px',
+                        height: isMdUp ? '3px' : '100%',
+                        width: isMdUp ? 'auto' : '3px',
+                        left: isMdUp ? undefined : 0,   // Mover a la izquierda
+                        right: isMdUp ? 0 : 'auto',     // Eliminar derecha
                     },
                 }}
                 sx={{
@@ -97,9 +97,13 @@ export const Navs = ({ className, ref1, ref2, ref3, ref4 }) => {
                     },
                     '& .MuiTab-root': {
                         color: 'inherit',
-                    },
-                    '& .Mui-selected': {
-                        color: '#19A9A4 !important',
+                        borderBottom: isMdUp ? '3px solid transparent' : 'none',
+                        borderLeft: !isMdUp ? '3px solid transparent' : 'none',
+                        '&.Mui-selected': {
+                            color: '#19A9A4',
+                            borderBottom: isMdUp ? '3px solid #19A9A4' : 'none',
+                            borderLeft: !isMdUp ? '3px solid #19A9A4' : 'none',
+                        },
                     },
                 }}
             >
