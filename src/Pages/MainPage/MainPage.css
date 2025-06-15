@@ -1,7 +1,7 @@
 .MainPageContainer {
     position: relative;
     top: 40px;
-    padding: 0 80px 5px 80px;
+    padding: 40px 80px 5px 80px;
     border-radius: 0 0 40px 40px;
 }
 .footer{

@@ -3,9 +3,9 @@ import { RegisterModal } from './Register/RegisterModal';
 import { buscarAdminPorCorreo } from './Get/Get';
 import { UpdateModal } from './Update/Update';
 import CardAdminsBack from './Get/CardAdminsBack';
-import Inputs from '../UI/Inputs/Inputs';
 import { BtnBack } from "../../UI/Login_Register/BtnBack";
 import ButtonBack from '../UI/ButtonBack/ButtonBack';
+import { InputLabel } from '../../UI/Login_Register/InputLabel/InputLabel';
 
 export const AdminsBack = () => {
   const [showRegisterModal, setShowRegisterModal] = useState(false);
@@ -105,7 +105,7 @@ export const AdminsBack = () => {
   }, [correoBusqueda]);
 
   // Mueve el input y el botón dentro del contenedorRef para que el click fuera funcione correctamente
-   return (
+  return (
     <div className="p-[20px] flex flex-col gap-[20px]">
       <div className="flex items-center gap-[20px] flex-wrap">
         <div>
@@ -115,9 +115,11 @@ export const AdminsBack = () => {
 
         <div className="relative" ref={contenedorRef}>
           <div className="flex items-center gap-2 border border-gray-300 rounded px-2 py-1 bg-white">
-            <Inputs
+            <InputLabel
               type="1"
+              ForID="correo_admin_busqueda"
               placeholder="Correo del administrador"
+              childLabel="Correo"
               value={correoBusqueda}
               onChange={(e) => setCorreoBusqueda(e.target.value)}
               className="outline-none"

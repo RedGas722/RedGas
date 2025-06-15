@@ -11,20 +11,24 @@ import './MainPage.css'
 
 export const MainPage = () => {
     return (
-        <div>
+        <>
+            <div className="bg-[var(--background-color)]">
                 <Header />
-            <div className="MainPageContainer bg-[var(--background-color)] flex flex-col gap-[60px]">
-                <Hero />
-                <ProductCategory />
-                <OffersSect />
-                <HeatersSect />
-                <ToolsSect />
-                <SpaerPartsSect />
-                <AccessoriesSect />
-                <div></div>
+                <div className="MainPageContainer bg-[var(--background-color)] flex flex-col gap-[60px]">
+                    <Hero />
+                    <ProductCategory />
+                    <OffersSect />
+                    <section id="AllProduct" className="flex flex-col gap-[60px] ">
+                        <HeatersSect />
+                        <ToolsSect />
+                        <SpaerPartsSect />
+                        <AccessoriesSect />
+                    </section>
+                    <div></div>
+                </div>
             </div>
             <Footer />
-        </div>
+        </>
     )
 }
 export default MainPage

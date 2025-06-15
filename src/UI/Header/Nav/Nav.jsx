@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { NavLink, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { Link } from 'react-scroll'
 import Box from '@mui/material/Box'
 import Tabs from '@mui/material/Tabs'
@@ -11,9 +11,9 @@ export const Navs = ({ className, ref1, ref2, ref3, ref4 }) => {
     const [tipoUsuario, setTipoUsuario] = useState(null)
     const [tabIndex, setTabIndex] = useState(0)
     const navigate = useNavigate()
-    const sectionIds = ['Hero', 'ProductCategory', 'OffersSect']
+    const sectionIds = ['Hero', 'OffersSect', 'AllProduct']
 
-    const isMdUp = useMediaQuery('(min-width: 768px)') // Tailwind md breakpoint
+    const isMdUp = useMediaQuery('(min-width: 768px)')
 
     useEffect(() => {
         const tipo = localStorage.getItem('tipo_usuario')
@@ -30,7 +30,7 @@ export const Navs = ({ className, ref1, ref2, ref3, ref4 }) => {
                     }
                 })
             },
-            { rootMargin: '-100px 0px 0px 0px', threshold: 0.6 }
+            { rootMargin: '-100px 0px 0px 0px', threshold: 0.1 }
         )
 
         sectionIds.forEach(id => {
@@ -48,10 +48,10 @@ export const Navs = ({ className, ref1, ref2, ref3, ref4 }) => {
                 document.getElementById('linkHero')?.click()
                 break
             case 1:
-                document.getElementById('linkProducts')?.click()
+                document.getElementById('linkOffers')?.click()
                 break
             case 2:
-                document.getElementById('linkOffers')?.click()
+                document.getElementById('linkMainPage')?.click()
                 break
             case 3:
                 navigate('/Technic')
@@ -108,8 +108,8 @@ export const Navs = ({ className, ref1, ref2, ref3, ref4 }) => {
                 }}
             >
                 <Tab label="Inicio" />
-                <Tab label="Productos" />
                 <Tab label="Ofertas" />
+                <Tab label="Productos" />
                 <Tab label="Técnicos" />
                 <Tab label="Servi" />
                 {(tipoUsuario === 1 || tipoUsuario === 3) && <Tab label="Admin" />}
@@ -121,10 +121,10 @@ export const Navs = ({ className, ref1, ref2, ref3, ref4 }) => {
                     <Link id="linkHero" to="Hero" smooth={true} duration={500} offset={-90} />
                 </span>
                 <span ref={ref2}>
-                    <Link id="linkProducts" to="ProductCategory" smooth={true} duration={500} offset={-130} />
+                    <Link id="linkOffers" to="OffersSect" smooth={true} duration={500} offset={-130} />
                 </span>
                 <span ref={ref3}>
-                    <Link id="linkOffers" to="OffersSect" smooth={true} duration={500} offset={-130} />
+                    <Link id="linkMainPage" to="AllProduct" smooth={true} duration={500} offset={-130} />
                 </span>
                 <span ref={ref4} />
             </div>

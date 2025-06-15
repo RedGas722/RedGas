@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Inputs } from '../../UI/Inputs/Inputs';
+import { InputLabel } from '../../../UI/Login_Register/InputLabel/InputLabel';
 
 export const RegisterModal = ({ onClose, setRefrescar, clientes, empleados }) => {
   const [clienteCorreo, setClienteCorreo] = useState('');
@@ -90,11 +90,15 @@ export const RegisterModal = ({ onClose, setRefrescar, clientes, empleados }) =>
         <h2 className="text-xl font-bold text-center">Registrar Factura</h2>
 
         {/* Autocompletar Cliente */}
-        <Inputs
-          Type="2"
-          Place="Correo del cliente"
-          Value={clienteCorreo}
+        <InputLabel
+          type="2"
+          ForID="clienteCorreo"
+          placeholder="Correo del cliente"
+          childLabel="Correo del cliente"
+          value={clienteCorreo}
           onChange={(e) => buscarCliente(e.target.value)}
+          required
+          placeholderError={!!errores.IDcliente}
         />
         {errores.IDcliente && <p className="text-red-600 text-sm">{errores.IDcliente}</p>}
         {sugerenciasCliente.length > 0 && (
@@ -116,11 +120,15 @@ export const RegisterModal = ({ onClose, setRefrescar, clientes, empleados }) =>
         )}
 
         {/* Autocompletar Empleado */}
-        <Inputs
-          Type="2"
-          Place="Correo del empleado"
-          Value={empleadoCorreo}
+        <InputLabel
+          type="2"
+          ForID="empleadoCorreo"
+          placeholder="Correo del empleado"
+          childLabel="Correo del empleado"
+          value={empleadoCorreo}
           onChange={(e) => buscarEmpleado(e.target.value)}
+          required
+          placeholderError={!!errores.IDempleado}
         />
         {errores.IDempleado && <p className="text-red-600 text-sm">{errores.IDempleado}</p>}
         {sugerenciasEmpleado.length > 0 && (
@@ -141,19 +149,27 @@ export const RegisterModal = ({ onClose, setRefrescar, clientes, empleados }) =>
           </div>
         )}
 
-        <Inputs
-          Type="7"
-          Place="Fecha de la factura"
-          Value={fecha}
+        <InputLabel
+          type="7"
+          ForID="fecha"
+          placeholder="Fecha de la factura"
+          childLabel="Fecha de la factura"
+          value={fecha}
           onChange={(e) => setFecha(e.target.value)}
+          required
+          placeholderError={!!errores.fecha}
         />
         {errores.fecha && <p className="text-red-600 text-sm">{errores.fecha}</p>}
 
-        <Inputs
-          Type="5"
-          Place="Total de la factura"
-          Value={totalFactura}
+        <InputLabel
+          type="5"
+          ForID="totalFactura"
+          placeholder="Total de la factura"
+          childLabel="Total de la factura"
+          value={totalFactura}
           onChange={(e) => setTotalFactura(e.target.value)}
+          required
+          placeholderError={!!errores.total}
         />
         {errores.total && <p className="text-red-600 text-sm">{errores.total}</p>}
 

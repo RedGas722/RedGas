@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Inputs } from '../../UI/Inputs/Inputs';
+import React, { useState, useRef } from 'react';
+import { InputLabel } from '../../../UI/Login_Register/InputLabel/InputLabel';
 
 export const RegisterModal = ({ onClose, setRefrescar }) => {
   const [nombreServicio, setNombreServicio] = useState('');
@@ -7,6 +7,8 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
   const [precioServicio, setPrecioServicio] = useState('');
   const [mensaje, setMensaje] = useState('');
   const [errores, setErrores] = useState({});
+  const [erroresActivos, setErroresActivos] = useState({});
+  const errorTimeouts = useRef({});
 
   const URL_REGISTER = 'https://redgas.onrender.com/ServicioRegister';
   const URL_GET = 'https://redgas.onrender.com/ServicioGet';
@@ -25,9 +27,17 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
     if (Object.keys(erroresValidados).length > 0) {
       setErrores(erroresValidados);
       setMensaje('');
+      setErroresActivos(erroresValidados);
+      Object.keys(erroresValidados).forEach((key) => {
+        if (errorTimeouts.current[key]) clearTimeout(errorTimeouts.current[key]);
+        errorTimeouts.current[key] = setTimeout(() => {
+          setErroresActivos((prev) => ({ ...prev, [key]: undefined }));
+        }, 2000);
+      });
       return;
     }
     setErrores({});
+    setErroresActivos({});
     setMensaje('');
     try {
       // Verificar si ya existe un servicio con ese nombre
@@ -73,17 +83,9 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
     <div className="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-2xl p-6 shadow-lg w-[320px] flex flex-col gap-4 relative text-black">
         <h2 className="text-xl font-bold text-center">Registrar Servicio</h2>
-        <Inputs Type='1' Place='Nombre del Servicio' Value={nombreServicio} onChange={(e) => setNombreServicio(e.target.value)} />
-        {errores.nombreServicio && <p className="text-red-600 text-sm">{errores.nombreServicio}</p>}
-        <textarea
-          placeholder="Descripción del Servicio"
-          value={descripcionServicio}
-          onChange={(e) => setDescripcionServicio(e.target.value)}
-          className="border rounded p-2"
-        />
-        {errores.descripcionServicio && <p className="text-red-600 text-sm">{errores.descripcionServicio}</p>}
-        <Inputs Type='5' Place='Precio del Servicio' Value={precioServicio} onChange={(e) => setPrecioServicio(e.target.value)} />
-        {errores.precioServicio && <p className="text-red-600 text-sm">{errores.precioServicio}</p>}
+        <InputLabel type='1' placeholder={erroresActivos.nombreServicio || 'Nombre del Servicio'} value={nombreServicio} onChange={(e) => setNombreServicio(e.target.value)} placeholderError={!!erroresActivos.nombreServicio} />
+        <InputLabel type='1' placeholder={erroresActivos.descripcionServicio || 'Descripción del Servicio'} value={descripcionServicio} onChange={(e) => setDescripcionServicio(e.target.value)} placeholderError={!!erroresActivos.descripcionServicio} />
+        <InputLabel type='5' placeholder={erroresActivos.precioServicio || 'Precio del Servicio'} value={precioServicio} onChange={(e) => setPrecioServicio(e.target.value)} placeholderError={!!erroresActivos.precioServicio} />
         <div className="flex justify-between gap-2">
           <button onClick={cancelarRegistro} className="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded">Cancelar</button>
           <button onClick={handleRegister} className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">Registrar</button>

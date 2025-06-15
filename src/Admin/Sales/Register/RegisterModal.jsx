@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Inputs } from '../../UI/Inputs/Inputs';
+import { InputLabel } from '../../../UI/Login_Register/InputLabel/InputLabel';
 
 export const RegisterModal = ({ onClose, setRefrescar }) => {
   const [idProducto, setIdProducto] = useState('');
@@ -69,16 +69,45 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
       <div className="bg-white rounded-2xl p-6 shadow-lg w-[350px] flex flex-col gap-4 relative text-black">
         <h2 className="text-xl font-bold text-center">Registrar Venta</h2>
 
-        <Inputs Type="5" Place="ID Producto" Value={idProducto} onChange={(e) => setIdProducto(e.target.value)} />
+        <InputLabel
+          type="1"
+          ForID="idProducto"
+          placeholder="ID Producto"
+          childLabel="ID Producto"
+          value={idProducto}
+          onChange={(e) => setIdProducto(e.target.value)}
+          placeholderError={!!errores.idProducto}
+        />
         {errores.idProducto && <p className="text-red-600 text-sm">{errores.idProducto}</p>}
-
-        <Inputs Type="5" Place="ID Factura" Value={idFactura} onChange={(e) => setIdFactura(e.target.value)} />
+        <InputLabel
+          type="1"
+          ForID="idFactura"
+          placeholder="ID Factura"
+          childLabel="ID Factura"
+          value={idFactura}
+          onChange={(e) => setIdFactura(e.target.value)}
+          placeholderError={!!errores.idFactura}
+        />
         {errores.idFactura && <p className="text-red-600 text-sm">{errores.idFactura}</p>}
-
-        <Inputs Type="5" Place="Cantidad" Value={cantidadProducto} onChange={(e) => setCantidadProducto(e.target.value)} />
+        <InputLabel
+          type="5"
+          ForID="cantidadProducto"
+          placeholder="Cantidad"
+          childLabel="Cantidad"
+          value={cantidadProducto}
+          onChange={(e) => setCantidadProducto(e.target.value)}
+          placeholderError={!!errores.cantidad}
+        />
         {errores.cantidad && <p className="text-red-600 text-sm">{errores.cantidad}</p>}
-
-        <Inputs Type="1" Place="Estado Pedido" Value={estadoPedido} onChange={(e) => setEstadoPedido(e.target.value)} />
+        <InputLabel
+          type="1"
+          ForID="estadoPedido"
+          placeholder="Estado"
+          childLabel="Estado"
+          value={estadoPedido}
+          onChange={(e) => setEstadoPedido(e.target.value)}
+          placeholderError={!!errores.estado}
+        />
         {errores.estado && <p className="text-red-600 text-sm">{errores.estado}</p>}
 
         <div className="flex justify-between gap-2">

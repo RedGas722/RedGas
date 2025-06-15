@@ -45,12 +45,12 @@
     top: 110%;
     overflow: hidden;
     clip-path: inset(0% 0% 0% 0% round 15px);
-    transition: all 0.4s;
+    transition: all 0.3s;
 }
 
 .menu-list {
-    --delay: 0.4s;
-    --trdelay: 0.15s;
+    --delay: 0.1s;
+    --trdelay: 0.1s;
     padding: 8px 10px;
     border-radius: inherit;
     transition: background-color 0.2s 0s;
@@ -85,32 +85,32 @@
 
 .inp:not(:checked)~.menu-container .menu-list:nth-child(1) {
     transition:
-        transform 0.4s var(--delay),
-        opacity 0.4s var(--delay);
+        transform 0.2s var(--delay),
+        opacity 0.2s var(--delay);
 }
 
 .inp:not(:checked)~.menu-container .menu-list:nth-child(2) {
     transition:
-        transform 0.4s calc(var(--delay) + (var(--trdelay) * 1)),
-        opacity 0.4s calc(var(--delay) + (var(--trdelay) * 1));
+        transform 0.2s calc(var(--delay) + (var(--trdelay) * 1)),
+        opacity 0.2s calc(var(--delay) + (var(--trdelay) * 1));
 }
 
 .inp:not(:checked)~.menu-container .menu-list:nth-child(3) {
     transition:
-        transform 0.4s calc(var(--delay) + (var(--trdelay) * 2)),
-        opacity 0.4s calc(var(--delay) + (var(--trdelay) * 2));
+        transform 0.2s calc(var(--delay) + (var(--trdelay) * 2)),
+        opacity 0.2s calc(var(--delay) + (var(--trdelay) * 2));
 }
 
 .inp:not(:checked)~.menu-container .menu-list:nth-child(4) {
     transition:
-        transform 0.4s calc(var(--delay) + (var(--trdelay) * 3)),
-        opacity 0.4s calc(var(--delay) + (var(--trdelay) * 3));
+        transform 0.2s calc(var(--delay) + (var(--trdelay) * 3)),
+        opacity 0.2s calc(var(--delay) + (var(--trdelay) * 3));
 }
 
 .inp:not(:checked)~.menu-container .menu-list:nth-child(5) {
     transition:
-        transform 0.4s calc(var(--delay) + (var(--trdelay) * 4)),
-        opacity 0.4s calc(var(--delay) + (var(--trdelay) * 4));
+        transform 0.2s calc(var(--delay) + (var(--trdelay) * 4)),
+        opacity 0.2s calc(var(--delay) + (var(--trdelay) * 4));
 }
 
 .bar-inp {

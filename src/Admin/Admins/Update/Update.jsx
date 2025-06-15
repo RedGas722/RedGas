@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Inputs } from '../../UI/Inputs/Inputs';
+import { useState, useEffect } from 'react';
+import { InputLabel } from '../../../UI/Login_Register/InputLabel/InputLabel';
 
 export const UpdateModal = ({ onClose, setRefrescar, adminCarta }) => {
   const [admin, setAdmin] = useState(null);
@@ -105,39 +105,51 @@ export const UpdateModal = ({ onClose, setRefrescar, adminCarta }) => {
         <h2 className="text-xl font-bold text-center">Actualizar Administrador</h2>
         {admin && (
           <>
-            <Inputs
-              Type="1"
-              Place="Nombre"
-              Value={nombre}
+            <InputLabel
+              type="1"
+              ForID="nombre_admin"
+              placeholder="Nombre"
+              childLabel="Nombre"
+              value={nombre}
               onChange={e => setNombre(e.target.value)}
               className="w-full"
+              placeholderError={!!errores.nombre}
             />
             {errores.nombre && <p className="text-red-600 text-sm">{errores.nombre}</p>}
-            <Inputs
-              Type="1"
-              Place="Apellido"
-              Value={apellido}
+            <InputLabel
+              type="1"
+              ForID="apellido_admin"
+              placeholder="Apellido"
+              childLabel="Apellido"
+              value={apellido}
               onChange={e => setApellido(e.target.value)}
               className="w-full"
+              placeholderError={!!errores.apellido}
             />
             {errores.apellido && <p className="text-red-600 text-sm">{errores.apellido}</p>}
-            <Inputs
-              Type="2"
-              Place="Nuevo correo"
-              Value={nuevoCorreo}
+            <InputLabel
+              type="2"
+              ForID="correo_admin"
+              placeholder="Nuevo correo"
+              childLabel="Correo"
+              value={nuevoCorreo}
               onChange={e => {
                 setNuevoCorreo(e.target.value);
                 setErrores(prev => ({ ...prev, nuevoCorreo: null }));
               }}
               className="w-full"
+              placeholderError={!!errores.nuevoCorreo}
             />
             {errores.nuevoCorreo && <p className="text-red-600 text-sm">{errores.nuevoCorreo}</p>}
-            <Inputs
-              Type="6"
-              Place="Teléfono"
-              Value={admin.telefono_admin}
+            <InputLabel
+              type="6"
+              ForID="telefono_admin"
+              placeholder="Teléfono"
+              childLabel="Teléfono"
+              value={admin.telefono_admin}
               onChange={e => setAdmin({ ...admin, telefono_admin: e.target.value })}
               className="w-full"
+              placeholderError={!!errores.telefono_admin}
             />
             {errores.telefono_admin && <p className="text-red-600 text-sm">{errores.telefono_admin}</p>}
             <div className="flex justify-between gap-2">

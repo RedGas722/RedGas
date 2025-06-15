@@ -5,7 +5,7 @@ import { ButtonBack } from '../UI/ButtonBack/ButtonBack';
 import { BtnBack } from "../../UI/Login_Register/BtnBack";
 import { buscarProductoPorNombre } from './Get/Get';
 import CardsProductsBack from './Get/CardProductsBack';
-import Inputs from '../UI/Inputs/Inputs';
+import { InputLabel } from '../../UI/Login_Register/InputLabel/InputLabel';
 
 export const ProductsBack = () => {
   const [showRegisterModal, setShowRegisterModal] = useState(false);
@@ -115,13 +115,14 @@ export const ProductsBack = () => {
         {/* Búsqueda con autocomplete */}
         <div className="relative" ref={contenedorRef}>
           <div className="flex items-center gap-2 border border-gray-300 rounded px-2 py-1 bg-white">
-            <Inputs
+            <InputLabel
               type="1"
-              placeholder="Nombre del producto"
+              ForID="nombre_producto_busqueda"
+              placeholder="Buscar producto"
+              childLabel="Buscar producto"
               value={nombreBusqueda}
-              onChange={(e) => setNombreBusqueda(e.target.value)}
-              className="outline-none"
-              ref={inputRef}
+              onChange={e => setNombreBusqueda(e.target.value)}
+              className="w-full"
             />
             <button
               onClick={buscarProducto}
