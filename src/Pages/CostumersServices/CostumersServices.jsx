@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useCallback } from "react"
 import { jwtDecode } from "jwt-decode"
 import { faUser, faTools, faPlug, faGears, faQuestion } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -26,6 +26,7 @@ const style = {
 }
 
 export const CostumerServices = () => {
+  const [isAccepting, setIsAccepting] = useState(false)
   const [dataInfo, setDataInfo] = useState([])
   const [result, setResult] = useState([])
   const [isScrollable, setIsScrollable] = useState(false)
@@ -93,10 +94,13 @@ export const CostumerServices = () => {
   const handleOpen = (index) => setOpenIndex(index)
   const handleClose = () => setOpenIndex(null)
 
-  const handleAceptServices = async (id) => {
+  const handleAceptServices = useCallback(async (id) => {
+    if (isAccepting) return
+    setIsAccepting(true)
+
     console.log(id);
 
-  }
+  },[isAccepting])
 
 
   return (
@@ -198,7 +202,12 @@ export const CostumerServices = () => {
                     </div>
 
                     <div className="w-full flex justify-center items-center">
-                      <Buttons type="submit" nameButton="Aceptar Servicio" Onclick={console.log('treu')} />
+                      <Buttons
+                       type="submit" 
+                       nameButton={isAccepting ? "Procesando..." : "Aceptar Servicio"}
+                       Onclick={() => handleAceptServices(item.userId)} 
+                       disabled={isAccepting}
+                       />
                     </div>
                   </div>
 
