@@ -5,6 +5,7 @@ import { UpdateModal } from './Update/Update';
 import CardServicesGetBack from './Get/CardServicesGetBack';
 import ButtonBack from '../UI/ButtonBack/ButtonBack';
 import { buscarServicioPorNombre } from './Get/Get';
+import { InputLabel } from '../../UI/Login_Register/InputLabel/InputLabel';
 
 export const ServicesBack = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -51,53 +52,53 @@ export const ServicesBack = () => {
   };
 
   // Para buscar servicios por nombre desde el input
- const handleBuscarServicio = async () => {
-  if (!nombreBusqueda.trim()) {
-    fetchServicios(); // Si no hay búsqueda, se recargan todos
-    return;
-  }
+  const handleBuscarServicio = async () => {
+    if (!nombreBusqueda.trim()) {
+      fetchServicios(); // Si no hay búsqueda, se recargan todos
+      return;
+    }
 
-  try {
-    const resultados = await buscarServicioPorNombre(nombreBusqueda);
-    setServicios(resultados);
-  } catch (error) {
-    console.error(error);
-    setServicios([]);
-  }
-};
-
-// Autocomplete: filtra servicios por nombre
-useEffect(() => {
-  if (nombreBusqueda.trim() === '') {
-    setSugerencias([]);
-    return;
-  }
-  const filtrados = servicios.filter((servicio) =>
-    servicio.nombre_servicio && servicio.nombre_servicio.toLowerCase().includes(nombreBusqueda.toLowerCase())
-  );
-  setSugerencias(filtrados.slice(0, 5));
-}, [nombreBusqueda, servicios]);
-
-// Cierre del dropdown si se hace clic fuera
-useEffect(() => {
-  const manejarClickFuera = (event) => {
-    if (
-      contenedorRef.current &&
-      !contenedorRef.current.contains(event.target)
-    ) {
-      setSugerencias([]);
+    try {
+      const resultados = await buscarServicioPorNombre(nombreBusqueda);
+      setServicios(resultados);
+    } catch (error) {
+      console.error(error);
+      setServicios([]);
     }
   };
-  document.addEventListener('mousedown', manejarClickFuera);
-  return () => document.removeEventListener('mousedown', manejarClickFuera);
-}, []);
 
-// Limpia servicios si el input queda vacío
-useEffect(() => {
-  if (nombreBusqueda.trim() === '') {
-    fetchServicios();
-  }
-}, [nombreBusqueda]);
+  // Autocomplete: filtra servicios por nombre
+  useEffect(() => {
+    if (nombreBusqueda.trim() === '') {
+      setSugerencias([]);
+      return;
+    }
+    const filtrados = servicios.filter((servicio) =>
+      servicio.nombre_servicio && servicio.nombre_servicio.toLowerCase().includes(nombreBusqueda.toLowerCase())
+    );
+    setSugerencias(filtrados.slice(0, 5));
+  }, [nombreBusqueda, servicios]);
+
+  // Cierre del dropdown si se hace clic fuera
+  useEffect(() => {
+    const manejarClickFuera = (event) => {
+      if (
+        contenedorRef.current &&
+        !contenedorRef.current.contains(event.target)
+      ) {
+        setSugerencias([]);
+      }
+    };
+    document.addEventListener('mousedown', manejarClickFuera);
+    return () => document.removeEventListener('mousedown', manejarClickFuera);
+  }, []);
+
+  // Limpia servicios si el input queda vacío
+  useEffect(() => {
+    if (nombreBusqueda.trim() === '') {
+      fetchServicios();
+    }
+  }, [nombreBusqueda]);
 
   return (
     <div className="flex flex-row h-screen p-[40px_0_0_40px] gap-[40px]">
@@ -105,21 +106,15 @@ useEffect(() => {
       <div className='flex flex-col items-start gap-[30px] min-w-[320px]'>
         <h1 className='font-bold text-[22px] mb-2'>Servicio BACK-OFFICE</h1>
         <div className="relative" ref={contenedorRef}>
-          <div className="flex items-center gap-2 border border-gray-300 rounded px-2 py-1 mb-2">
-            <input
-              type="text"
-              placeholder="Nombre del servicio"
-              value={nombreBusqueda}
-              onChange={e => setNombreBusqueda(e.target.value)}
-              className="outline-none px-2 py-1 w-[180px]"
-              ref={inputRef}
-            />
-            <button
-              onClick={handleBuscarServicio}
-              aria-label="Buscar servicio"
-              className="text-gray-600 hover:text-gray-900"
-            >🔍</button>
-          </div>
+          <InputLabel
+            type="1"
+            ForID="nombre_servicio_busqueda"
+            placeholder="Buscar servicio"
+            childLabel="Buscar servicio"
+            value={nombreBusqueda}
+            onChange={e => setNombreBusqueda(e.target.value)}
+            className="w-full"
+          />
           {sugerencias.length > 0 && (
             <ul className="absolute z-10 bg-white border border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto w-full shadow">
               {sugerencias.map((servicio) => (

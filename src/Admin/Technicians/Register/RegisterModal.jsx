@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState, useRef } from 'react';
 import { InputLabel } from '../../../UI/Login_Register/InputLabel/InputLabel';
 
 export const RegisterModal = ({ onClose, setRefrescar }) => {
@@ -10,6 +10,8 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
   const [imagen, setImagen] = useState(null);
   const [mensaje, setMensaje] = useState('');
   const [errores, setErrores] = useState({});
+  const [erroresActivos, setErroresActivos] = useState({});
+  const errorTimeouts = useRef({});
 
   const URL_REGISTER = 'https://redgas.onrender.com/TecnicoRegister';
   const URL_GET = 'https://redgas.onrender.com/TecnicoGet';
@@ -31,9 +33,18 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
     if (Object.keys(erroresValidados).length > 0) {
       setErrores(erroresValidados);
       setMensaje('');
+      setErroresActivos(erroresValidados);
+      // Limpiar errores después de 2 segundos
+      Object.keys(erroresValidados).forEach((key) => {
+        if (errorTimeouts.current[key]) clearTimeout(errorTimeouts.current[key]);
+        errorTimeouts.current[key] = setTimeout(() => {
+          setErroresActivos((prev) => ({ ...prev, [key]: undefined }));
+        }, 2000);
+      });
       return;
     }
     setErrores({});
+    setErroresActivos({});
     setMensaje('');
     try {
       // Verificar si ya existe un técnico con ese correo
@@ -87,18 +98,12 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
     <div className="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50">
       <div className="NeoContainer_Admin_outset_TL p-6 w-[320px] flex flex-col gap-4 relative text-[var(--main-color)]">
         <h2 className="text-xl font-bold text-center">Registrar Técnico</h2>
-        <InputLabel type='1' placeholder='Nombre del Técnico' value={nombre} onChange={(e) => setNombre(e.target.value)} />
-        {errores.nombre && <p className="text-red-600 text-sm">{errores.nombre}</p>}
-        <InputLabel type='1' placeholder='Apellido del Técnico' value={apellido} onChange={(e) => setApellido(e.target.value)} />
-        {errores.apellido && <p className="text-red-600 text-sm">{errores.apellido}</p>}
-        <InputLabel type='2' placeholder='Correo del Técnico' value={correo} onChange={(e) => setCorreo(e.target.value)} />
-        {errores.correo && <p className="text-red-600 text-sm">{errores.correo}</p>}
-        <InputLabel type='6' placeholder='Teléfono del Técnico' value={telefono} onChange={(e) => setTelefono(e.target.value)} />
-        {errores.telefono && <p className="text-red-600 text-sm">{errores.telefono}</p>}
-        <InputLabel type='3' placeholder='Contraseña del Técnico' value={contrasena} onChange={(e) => setContrasena(e.target.value)} />
-        {errores.contrasena && <p className="text-red-600 text-sm">{errores.contrasena}</p>}
-        <InputLabel type='4' placeholder='Imagen del Técnico' value={imagen} onChange={handleImageChange} />
-        {errores.imagen && <p className="text-red-600 text-sm">{errores.imagen}</p>}
+        <InputLabel type='1' placeholder={erroresActivos.nombre || 'Nombre del Técnico'} value={nombre} onChange={(e) => setNombre(e.target.value)} placeholderError={!!erroresActivos.nombre} />
+        <InputLabel type='1' placeholder={erroresActivos.apellido || 'Apellido del Técnico'} value={apellido} onChange={(e) => setApellido(e.target.value)} placeholderError={!!erroresActivos.apellido} />
+        <InputLabel type='2' placeholder={erroresActivos.correo || 'Correo del Técnico'} value={correo} onChange={(e) => setCorreo(e.target.value)} placeholderError={!!erroresActivos.correo} />
+        <InputLabel type='6' placeholder={erroresActivos.telefono || 'Teléfono del Técnico'} value={telefono} onChange={(e) => setTelefono(e.target.value)} placeholderError={!!erroresActivos.telefono} />
+        <InputLabel type='3' placeholder={erroresActivos.contrasena || 'Contraseña del Técnico'} value={contrasena} onChange={(e) => setContrasena(e.target.value)} placeholderError={!!erroresActivos.contrasena} />
+        <InputLabel type='4' placeholder={erroresActivos.imagen || 'Imagen del Técnico'} value={imagen} onChange={handleImageChange} placeholderError={!!erroresActivos.imagen} />
         <div className="flex justify-between gap-2">
           <button
             onClick={cancelarRegistro}

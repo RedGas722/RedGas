@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Inputs } from '../../UI/Inputs/Inputs';
+import { useState } from 'react';
+import { InputLabel } from '../../../UI/Login_Register/InputLabel/InputLabel';
 
 export const RegisterModal = ({ onClose, setRefrescar }) => {
   const [nombre, setNombre] = useState('');
@@ -93,35 +93,44 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
       <div className="bg-white rounded-2xl p-6 shadow-lg w-[320px] flex flex-col gap-4 relative text-black">
         <h2 className="text-xl font-bold text-center">Registrar Administrador</h2>
 
-        <Inputs
-          Type="1"
-          Place="Nombre"
-          Value={nombre}
+        <InputLabel
+          type="1"
+          ForID="nombre_admin"
+          placeholder="Nombre"
+          childLabel="Nombre"
+          value={nombre}
           onChange={(e) => setNombre(e.target.value)}
+          placeholderError={!!errores.nombre}
         />
         {errores.nombre && <p className="text-red-600 text-sm">{errores.nombre}</p>}
-
-        <Inputs
-          Type="2"
-          Place="Correo"
-          Value={correo}
+        <InputLabel
+          type="2"
+          ForID="correo_admin"
+          placeholder="Correo"
+          childLabel="Correo"
+          value={correo}
           onChange={(e) => setCorreo(e.target.value)}
+          placeholderError={!!errores.correo}
         />
         {errores.correo && <p className="text-red-600 text-sm">{errores.correo}</p>}
-
-        <Inputs
-          Type="6"
-          Place="Teléfono"
-          Value={telefono}
+        <InputLabel
+          type="6"
+          ForID="telefono_admin"
+          placeholder="Teléfono"
+          childLabel="Teléfono"
+          value={telefono}
           onChange={(e) => setTelefono(e.target.value)}
+          placeholderError={!!errores.telefono}
         />
         {errores.telefono && <p className="text-red-600 text-sm">{errores.telefono}</p>}
-
-        <Inputs
-          Type="3"
-          Place="Contraseña"
-          Value={contrasena}
+        <InputLabel
+          type="3"
+          ForID="contrasena_admin"
+          placeholder="Contraseña"
+          childLabel="Contraseña"
+          value={contrasena}
           onChange={(e) => setContrasena(e.target.value)}
+          placeholderError={!!errores.contrasena}
         />
         {errores.contrasena && <p className="text-red-600 text-sm">{errores.contrasena}</p>}
 

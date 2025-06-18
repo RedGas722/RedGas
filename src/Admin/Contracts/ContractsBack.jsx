@@ -5,7 +5,7 @@ import { buscarContratoPorEmpleado } from './Get/Get';
 import { BtnBack } from '../../UI/Login_Register/BtnBack';
 import ButtonBack from '../UI/ButtonBack/ButtonBack';
 import CardContractsBack from './Get/CardContractsBack';
-import Inputs from '../UI/Inputs/Inputs';
+import { InputLabel } from '../../UI/Login_Register/InputLabel/InputLabel';
 
 export const ContractsBack = () => {
   const [showRegisterModal, setShowRegisterModal] = useState(false);
@@ -158,13 +158,14 @@ export const ContractsBack = () => {
 
         <div className="relative" ref={contenedorRef}>
           <div className="flex items-center gap-2 border border-gray-300 rounded px-2 py-1">
-            <Inputs
+            <InputLabel
               type="1"
-              placeholder="Correo del empleado"
+              ForID="contrato_busqueda"
+              placeholder="Buscar contrato"
+              childLabel="Buscar contrato"
               value={correoBusqueda}
-              onChange={(e) => setCorreoBusqueda(e.target.value)}
-              className="outline-none"
-              ref={inputRef}
+              onChange={e => setCorreoBusqueda(e.target.value)}
+              className="w-full"
             />
             <button
               onClick={buscarContrato}

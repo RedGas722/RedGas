@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect, useRef, use } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { SearchBarr } from "../../UI/Header/SearchBarr/SearchBarr"
 import { Navs } from "../../UI/Header/Nav/Nav"
@@ -34,6 +34,8 @@ export const Header = () => {
     const [isChecked, setIsChecked] = useState(true);
 
     const isDesktop = () => window.innerWidth >= 768;
+
+    // Verificar si el usuario está autenticado para el nombre de usuario
     
     // Verificar si el usuario está autenticado
     useEffect(() => {
@@ -41,8 +43,6 @@ export const Header = () => {
             const decoded = jwtDecode(token);
             const names = decoded.data.name.split(' ')
             const firstLetter = names[0].toUpperCase()
-            console.log(firstLetter.length);
-
 
             if (firstLetter.length > 6) {
                 const secondLetter = names[1].toUpperCase().slice(0, 1)
@@ -55,7 +55,7 @@ export const Header = () => {
         }
 
 
-    }, []);
+    }, [token]);
 
     // Cargar productos al iniciar
     useEffect(() => {
@@ -148,7 +148,6 @@ export const Header = () => {
                 .fromTo(navRef2.current, { x: -300, opacity: 0 }, { x: 0, opacity: 1 })
                 .fromTo(navRef3.current, { x: -400, opacity: 0 }, { x: 0, opacity: 1 })
                 .fromTo(navRef4.current, { x: -500, opacity: 0 }, { x: 0, opacity: 1 })
-                .fromTo(navRef5.current, { x: -600, opacity: 0 }, { x: 0, opacity: 1 })
         }
     }, [hamburger]);
 
@@ -211,7 +210,7 @@ export const Header = () => {
                     {token && (
                         <>
                             <div onClick={() => navigate('/Login')} className="menu-list">Perfil</div>
-                            <div onClick={() => navigate('/CostumerMyServices')} className="menu-list">Mi Servicio</div>
+                            <div onClick={() => navigate('/CostumerMyService')} className="menu-list">Mi Servicio</div>
                             <div onClick={() => navigate('/Shopping')} className="menu-list">Carrito</div>
                             <div onClick={() => navigate('/Login')} className="menu-list">Cambiar Cuenta</div>
                             <div onClick={() => handSignOut()} className="menu-list">Cerrar Sesion</div>

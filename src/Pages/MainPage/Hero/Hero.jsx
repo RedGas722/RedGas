@@ -40,7 +40,7 @@ export const Hero = () => {
         <section
             ref={sectionRef}
             id='Hero'
-            className="SectHero py-[50px] w-full NeoContainer_outset_TL text-[var(--main-color)] flex flex-col gap-[20px] justify-center items-center"
+            className="SectHero p-[30px_0_30px_0] !rounded-[40px] w-full NeoContainer_outset_TL text-[var(--main-color)] flex flex-col gap-[20px] justify-center items-center"
         >
             <img ref={logoRef} src={Logo} alt="RedGas Logo" className='Logo' />
             <h1 ref={titleRef} className='text-6xl text-center font-bold text-[var(--Font-Nav)]'>RedGas</h1>

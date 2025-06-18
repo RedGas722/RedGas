@@ -5,7 +5,7 @@ import { ButtonBack } from '../UI/ButtonBack/ButtonBack';
 import CardClientsBack from './Get/CardClientsBack';
 import { buscarClientePorCorreo } from './Get/Get';
 import { BtnBack } from "../../UI/Login_Register/BtnBack";
-import Inputs from '../UI/Inputs/Inputs';
+import { InputLabel } from '../../UI/Login_Register/InputLabel/InputLabel';
 
 export const ClientsBack = () => {
   const [showRegisterModal, setShowRegisterModal] = useState(false);
@@ -111,12 +111,14 @@ export const ClientsBack = () => {
         {/* Búsqueda con autocomplete */}
         <div className="relative" ref={contenedorRef}>
           <div className="flex items-center gap-2 border border-gray-300 rounded px-2 py-1 bg-white">
-            <Inputs
+            <InputLabel
               type="1"
-              placeholder="Correo del cliente"
+              ForID="correo_cliente_busqueda"
+              placeholder="Buscar cliente"
+              childLabel="Buscar cliente"
               value={correoBusqueda}
-              onChange={(e) => setCorreoBusqueda(e.target.value)}
-              className="outline-none"
+              onChange={e => setCorreoBusqueda(e.target.value)}
+              className="w-full"
             />
             <button
               onClick={buscarCliente}

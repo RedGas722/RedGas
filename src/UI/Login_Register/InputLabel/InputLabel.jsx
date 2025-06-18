@@ -2,7 +2,7 @@ import { useState } from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons"
 
-export const InputLabel = ({ type, ForID, placeholder, childLabel, value, onChange, required }) => {
+export const InputLabel = ({ type, ForID, placeholder, childLabel, value, onChange, required, autoComplete, className, placeholderError }) => {
     const [showPassword, setShowPassword] = useState(false)
     const [showCapPassword, setShowCapPassword] = useState(false)
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)
@@ -35,22 +35,23 @@ export const InputLabel = ({ type, ForID, placeholder, childLabel, value, onChan
 
     return (
         <div className="min-w-[230px] w-full flex flex-col gap-2 ">
-            <label htmlFor={ForID} className="text-[var(--main-color)] text-[18px] w-full">{childLabel}</label>
+            <label htmlFor={ForID} className={`text-[var(--main-color)] text-[18px] w-full ${className}`}>{childLabel}</label>
             <div className="relative w-full ">
                 {inputType !== "file" ? (
                     <input
                         type={inputType}
-                        className="NeoSubContainer_inset_TOTAL inputs relative text-[var(--main-color)] w-full p-[10px_10px_10px_15px] placeholder:text-[var(--main-color-sub)] border-0 outline-0"
+                        className={`NeoSubContainer_inset_TOTAL inputs relative text-[var(--main-color)] w-full p-[10px_10px_10px_15px] border-0 outline-0 ${placeholderError ? 'placeholder:text-red-500' : 'placeholder:text-[var(--main-color-sub)]'}`}
                         value={value}
                         id={ForID}
                         onChange={onChange}
                         placeholder={placeholderText}
+                        autoComplete={autoComplete}
                         required={required}
                     />
                 ) : (
                     <input
                         type="file"
-                        className="NeoSubContainer_inset_TOTAL inputs relative text-[var(--main-color)] w-full p-[10px_10px_10px_15px] placeholder:text-[var(--main-color-sub)] border-0 outline-0"
+                        className={`NeoSubContainer_inset_TOTAL inputs relative text-[var(--main-color)] w-full p-[10px_10px_10px_15px] border-0 outline-0 ${placeholderError ? 'placeholder:text-red-500' : 'placeholder:text-[var(--main-color-sub)]'}`}
                         id={ForID}
                         onChange={onChange}
                         placeholder={placeholderText}

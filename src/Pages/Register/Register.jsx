@@ -195,6 +195,7 @@ export const Register = () => {
                             ForID="Name"
                             childLabel="Nombre"
                             placeholder="Nombre"
+                            autoComplete="given-name"
                             value={nombre}
                             onChange={e => setNombre(e.target.value)}
                         />
@@ -203,6 +204,7 @@ export const Register = () => {
                             ForID="LastName"
                             childLabel="Apellido"
                             placeholder="Apellido"
+                            autoComplete="family-name"
                             value={apellido}
                             onChange={e => setApellido(e.target.value)}
                         />
@@ -215,6 +217,7 @@ export const Register = () => {
                             ForID="Phone"
                             childLabel="Teléfono"
                             placeholder="3*********"
+                            autoComplete="tel"
                             value={telefono}
                             onChange={e => setTelefono(e.target.value)}
                         />
@@ -223,6 +226,7 @@ export const Register = () => {
                             ForID="Address"
                             childLabel="Dirección"
                             placeholder="Cra 22 #19 ******"
+                            autoComplete="street-address"
                             value={direccion}
                             onChange={e => setDireccion(e.target.value)}
                         />
@@ -235,6 +239,8 @@ export const Register = () => {
                         childLabel="Correo electrónico"
                         placeholder="example@gmail.com"
                         value={correo}
+                        autoComplete="email"
+                        required={true}
                         onChange={e => setCorreo(e.target.value)}
                     />
 
@@ -245,6 +251,8 @@ export const Register = () => {
                             ForID="password"
                             childLabel="Contraseña"
                             placeholder="Contraseña"
+                            autoComplete="new-password"
+                            required={true}
                             value={contrasena}
                             onChange={e => setContrasena(e.target.value)}
                         />
@@ -253,6 +261,8 @@ export const Register = () => {
                             ForID="passwordConfirm"
                             childLabel="Confirmar contraseña"
                             placeholder="Confirmar contraseña"
+                            autoComplete="new-password"
+                            required={true}
                         />
                     </div>
 

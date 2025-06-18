@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Inputs } from '../../UI/Inputs/Inputs';
+import { useState, useEffect } from 'react';
+import { InputLabel } from '../../../UI/Login_Register/InputLabel/InputLabel';
 
 export const UpdateModal = ({ onClose, setRefrescar, tecnicoCarta }) => {
   const [tecnico, setTecnico] = useState(null);
@@ -100,41 +100,58 @@ export const UpdateModal = ({ onClose, setRefrescar, tecnicoCarta }) => {
         <h2 className="text-xl font-bold text-center">Actualizar Técnico</h2>
         {tecnico && (
           <>
-            <Inputs
-              Type="1"
-              Place="Nombre"
-              Value={nombre}
-              onChange={e => setNombre(e.target.value)}
+            <InputLabel
+              type="1"
+              ForID="nombre_tecnico"
+              placeholder="Nombre"
+              childLabel="Nombre"
+              value={nombre}
+              onChange={(e) => setNombre(e.target.value)}
               className="w-full"
+              placeholderError={!!errores.nombre}
             />
-            {errores.nombre && <p className="text-red-600 text-sm">{errores.nombre}</p>}
-            <Inputs
-              Type="1"
-              Place="Apellido"
-              Value={apellido}
-              onChange={e => setApellido(e.target.value)}
+            {errores.nombre && (
+              <p className="text-red-600 text-sm">{errores.nombre}</p>
+            )}
+            <InputLabel
+              type="1"
+              ForID="apellido_tecnico"
+              placeholder="Apellido"
+              childLabel="Apellido"
+              value={apellido}
+              onChange={(e) => setApellido(e.target.value)}
               className="w-full"
+              placeholderError={!!errores.apellido}
             />
-            {errores.apellido && <p className="text-red-600 text-sm">{errores.apellido}</p>}
-            <Inputs
-              Type="2"
-              Place="Nuevo correo"
-              Value={nuevoCorreo}
-              onChange={e => {
-                setNuevoCorreo(e.target.value);
-                setErrores(prev => ({ ...prev, nuevoCorreo: null }));
-              }}
+            {errores.apellido && (
+              <p className="text-red-600 text-sm">{errores.apellido}</p>
+            )}
+            <InputLabel
+              type="2"
+              ForID="correo_tecnico"
+              placeholder="Correo"
+              childLabel="Correo"
+              value={nuevoCorreo}
+              onChange={(e) => setNuevoCorreo(e.target.value)}
               className="w-full"
+              placeholderError={!!errores.nuevoCorreo}
             />
-            {errores.nuevoCorreo && <p className="text-red-600 text-sm">{errores.nuevoCorreo}</p>}
-            <Inputs
-              Type="6"
-              Place="Teléfono"
-              Value={tecnico.telefono_tecnico}
-              onChange={e => setTecnico({ ...tecnico, telefono_tecnico: e.target.value })}
+            {errores.nuevoCorreo && (
+              <p className="text-red-600 text-sm">{errores.nuevoCorreo}</p>
+            )}
+            <InputLabel
+              type="6"
+              ForID="telefono_tecnico"
+              placeholder="Teléfono"
+              childLabel="Teléfono"
+              value={tecnico?.telefono_tecnico || ''}
+              onChange={(e) => setTecnico({ ...tecnico, telefono_tecnico: e.target.value })}
               className="w-full"
+              placeholderError={!!errores.telefono_tecnico}
             />
-            {errores.telefono_tecnico && <p className="text-red-600 text-sm">{errores.telefono_tecnico}</p>}
+            {errores.telefono_tecnico && (
+              <p className="text-red-600 text-sm">{errores.telefono_tecnico}</p>
+            )}
             <div className="flex justify-between gap-2">
               <button
                 onClick={cancelarEdicion}

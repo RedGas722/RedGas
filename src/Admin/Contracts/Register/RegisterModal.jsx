@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Inputs } from '../../UI/Inputs/Inputs';
+import InputLabel from '../../../UI/Login_Register/InputLabel/InputLabel';
 
 export const RegisterModal = ({ onClose, setRefrescar, admins = [], empleados = [] }) => {
   const [fechaContrato, setFechaContrato] = useState(() => {
@@ -129,26 +129,55 @@ export const RegisterModal = ({ onClose, setRefrescar, admins = [], empleados = 
 
         <h2 className="text-xl font-bold text-center">Registrar Contrato</h2>
 
-        <Inputs
-          Type="7"
-          Place="Fecha del contrato"
-          Value={fechaContrato}
+        <InputLabel
+          type="7"
+          ForID="fechaContrato"
+          placeholder="Fecha del contrato"
+          childLabel="Fecha del contrato"
+          value={fechaContrato}
           onChange={(e) => setFechaContrato(e.target.value)}
           className="w-full"
           min={new Date().toISOString().split('T')[0]} // 👈 esta línea limita a hoy o después
         />
-        <Inputs Type="1" Place="Duración del contrato" Value={duracionContrato} onChange={(e) => setDuracionContrato(e.target.value)} />
-        <Inputs Type="1" Place="Tipo de contrato" Value={tipoContrato} onChange={(e) => setTipoContrato(e.target.value)} />
-        <Inputs Type="5" Place="Salario" Value={salario} onChange={(e) => setSalario(e.target.value)} />
+
+        <InputLabel
+          type="1"
+          ForID="duracionContrato"
+          placeholder="Duración del contrato"
+          childLabel="Duración del contrato"
+          value={duracionContrato}
+          onChange={(e) => setDuracionContrato(e.target.value)}
+          min={new Date().toISOString().split('T')[0]}
+          required
+        />
+        <InputLabel
+          type="1"
+          ForID="tipoContrato"
+          placeholder="Tipo de contrato"
+          childLabel="Tipo de contrato"
+          value={tipoContrato}
+          onChange={(e) => setTipoContrato(e.target.value)}
+          required
+        />
+        <InputLabel
+          type="5"
+          ForID="salario"
+          placeholder="Salario"
+          childLabel="Salario"
+          value={salario}
+          onChange={(e) => setSalario(e.target.value)}
+          required
+        />
 
         {/* Autocompletado ADMIN */}
         <div className="relative w-full" ref={refAdmin}>
-          <Inputs
+          <InputLabel
             Type="2"
-            Place="Correo del administrador"
-            Value={correoAdmin}
+            ForID="correoAdmin"
+            placeholder="Correo del administrador"
+            childLabel="Correo del Administrador"
+            value={correoAdmin}
             onChange={(e) => setCorreoAdmin(e.target.value)}
-            className="w-full"
           />
           {sugerenciasAdmin.length > 0 && (
             <ul className="absolute z-10 bg-white border border-gray-300 rounded mt-1 max-h-[160px] overflow-y-auto w-full shadow">
@@ -170,12 +199,13 @@ export const RegisterModal = ({ onClose, setRefrescar, admins = [], empleados = 
 
         {/* Autocompletado EMPLEADO */}
         <div className="relative w-full" ref={refEmpleado}>
-          <Inputs
+          <InputLabel
             Type="2"
-            Place="Correo del empleado"
-            Value={correoEmpleado}
+            ForID="correoEmpleado"
+            placeholder="Correo del Empleado"
+            childLabel="Correo del Empleado"
+            value={correoEmpleado}
             onChange={(e) => setCorreoEmpleado(e.target.value)}
-            className="w-full"
           />
           {sugerenciasEmpleado.length > 0 && (
             <ul className="absolute z-10 bg-white border border-gray-300 rounded mt-1 max-h-[160px] overflow-y-auto w-full shadow">
@@ -184,7 +214,7 @@ export const RegisterModal = ({ onClose, setRefrescar, admins = [], empleados = 
                   key={emp.id_empleado}
                   onClick={() => {
                     setCorreoEmpleado(emp.correo_empleado);
-                    setTimeout(() => setSugerenciasEmpleado([]), 0); // 👈 ejecuta después del click
+                    setTimeout(() => setSugerenciasEmpleado([]), 0); 
                   }}
                   className="p-2 hover:bg-gray-100 cursor-pointer"
                 >

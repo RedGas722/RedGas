@@ -1,4 +1,5 @@
-.btnDown {
-    margin-top: 65px;
-    margin-left: 10px;
+.customDescripcion {
+    display: grid;
+    grid-template-rows: 50px calc(100vh - 60px);
+    place-items: center;
 }

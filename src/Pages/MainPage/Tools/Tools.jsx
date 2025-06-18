@@ -21,7 +21,7 @@ export const ToolsSect = () => {
   }, []);
 
   return (
-    <section id="ToolsSect" className="NeoContainer_outset_TL flex flex-col p-[15px] gap-[20px] text-[var(--Font-Nav)]">
+    <section id="ToolsSect" className="NeoContainer_outset_TL !rounded-[40px] flex flex-col p-[15px] gap-[20px] text-[var(--Font-Nav)]">
       <TitleSectCategory IconClass='text-[var(--Font-Nav-shadow)]' iconCategory={faWrench} nameCategory="Herramientas" className='flex flex-row justify-start items-center gap-[8px]' />
       <Cards
         uniqueId="tools"

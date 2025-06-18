@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Inputs } from '../../UI/Inputs/Inputs';
+import { InputLabel } from '../../../UI/Login_Register/InputLabel/InputLabel';
 
 export const UpdateModal = ({ onClose, setRefrescar, servicioCarta }) => {
   const [servicio, setServicio] = useState(null);
@@ -81,12 +81,15 @@ export const UpdateModal = ({ onClose, setRefrescar, servicioCarta }) => {
         <h2 className="text-xl font-bold text-center">Actualizar Servicio</h2>
         {servicio && (
           <>
-            <Inputs
-              Type="1"
-              Place="Nombre"
-              Value={nuevoNombre}
+            <InputLabel
+              type="1"
+              ForID="nombre_servicio"
+              placeholder="Nombre"
+              childLabel="Nombre"
+              value={nuevoNombre}
               onChange={(e) => setNuevoNombre(e.target.value)}
               className="w-full"
+              placeholderError={!!errores.nuevoNombre}
             />
             {errores.nuevoNombre && (
               <p className="text-red-600 text-sm">{errores.nuevoNombre}</p>
@@ -100,12 +103,15 @@ export const UpdateModal = ({ onClose, setRefrescar, servicioCarta }) => {
             {errores.descripcion && (
               <p className="text-red-600 text-sm">{errores.descripcion}</p>
             )}
-            <Inputs
-              Type="5"
-              Place="Precio"
-              Value={precio}
+            <InputLabel
+              type="5"
+              ForID="precio_servicio"
+              placeholder="Precio"
+              childLabel="Precio"
+              value={precio}
               onChange={(e) => setPrecio(e.target.value)}
               className="w-full"
+              placeholderError={!!errores.precio}
             />
             {errores.precio && (
               <p className="text-red-600 text-sm">{errores.precio}</p>
@@ -128,9 +134,8 @@ export const UpdateModal = ({ onClose, setRefrescar, servicioCarta }) => {
         )}
         {mensaje && (
           <p
-            className={`text-center font-semibold ${
-              mensaje.includes('exitosamente') ? 'text-green-600' : 'text-red-600'
-            }`}
+            className={`text-center font-semibold ${mensaje.includes('exitosamente') ? 'text-green-600' : 'text-red-600'
+              }`}
           >
             {mensaje}
           </p>

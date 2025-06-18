@@ -4,7 +4,7 @@ import { UpdateModal } from './Update/Update';
 import { ButtonBack } from '../UI/ButtonBack/ButtonBack';
 import { BtnBack } from "../../UI/Login_Register/BtnBack";
 import CardsFacturesBack from './Get/CardFacturesBack';
-import Inputs from '../UI/Inputs/Inputs';
+import { InputLabel } from '../../UI/Login_Register/InputLabel/InputLabel';
 import { useBuscarFacturas } from './Get/Get';
 import { ProductsModal } from './Get/ProductsModal';
 
@@ -106,10 +106,12 @@ export const FacturesBack = () => {
 
         {/* Autocompletado cliente */}
         <div className="relative" ref={contenedorRefCliente}>
-          <Inputs
-            Type="1"
-            Place="Buscar por cliente"
-            Value={clienteCorreoBusqueda}
+          <InputLabel
+            type="1"
+            ForID="clienteBusqueda"
+            placeholder="Buscar por cliente"
+            childLabel="Buscar por cliente"
+            value={clienteCorreoBusqueda}
             onChange={(e) => handleClienteInput(e.target.value)}
           />
           {clienteSugerencias.length > 0 && (
@@ -131,10 +133,12 @@ export const FacturesBack = () => {
 
         {/* Autocompletado empleado */}
         <div className="relative" ref={contenedorRefEmpleado}>
-          <Inputs
-            Type="1"
-            Place="Buscar por empleado"
-            Value={empleadoBusqueda}
+          <InputLabel
+            type="1"
+            ForID="empleadoBusqueda"
+            placeholder="Buscar por empleado"
+            childLabel="Buscar por empleado"
+            value={empleadoBusqueda}
             onChange={(e) => handleEmpleadoInput(e.target.value)}
           />
           {empleadoSugerencias.length > 0 && (
@@ -143,7 +147,7 @@ export const FacturesBack = () => {
                 <div
                   key={empleado.id_empleado}
                   onClick={() => {
-                    setEmpleadoBusqueda(empleado.nombre_empleado);
+                    setEmpleadoBusqueda(empleado.correo_empleado);
                   }}
                   className="p-2 hover:bg-gray-100 cursor-pointer"
                 >

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import Inputs from "../../UI/Inputs/Inputs"; 
+import { InputLabel } from '../../../UI/Login_Register/InputLabel/InputLabel';
 
 export const UpdateModal = ({ onClose, setRefrescar, empleadoCarta }) => {
   const [empleado, setEmpleado] = useState(null);
@@ -112,65 +112,67 @@ export const UpdateModal = ({ onClose, setRefrescar, empleadoCarta }) => {
 
         {empleado && (
           <>
-            <Inputs
-              Type="1"
-              Place="Nombre"
-              Value={nombre}
+            <InputLabel
+              type="1"
+              ForID="nombre_empleado"
+              placeholder="Nombre"
+              childLabel="Nombre"
+              value={nombre}
               onChange={(e) => setNombre(e.target.value)}
               className="w-full"
+              placeholderError={!!errores.nombre}
             />
             {errores.nombre && (
               <p className="text-red-600 text-sm">{errores.nombre}</p>
             )}
-
-            <Inputs
-              Type="1"
-              Place="Apellido"
-              Value={apellido}
+            <InputLabel
+              type="1"
+              ForID="apellido_empleado"
+              placeholder="Apellido"
+              childLabel="Apellido"
+              value={apellido}
               onChange={(e) => setApellido(e.target.value)}
               className="w-full"
+              placeholderError={!!errores.apellido}
             />
             {errores.apellido && (
               <p className="text-red-600 text-sm">{errores.apellido}</p>
             )}
-
-            <Inputs
-              Type="2"
-              Place="Nuevo correo"
-              Value={nuevoCorreo}
-              onChange={(e) => {
-                setNuevoCorreo(e.target.value);
-                setErrores((prev) => ({ ...prev, nuevoCorreo: null }));
-              }}
+            <InputLabel
+              type="2"
+              ForID="correo_empleado"
+              placeholder="Correo"
+              childLabel="Correo"
+              value={nuevoCorreo}
+              onChange={(e) => setNuevoCorreo(e.target.value)}
               className="w-full"
+              placeholderError={!!errores.nuevoCorreo}
             />
             {errores.nuevoCorreo && (
               <p className="text-red-600 text-sm">{errores.nuevoCorreo}</p>
             )}
-
-            <Inputs
-              Type="6"
-              Place="Teléfono"
-              Value={empleado.telefono_empleado}
-              onChange={(e) =>
-                setEmpleado({ ...empleado, telefono_empleado: e.target.value })
-              }
+            <InputLabel
+              type="6"
+              ForID="telefono_empleado"
+              placeholder="Teléfono"
+              childLabel="Teléfono"
+              value={empleado.telefono_empleado || ''}
+              onChange={(e) => setEmpleado({ ...empleado, telefono_empleado: e.target.value })}
               className="w-full"
+              placeholderError={!!errores.telefono_empleado}
             />
             {errores.telefono_empleado && (
               <p className="text-red-600 text-sm">{errores.telefono_empleado}</p>
             )}
-
-            <Inputs
-              Type="1"
-              Place="Dirección"
-              Value={empleado.direccion_empleado}
-              onChange={(e) =>
-                setEmpleado({ ...empleado, direccion_empleado: e.target.value })
-              }
+            <InputLabel
+              type="1"
+              ForID="direccion_empleado"
+              placeholder="Dirección"
+              childLabel="Dirección"
+              value={empleado.direccion_empleado || ''}
+              onChange={(e) => setEmpleado({ ...empleado, direccion_empleado: e.target.value })}
               className="w-full"
             />
-
             <div className="flex justify-between gap-2">
               <button
                 onClick={cancelarEdicion}
@@ -178,7 +180,6 @@ export const UpdateModal = ({ onClose, setRefrescar, empleadoCarta }) => {
               >
                 Cancelar
               </button>
-
               <button
                 onClick={actualizarEmpleado}
                 className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded"

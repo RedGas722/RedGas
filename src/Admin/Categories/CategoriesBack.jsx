@@ -5,7 +5,7 @@ import { ButtonBack } from '../UI/ButtonBack/ButtonBack';
 import { buscarCategoriaPorNombre } from './Get/Get';
 import { BtnBack } from "../../UI/Login_Register/BtnBack";
 import CardCategoriesBack from './Get/CardCategoriesBack';
-import Inputs from '../UI/Inputs/Inputs';
+import { InputLabel } from '../../UI/Login_Register/InputLabel/InputLabel';
 
 export const CategoriesBack = () => {
   const [showRegisterModal, setShowRegisterModal] = useState(false);
@@ -105,12 +105,14 @@ export const CategoriesBack = () => {
         {/* Input de búsqueda con sugerencias */}
         <div className="relative" ref={contenedorRef}>
           <div className="flex items-center gap-2 border border-gray-300 rounded px-2 py-1 bg-white">
-            <Inputs
+            <InputLabel
               type="1"
-              placeholder="Nombre de la categoría"
+              ForID="nombre_categoria_busqueda"
+              placeholder="Buscar categoría"
+              childLabel="Buscar categoría"
               value={nombreBusqueda}
-              onChange={(e) => setNombreBusqueda(e.target.value)}
-              className="outline-none"
+              onChange={e => setNombreBusqueda(e.target.value)}
+              className="w-full"
             />
             <button
               onClick={buscarCategoria}

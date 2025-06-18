@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import Inputs from "../../UI/Inputs/Inputs"; 
+import { InputLabel } from "../../../UI/Login_Register/InputLabel/InputLabel";
 
 export const UpdateModal = ({ onClose, setRefrescar, clienteCarta }) => {
   const [cliente, setCliente] = useState(null);
@@ -113,59 +113,69 @@ export const UpdateModal = ({ onClose, setRefrescar, clienteCarta }) => {
 
         {cliente && (
           <>
-            <Inputs
-              Type="1"
-              Place="Nombre"
-              Value={nombre}
+            <InputLabel
+              type="1"
+              ForID="nombre_cliente"
+              placeholder="Nombre"
+              childLabel="Nombre"
+              value={nombre}
               onChange={(e) => setNombre(e.target.value)}
               className="w-full"
+              placeholderError={!!errores.nombre}
             />
             {errores.nombre && (
               <p className="text-red-600 text-sm">{errores.nombre}</p>
             )}
-
-            <Inputs
-              Type="1"
-              Place="Apellido"
-              Value={apellido}
+            <InputLabel
+              type="1"
+              ForID="apellido_cliente"
+              placeholder="Apellido"
+              childLabel="Apellido"
+              value={apellido}
               onChange={(e) => setApellido(e.target.value)}
               className="w-full"
+              placeholderError={!!errores.apellido}
             />
             {errores.apellido && (
               <p className="text-red-600 text-sm">{errores.apellido}</p>
             )}
-
-            <Inputs
-              Type="2"
-              Place="Nuevo correo"
-              Value={nuevoCorreo}
+            <InputLabel
+              type="2"
+              ForID="correo_cliente"
+              placeholder="Nuevo correo"
+              childLabel="Correo"
+              value={nuevoCorreo}
               onChange={(e) => {
                 setNuevoCorreo(e.target.value);
                 setErrores((prev) => ({ ...prev, nuevoCorreo: null }));
               }}
               className="w-full"
+              placeholderError={!!errores.nuevoCorreo}
             />
             {errores.nuevoCorreo && (
               <p className="text-red-600 text-sm">{errores.nuevoCorreo}</p>
             )}
-
-            <Inputs
-              Type="6"
-              Place="Teléfono"
-              Value={cliente.telefono_cliente}
+            <InputLabel
+              type="6"
+              ForID="telefono_cliente"
+              placeholder="Teléfono"
+              childLabel="Teléfono"
+              value={cliente.telefono_cliente}
               onChange={(e) =>
                 setCliente({ ...cliente, telefono_cliente: e.target.value })
               }
               className="w-full"
+              placeholderError={!!errores.telefono_cliente}
             />
             {errores.telefono_cliente && (
               <p className="text-red-600 text-sm">{errores.telefono_cliente}</p>
             )}
-
-            <Inputs
-              Type="1"
-              Place="Dirección"
-              Value={cliente.direccion_cliente}
+            <InputLabel
+              type="1"
+              ForID="direccion_cliente"
+              placeholder="Dirección"
+              childLabel="Dirección"
+              value={cliente.direccion_cliente}
               onChange={(e) =>
                 setCliente({ ...cliente, direccion_cliente: e.target.value })
               }
