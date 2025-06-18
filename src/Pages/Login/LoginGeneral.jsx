@@ -9,6 +9,7 @@ import withReactContent from 'sweetalert2-react-content'
 import Swal from 'sweetalert2'
 import './Login.css'
 import { validateUserType } from './ValidateUserType'
+import { startTokenRefresher } from "./TokenRefresher"
 
 export const LoginGeneral = () => {
     const navigate = useNavigate()
@@ -197,7 +198,7 @@ export const LoginGeneral = () => {
                                 <input type="checkbox" className="input" />
                                 <span className="custom-checkbox"></span>
                             </label>
-                            <div><p>Recordarme</p></div>
+                            <div onClick={() => startTokenRefresher(true)}><p>Recordarme</p></div>
                         </label>
                         <div className="text-[var(--main-focus)]">
                             <Link to="/Login/ForgotPassword">
