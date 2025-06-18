@@ -6,7 +6,7 @@ import withReactContent from 'sweetalert2-react-content'
 import Swal from 'sweetalert2'
 import './Services.css'
 
-const URL_IA = 'http://localhost:10101/Diagnostic'
+const URL_IA = 'https://redgas.onrender.com/Diagnostic'
 const URL_REDIS = 'https://redgas.onrender.com/ClienteServicesAdd'
 
 
