@@ -31,14 +31,13 @@ const getServiceColor = (label) => {
 	switch (label.toLowerCase()) {
 		case 'reparación':
 		case 'reparacion':
-			return 'var(--)'; // light red
+			return 'var(--Font-Nav2)'
 		case 'mantenimiento':
-			return '#fff9e5'; // light yellow
+			return 'var(--Font-Nav)'
 		case 'instalación':
-		case 'instalacion':
-			return '#e5ffe5'; // light green
+			return 'var(--main-color)'
 		default:
-			return '#f5f5f5'; // default gray
+			return 'var(--Font-Nav-shadow2)'
 	}
 };
 
@@ -131,12 +130,12 @@ export const CostumerServices = () => {
 						className="userServiceTec flex flex-col items-start justify-center !rounded-[40px] max-w-[400px] min-w-0 NeoContainer_outset_TL p-5 gap-3"
 					>
 						<div className="text-[var(--Font-Nav)] flex items-center gap-4 cursor-pointer" style={{ color: getServiceColor(service.label) }} onClick={() => handleOpen(idx)}>
-							<FontAwesomeIcon icon={getIconByLabel(service.label)} className="text-4xl"/>
+							<FontAwesomeIcon icon={getIconByLabel(service.label)} className="text-4xl" />
 							<p className="text-3xl font-bold">{service.label}</p>
 						</div>
 
 						<div className="text-[var(--main-color-sub)] pl-2 gap-3 flex items-center font-bold w-fit cursor-pointer" onClick={() => handleOpen(idx)}>
-							<FontAwesomeIcon icon={faUser} className="text-[var(--main-color)] text-5xl" />
+							<FontAwesomeIcon icon={faUser} className="text-5xl" style={{ color: getServiceColor(service.label) }} />
 							<div className="flex flex-col justify-center font-light leading-[20px] gap-[2px]">
 								<p className="text-xl font-bold text-[var(--main-color)]">{service.user}</p>
 								<p className="text-[1rem]">{service.phone}</p>
