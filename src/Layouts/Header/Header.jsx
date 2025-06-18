@@ -35,7 +35,6 @@ export const Header = () => {
 
     const isDesktop = () => window.innerWidth >= 768;
 
-    // Verificar si el usuario está autenticado para el nombre de usuario
     
     // Verificar si el usuario está autenticado
     useEffect(() => {
