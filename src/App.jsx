@@ -34,9 +34,14 @@ import { SalesBack } from './Admin/Sales/SalesBack.jsx'
 export function App() {
 
     useEffect(() => {
+    const token = localStorage.getItem('token');
+    const recordar = localStorage.getItem('recordarme') === 'true';
+
+    if (token && recordar) {
         startTokenRefresher();
+    }
     }, []);
-    
+
     return (
         <>
             <div>

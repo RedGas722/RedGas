@@ -9,11 +9,13 @@ import withReactContent from 'sweetalert2-react-content'
 import Swal from 'sweetalert2'
 import './Login.css'
 import { validateUserType } from './ValidateUserType'
+import { startTokenRefresher } from "./TokenRefresher"
 
 export const LoginGeneral = () => {
     const navigate = useNavigate()
     const [correo, setCorreo] = useState('')
     const [contrasena, setContrasena] = useState('')
+    const [recordarme, setRecordarme] = useState(false)
 
     const handleLogin = async (e) => {
         e.preventDefault()
@@ -70,7 +72,8 @@ export const LoginGeneral = () => {
                 alertSendForm(200, 'Inicio de sesión exitoso', `Bienvenido de nuevo ${user || 'Usuario'}`)
                 localStorage.setItem('token', token)
                 localStorage.setItem('tipo_usuario', userInfo.tipo_usuario)
-
+                localStorage.setItem('recordarme', recordarme ? 'true' : 'false')
+                startTokenRefresher();
                 setTimeout(() => {
                     navigate('/')
                 }, 0)
@@ -194,7 +197,7 @@ export const LoginGeneral = () => {
                     <section className="flex gap-[5px] items-center justify-between w-full">
                         <label className="flex gap-[5px] items-center justify-center cursor-pointer text-[var(--main-color-sub)]">
                             <label className="flex items-center justify-center">
-                                <input type="checkbox" className="input" />
+                                <input type="checkbox" className="input" checked={recordarme} onChange={() => setRecordarme(!recordarme)}/>
                                 <span className="custom-checkbox"></span>
                             </label>
                             <div><p>Recordarme</p></div>
