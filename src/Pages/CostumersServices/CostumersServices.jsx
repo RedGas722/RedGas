@@ -14,7 +14,7 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import { costumerServicesData } from "./costumerServicesData";
 import './CostumersServices.css';
-import { Footer } from "../MainPage/Footer/Footer";
+// import { Footer } from "../MainPage/Footer/Footer";
 
 const URL = 'http://localhost:10101/ClienteServicesGet';
 
@@ -25,6 +25,21 @@ const style = {
 	transform: 'translate(-50%, -50%)',
 	boxShadow: 24,
 	p: 2,
+};
+
+const getServiceColor = (label) => {
+	switch (label.toLowerCase()) {
+		case 'reparación':
+		case 'reparacion':
+			return 'var(--)'; // light red
+		case 'mantenimiento':
+			return '#fff9e5'; // light yellow
+		case 'instalación':
+		case 'instalacion':
+			return '#e5ffe5'; // light green
+		default:
+			return '#f5f5f5'; // default gray
+	}
 };
 
 export const CostumerServices = () => {
@@ -111,9 +126,12 @@ export const CostumerServices = () => {
 
 			<section className="h-fit flex flex-wrap justify-center text-[var(--main-color)] items-center gap-[40px] !p-[80px_0] bg-[var(--background-color)] MainPageContainer">
 				{costumerServicesData.map((service, idx) => (
-					<div key={idx} className="userServiceTec flex flex-col items-start justify-center !rounded-[40px] max-w-[400px] min-w-0 NeoContainer_outset_TL p-5 gap-3">
-						<div className="text-[var(--Font-Nav)] flex items-center gap-4 cursor-pointer" onClick={() => handleOpen(idx)}>
-							<FontAwesomeIcon icon={getIconByLabel(service.label)} className="text-4xl" />
+					<div
+						key={idx}
+						className="userServiceTec flex flex-col items-start justify-center !rounded-[40px] max-w-[400px] min-w-0 NeoContainer_outset_TL p-5 gap-3"
+					>
+						<div className="text-[var(--Font-Nav)] flex items-center gap-4 cursor-pointer" style={{ color: getServiceColor(service.label) }} onClick={() => handleOpen(idx)}>
+							<FontAwesomeIcon icon={getIconByLabel(service.label)} className="text-4xl"/>
 							<p className="text-3xl font-bold">{service.label}</p>
 						</div>
 
@@ -137,7 +155,13 @@ export const CostumerServices = () => {
 							aria-labelledby="modal-modal-title"
 							aria-describedby="modal-modal-description"
 						>
-							<Box sx={style} className="flex flex-col min-w-[330px] items-start justify-center gap-4 outline-none NeoContainer_outset_TL relative">
+							<Box
+								sx={{
+									...style,
+									backgroundColor: getServiceColor(service.label),
+								}}
+								className="flex flex-col min-w-[330px] items-start justify-center gap-4 outline-none NeoContainer_outset_TL relative"
+							>
 								<IconButton
 									aria-label="close"
 									onClick={handleClose}
@@ -171,7 +195,12 @@ export const CostumerServices = () => {
 										className={`accordionContain flex NeoContainer_outset_TL max-h-[256px] flex-col gap-0 ${isScrollable ? 'overflow-y-scroll' : 'overflow-y-auto'}`}
 									>
 										{service.solutions.map((item, i) => (
-											<Accordion key={i}>
+											<Accordion
+												key={i}
+												sx={{
+													backgroundColor: getServiceColor(service.label),
+												}}
+											>
 												<AccordionSummary
 													expandIcon={<ExpandMoreIcon />}
 													aria-controls={`panel${i}-content`}
@@ -195,7 +224,7 @@ export const CostumerServices = () => {
 					</div>
 				))}
 			</section>
-			<Footer />
+			{/* <Footer /> */}
 		</div>
 	);
 };

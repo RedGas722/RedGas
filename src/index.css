@@ -22,7 +22,6 @@ input::placeholder {
 :root {
   --main-color: #323232;
   --main-color-sub: #4f4f4f;
-  --main-focus: #2d8cf0;
   --Bacground-Admin: linear-gradient(90deg, #c7c7c7, #f2f2f2, #c7c7c7);
   /* Body-color-end----------------- Font-Nav*/
   --Font-Nav: #19A9A4;
