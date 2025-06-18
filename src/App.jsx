@@ -38,12 +38,12 @@ import { SalesBack } from './Admin/Sales/SalesBack.jsx'
 export function App() {
 
     useEffect(() => {
-    const token = localStorage.getItem('token');
-    const recordar = localStorage.getItem('recordarme') === 'true';
+        const token = localStorage.getItem('token');
+        const recordar = localStorage.getItem('recordarme') === 'true';
 
-    if (token && recordar) {
-        startTokenRefresher();
-    }
+        if (token && recordar) {
+            startTokenRefresher();
+        }
     }, []);
 
     return (
@@ -125,9 +125,9 @@ export function App() {
                     } />
 
                     <Route path="/Admin/Sales" element={
-                    <ProtectedRoute requiredTypes={[1, 3]}>
-                        <SalesBack />
-                    </ProtectedRoute>
+                        <ProtectedRoute requiredTypes={[1, 3]}>
+                            <SalesBack />
+                        </ProtectedRoute>
                     } />
 
                     {/* Rutas de Pago */}
