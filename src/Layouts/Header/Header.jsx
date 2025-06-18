@@ -9,7 +9,24 @@ import './Header.css'
 
 export const Header = () => {
     const navigate = useNavigate();
-    const token = localStorage.getItem('token');
+    const rawToken = localStorage.getItem('token');
+    let token = null;
+
+    if (rawToken) {
+    try {
+        const decoded = jwtDecode(rawToken);
+        const now = Date.now() / 1000;
+        if (decoded.exp > now) {
+        token = rawToken;
+        } else {
+        localStorage.removeItem('token');
+        localStorage.removeItem('tipo_usuario');
+        }
+    } catch (e) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('tipo_usuario');
+    }
+    }   
     const [userName, setUserName] = useState('');
     const [productos, setProductos] = useState([]);
     const [scrolled, setScrolled] = useState(false)
@@ -17,7 +34,7 @@ export const Header = () => {
     const [isChecked, setIsChecked] = useState(true);
 
     const isDesktop = () => window.innerWidth >= 768;
-
+    
     // Verificar si el usuario está autenticado
     useEffect(() => {
         if (token) {
