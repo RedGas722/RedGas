@@ -14,7 +14,7 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import './CostumersServices.css';
 
-const URL = 'https://redgas.onrender.com/ClienteServicesGet';
+const URL = 'http://localhost:10101/ClienteServicesGet';
 
 const style = {
 	position: 'absolute',
@@ -58,8 +58,11 @@ export const CostumerServices = () => {
 					const datainfo = await response.json();
 					const firstParse = JSON.parse(datainfo.get);
 					const secondParse = JSON.parse(JSON.parse(firstParse.item));
+          console.log('firstParse:', firstParse);
+          console.log('secondParse:', secondParse);
+          
 					const solutionsArray = Object.values(secondParse.resultado.posibles_soluciones);
-
+          
 					setUser(firstParse.userName);
 					setPhone(firstParse.userPhone);
 					setAddress(firstParse.userAddress);
