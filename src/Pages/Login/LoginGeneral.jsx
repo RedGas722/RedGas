@@ -200,7 +200,7 @@ export const LoginGeneral = () => {
                                 <input type="checkbox" className="input" checked={recordarme} onChange={() => setRecordarme(!recordarme)}/>
                                 <span className="custom-checkbox"></span>
                             </label>
-                            <div onClick={() => startTokenRefresher(true)}><p>Recordarme</p></div>
+                            <div><p>Recordarme</p></div>
                         </label>
                         <div className="text-[var(--main-focus)]">
                             <Link to="/Login/ForgotPassword">
