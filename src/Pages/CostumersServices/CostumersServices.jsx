@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useCallback } from "react"
 import { jwtDecode } from "jwt-decode"
 import { faUser, faTools, faPlug, faGears, faQuestion } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -40,6 +40,7 @@ const getServiceColor = (label) => {
 };
 
 export const CostumerServices = () => {
+	const [isAccepting, setIsAccepting] = useState(false)
 	const [dataInfo, setDataInfo] = useState([])
 	const [result, setResult] = useState([])
 	const [isScrollable, setIsScrollable] = useState(false)
@@ -107,10 +108,13 @@ export const CostumerServices = () => {
 	const handleOpen = (index) => setOpenIndex(index)
 	const handleClose = () => setOpenIndex(null)
 
-	const handleAceptServices = async (id) => {
+	const handleAceptServices = useCallback(async (id) => {
+		if (isAccepting) return
+		setIsAccepting(true)
+
 		console.log(id);
 
-	}
+	}, [isAccepting])
 
 
 	return (
@@ -131,7 +135,7 @@ export const CostumerServices = () => {
 
 					return (
 						<div key={idx} className="userServiceTec flex flex-col items-start justify-center !rounded-[40px] max-w-[400px] min-w-0 NeoContainer_outset_TL p-5 gap-3">
-							<div className="text-[var(--Font-Nav)] flex items-center gap-4 cursor-pointer" style={{ color: getServiceColor(service.label) }}> 
+							<div className="text-[var(--Font-Nav)] flex items-center gap-4 cursor-pointer" style={{ color: getServiceColor(service.label) }}>
 								<FontAwesomeIcon icon={getIconByLabel(service.etiqueta)} className="text-4xl" />
 								<p className="text-3xl font-bold">{service.etiqueta}</p>
 							</div>
@@ -212,7 +216,15 @@ export const CostumerServices = () => {
 										</div>
 
 										<div className="w-full flex justify-center items-center">
-											<Buttons type="submit" nameButton="Ver más" Onclick={handleOpen(idx)} />
+											<Buttons
+												type="submit"
+												nameButton={isAccepting ? "Procesando..." : "Aceptar Servicio"}
+												Onclick={() => {
+													handleAceptServices(item.userId);
+													handleOpen(idx);
+												}}
+											disabled={isAccepting}
+											/>
 										</div>
 									</div>
 
