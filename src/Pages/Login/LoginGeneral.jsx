@@ -51,6 +51,12 @@ export const LoginGeneral = () => {
                         contraseña_empleado: contrasena
                     }
                     break
+                case 4: // Tecnico
+                    bodyData = {
+                        correo_tecnico: correo,
+                        contraseña_tecnico: contrasena
+                    }
+                    break
                 default:
                     alertSendForm(401, 'Tipo de usuario no válido')
                     return
@@ -192,8 +198,25 @@ export const LoginGeneral = () => {
             <div className="divForm p-[30px_15px_15px_15px] z-50 shadow_box_RL NeoContainer_outset_TL rounded-3xl flex flex-col items-center w-fit justify-self-center gap-[20px]">
                 <h1 className="text-center text-4xl">¡Bienvenido Cliente!</h1>
                 <form className="form flex flex-col gap-2.5 justify-center items-center text-start w-full " onSubmit={handleLogin}>
-                    <InputLabel type='2' ForID='Email' childLabel='Correo electrónico' placeholder='example@gmail.com' value={correo} onChange={e => setCorreo(e.target.value)} required />
-                    <InputLabel type='3' ForID='Password' childLabel='Contraseña' placeholder='**********' value={contrasena} onChange={e => setContrasena(e.target.value)} required />
+                    
+                    {/* Email */}
+                    <InputLabel type='2'
+                        ForID='Email'
+                        childLabel='Correo electrónico'
+                        placeholder='example@gmail.com'
+                        value={correo}
+                        onChange={e => setCorreo(e.target.value)}
+                        required />
+                        
+                    {/* Password */}
+                    <InputLabel type='3'
+                        ForID='Password'
+                        childLabel='Contraseña'
+                        placeholder='**********'
+                        autoComplete='off'
+                        value={contrasena}
+                        onChange={e => setContrasena(e.target.value)}
+                        required />
                     <section className="flex gap-[5px] items-center justify-between w-full">
                         <label className="flex gap-[5px] items-center justify-center cursor-pointer text-[var(--main-color-sub)]">
                             <label className="flex items-center justify-center">
@@ -204,7 +227,7 @@ export const LoginGeneral = () => {
                         </label>
                         <div className="text-[var(--main-focus)]">
                             <Link to="/Login/ForgotPassword">
-                                <button className="cursor-pointer hover:text-[var(--Font-Nav)]"><p>Olvidaste tu contraseña?</p></button>
+                                <button type="button" className="cursor-pointer hover:text-[var(--Font-Nav)]"><p>Olvidaste tu contraseña?</p></button>
                             </Link>
                         </div>
                     </section>

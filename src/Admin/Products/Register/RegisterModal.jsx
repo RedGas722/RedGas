@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Inputs } from '../../UI/Inputs/Inputs';
+import { InputLabel } from '../../../UI/Login_Register/InputLabel/InputLabel';
 
 export const RegisterModal = ({ onClose, setRefrescar }) => {
   const [nombre, setNombre] = useState('');
@@ -165,28 +165,32 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
       <div className="bg-white rounded-2xl p-6 shadow-lg w-[320px] flex flex-col gap-4 relative text-black">
         <h2 className="text-xl font-bold text-center">Registrar Producto</h2>
 
-        <Inputs Type="1" Place="Nombre del Producto" Value={nombre} onChange={(e) => setNombre(e.target.value)} />
+        <InputLabel type="1" ForID="nombre" placeholder="Nombre del Producto" childLabel="Nombre del Producto" value={nombre} onChange={(e) => setNombre(e.target.value)} required placeholderError={!!errores.nombre} />
         {errores.nombre && <p className="text-red-600 text-sm">{errores.nombre}</p>}
 
-        <Inputs Type="5" Place="Precio del Producto" Value={precio} onChange={(e) => setPrecio(e.target.value)} />
+        <InputLabel type="5" ForID="precio" placeholder="Precio del Producto" childLabel="Precio del Producto" value={precio} onChange={(e) => setPrecio(e.target.value)} required placeholderError={!!errores.precio} />
         {errores.precio && <p className="text-red-600 text-sm">{errores.precio}</p>}
 
-        <textarea placeholder="Descripción" value={descripcion} onChange={(e) => setDescripcion(e.target.value)} className="border rounded p-2" />
+        <InputLabel type="1" ForID="descripcion" placeholder="Descripción" childLabel="Descripción" value={descripcion} onChange={(e) => setDescripcion(e.target.value)} required placeholderError={!!errores.descripcion} />
         {errores.descripcion && <p className="text-red-600 text-sm">{errores.descripcion}</p>}
 
-        <Inputs Type="5" Place="Stock" Value={stock} onChange={(e) => setStock(e.target.value)} />
+        <InputLabel type="5" ForID="stock" placeholder="Stock" childLabel="Stock" value={stock} onChange={(e) => setStock(e.target.value)} required placeholderError={!!errores.stock} />
         {errores.stock && <p className="text-red-600 text-sm">{errores.stock}</p>}
 
-        <Inputs Type="5" Place="Descuento" Value={descuento} onChange={(e) => setDescuento(e.target.value)} />
+        <InputLabel type="5" ForID="descuento" placeholder="Descuento" childLabel="Descuento" value={descuento} onChange={(e) => setDescuento(e.target.value)} required placeholderError={!!errores.descuento} />
         {errores.descuento && <p className="text-red-600 text-sm">{errores.descuento}</p>}
 
         {parseFloat(descuento) > 0 && (
-          <Inputs
-            Type="7"
-            Place="Fecha Descuento"
-            Value={fechaDescuento}
+          <InputLabel
+            type="7"
+            ForID="fechaDescuento"
+            placeholder="Fecha Descuento"
+            childLabel="Fecha Descuento"
+            value={fechaDescuento}
             onChange={(e) => setFechaDescuento(e.target.value)}
             min={new Date().toISOString().slice(0, 10)}
+            required
+            placeholderError={!!errores.fechaDescuento}
           />
         )}
         {errores.fechaDescuento && <p className="text-red-600 text-sm">{errores.fechaDescuento}</p>}
@@ -205,7 +209,7 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
         </select>
         {errores.categoria && <p className="text-red-600 text-sm">{errores.categoria}</p>}
 
-        <Inputs Type="4" Place="Imagen del Producto" onChange={handleImageChange} />
+        <InputLabel type="4" ForID="imagen" placeholder="Imagen del Producto" childLabel="Imagen del Producto" onChange={handleImageChange} required placeholderError={!!errores.imagen} />
         {errores.imagen && <p className="text-red-600 text-sm">{errores.imagen}</p>}
 
         <div className="flex justify-between gap-2">

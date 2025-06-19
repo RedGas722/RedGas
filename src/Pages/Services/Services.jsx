@@ -6,8 +6,8 @@ import withReactContent from 'sweetalert2-react-content'
 import Swal from 'sweetalert2'
 import './Services.css'
 
-const URL_IA = 'https://redgas.onrender.com/Diagnostic'
-const URL_REDIS = 'https://redgas.onrender.com/ClienteServicesAdd'
+const URL_IA = 'http://localhost:10101/Diagnostic'
+const URL_REDIS = 'http://localhost:10101/ClienteServicesAdd'
 
 
 export const ServicesInfo = () => {
@@ -17,7 +17,7 @@ export const ServicesInfo = () => {
 
    const handleServices = async (e) => {
       e.preventDefault()
-      
+
       if (description.length <= 0) {
          alertSendForm(401, 'Por favor, ingresa una descripción de tu necesidad', '')
          return
@@ -31,12 +31,13 @@ export const ServicesInfo = () => {
             })
 
             const data = await res.json()
-            const datainfo = JSON.stringify(data)
+            const dataInfo = JSON.stringify(data)
             const token = localStorage.getItem('token')
 
-            if (token || datainfo) {
-               sendServicesInfo(token, datainfo)
+            if (token || dataInfo) {
+               sendServicesInfo(token, dataInfo)
             } else {
+               navigate('/login')
                alertSendForm(502, 'Error al enviar la información', 'Ocurrió un error al enviar la información.');
             }
 
@@ -103,7 +104,7 @@ export const ServicesInfo = () => {
             })
                .then((result) => {
                   if (result.isConfirmed) {
-                     navigate('/CostumerMyServices')
+                     navigate('/CostumerMyService')
                   }
                })
             break;
@@ -111,16 +112,16 @@ export const ServicesInfo = () => {
          case 401:
             MySwal.fire({
                html: `
-                            <div style="display: flex; align-items: center;">
-                            <div style="font-size: 30px; color: #3498db; margin-right: 15px;">
-                                ℹ️
-                            </div>
-                            <div style="text-align: left;">
-                                <h3 style="margin: 0; font-size: 16px; font-weight: 600; color: #2c3e50;">
-                                ${title}
-                                </h3>
-                            </div>
-                            </div>
+                        <div style="display: flex; align-items: center;">
+                           <div style="font-size: 30px; color: #3498db; margin-right: 15px;">
+                              ℹ️
+                           </div>
+                           <div style="text-align: left;">
+                              <h3 style="margin: 0; font-size: 16px; font-weight: 600; color: #2c3e50;">
+                                 ${title}
+                              </h3>
+                           </div>
+                        </div>
                         `,
                showConfirmButton: false,
                position: 'top-end',
@@ -130,7 +131,8 @@ export const ServicesInfo = () => {
                background: '#ffffff',
             });
             descriptionInput.value = '';
-            descriptionInput.style.border = '2px solid #FF0000';
+            descriptionInput.style.color = 'var(--main-color)';
+            descriptionInput.style.background = '#a9191e14';
             break;
 
          case 502:
@@ -168,7 +170,7 @@ export const ServicesInfo = () => {
             })
                .then((result) => {
                   if (result.isConfirmed) {
-                     navigate('/')
+                     navigate('/login')
                      descriptionInput.value = '';
                   }
                })
@@ -178,21 +180,39 @@ export const ServicesInfo = () => {
 
 
    return (
-      <>
-         <div>
-            <h2 className="font-bold text-4xl text-[var(--Font-Nav)] fixed top-5 left-5 text-shadow">Formulario Servicio</h2>
-            <div className='btnDown'>
-               <BtnBack To='/' />
-            </div>
+      <section className="customDescripcion">
+         <div className="flex justify-between items-center p-[0_5px] w-full">
+            <BtnBack To='/' />
+            <h2 className="font-bold text-4xl text-[var(--Font-Nav)]">Formulario Servicio</h2>
          </div>
-         <section className="h-fit flex flex-wrap justify-center items-center gap-[20px] p-20">
-            <form onSubmit={handleServices}>
-               <p>ingrese aqui una descripcion de su necesidad - hacemos instalaciones/reparaciones/mantenimiento/otros </p>
-               <textarea ForID='Description' placeholder="mi estufa ya no enciende..." value={description} onChange={e => setDescription(e.target.value)} />
-               <Buttons type="submit" nameButton="enviar" />
+
+         <section className="h-fit flex justify-center items-center">
+            <form
+               onSubmit={handleServices}
+               className="w-full max-w-xl p-6 flex flex-col gap-3 NeoContainer_outset_TL"
+            >
+               <div>
+                  <p className="text-[18px] font-medium text-[var(--main-color)]">
+                     Ingrese una descripción de su necesidad
+                  </p>
+                  <p className="text-sm text-[var(--main-color-sub)]">
+                     Hacemos instalaciones, reparaciones y mantenimientos.
+                  </p>
+               </div>
+
+               <textarea
+                  id="Description"
+                  placeholder="Ej: Mi estufa ya no enciende..."
+                  value={description}
+                  onChange={e => setDescription(e.target.value)}
+                  className="w-full h-32 p-4 overflow-auto NeoSubContainer_outset_TL focus-within:!bg-white outline-none resize-none text-[var(--Font-Nav-shadow)]"
+               />
+               <div className="flex justify-center items-center">
+                  <Buttons type="submit" nameButton="enviar" />
+               </div>
             </form>
          </section>
-      </>
+      </section>
    )
 }
 

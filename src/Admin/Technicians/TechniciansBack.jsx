@@ -6,6 +6,7 @@ import { ButtonBack } from '../UI/ButtonBack/ButtonBack'
 import { BtnBack } from "../../UI/Login_Register/BtnBack"
 import CardTechniciansBack from './Get/CardTechniciansBack'
 import { buscarTecnicoPorCorreo } from './Get/Get'
+import { InputLabel } from '../../UI/Login_Register/InputLabel/InputLabel'
 
 
 export const TechniciansBack = () => {
@@ -108,21 +109,15 @@ export const TechniciansBack = () => {
       <div className='NeoContainer_outset_TL flex flex-col w-fit p-[0_0_0_20px]'>
         <h1 className="font-bold text-[20px] text-[var(--main-color)]">Técnicos</h1>
         <div className="relative" ref={contenedorRef}>
-          <div className="flex items-center gap-2 border border-gray-300 rounded px-2 py-1 mb-2">
-            <input
-              type="text"
-              placeholder="Correo del técnico"
-              value={correoBusqueda}
-              onChange={e => setCorreoBusqueda(e.target.value)}
-              className="outline-none px-2 py-1 w-[180px]"
-              ref={inputRef}
-            />
-            <button
-              onClick={handleBuscarTecnico}
-              aria-label="Buscar técnico"
-              className="text-gray-600 hover:text-gray-900"
-            >🔍</button>
-          </div>
+          <InputLabel
+            type="1"
+            ForID="correo_tecnico_busqueda"
+            placeholder="Buscar técnico"
+            childLabel="Buscar técnico"
+            value={correoBusqueda}
+            onChange={e => setCorreoBusqueda(e.target.value)}
+            className="w-full"
+          />
           {sugerencias.length > 0 && (
             <ul className="absolute z-10 bg-white border border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto w-full shadow">
               {sugerencias.map((tecnico) => (

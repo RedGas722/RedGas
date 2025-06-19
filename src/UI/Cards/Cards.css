@@ -87,7 +87,7 @@
     padding: 1px 15px;
     background: var(--bg-color);
     border: 2px solid var(--main-color);
-    border-radius: 5px;
+    border-radius: 6px;
     transition: all 0.3s;
     cursor: pointer;
 }
@@ -95,7 +95,6 @@
 .card-btn,
 .card-btn_Offer {
     color: var(--main-color);
-    transition: all 0.3s;
 }
 
 .card-img:hover {

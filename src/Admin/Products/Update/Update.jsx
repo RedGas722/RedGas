@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Inputs } from '../../UI/Inputs/Inputs';
+import { useState, useEffect } from 'react';
+import { InputLabel } from '../../../UI/Login_Register/InputLabel/InputLabel';
 
 export const UpdateModal = ({ onClose, setRefrescar, productoCarta }) => {
   const [producto, setProducto] = useState(null);
@@ -16,7 +16,7 @@ export const UpdateModal = ({ onClose, setRefrescar, productoCarta }) => {
   const URL_SE_ENCUENTRA_UPDATE = 'https://redgas.onrender.com/SeEncuentraUpdate';
   const URL_SE_ENCUENTRA_REGISTER = 'https://redgas.onrender.com/SeEncuentraRegister';
   const URL_SE_ENCUENTRA_DELETE = 'https://redgas.onrender.com/SeEncuentraDelete';
-  const URL_CATEGORIAS = 'https://redgas.onrender.com/CategoriaGetAll'; 
+  const URL_CATEGORIAS = 'https://redgas.onrender.com/CategoriaGetAll';
 
   // Cargar categorías al montar el componente
   useEffect(() => {
@@ -47,7 +47,7 @@ export const UpdateModal = ({ onClose, setRefrescar, productoCarta }) => {
       parseInt(producto.descuento) > 100
     ) {
       errores.descuento = 'Descuento no puede ser menor a 0 o mayor a 100';
-    }    
+    }
     if (parseInt(producto.descuento) > 0) {
       const hoy = new Date().toISOString().slice(0, 10);
       if (!producto.fechaDescuento || producto.fechaDescuento < hoy) {
@@ -220,7 +220,7 @@ export const UpdateModal = ({ onClose, setRefrescar, productoCarta }) => {
   };
 
   const convertirFecha = (fechaConvertir) => {
-  return fechaConvertir ? fechaConvertir.slice(0, 10) : '';
+    return fechaConvertir ? fechaConvertir.slice(0, 10) : '';
   };
 
   const actualizarRelacionCategoria = async (nombreFinal) => {
@@ -244,9 +244,9 @@ export const UpdateModal = ({ onClose, setRefrescar, productoCarta }) => {
         }
         throw new Error(data?.errors?.[0]?.msg || 'Error al actualizar categoría');
       }
-      } catch (error) {
-        throw error;
-      }
+    } catch (error) {
+      throw error;
+    }
   };
 
   const agregarRelacionCategoriaOfertas = async (nombreProducto, categorias) => {
@@ -319,66 +319,84 @@ export const UpdateModal = ({ onClose, setRefrescar, productoCarta }) => {
 
         {producto && (
           <>
-            <Inputs
-              Type="1"
-              Place="Nuevo Nombre del Producto"
-              Value={producto.nuevoNombre}
+            <InputLabel
+              type="1"
+              ForID="nuevo_nombre_producto"
+              placeholder="Nuevo nombre"
+              childLabel="Nombre"
+              value={producto.nuevoNombre || ''}
               onChange={(e) => setProducto({ ...producto, nuevoNombre: e.target.value })}
+              className="w-full"
+              placeholderError={!!errores.nuevoNombre}
             />
-            {errores.nuevoNombre && <p className="text-red-600 text-sm">{errores.nuevoNombre}</p>}
-
-            <Inputs
-              Type="5"
-              Place="Nuevo Precio del Producto"
-              Value={producto.precio}
-              onChange={(e) => setProducto({ ...producto, precio: e.target.value })}
-            />
-            {errores.precio && <p className="text-red-600 text-sm">{errores.precio}</p>}
-
-            <textarea
-              placeholder="Descripción"
-              value={producto.descripcion}
-              onChange={(e) => setProducto({ ...producto, descripcion: e.target.value })}
-              className="border rounded p-2"
-            />
-            {errores.descripcion && <p className="text-red-600 text-sm">{errores.descripcion}</p>}
-
-            <Inputs
-              Type="5"
-              Place="Nuevo Stock del Producto"
-              Value={producto.stock}
-              onChange={(e) => setProducto({ ...producto, stock: e.target.value })}
-            />
-            {errores.stock && <p className="text-red-600 text-sm">{errores.stock}</p>}
-
-            <Inputs
-              Type="5"
-              Place="Nuevo Descuento del Producto"
-              Value={producto.descuento}
-              onChange={(e) => {
-                const inputValue = e.target.value;
-
-                if (/^\d{0,3}$/.test(inputValue)) {
-                  // Eliminamos la lógica de forzar categoría 'Ofertas'
-                  setProducto({
-                    ...producto,
-                    descuento: inputValue,
-                    // Ya no cambiamos categoría automáticamente
-                  });
-                }
-              }}
-            />
-            {errores.descuento && <p className="text-red-600 text-sm">{errores.descuento}</p>}
-
-            {producto.descuento > 0 && (
-              <Inputs
-                Type="7"
-                Place="Nueva Fecha de Descuento"
-                Value={producto.fechaDescuento}
-                onChange={(e) => setProducto({ ...producto, fechaDescuento: e.target.value })}
-              />
+            {errores.nuevoNombre && (
+              <p className="text-red-600 text-sm">{errores.nuevoNombre}</p>
             )}
-            {errores.fechaDescuento && <p className="text-red-600 text-sm">{errores.fechaDescuento}</p>}
+            <InputLabel
+              type="5"
+              ForID="precio_producto"
+              placeholder="Precio"
+              childLabel="Precio"
+              value={producto.precio || ''}
+              onChange={(e) => setProducto({ ...producto, precio: e.target.value })}
+              className="w-full"
+              placeholderError={!!errores.precio}
+            />
+            {errores.precio && (
+              <p className="text-red-600 text-sm">{errores.precio}</p>
+            )}
+            <InputLabel
+              type="1"
+              ForID="descripcion_producto"
+              placeholder="Descripción"
+              childLabel="Descripción"
+              value={producto.descripcion || ''}
+              onChange={(e) => setProducto({ ...producto, descripcion: e.target.value })}
+              className="w-full"
+              placeholderError={!!errores.descripcion}
+            />
+            {errores.descripcion && (
+              <p className="text-red-600 text-sm">{errores.descripcion}</p>
+            )}
+            <InputLabel
+              type="5"
+              ForID="stock_producto"
+              placeholder="Stock"
+              childLabel="Stock"
+              value={producto.stock || ''}
+              onChange={(e) => setProducto({ ...producto, stock: e.target.value })}
+              className="w-full"
+              placeholderError={!!errores.stock}
+            />
+            {errores.stock && (
+              <p className="text-red-600 text-sm">{errores.stock}</p>
+            )}
+            <InputLabel
+              type="5"
+              ForID="descuento_producto"
+              placeholder="Descuento (%)"
+              childLabel="Descuento (%)"
+              value={producto.descuento || ''}
+              onChange={(e) => setProducto({ ...producto, descuento: e.target.value })}
+              className="w-full"
+              placeholderError={!!errores.descuento}
+            />
+            {errores.descuento && (
+              <p className="text-red-600 text-sm">{errores.descuento}</p>
+            )}
+            <InputLabel
+              type="7"
+              ForID="fecha_descuento"
+              placeholder="Fecha de descuento"
+              childLabel="Fecha de descuento"
+              value={producto.fechaDescuento || ''}
+              onChange={(e) => setProducto({ ...producto, fechaDescuento: e.target.value })}
+              className="w-full"
+              placeholderError={!!errores.fechaDescuento}
+            />
+            {errores.fechaDescuento && (
+              <p className="text-red-600 text-sm">{errores.fechaDescuento}</p>
+            )}
 
             {/* Select para categoría */}
             <select
@@ -411,7 +429,15 @@ export const UpdateModal = ({ onClose, setRefrescar, productoCarta }) => {
             )}
 
             <label className="mt-2">Seleccionar Nueva Imagen:</label>
-            <Inputs Type="4" Place="Seleccionar Nueva Imagen" onChange={handleImageChange} />
+            <InputLabel
+              type="4"
+              ForID="nueva_imagen"
+              placeholder="Seleccionar Nueva Imagen"
+              childLabel="Nueva Imagen"
+              onChange={handleImageChange}
+              className="w-full"
+              placeholderError={!!errores.imagen}
+            />
             {errores.imagen && <p className="text-red-600 text-sm">{errores.imagen}</p>}
 
             <div className="flex justify-between gap-2">
@@ -433,9 +459,8 @@ export const UpdateModal = ({ onClose, setRefrescar, productoCarta }) => {
 
         {mensaje && (
           <p
-            className={`text-center font-semibold ${
-              mensaje.includes('exitosamente') ? 'text-green-600' : 'text-red-600'
-            }`}
+            className={`text-center font-semibold ${mensaje.includes('exitosamente') ? 'text-green-600' : 'text-red-600'
+              }`}
           >
             {mensaje}
           </p>

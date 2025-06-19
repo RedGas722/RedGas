@@ -99,7 +99,7 @@ export const CardsOffers = ({ uniqueId, productos = [] }) => {
         {productos.map((producto, index) => (
           <SwiperSlide key={index}>
             <div className="flex justify-center justify-self-center h-fit p-[25px_0_25px_0] items-center w-fit">
-              <div className="card relative NeoSubContainer_outset_TL">
+              <div className="card relative NeoSubContainer_outset_TL !rounded-[25px]">
                 <div className="card-img">
                   <div className="img h-full">
                     <img

@@ -1,0 +1,5 @@
+.InfoContainer {
+    display: grid;
+    grid-template-rows: 100px calc(100px - 100dvh);
+    padding-top: 10px 0 0 10px;
+}

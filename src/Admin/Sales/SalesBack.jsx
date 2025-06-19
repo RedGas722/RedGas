@@ -3,7 +3,7 @@ import { RegisterModal } from './Register/RegisterModal';
 import { ButtonBack } from '../UI/ButtonBack/ButtonBack';
 import { BtnBack } from "../../UI/Login_Register/BtnBack";
 import CardSalesBack from './Get/CardSalesBack';
-import Inputs from '../UI/Inputs/Inputs';
+import { InputLabel } from '../../UI/Login_Register/InputLabel/InputLabel';
 import { useBuscarSales } from './Get/Get';
 
 export const SalesBack = () => {
@@ -64,10 +64,12 @@ export const SalesBack = () => {
         </div>
 
         <div className="relative" ref={contenedorRefProducto}>
-          <Inputs
-            Type="1"
-            Place="Buscar por producto"
-            Value={productoBusqueda}
+          <InputLabel
+            type="1"
+            ForID="buscar_producto"
+            placeholder="Buscar por producto"
+            childLabel="Buscar por producto"
+            value={productoBusqueda}
             onChange={(e) => handleProductoInput(e.target.value)}
           />
           {productoSugerencias.length > 0 && (

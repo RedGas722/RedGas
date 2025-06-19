@@ -8,3 +8,4 @@ npm install gsap
 npm install @emailjs/browser
 npm install jwt-decode
 npm install sweetalert2 sweetalert2-react-content
+npm install @mui/material @emotion/react @emotion/styled @mui/icons-material

@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import Inputs from "../../UI/Inputs/Inputs"; 
+import { useState, useEffect, useRef } from "react";
+import { InputLabel } from "../../../UI/Login_Register/InputLabel/InputLabel";
 
 export const UpdateModal = ({ onClose, setRefrescar, categoriaCarta }) => {
   const [categoria, setCategoria] = useState(null);
@@ -7,6 +7,8 @@ export const UpdateModal = ({ onClose, setRefrescar, categoriaCarta }) => {
   const [nombre, setNombre] = useState("");
   const [mensaje, setMensaje] = useState("");
   const [errores, setErrores] = useState({});
+  const [erroresActivos, setErroresActivos] = useState({});
+  const errorTimeouts = useRef({});
 
   const validarCampos = () => {
     const errores = {};
@@ -27,12 +29,18 @@ export const UpdateModal = ({ onClose, setRefrescar, categoriaCarta }) => {
     const erroresValidados = validarCampos();
     if (Object.keys(erroresValidados).length > 0) {
       setErrores(erroresValidados);
+      setErroresActivos(erroresValidados);
+      Object.keys(erroresValidados).forEach((key) => {
+        if (errorTimeouts.current[key]) clearTimeout(errorTimeouts.current[key]);
+        errorTimeouts.current[key] = setTimeout(() => {
+          setErroresActivos((prev) => ({ ...prev, [key]: undefined }));
+        }, 2000);
+      });
       return;
     }
-
     setErrores({});
+    setErroresActivos({});
     setMensaje("");
-
     try {
       const res = await fetch("https://redgas.onrender.com/CategoriaUpdate", {
         method: "PUT",
@@ -60,6 +68,7 @@ export const UpdateModal = ({ onClose, setRefrescar, categoriaCarta }) => {
     setNombre("");
     setNombreParaBusqueda("");
     setErrores({});
+    setErroresActivos({});
     setMensaje("");
     onClose();
   };
@@ -68,20 +77,21 @@ export const UpdateModal = ({ onClose, setRefrescar, categoriaCarta }) => {
     <div className="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-2xl p-6 shadow-lg w-[340px] flex flex-col gap-4 relative text-black">
         <h2 className="text-xl font-bold text-center">Actualizar Categoría</h2>
-
         {categoria && (
           <>
-            <Inputs
-              Type="1"
-              Place="Nombre Categoría"
-              Value={nombre}
+            <InputLabel
+              type="1"
+              ForID="nombre_categoria"
+              placeholder="Nombre de la categoría"
+              childLabel="Nombre"
+              value={nombre}
               onChange={(e) => setNombre(e.target.value)}
               className="w-full"
+              placeholderError={!!errores.nombre}
             />
             {errores.nombre && (
               <p className="text-red-600 text-sm">{errores.nombre}</p>
             )}
-
             <div className="flex justify-between gap-2">
               <button
                 onClick={cancelarEdicion}
@@ -89,7 +99,6 @@ export const UpdateModal = ({ onClose, setRefrescar, categoriaCarta }) => {
               >
                 Cancelar
               </button>
-
               <button
                 onClick={actualizarCategoria}
                 className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded"
@@ -99,7 +108,6 @@ export const UpdateModal = ({ onClose, setRefrescar, categoriaCarta }) => {
             </div>
           </>
         )}
-
         {mensaje && (
           <p
             className={`text-center font-semibold ${

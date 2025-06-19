@@ -6,12 +6,15 @@
   box-sizing: border-box;
   transition: all 0.3s ease;
 }
-button{
+
+button {
   cursor: pointer;
 }
+
 input[type="file"] {
   cursor: pointer;
 }
+
 input::placeholder {
   color: var(--main-color-sub);
 }
