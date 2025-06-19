@@ -41,29 +41,32 @@ export const Navs = ({ className, ref1, ref2, ref3, ref4 }) => {
         return () => observer.disconnect()
     }, [])
 
+    const generateTabs = () => {
+        const baseTabs = [
+            { label: 'Inicio', action: () => document.getElementById('linkHero')?.click() },
+            { label: 'Ofertas', action: () => document.getElementById('linkOffers')?.click() },
+            { label: 'Productos', action: () => document.getElementById('linkMainPage')?.click() },
+            { label: 'Técnicos', action: () => navigate('/Technic') },
+        ]
+
+        if (tipoUsuario === 4) {
+            baseTabs.push({ label: 'Servi', action: () => navigate('/CostumerServices') })
+        }
+
+        if (tipoUsuario === 1 || tipoUsuario === 3) {
+            baseTabs.push({ label: 'Admin', action: () => navigate('/Admin') })
+        }
+
+        return baseTabs
+    }
+
+    const tabOptions = generateTabs()
+
     const handleTabChange = (event, newValue) => {
         setTabIndex(newValue)
-        switch (newValue) {
-            case 0:
-                document.getElementById('linkHero')?.click()
-                break
-            case 1:
-                document.getElementById('linkOffers')?.click()
-                break
-            case 2:
-                document.getElementById('linkMainPage')?.click()
-                break
-            case 3:
-                navigate('/Technic')
-                break
-            case 4:
-                navigate('/CostumerServices')
-                break
-            case 5:
-                navigate('/Admin')
-                break
-            default:
-                break
+        const selectedTab = tabOptions[newValue]
+        if (selectedTab && typeof selectedTab.action === 'function') {
+            selectedTab.action()
         }
     }
 
@@ -77,43 +80,40 @@ export const Navs = ({ className, ref1, ref2, ref3, ref4 }) => {
             }}
         >
             <Tabs
-                value={tabIndex}
-                onChange={handleTabChange}
-                orientation={isMdUp ? 'horizontal' : 'vertical'}
-                scrollButtons
-                allowScrollButtonsMobile
-                TabIndicatorProps={{
-                    style: {
-                        backgroundColor: '#19A9A4',
-                        height: isMdUp ? '3px' : '100%',
-                        width: isMdUp ? 'auto' : '3px',
-                        left: isMdUp ? undefined : 0,   // Mover a la izquierda
-                        right: isMdUp ? 0 : 'auto',     // Eliminar derecha
+            value={tabIndex}
+            onChange={handleTabChange}
+            orientation={isMdUp ? 'horizontal' : 'vertical'}
+            scrollButtons
+            allowScrollButtonsMobile
+            TabIndicatorProps={{
+                style: {
+                    backgroundColor: '#19A9A4',
+                    height: isMdUp ? '3px' : '100%',
+                    width: isMdUp ? 'auto' : '3px',
+                    left: isMdUp ? undefined : 0,
+                    right: isMdUp ? 0 : 'auto',
+                },
+            }}
+            sx={{
+                [`& .${tabsClasses.scrollButtons}`]: {
+                    '&.Mui-disabled': { opacity: 0.3 },
+                },
+                '& .MuiTab-root': {
+                    color: 'inherit',
+                    borderBottom: isMdUp ? '3px solid transparent' : 'none',
+                    borderLeft: !isMdUp ? '3px solid transparent' : 'none',
+                    '&.Mui-selected': {
+                        color: '#19A9A4',
+                        borderBottom: isMdUp ? '3px solid #19A9A4' : 'none',
+                        borderLeft: !isMdUp ? '3px solid #19A9A4' : 'none',
                     },
-                }}
-                sx={{
-                    [`& .${tabsClasses.scrollButtons}`]: {
-                        '&.Mui-disabled': { opacity: 0.3 },
-                    },
-                    '& .MuiTab-root': {
-                        color: 'inherit',
-                        borderBottom: isMdUp ? '3px solid transparent' : 'none',
-                        borderLeft: !isMdUp ? '3px solid transparent' : 'none',
-                        '&.Mui-selected': {
-                            color: '#19A9A4',
-                            borderBottom: isMdUp ? '3px solid #19A9A4' : 'none',
-                            borderLeft: !isMdUp ? '3px solid #19A9A4' : 'none',
-                        },
-                    },
-                }}
-            >
-                <Tab label="Inicio" />
-                <Tab label="Ofertas" />
-                <Tab label="Productos" />
-                <Tab label="Técnicos" />
-                {(tipoUsuario === 1 || tipoUsuario === 3) && <Tab label="Admin" />}
-                {(tipoUsuario === 4) && <Tab label="Servi" />}
-            </Tabs>
+                },
+            }}
+        >
+            {tabOptions.map((tab, index) => (
+                <Tab key={index} label={tab.label} />
+            ))}
+        </Tabs>
 
             {/* LINKS OCULTOS PARA DISPARAR SCROLL */}
             <div className="hidden">
