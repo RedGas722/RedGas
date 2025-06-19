@@ -1,4 +1,10 @@
 {
+  "build": {
+    "env": {
+      "NODE_ENV": "production",
+      "ESBUILD_BINARY_PATH": "./node_modules/esbuild/bin/esbuild"
+    }
+  },
   "rewrites": [
     { "source": "/(.*)", "destination": "/" }
   ]

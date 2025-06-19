@@ -14,7 +14,7 @@ import IconButton from '@mui/material/IconButton'
 import CloseIcon from '@mui/icons-material/Close'
 import './CostumersServices.css'
 
-const URL = 'http://localhost:10101/ClienteServicesGetAll'
+const URL = 'https://redgas.onrender.com/ClienteServicesGetAll'
 
 const style = {
 	position: 'absolute',
