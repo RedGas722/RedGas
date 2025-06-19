@@ -21,6 +21,7 @@ const CardEmployeesBack = ({ empleado, setRefrescar, onUpdateClick }) => {
 
       <div className="mt-2 space-y-1 text-sm">
         <p><span className="font-semibold">ID:</span> {empleado.id_empleado}</p>
+        <p><span className="font-semibold">CC:</span> {empleado.cc}</p>
         <p><span className="font-semibold">Correo:</span> {empleado.correo_empleado}</p>
         <p><span className="font-semibold">Teléfono:</span> {empleado.telefono_empleado}</p>
         <p><span className="font-semibold">Dirección:</span> {empleado.direccion_empleado}</p>

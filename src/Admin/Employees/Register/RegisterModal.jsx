@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { InputLabel } from '../../../UI/Login_Register/InputLabel/InputLabel';
 
 export const RegisterModal = ({ onClose, setRefrescar }) => {
+  const [cc, setCc] = useState(0);
   const [nombre, setNombre] = useState('');
   const [apellido, setApellido] = useState('');
   const [correo, setCorreo] = useState('');
@@ -17,7 +18,7 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
   const validarCampos = () => {
     const errores = {};
     const correoRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
+    if (cc.length < 10 || cc.length > 15) errores.cc = 'Cedula obligatoria, entre 10 y 15 caracteres';
     if (!nombre.trim()) errores.nombre = 'Nombre es requerido.';
     if (!apellido.trim()) errores.apellido = 'Apellido es requerido.';
     if (!correoRegex.test(correo)) errores.correo = 'Correo inválido.';
@@ -54,6 +55,7 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          cc: cc,
           nombre_empleado: `${nombre} ${apellido}`,
           correo_empleado: correo,
           telefono_empleado: telefono,
@@ -75,6 +77,7 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
   };
 
   const cancelarRegistro = () => {
+    setCc(0);
     setNombre('');
     setApellido('');
     setCorreo('');
@@ -92,6 +95,16 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
 
         <h2 className="text-xl font-bold text-center">Registrar Empleado</h2>
 
+        <InputLabel
+          type='5'
+          ForID='cc'
+          placeholder='CC'
+          childLabel='CC'
+          value={cc}
+          onChange={(e) => setCc(e.target.value)}
+          placeholderError={!!errores.cc}
+        />
+        {errores.cc && <p className="text-red-600 text-sm">{errores.cc}</p>}
         <InputLabel
           type='1'
           ForID='nombre_empleado'

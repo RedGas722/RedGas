@@ -53,6 +53,10 @@ const CardTechniciansBack = ({ tecnico, setRefrescar, onUpdateClick }) => {
           <span className="break-words">{tecnico.id_tecnico}</span>
         </p>
         <p className="text-[var(--main-color)] font-medium flex flex-wrap gap-2">
+          <span className="font-semibold">CC:</span>
+          <span className="break-words">{tecnico.cc}</span>
+        </p>
+        <p className="text-[var(--main-color)] font-medium flex flex-wrap gap-2">
           <span className="font-semibold">Correo:</span>
           <span className="break-words">{tecnico.correo_tecnico}</span>
         </p>
