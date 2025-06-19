@@ -238,7 +238,12 @@ export const ContractsBack = () => {
       </div>
 
       {showRegisterModal && (
-        <RegisterModal onClose={() => setShowRegisterModal(false)} setRefrescar={setRefrescar} />
+        <RegisterModal
+          onClose={() => setShowRegisterModal(false)}
+          setRefrescar={setRefrescar}
+          empleados={empleados}
+          admins={admins}
+        />
       )}
       {showUpdateModal && contratoSeleccionado && (
         <UpdateModal
