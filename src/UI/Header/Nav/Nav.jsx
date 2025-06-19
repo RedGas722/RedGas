@@ -76,6 +76,15 @@ export const Navs = ({ className, ref1, ref2, ref3, ref4 }) => {
                     Admin
                 </NavLink>
             )}
+            
+            {/* Mostrar solo si está logueado como tecnico */}
+            {(tipoUsuario === 4 ) && (
+                <NavLink to="/Services" 
+                className='NeoSubContainer_outset_TL p-[5px_10px]'
+                >
+                    Servi
+                </NavLink>
+            )}
         </div>
     )
 }
