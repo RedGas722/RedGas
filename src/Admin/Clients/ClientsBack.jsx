@@ -119,6 +119,7 @@ export const ClientsBack = () => {
               value={correoBusqueda}
               onChange={e => setCorreoBusqueda(e.target.value)}
               className="w-full"
+              placeholderError={!!errorBusqueda}
             />
             <button
               onClick={buscarCliente}

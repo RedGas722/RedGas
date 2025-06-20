@@ -53,6 +53,7 @@ export const TechniciansBack = () => {
   // Para buscar técnicos por correo desde el input
   const [correoBusqueda, setCorreoBusqueda] = useState("");
   const [sugerencias, setSugerencias] = useState([]);
+  const [errorBusqueda, setErrorBusqueda] = useState(false);
   const contenedorRef = useRef(null);
   const inputRef = useRef(null);
 
@@ -65,6 +66,7 @@ export const TechniciansBack = () => {
     try {
       const resultados = await buscarTecnicoPorCorreo(correoBusqueda);
       setTecnicos(resultados);
+      setErrorBusqueda(resultados.length === 0); // Si no hay resultados, activa el error
     } catch (error) {
       console.error(error);
       setTecnicos([]);
@@ -117,6 +119,7 @@ export const TechniciansBack = () => {
             value={correoBusqueda}
             onChange={e => setCorreoBusqueda(e.target.value)}
             className="w-full"
+            placeholderError={!!errorBusqueda}
           />
           {sugerencias.length > 0 && (
             <ul className="absolute z-10 bg-white border border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto w-full shadow">

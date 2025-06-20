@@ -116,6 +116,7 @@ export const EmployeesBack = () => {
             value={correoBusqueda}
             onChange={e => setCorreoBusqueda(e.target.value)}
             className="w-full"
+            placeholderError={!!errorBusqueda}
           />
           <button
             onClick={buscarEmpleado}

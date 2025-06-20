@@ -99,6 +99,7 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
           value={fechaContrato}
           onChange={(e) => setFechaContrato(e.target.value)}
           required
+          placeholderError={!!(mensaje && mensaje.toLowerCase().includes('fecha'))}
         />
         <InputLabel
           type="1"
@@ -108,6 +109,7 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
           value={duracionContrato}
           onChange={(e) => setDuracionContrato(e.target.value)}
           required
+          placeholderError={!!(mensaje && mensaje.toLowerCase().includes('duración'))}
         />
         <InputLabel
           type="1"
@@ -117,6 +119,7 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
           value={tipoContrato}
           onChange={(e) => setTipoContrato(e.target.value)}
           required
+          placeholderError={!!(mensaje && mensaje.toLowerCase().includes('tipo'))}
         />
         <InputLabel
           type="5"
@@ -126,6 +129,7 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
           value={salario}
           onChange={(e) => setSalario(e.target.value)}
           required
+          placeholderError={!!(mensaje && mensaje.toLowerCase().includes('salario'))}
         />
         <InputLabel
           type="5"
@@ -135,6 +139,7 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
           value={idAdmin}
           onChange={(e) => setIdAdmin(e.target.value)}
           required
+          placeholderError={!!(mensaje && mensaje.toLowerCase().includes('administrador'))}
         />
         <InputLabel
           type="5"
@@ -144,6 +149,7 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
           value={idEmpleado}
           onChange={(e) => setIdEmpleado(e.target.value)}
           required
+          placeholderError={!!(mensaje && mensaje.toLowerCase().includes('empleado'))}
         />
 
         <div className="flex justify-between gap-2">
