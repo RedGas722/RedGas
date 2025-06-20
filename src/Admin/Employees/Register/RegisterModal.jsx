@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { InputLabel } from '../../../UI/Login_Register/InputLabel/InputLabel';
 
 export const RegisterModal = ({ onClose, setRefrescar }) => {
-  const [cc, setCc] = useState(0);
+  const [cc_empleado, setCc] = useState('');
   const [nombre, setNombre] = useState('');
   const [apellido, setApellido] = useState('');
   const [correo, setCorreo] = useState('');
@@ -18,7 +18,7 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
   const validarCampos = () => {
     const errores = {};
     const correoRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (cc.length < 10 || cc.length > 15) errores.cc = 'Cedula obligatoria, entre 10 y 15 caracteres';
+    if (cc_empleado.length < 10 || cc_empleado.length > 15) errores.cc_empleado = 'Cedula obligatoria, entre 10 y 15 caracteres';
     if (!nombre.trim()) errores.nombre = 'Nombre es requerido.';
     if (!apellido.trim()) errores.apellido = 'Apellido es requerido.';
     if (!correoRegex.test(correo)) errores.correo = 'Correo inválido.';
@@ -55,7 +55,7 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          cc: cc,
+          cc_empleado: cc_empleado,
           nombre_empleado: `${nombre} ${apellido}`,
           correo_empleado: correo,
           telefono_empleado: telefono,
@@ -63,10 +63,9 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
           contraseña_empleado: contrasena,
         }),
       });
-
       if (!res.ok) {
-        const errorData = await res.json();
-        setMensaje('Error al registrar: ' + (errorData?.errors?.[0]?.msg || 'Datos inválidos.'));
+        const errorText = await res.text();
+        setMensaje('Error al registrar: ' + errorText); 
         return;
       }
       setMensaje('Empleado registrado exitosamente.');
@@ -100,11 +99,11 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
           ForID='cc'
           placeholder='CC'
           childLabel='CC'
-          value={cc}
+          value={cc_empleado}
           onChange={(e) => setCc(e.target.value)}
-          placeholderError={!!errores.cc}
+          placeholderError={!!errores.cc_empleado}
         />
-        {errores.cc && <p className="text-red-600 text-sm">{errores.cc}</p>}
+        {errores.cc_empleado && <p className="text-red-600 text-sm">{errores.cc_empleado}</p>}
         <InputLabel
           type='1'
           ForID='nombre_empleado'

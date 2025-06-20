@@ -14,8 +14,8 @@ export const UpdateModal = ({ onClose, setRefrescar, empleadoCarta }) => {
     const errores = {};
     const correoRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    if (empleado.cc < 10 || empleado.cc > 15) {
-      errores.cc = "La cedula es obligatoria, entre 10 y 15 caracteres"
+    if (empleado.cc_empleado.length < 10 || empleado.cc_empleado.length > 15) {
+      errores.cc_empleado = "La cedula es obligatoria, entre 10 y 15 caracteres"
     }
     if (!nombre.trim()) errores.nombre = "El nombre es obligatorio";
     if (!apellido.trim()) errores.apellido = "El apellido es obligatorio";
@@ -66,7 +66,7 @@ export const UpdateModal = ({ onClose, setRefrescar, empleadoCarta }) => {
     const direccionActualizada = empleado.direccion_empleado?.trim() === "" ? "sin direccion" : empleado.direccion_empleado;
 
     const body = {
-      cc: empleado.cc,
+      cc_empleado: empleado.cc_empleado,
       nombre_empleado: `${nombre.trim()} ${apellido.trim()}`,
       nuevo_correo_empleado: nuevoCorreo,
       telefono_empleado: empleado.telefono_empleado,
@@ -122,13 +122,13 @@ export const UpdateModal = ({ onClose, setRefrescar, empleadoCarta }) => {
               ForID="cc"
               placeholder="CC"
               childLabel="CC"
-              value={empleado.cc}
-              onChange={(e) => setEmpleado({ ...empleado, cc: e.target.value })}
+              value={empleado.cc_empleado}
+              onChange={(e) => setEmpleado({ ...empleado, cc_empleado: e.target.value })}
               className="w-full"
               placeholderError={!!errores.cc}
             />
-            {errores.cc && (
-              <p className="text-red-600 text-sm">{errores.cc}</p>
+            {errores.cc_empleado && (
+              <p className="text-red-600 text-sm">{errores.cc_empleado}</p>
             )}
 
             <InputLabel

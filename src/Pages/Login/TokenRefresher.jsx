@@ -43,10 +43,12 @@ export function startTokenRefresher() {
 
         // Intentar renovar token
         fetch('https://redgas.onrender.com/renewToken', {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ recordarme: localStorage.getItem('recordarme') === 'true' })
         })
         .then(res => {
             if (res.ok) return res.json();
