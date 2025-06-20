@@ -52,7 +52,6 @@ export function App() {
                 <Routes>
                     <Route path="/" element={<MainPage />} />
                     <Route path="/CostumerMyService" element={<CostumerMyService />} />
-                    <Route path="/CostumerServices" element={<CostumerServices />} />
                     <Route path="/Services" element={<ServicesInfo />} />
                     <Route path="/Technic" element={<TechniciansPage />} />
                     <Route path="/Shopping" element={<Shopping />} />
@@ -127,6 +126,14 @@ export function App() {
                     <Route path="/Admin/Sales" element={
                         <ProtectedRoute requiredTypes={[1, 3]}>
                             <SalesBack />
+                        </ProtectedRoute>
+                    } />
+
+                    {/* rutas para tecnicos */}
+
+                    <Route path="/CostumerServices" element={
+                        <ProtectedRoute requiredTypes={[4]}>
+                            <CostumerServices />
                         </ProtectedRoute>
                     } />
 

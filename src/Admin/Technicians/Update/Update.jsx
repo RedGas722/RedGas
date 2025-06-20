@@ -13,7 +13,7 @@ export const UpdateModal = ({ onClose, setRefrescar, tecnicoCarta }) => {
   const validarCampos = () => {
     const errores = {};
     const correoRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
+    if (tecnico.cc_tecnico.length < 10 || tecnico.cc_tecnico.length > 15) errores.cc_tecnico = "Cédula obligatoria, entre 10 y 15 caracteres";
     if (!nombre.trim()) errores.nombre = 'El nombre es obligatorio';
     if (!apellido.trim()) errores.apellido = 'El apellido es obligatorio';
 
@@ -57,6 +57,7 @@ export const UpdateModal = ({ onClose, setRefrescar, tecnicoCarta }) => {
     setErrores({});
     setMensaje('');
     const body = {
+      cc_tecnico: tecnico.cc_tecnico,
       nombre_tecnico: `${nombre.trim()} ${apellido.trim()}`,
       nuevo_correo_tecnico: nuevoCorreo,
       telefono_tecnico: tecnico.telefono_tecnico,
@@ -100,6 +101,20 @@ export const UpdateModal = ({ onClose, setRefrescar, tecnicoCarta }) => {
         <h2 className="text-xl font-bold text-center">Actualizar Técnico</h2>
         {tecnico && (
           <>
+            <InputLabel
+              type="5"
+              ForID="cc"
+              placeholder="CC"
+              childLabel="CC"
+              value={tecnico?.cc_tecnico || 0}
+              onChange={(e) => setTecnico({ ...tecnico, cc_tecnico: e.target.value })}
+              className="w-full"
+              placeholderError={!!errores.cc}
+            />
+            {errores.cc_tecnico && (
+              <p className="text-red-600 text-sm">{errores.cc_tecnico}</p>
+            )}
+
             <InputLabel
               type="1"
               ForID="nombre_tecnico"

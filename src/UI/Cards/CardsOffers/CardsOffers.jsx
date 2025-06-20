@@ -7,6 +7,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight, faArrowLeft, faCartShopping, faTags } from '@fortawesome/free-solid-svg-icons';
 import Swal from 'sweetalert2'
 import { useNavigate } from "react-router-dom";
+import { Buttons } from "../../Login_Register/Buttons";
+import React, { useState } from 'react';
+import Modal from '@mui/material/Modal';
+import Box from '@mui/material/Box';
 
 
 async function agregarAlCarrito(item) {
@@ -34,6 +38,16 @@ async function agregarAlCarrito(item) {
 
 export const CardsOffers = ({ uniqueId, productos = [] }) => {
   const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const handleOpen = (producto) => {
+    setSelectedProduct(producto);
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+    setSelectedProduct(null);
+  };
 
   const handleAddToCart = async (producto) => {
     const token = localStorage.getItem("token");
@@ -46,7 +60,7 @@ export const CardsOffers = ({ uniqueId, productos = [] }) => {
         confirmButtonText: 'Ir al login',
         cancelButtonText: 'Cancelar'
       }).then((result) => {
-        if(result.isConfirmed){
+        if (result.isConfirmed) {
           navigate("/Login");
         }
       });
@@ -136,12 +150,77 @@ export const CardsOffers = ({ uniqueId, productos = [] }) => {
                     <p className="text-[18px] flex text-[var(--Font-Nav)] absolute left-4 top-4 font-bold">{producto.descuento} <span className="text-[12px]">%</span> </p>
                   </div>
                 </div>
+                <Buttons radius='7' nameButton='Ver más...' Onclick={() => handleOpen(producto)} />
               </div>
             </div>
           </SwiperSlide>
         ))}
       </Swiper>
-
+      {/* inicio */}
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-title"
+        aria-describedby="modal-description"
+        disableScrollLock={true}
+      >
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: 350,
+            bgcolor: 'background.paper',
+            zIndex: '1000',
+            boxShadow: 24,
+            borderRadius: 4,
+            p: 4,
+          }}
+        >
+          {selectedProduct && (
+            <div className="card relative !rounded-[25px]">
+              <div className="card-img">
+                <div className="img h-full">
+                  <img
+                    src={selectedProduct.imagen ? `data:image/jpeg;base64,${selectedProduct.imagen}` : "https://via.placeholder.com/150"}
+                    alt={selectedProduct.nombre_producto || "Producto"}
+                    className="rounded-[20px]"
+                  />
+                </div>
+              </div>
+              <div className="flex gap-1 items-end justify-center">
+                <div className="card-title">{selectedProduct.nombre_producto}</div>
+              </div>
+              <div className="card-subtitle">
+                {selectedProduct.descripcion_producto || "Sin descripción disponible."}
+              </div>
+              <hr className="card-divider" />
+              <div className="card-footer">
+                <div className="card-price">
+                  <p className="text-[var(--Font-Nav2)]"><span className="text-[var(--Font-Nav2-shadow)]">$</span>{(parseFloat(selectedProduct.precio_producto) - (parseFloat(selectedProduct.precio_producto) * (selectedProduct.descuento / 100))).toLocaleString()} <span className="text-[var(--main-color-sub)] text-[12px]">Cop</span> </p>
+                  <div className="text-[15px] text-[var(--Font-Nav)] ">
+                    <p className="text-[var(--Font-Nav-shadow)]">$ <span className="line-through decoration-[1.5px] decoration-[var(--Font-Nav2)]">{(parseFloat(selectedProduct.precio_producto)).toLocaleString()}</span></p>
+                  </div>
+                </div>
+                <button
+                  className="card-btn_Offer"
+                  onClick={() => handleAddToCart(selectedProduct)}
+                >
+                  <FontAwesomeIcon icon={faCartShopping} />
+                </button>
+              </div>
+              <div className="absolute top-0 -right-1">
+                <div className="relative flex items-center text-[var(--main-color)]">
+                  <FontAwesomeIcon icon={faTags} className="text-6xl text rotate-90" />
+                  <p className="text-[18px] flex text-[var(--Font-Nav)] absolute left-4 top-4 font-bold">{selectedProduct.descuento} <span className="text-[12px]">%</span> </p>
+                </div>
+              </div>
+            </div>
+          )}
+        </Box>
+      </Modal>
+      {/* fin */}
       <div className="flex flex-col justify-center items-center self-center w-fit p-[10px] NeoSubContainer_outset_TL text-[var(--main-color)]">
         <div className="flex justify-center items-center gap-[20px]">
           <button

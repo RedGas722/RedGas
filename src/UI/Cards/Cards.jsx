@@ -9,75 +9,75 @@ import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2';
 
 async function agregarAlCarrito(item) {
-    const token = localStorage.getItem("token");
-    if (!token) {
-        // Se comprobará en handleAddToCart
-        return null;
-    }
-    const res = await fetch("https://redgas.onrender.com/CartAdd", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`,
-      },
-      body: JSON.stringify(item),
-    });
-  
-    if (!res.ok) {
-      const error = await res.json();
-      throw new Error(error.message || "Error al agregar al carrito");
-    }
-    return await res.json();
+  const token = localStorage.getItem("token");
+  if (!token) {
+    // Se comprobará en handleAddToCart
+    return null;
+  }
+  const res = await fetch("https://redgas.onrender.com/CartAdd", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`,
+    },
+    body: JSON.stringify(item),
+  });
+
+  if (!res.ok) {
+    const error = await res.json();
+    throw new Error(error.message || "Error al agregar al carrito");
+  }
+  return await res.json();
 }
-  
+
 export const Cards = ({ uniqueId, productos = [] }) => {
 
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    const handleAddToCart = async (producto) => {
-        const token = localStorage.getItem("token");
-        if (!token) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'No estás logueado',
-                text: 'Debes iniciar sesión para agregar productos al carrito.',
-                showCancelButton: true,
-                confirmButtonText: 'Ir al login',
-                cancelButtonText: 'Cancelar',
-                allowOutsideClick: false,
-                allowEscapeKey: false
-            }).then((result) => {
-                if(result.isConfirmed){
-                    navigate("/Login");
-                }
-            });
-            return;
+  const handleAddToCart = async (producto) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'No estás logueado',
+        text: 'Debes iniciar sesión para agregar productos al carrito.',
+        showCancelButton: true,
+        confirmButtonText: 'Ir al login',
+        cancelButtonText: 'Cancelar',
+        allowOutsideClick: false,
+        allowEscapeKey: false
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate("/Login");
         }
+      });
+      return;
+    }
 
-        const item = {
-            productId: producto.id_producto,
-            productName: producto.nombre_producto,
-            quantity: 1,
-            price: producto.precio_producto,
-            discount: producto.descuento || 0
-        };
-
-        try {
-            await agregarAlCarrito(item);
-            Swal.fire({
-                icon: 'success',
-                title: 'Producto agregado',
-                text: `"${producto.nombre_producto}" fue agregado al carrito`
-            });
-        } catch (error) {
-            console.error("Error al agregar al carrito", error);
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: "Ocurrió un error al agregar al carrito"
-            });
-        }
+    const item = {
+      productId: producto.id_producto,
+      productName: producto.nombre_producto,
+      quantity: 1,
+      price: producto.precio_producto,
+      discount: producto.descuento || 0
     };
+
+    try {
+      await agregarAlCarrito(item);
+      Swal.fire({
+        icon: 'success',
+        title: 'Producto agregado',
+        text: `"${producto.nombre_producto}" fue agregado al carrito`
+      });
+    } catch (error) {
+      console.error("Error al agregar al carrito", error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: "Ocurrió un error al agregar al carrito"
+      });
+    }
+  };
 
   return (
     <section id={`CardSect-${uniqueId}`} className="flex flex-col gap-[10px] h-fit w-[100%]">
@@ -129,6 +129,7 @@ export const Cards = ({ uniqueId, productos = [] }) => {
                     <FontAwesomeIcon icon={faCartShopping} />
                   </button>
                 </div>
+              <button>dsadasd</button>
               </div>
             </div>
           </SwiperSlide>

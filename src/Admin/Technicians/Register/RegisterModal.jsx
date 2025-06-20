@@ -2,6 +2,7 @@ import { useState, useRef } from 'react';
 import { InputLabel } from '../../../UI/Login_Register/InputLabel/InputLabel';
 
 export const RegisterModal = ({ onClose, setRefrescar }) => {
+  const [cc_tecnico, setCc] = useState('');
   const [nombre, setNombre] = useState('');
   const [apellido, setApellido] = useState('');
   const [correo, setCorreo] = useState('');
@@ -18,6 +19,7 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
 
   const validarCampos = () => {
     const errores = {};
+    if (cc_tecnico.length < 10 || cc_tecnico.length > 15) errores.cc_tecnico = "Cédula obligatoria, entre 10 y 15 caracteres";
     if (!nombre.trim()) errores.nombre = 'Nombre es requerido.';
     if (!apellido.trim()) errores.apellido = 'Apellido es requerido.';
     if (!correo.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) errores.correo = 'Correo inválido.';
@@ -57,6 +59,7 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
         }
       }
       const formData = new FormData();
+      formData.append('cc_tecnico', cc_tecnico);
       formData.append('nombre_tecnico', nombre + ' ' + apellido);
       formData.append('correo_tecnico', correo);
       formData.append('telefono_tecnico', telefono);
@@ -78,6 +81,7 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
   };
 
   const cancelarRegistro = () => {
+    setCc(0);
     setNombre('');
     setApellido('');
     setCorreo('');
@@ -98,6 +102,7 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
     <div className="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50">
       <div className="NeoContainer_Admin_outset_TL p-6 w-[320px] flex flex-col gap-4 relative text-[var(--main-color)]">
         <h2 className="text-xl font-bold text-center">Registrar Técnico</h2>
+        <InputLabel type='5' placeholder={erroresActivos.cc_tecnico || 'CC'} value={cc_tecnico} onChange={(e) => setCc(e.target.value)} placeholderError={!!erroresActivos} />
         <InputLabel type='1' placeholder={erroresActivos.nombre || 'Nombre del Técnico'} value={nombre} onChange={(e) => setNombre(e.target.value)} placeholderError={!!erroresActivos.nombre} />
         <InputLabel type='1' placeholder={erroresActivos.apellido || 'Apellido del Técnico'} value={apellido} onChange={(e) => setApellido(e.target.value)} placeholderError={!!erroresActivos.apellido} />
         <InputLabel type='2' placeholder={erroresActivos.correo || 'Correo del Técnico'} value={correo} onChange={(e) => setCorreo(e.target.value)} placeholderError={!!erroresActivos.correo} />

@@ -274,7 +274,7 @@ export const Shopping = () => {
                 <section className='NeoContainer_outset_TL flex gap-[20px] p-[20px_10px] w-[70%] h-fit'>
                   <div>
                     <img
-                      src={producto.imagen ? `data:image/jpegbase64,${producto.imagen}` : "https://via.placeholder.com/150"}
+                      src={producto.imagen ? `data:image/jpeg;base64,${producto.imagen}` : "https://via.placeholder.com/150"}
                       alt={producto.nombre_producto}
                       className='w-[150px] rounded-[20px]'
                     />

@@ -1,5 +1,34 @@
 @import "tailwindcss";
 
+:root {
+  --main-color: #323232;
+  --main-color-sub: #4f4f4f;
+  --Bacground-Admin: linear-gradient(90deg, #c7c7c7, #f2f2f2, #c7c7c7);
+  --Font-Nav: #19A9A4;
+  --Font-Nav-shadow: #106A67;
+  --Font-Nav-shadow2: #0d5552;
+  --Font-Nav2: #A9191E;
+  --Font-Nav2-shadow: #6a1013;
+  --background-color: #ffff;
+  --shadow-1: #CACACA;
+  --shadow-2: #F2F2F2;
+  --shadow-3: #CCCED0;
+  --shadow-4: #F4F6FA;
+  --shadow-5: #DADADA;
+  --radius-main: 20px;
+  --radius-admin: 10px;
+  --shadow-main: 9.91px 9.91px 15px var(--shadow-1), -9.91px -9.91px 15px var(--shadow-2);
+  --shadow-main-inset: inset -9.91px -9.91px 15px var(--shadow-1), inset 9.91px 9.91px 15px var(--shadow-2);
+  --shadow-admin: 9.91px 9.91px 15px var(--shadow-1), -9.91px -9.91px 15px var(--shadow-2);
+  --shadow-sub-outset: 9.91px 9.91px 15px var(--shadow-3), -9.91px -9.91px 15px var(--shadow-4);
+  --shadow-sub-inset: inset -9.91px -9.91px 15px var(--shadow-3), 9.91px 9.91px 15px var(--shadow-4);
+  --shadow-sub-inset-total: inset -4px -4px 8px var(--shadow-3), inset 4px 4px 8px var(--shadow-4);
+  --shadow-sub-outset-total: 4px 4px 8px var(--shadow-3), -4px -4px 8px var(--shadow-4);
+  --shadow-outset-br: -9.91px -9.91px 15px var(--shadow-1), 9.91px 9.91px 15px var(--shadow-2);
+  --shadow-sub-inset-br: inset 9.91px 9.91px 15px var(--shadow-1), -9.91px -9.91px 15px var(--shadow-2);
+  --shadow-inset-br: inset 9.91px 9.91px 15px var(--shadow-1), -9.91px -9.91px 15px var(--shadow-2);
+}
+
 * {
   margin: 0;
   font-family: Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
@@ -17,28 +46,6 @@ input[type="file"] {
 
 input::placeholder {
   color: var(--main-color-sub);
-}
-
-:root {
-  --main-color: #323232;
-  --main-color-sub: #4f4f4f;
-  --Bacground-Admin: linear-gradient(90deg, #c7c7c7, #f2f2f2, #c7c7c7);
-  /* Body-color-end----------------- Font-Nav*/
-  --Font-Nav: #19A9A4;
-  --Font-Nav-shadow: #106A67;
-  --Font-Nav-shadow2: #0d5552;
-  --Font-Nav2: #A9191E;
-  --Font-Nav2-shadow: #6a1013;
-  /* ADMIN */
-  --background-color: #ffff;
-  /* Shadows Neomorfism */
-  --shadow-1: #CACACA;
-  --shadow-2: #F2F2F2;
-  /* Sub Shadows Neomorfism */
-  --shadow-3: #CCCED0;
-  --shadow-4: #F4F6FA;
-  /* For Inputs:focus */
-  --shadow-5: #DADADA;
 }
 
 body {
@@ -59,20 +66,20 @@ input[type="password"]::-webkit-reveal {
 
   .NeoContainer_inset_TL {
     background: var(--background-color);
-    border-radius: 20px;
-    box-shadow: inset -9.91px -9.91px 15px var(--shadow-1), inset 9.91px 9.91px 15px var(--shadow-2);
+    border-radius: var(--radius-main);
+    box-shadow: var(--shadow-main-inset);
   }
 
   .NeoContainer_outset_TL {
     background: var(--background-color);
-    border-radius: 20px;
-    box-shadow: 9.91px 9.91px 15px var(--shadow-1), -9.91px -9.91px 15px var(--shadow-2);
+    border-radius: var(--radius-main);
+    box-shadow: var(--shadow-main);
   }
 
   .NeoContainer_Admin_outset_TL {
     background: #e0e2e5e3;
-    border-radius: 10px;
-    box-shadow: 9.91px 9.91px 15px var(--shadow-1), -9.91px -9.91px 15px var(--shadow-2);
+    border-radius: var(--radius-admin);
+    box-shadow: var(--shadow-admin);
   }
 
   .NeoNone {
@@ -83,44 +90,44 @@ input[type="password"]::-webkit-reveal {
 
   .NeoSubContainer_outset_TL {
     background: var(--background-color);
-    border-radius: 20px;
-    box-shadow: 9.91px 9.91px 15px var(--shadow-3), -9.91px -9.91px 15px var(--shadow-4);
+    border-radius: var(--radius-main);
+    box-shadow: var(--shadow-sub-outset);
   }
 
   .NeoSubContainer_inset_TL {
     background: var(--background-color);
-    border-radius: 20px;
-    box-shadow: inset -9.91px -9.91px 15px var(--shadow-3), 9.91px 9.91px 15px var(--shadow-4);
+    border-radius: var(--radius-main);
+    box-shadow: var(--shadow-sub-inset);
   }
 
   .NeoSubContainer_inset_TOTAL {
     background: var(--background-color);
-    border-radius: 20px;
-    box-shadow: inset -4px -4px 8px var(--shadow-3), inset 4px 4px 8px var(--shadow-4);
+    border-radius: var(--radius-main);
+    box-shadow: var(--shadow-sub-inset-total);
   }
 
   .NeoSubContainer_outset_TOTAL {
     background: var(--background-color);
-    border-radius: 20px;
-    box-shadow: 4px 4px 8px var(--shadow-3), -4px -4px 8px var(--shadow-4);
+    border-radius: var(--radius-main);
+    box-shadow: var(--shadow-sub-outset-total);
   }
 
   .NeoContainer_outset_BR {
     background: var(--background-color);
-    border-radius: 20px;
-    box-shadow: -9.91px -9.91px 15px var(--shadow-1), 9.91px 9.91px 15px var(--shadow-2);
+    border-radius: var(--radius-main);
+    box-shadow: var(--shadow-outset-br);
   }
 
   .NeoSubContainer_inset_BR {
     background: var(--background-color);
-    border-radius: 20px;
-    box-shadow: inset 9.91px 9.91px 15px var(--shadow-1), -9.91px -9.91px 15px var(--shadow-2);
+    border-radius: var(--radius-main);
+    box-shadow: var(--shadow-sub-inset-br);
   }
 
   .NeoContainer_inset_BR {
     background: var(--background-color);
-    border-radius: 20px;
-    box-shadow: inset 9.91px 9.91px 15px var(--shadow-1), -9.91px -9.91px 15px var(--shadow-2);
+    border-radius: var(--radius-main);
+    box-shadow: var(--shadow-inset-br);
   }
 
   .inputs:focus-within {
@@ -143,8 +150,8 @@ input[type="password"]::-webkit-reveal {
 
   .buttonTL:active {
     background: var(--background-color);
-    border-radius: 20px;
-    box-shadow: inset 9.91px 9.91px 15px #CACACA, -9.91px -9.91px 15px #F2F2F2;
+    border-radius: var(--radius-main);
+    box-shadow: var(--shadow-main-inset);
   }
 
   .buttonTL2 {
@@ -156,7 +163,7 @@ input[type="password"]::-webkit-reveal {
   .buttonTL2:active {
     color: var(--Font-Nav);
     background: var(--background-color);
-    border-radius: 20px;
-    box-shadow: inset 9.91px 9.91px 15px #CACACA, -9.91px -9.91px 15px #F2F2F2;
+    border-radius: var(--radius-main);
+    box-shadow: var(--shadow-main-inset);
   }
 }
