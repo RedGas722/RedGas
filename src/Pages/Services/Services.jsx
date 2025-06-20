@@ -7,7 +7,7 @@ import Swal from 'sweetalert2'
 import './Services.css'
 
 const URL_IA = 'http://localhost:10101/Diagnostic'
-const URL_REDIS = 'https://redgas.onrender.com/ClienteServicesAdd'
+const URL_REDIS = 'http://localhost:10101/ClienteServicesAdd'
 
 
 export const ServicesInfo = () => {
@@ -31,12 +31,13 @@ export const ServicesInfo = () => {
             })
 
             const data = await res.json()
-            const datainfo = JSON.stringify(data)
+            const dataInfo = JSON.stringify(data)
             const token = localStorage.getItem('token')
 
-            if (token || datainfo) {
-               sendServicesInfo(token, datainfo)
+            if (token || dataInfo) {
+               sendServicesInfo(token, dataInfo)
             } else {
+               navigate('/login')
                alertSendForm(502, 'Error al enviar la información', 'Ocurrió un error al enviar la información.');
             }
 

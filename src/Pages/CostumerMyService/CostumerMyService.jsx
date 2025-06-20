@@ -7,7 +7,7 @@ import { BtnBack } from "../../UI/Login_Register/BtnBack"
 import { Buttons } from "../../UI/Login_Register/Buttons"
 import './CostumerMyService.css'
 
-const URL_GET = 'https://redgas.onrender.com/ClienteServicesGet'
+const URL_GET = 'http://localhost:10101/ClienteServicesGet'
 const URL_DELETE = 'http://localhost:10101/ClienteServicesDelete'
 
 export const CostumerMyService = () => {
@@ -43,7 +43,7 @@ export const CostumerMyService = () => {
           }
 
           const datainfo = await response.json()
-
+          
           if (!datainfo.get) {
             navigate('/Services')
           }

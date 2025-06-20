@@ -25,6 +25,8 @@ import ConfirmacionPsE from './Pages/Shopping/ConfirmacionPsE.jsx'
 import { NotFound } from './Pages/NotFound/NotFound.jsx'
 import { LoginGeneral } from './Pages/Login/LoginGeneral.jsx'
 import { LoginTechnician } from './Pages/Login/LoginTechnician.jsx'
+import { startTokenRefresher } from './Pages/Login/TokenRefresher.jsx';
+import { useEffect } from 'react'
 import { SearchPage } from './Pages/SearchPage/SearchPage.jsx'
 import { ProductInfo } from './Pages/ProductInfo/ProductInfo.jsx'
 
@@ -34,6 +36,16 @@ import { ProtectedRoute } from './Pages/Login/ProtectedRoutes.jsx'
 import { SalesBack } from './Admin/Sales/SalesBack.jsx'
 
 export function App() {
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        const recordar = localStorage.getItem('recordarme') === 'true';
+
+        if (token && recordar) {
+            startTokenRefresher();
+        }
+    }, []);
+
     return (
         <>
             <div>
@@ -113,9 +125,9 @@ export function App() {
                     } />
 
                     <Route path="/Admin/Sales" element={
-                    <ProtectedRoute requiredTypes={[1, 3]}>
-                        <SalesBack />
-                    </ProtectedRoute>
+                        <ProtectedRoute requiredTypes={[1, 3]}>
+                            <SalesBack />
+                        </ProtectedRoute>
                     } />
 
                     {/* Rutas de Pago */}
