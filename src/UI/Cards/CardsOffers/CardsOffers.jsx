@@ -100,6 +100,13 @@ export const CardsOffers = ({ uniqueId, productos = [] }) => {
           prevEl: `.swiper-button-prev-${uniqueId}`,
           nextEl: `.swiper-button-next-${uniqueId}`,
         }}
+        onInit={(swiper) => {
+          // Reasigna los selectores de navegación dinámicamente
+          swiper.params.navigation.prevEl = `.swiper-button-prev-${uniqueId}`;
+          swiper.params.navigation.nextEl = `.swiper-button-next-${uniqueId}`;
+          swiper.navigation.init();
+          swiper.navigation.update();
+        }}
         breakpoints={{
           1390: { slidesPerView: 5, spaceBetween: 0 },
           1080: { slidesPerView: 4, spaceBetween: 5 },
@@ -150,7 +157,7 @@ export const CardsOffers = ({ uniqueId, productos = [] }) => {
                     <p className="text-[18px] flex text-[var(--Font-Nav)] absolute left-4 top-4 font-bold">{producto.descuento} <span className="text-[12px]">%</span> </p>
                   </div>
                 </div>
-                <Buttons data-cursor-hover radius='7' textColor='var(--Font-Nav2)' nameButton='Ver más...' Onclick={() => handleOpen(producto)} />
+                <Buttons radius='7' textColor='var(--Font-Nav2)' nameButton='Ver más...' Onclick={() => handleOpen(producto)} />
               </div>
             </div>
           </SwiperSlide>
@@ -163,6 +170,9 @@ export const CardsOffers = ({ uniqueId, productos = [] }) => {
         aria-labelledby="modal-title"
         aria-describedby="modal-description"
         disableScrollLock={true}
+        sx={{
+          outline: 'none',
+        }}
       >
         <Box
           sx={{

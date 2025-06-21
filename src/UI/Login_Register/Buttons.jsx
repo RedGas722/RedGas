@@ -26,8 +26,11 @@ export const Buttons = ({ radius, borderWidth, borderColor, textColor, nameButto
                     minWidth: 'unset',
                     '&:hover': {
                         background: 'var(--background-color)',
-                        color: 'var(--Font-Nav-shadow)',
+                        color: textColor || 'var(--Font-Nav)',
                         boxShadow: 'var(--shadow-sub-outset)',
+                        '& .textBtn': {
+                            filter: 'brightness(1.2)',
+                        }
                     },
                     '&:active': {
                         color: textColor || 'var(--Font-Nav)',
@@ -35,7 +38,7 @@ export const Buttons = ({ radius, borderWidth, borderColor, textColor, nameButto
                         transform: 'scale(0.98)',
                         '& .textBtn': {
                             color: textColor || 'var(--Font-Nav)',
-                            opacity: 1.8,
+                            filter: 'brightness(0.7)',
                         },
                     },
                 }}

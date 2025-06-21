@@ -9,6 +9,7 @@
   --Font-Nav-shadow2: #0d5552;
   --Font-Nav2: #A9191E;
   --Font-Nav2-shadow: #6a1013;
+  --Font-Yellow: #F3B706;
   --background-color: #ffff;
   --shadow-1: #CACACA;
   --shadow-2: #F2F2F2;
@@ -34,6 +35,11 @@
   font-family: Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   box-sizing: border-box;
   transition: all 0.3s ease;
+}
+
+::selection {
+  background: #323232d1;
+  color: var(--background-color);
 }
 
 button {

@@ -1,5 +1,5 @@
-import React from 'react';
 import { DeleteTechnician } from '../Delete/Delete';
+import { Buttons } from '../../../UI/Login_Register/Buttons';
 
 const convertirBase64AUrl = (imagen) => {
   if (!imagen) return null;
@@ -30,15 +30,14 @@ const CardTechniciansBack = ({ tecnico, setRefrescar, onUpdateClick }) => {
   };
 
   return (
-    <div className="NeoContainer_outset_TL p-4 w-fit h-fit flex flex-col justify-start overflow-hidden">
-      <h2 className="text-xl font-semibold text-[var(--main-color)] truncate">{tecnico.nombre_tecnico}</h2>
-
-      <div className="my-2 w-full h-[200px]">
+    <div className="text-center items-center NeoContainer_outset_TL p-4 w-[250px] h-fit flex flex-col justify-start gap-2">
+      <h2 className="text-[20px] font-semibold text-[var(--main-color)] ">{tecnico.nombre_tecnico}</h2>
+      <div className="">
         {imageUrl ? (
           <img
             src={imageUrl}
             alt={tecnico.nombre_tecnico}
-            className="w-full h-full object-contain rounded-md"
+            className="w-full h-full object-contain rounded-[20px]"
           />
         ) : (
           <div className="w-full h-full flex justify-center items-center bg-gray-200 rounded-md text-[var(--main-color-sub)]">
@@ -47,39 +46,29 @@ const CardTechniciansBack = ({ tecnico, setRefrescar, onUpdateClick }) => {
         )}
       </div>
 
-      <div className="space-y-1 text-sm">
-        <p className="text-[var(--main-color)] font-medium flex flex-wrap gap-2">
-          <span className="font-semibold">ID:</span>
+      <div className="text-[var(--main-color)] flex flex-col text-sm">
+        <p className="font-medium flex flex-wrap gap-2">
+          <span className="font-bold text-[15px]">ID:</span>
           <span className="break-words">{tecnico.id_tecnico}</span>
         </p>
-        <p className="text-[var(--main-color)] font-medium flex flex-wrap gap-2">
-          <span className="font-semibold">CC:</span>
+        <p className="font-medium flex flex-wrap gap-2">
+          <span className="font-bold text-[15px]">CC:</span>
           <span className="break-words">{tecnico.cc_tecnico}</span>
         </p>
-        <p className="text-[var(--main-color)] font-medium flex flex-wrap gap-2">
-          <span className="font-semibold">Correo:</span>
+        <p className="font-medium flex flex-wrap gap-2">
+          <span className="font-bold text-[15px]">Correo:</span>
           <span className="break-words">{tecnico.correo_tecnico}</span>
         </p>
-        <p className="text-[var(--main-color)] font-medium flex flex-wrap gap-2">
-          <span className="font-semibold">Teléfono:</span>
+        <p className="font-medium flex flex-wrap gap-2">
+          <span className="font-bold text-[15px]">Teléfono:</span>
           <span className="break-words">{tecnico.telefono_tecnico}</span>
         </p>
       </div>
 
       <div className="mt-4 flex flex-col gap-2">
-        <button
-          onClick={handleDelete}
-          className="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded"
-        >
-          Eliminar
-        </button>
+        <Buttons onClick={handleDelete} nameButton='Eliminar' textColor='var(--Font-Nav2)' radius='12' borderWidth='1' borderColor='var(--Font-Nav2)' />
         {onUpdateClick && (
-          <button
-            onClick={() => onUpdateClick(tecnico)}
-            className="bg-yellow-500 hover:bg-yellow-600 text-white py-1 px-3 rounded"
-          >
-            Actualizar
-          </button>
+          <Buttons onClick={() => onUpdateClick(tecnico)} nameButton='Actualizar' textColor='var(--Font-Yellow)' radius='12' borderWidth='1' borderColor='var(--Font-Yellow)' />
         )}
       </div>
     </div>
