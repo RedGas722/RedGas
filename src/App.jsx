@@ -29,6 +29,7 @@ import { startTokenRefresher } from './Pages/Login/TokenRefresher.jsx';
 import { useEffect } from 'react'
 import { SearchPage } from './Pages/SearchPage/SearchPage.jsx'
 import { ProductInfo } from './Pages/ProductInfo/ProductInfo.jsx'
+import { Cursor } from './UI/Cursor/Cursor.jsx'
 
 
 // 👇 Importar ruta protegida
@@ -49,6 +50,7 @@ export function App() {
     return (
         <>
             <div>
+                <Cursor />
                 <Routes>
                     <Route path="/" element={<MainPage />} />
                     <Route path="/CostumerMyService" element={<CostumerMyService />} />

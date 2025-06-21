@@ -1,10 +1,11 @@
 import Button from '@mui/material/Button';
 import './LR.css';
 
-export const Buttons = ({ radius, nameButton, Onclick, Type, ...props }) => {
+export const Buttons = ({ radius, borderWidth, borderColor, textColor, nameButton, Onclick, Type, ...props }) => {
     return (
         <div className="group">
             <Button
+                data-cursor-hover
                 onClick={Onclick}
                 type={Type}
                 disableElevation
@@ -12,9 +13,9 @@ export const Buttons = ({ radius, nameButton, Onclick, Type, ...props }) => {
                 sx={{
                     background: 'var(--background-color)',
                     borderRadius: `${radius || 18}px`,
+                    border: `${borderWidth || ''}px solid ${borderColor || ' '}`,
                     boxShadow: 'var(--shadow-sub-outset)',
-                    color: 'var(--main-color)',
-                    fontWeight: 600,
+                    color: textColor || 'var(--Font-Nav)',
                     whiteSpace: 'nowrap',
                     textTransform: 'none',
                     padding: '5px 70px',
@@ -24,18 +25,24 @@ export const Buttons = ({ radius, nameButton, Onclick, Type, ...props }) => {
                     transition: 'all 0.3s ease',
                     minWidth: 'unset',
                     '&:hover': {
-                        color: 'var(--Font-Nav)',
                         background: 'var(--background-color)',
+                        color: 'var(--Font-Nav-shadow)',
                         boxShadow: 'var(--shadow-sub-outset)',
                     },
                     '&:active': {
-                        color: 'var(--Font-Nav)',
+                        color: textColor || 'var(--Font-Nav)',
                         boxShadow: 'var(--shadow-sub-inset-br)',
                         transform: 'scale(0.98)',
+                        '& .textBtn': {
+                            color: textColor || 'var(--Font-Nav)',
+                            opacity: 1.8,
+                        },
                     },
                 }}
             >
-                {nameButton}
+                <p className='textBtn font-bold'>
+                    {nameButton}
+                </p>
             </Button>
         </div>
     );

@@ -7,6 +7,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight, faArrowLeft, faCartShopping } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2';
+import { Buttons } from "../Login_Register/Buttons";
+import { useState } from 'react';
+import Modal from '@mui/material/Modal';
+import Box from '@mui/material/Box';
 
 async function agregarAlCarrito(item) {
   const token = localStorage.getItem("token");
@@ -31,8 +35,17 @@ async function agregarAlCarrito(item) {
 }
 
 export const Cards = ({ uniqueId, productos = [] }) => {
-
   const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const handleOpen = (producto) => {
+    setSelectedProduct(producto);
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+    setSelectedProduct(null);
+  };
 
   const handleAddToCart = async (producto) => {
     const token = localStorage.getItem("token");
@@ -129,13 +142,86 @@ export const Cards = ({ uniqueId, productos = [] }) => {
                     <FontAwesomeIcon icon={faCartShopping} />
                   </button>
                 </div>
-              <button>dsadasd</button>
+                <Buttons radius='7' nameButton='Ver más...' Onclick={() => handleOpen(producto)} />
               </div>
             </div>
           </SwiperSlide>
         ))}
       </Swiper>
-
+      {/* Modal de detalle de producto */}
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-title"
+        aria-describedby="modal-description"
+        disableScrollLock={true}
+      >
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: 350,
+            bgcolor: 'background.paper',
+            zIndex: '1000',
+            border: '2px solid #19A9A4',
+            boxShadow: 24,
+            borderRadius: 4,
+            p: 4,
+          }}
+        >
+          {/* Botón X de cerrar */}
+          <button
+            onClick={handleClose}
+            style={{
+              position: 'absolute',
+              top: 8,
+              right: 8,
+              background: 'transparent',
+              border: 'none',
+              fontSize: 24,
+              color: '#19A9A4',
+              cursor: 'pointer',
+              zIndex: 10,
+            }}
+            aria-label="Cerrar"
+          >
+            &times;
+          </button>
+          {selectedProduct && (
+            <div className="card relative !rounded-[25px]">
+              <div className="card-img">
+                <div className="img h-full">
+                  <img
+                    src={selectedProduct.imagen ? `data:image/jpeg;base64,${selectedProduct.imagen}` : "https://via.placeholder.com/150"}
+                    alt={selectedProduct.nombre_producto || "Producto"}
+                    className="rounded-[20px]"
+                  />
+                </div>
+              </div>
+              <div className="flex gap-1 items-end justify-center">
+                <div className="card-title">{selectedProduct.nombre_producto}</div>
+              </div>
+              <div className="card-subtitle">
+                {selectedProduct.descripcion_producto || "Sin descripción disponible."}
+              </div>
+              <hr className="card-divider" />
+              <div className="card-footer">
+                <div className="card-price">
+                  <p><span className="text-[var(--Font-Nav-shadow)]">$</span> {(parseFloat(selectedProduct.precio_producto) || 0).toLocaleString()} <span className="text-[var(--main-color-sub)] text-[12px]">Cop</span> </p>
+                </div>
+                <button
+                  className="card-btn"
+                  onClick={() => handleAddToCart(selectedProduct)}
+                >
+                  <FontAwesomeIcon icon={faCartShopping} />
+                </button>
+              </div>
+            </div>
+          )}
+        </Box>
+      </Modal>
       <div className="flex flex-col justify-center items-center self-center w-fit p-[10px] NeoSubContainer_outset_TL text-[var(--main-color)]">
         <div className="flex justify-center items-center gap-[20px]">
           <button

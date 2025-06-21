@@ -87,7 +87,7 @@ export const Navs = ({ className, ref1, ref2, ref3, ref4 }) => {
             allowScrollButtonsMobile
             TabIndicatorProps={{
                 style: {
-                    backgroundColor: '#19A9A4',
+                    backgroundColor: 'var(--Font-Nav)',
                     height: isMdUp ? '3px' : '100%',
                     width: isMdUp ? 'auto' : '3px',
                     left: isMdUp ? undefined : 0,
@@ -103,7 +103,8 @@ export const Navs = ({ className, ref1, ref2, ref3, ref4 }) => {
                     borderBottom: isMdUp ? '3px solid transparent' : 'none',
                     borderLeft: !isMdUp ? '3px solid transparent' : 'none',
                     '&.Mui-selected': {
-                        color: '#19A9A4',
+                        color: 'var(--Font-Nav)',
+                        borderRadius: isMdUp ? '0 0 3px 3px' : '3px 0 0 3px',
                         borderBottom: isMdUp ? '3px solid #19A9A4' : 'none',
                         borderLeft: !isMdUp ? '3px solid #19A9A4' : 'none',
                     },

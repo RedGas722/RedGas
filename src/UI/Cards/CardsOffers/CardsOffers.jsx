@@ -150,7 +150,7 @@ export const CardsOffers = ({ uniqueId, productos = [] }) => {
                     <p className="text-[18px] flex text-[var(--Font-Nav)] absolute left-4 top-4 font-bold">{producto.descuento} <span className="text-[12px]">%</span> </p>
                   </div>
                 </div>
-                <Buttons radius='7' nameButton='Ver más...' Onclick={() => handleOpen(producto)} />
+                <Buttons data-cursor-hover radius='7' textColor='var(--Font-Nav2)' nameButton='Ver más...' Onclick={() => handleOpen(producto)} />
               </div>
             </div>
           </SwiperSlide>
