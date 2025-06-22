@@ -108,10 +108,14 @@ export const TechniciansBack = () => {
   return (
     <section className="w-full h-full p-[5px_20px_10px_5px]">
       <BtnBack To='/Admin' />
+      
       <div className="p-[10px_20px_10px_20px] h-full flex flex-col gap-2">
         <h1 className="font-bold text-3xl text-[var(--main-color)]">Técnicos</h1>
+        
         <div className='flex flex-col gap-2'>
+          
           <div className='NeoContainer_outset_TL flex gap-4 flex-wrap items-end w-fit p-[0_20px_10px_20px]'>
+            
             <div ref={contenedorRef}>
               <InputLabel
                 radius='10'

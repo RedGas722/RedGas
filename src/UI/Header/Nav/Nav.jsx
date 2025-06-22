@@ -105,9 +105,15 @@ export const Navs = ({ className, ref1, ref2, ref3, ref4 }) => {
                     '&.Mui-selected': {
                         color: 'var(--Font-Nav)',
                         borderRadius: isMdUp ? '0 0 3px 3px' : '3px 0 0 3px',
-                        borderBottom: isMdUp ? '3px solid #19A9A4' : 'none',
-                        borderLeft: !isMdUp ? '3px solid #19A9A4' : 'none',
+                        borderBottom: isMdUp ? '3px solid var(--Font-Nav)' : 'none',
+                        borderLeft: !isMdUp ? '3px solid var(--Font-Nav)' : 'none',
                     },
+                    '&:hover': {
+                        color: 'var(--Font-Nav-shadow)',
+                        '&.Mui-selected': {
+                            color: 'var(--Font-Nav)',
+                        }
+                    }
                 },
             }}
         >
@@ -119,7 +125,7 @@ export const Navs = ({ className, ref1, ref2, ref3, ref4 }) => {
             {/* LINKS OCULTOS PARA DISPARAR SCROLL */}
             <div className="hidden">
                 <span ref={ref1}>
-                    <Link id="linkHero" to="Hero" smooth={true} duration={500} offset={-90} />
+                    <Link id="linkHero" to="Hero" smooth={true} duration={500} offset={-900} />
                 </span>
                 <span ref={ref2}>
                     <Link id="linkOffers" to="OffersSect" smooth={true} duration={500} offset={-130} />

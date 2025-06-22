@@ -127,7 +127,7 @@ export const Cards = ({ uniqueId, productos = [] }) => {
                 <div className="flex gap-1 items-end justify-center">
                   <div className="card-title">{producto.nombre_producto}</div>
                 </div>
-                <div className="card-subtitle">
+                <div className="card-subtitle break-words whitespace-pre-wrap">
                   {producto.descripcion_producto || "Sin descripción disponible."}
                 </div>
                 <hr className="card-divider" />

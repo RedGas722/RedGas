@@ -11,7 +11,7 @@ export const Cursor = () => {
     const speed = 0.15
 
     useEffect(() => {
-        const interactiveSelector = 'a, button, input, [data-cursor-hover], .swiper-slide'
+        const interactiveSelector = 'a, button, input, [data-cursor-hover]'
 
         const isMobile = window.matchMedia('(max-width: 768px)').matches
         if (isMobile) return
@@ -39,7 +39,6 @@ export const Cursor = () => {
         }
 
         const handleHover = (e) => {
-            console.log("Hover event:", e.type, e.target);
             if (e.type === 'mouseenter' || e.type === 'pointerenter') {
                 gsap.to(cursorRef.current, { scale: 0.6, duration: 0.3 })
                 gsap.to(followerRef.current, { scale: 1.1, duration: 0.3 })
