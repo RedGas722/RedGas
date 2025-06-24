@@ -154,7 +154,7 @@ export const Header = () => {
     return (
         <div ref={headerRef}
             id="Header"
-            className={`Header w-[100%] h-fit md:sticky fixed left-0 top-0 z-[10000] ${(scrolled && !hamburger && isDesktop()) ? 'scrolled NeoContainer_outset_TL' : ''} ${hamburger ? 'Burguer w-fit NeoContainer_outset_TL' : ''}`}
+            className={`Header w-[100%] h-fit md:sticky fixed left-0 top-0 z-[999] ${(scrolled && !hamburger && isDesktop()) ? 'scrolled NeoContainer_outset_TL' : ''} ${hamburger ? 'Burguer w-fit NeoContainer_outset_TL' : ''}`}
         >
             {(scrolled && !hamburger && isDesktop()) && (
                 <h2 className="justify-self-center hidden md:flex font-bold text-4xl text-[var(--Font-Nav)]">

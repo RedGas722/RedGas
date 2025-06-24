@@ -8,7 +8,7 @@ interface Usuario {
 const generarCalificacion = (): number => Math.floor(Math.random() * 5) + 1;
 
 const usuarios: Usuario[] = [
-    { foto: "https://i.pinimg.com/736x/dc/8c/61/dc8c61ed46f55b3245c2c8dacc863029.jpg", nombre: "Johan David Villanueva Gallego", calificacion: generarCalificacion() },
+    { foto: "https://i.pinimg.com/736x/dc/8c/61/dc8c61ed46f55b3245c2c8dacc863029.jpg", nombre: "Carlos López", calificacion: generarCalificacion() },
     { foto: "https://i.pinimg.com/736x/dc/8c/61/dc8c61ed46f55b3245c2c8dacc863029.jpg", nombre: "María González", calificacion: generarCalificacion() },
     { foto: "https://i.pinimg.com/736x/dc/8c/61/dc8c61ed46f55b3245c2c8dacc863029.jpg", nombre: "Carlos López", calificacion: generarCalificacion() },
     { foto: "https://i.pinimg.com/736x/dc/8c/61/dc8c61ed46f55b3245c2c8dacc863029.jpg", nombre: "Ana Rodríguez", calificacion: generarCalificacion() },

@@ -198,7 +198,7 @@ export const LoginGeneral = () => {
             <div className="divForm p-[30px_15px_15px_15px] z-50 shadow_box_RL NeoContainer_outset_TL rounded-3xl flex flex-col items-center w-fit justify-self-center gap-[20px]">
                 <h1 className="text-center text-4xl">¡Bienvenido Cliente!</h1>
                 <form className="form flex flex-col gap-2.5 justify-center items-center text-start w-full " onSubmit={handleLogin}>
-                    
+
                     {/* Email */}
                     <InputLabel type='2'
                         ForID='Email'
@@ -207,7 +207,7 @@ export const LoginGeneral = () => {
                         value={correo}
                         onChange={e => setCorreo(e.target.value)}
                         required />
-                        
+
                     {/* Password */}
                     <InputLabel type='3'
                         ForID='Password'
@@ -220,20 +220,22 @@ export const LoginGeneral = () => {
                     <section className="flex gap-[5px] items-center justify-between w-full">
                         <label className="flex gap-[5px] items-center justify-center cursor-pointer text-[var(--main-color-sub)]">
                             <label className="flex items-center justify-center">
-                                <input type="checkbox" className="input" checked={recordarme} onChange={() => setRecordarme(!recordarme)}/>
+                                <input type="checkbox" className="input" checked={recordarme} onChange={() => setRecordarme(!recordarme)} />
                                 <span className="custom-checkbox"></span>
                             </label>
                             <div><p>Recordarme</p></div>
                         </label>
-                        <div className="text-[var(--main-focus)]">
+                        <div className="text-[var(--Font-Nav)] text-[14px]">
                             <Link to="/Login/ForgotPassword">
-                                <button type="button" className="cursor-pointer hover:text-[var(--Font-Nav)]"><p>Olvidaste tu contraseña?</p></button>
+                                <button type="button" className="cursor-pointer hover:text-[var(--Font-Nav-shadow)]">
+                                    <p>¿Olvidaste tu contraseña?</p>
+                                </button>
                             </Link>
                         </div>
                     </section>
                     <div className="flex flex-col gap-2.5 items-center justify-center">
                         <Buttons type="submit" nameButton="Iniciar" />
-                        <Text Have="No tienes cuenta?" GoTo="Regístrate aquí" nav='/Register' />
+                        <Text Have="¿No tienes cuenta?" GoTo="Regístrate aquí" nav='/Register' />
                     </div>
                 </form>
             </div>

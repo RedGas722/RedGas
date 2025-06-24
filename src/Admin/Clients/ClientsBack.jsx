@@ -1,11 +1,13 @@
 import { useState, useEffect, useRef } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { RegisterModal } from './Register/RegisterModal';
 import { UpdateModal } from './Update/Update';
-import { ButtonBack } from '../UI/ButtonBack/ButtonBack';
 import CardClientsBack from './Get/CardClientsBack';
 import { buscarClientePorCorreo } from './Get/Get';
 import { BtnBack } from "../../UI/Login_Register/BtnBack";
 import { InputLabel } from '../../UI/Login_Register/InputLabel/InputLabel';
+import { Buttons } from '../../UI/Login_Register/Buttons';
 
 export const ClientsBack = () => {
   const [showRegisterModal, setShowRegisterModal] = useState(false);
@@ -99,95 +101,95 @@ export const ClientsBack = () => {
   }, []);
 
   return (
-    <div className="p-[20px] flex flex-col gap-[20px]">
-      <div className="flex items-center gap-[20px] flex-wrap">
-        <div>
-          <h1 className="font-bold text-[20px]">Cliente BACK-OFFICE</h1>
-          <div className='btnDown'>
-            <BtnBack To='/Admin'  />
+    <section className="w-full h-full flex flex-col p-[5px_20px_10px_5px]">
+      <BtnBack To='/Admin' />
+      <div className="p-[10px_20px_10px_20px] h-full flex flex-col gap-2">
+        <h1 className="font-bold text-3xl text-[var(--main-color)]">Cliente BACK-OFFICE</h1>
+        <div className="p-[0_20px_10px_20px] w-fit flex flex-col gap-2 NeoContainer_outset_TL">
+          {/* Búsqueda con autocomplete */}
+          <div className="" ref={contenedorRef}>
+            <div className="flex w-fit items-end gap-4 bg-white">
+              <InputLabel
+                type="1"
+                ForID="correo_cliente_busqueda"
+                placeholder="Buscar cliente"
+                radius='10'
+                className='relative'
+                childLabel="Buscar cliente"
+                value={correoBusqueda}
+                onChange={e => setCorreoBusqueda(e.target.value)}
+                placeholderError={!!errorBusqueda}
+              />
+              {/* <button
+                onClick={buscarCliente}
+                aria-label="Buscar cliente"
+                className="absolute top-0 right-0"
+              >
+                🔍
+              </button> */}
+              <FontAwesomeIcon onClick={buscarCliente} icon={faSearch} className="absolute left-[10px] top-[9px] text-[var(--Font-Nav)]" />
+              <Buttons radius='10' nameButton='Registrar' textColor='var(--Font-Nav)' onClick={() => setShowRegisterModal(true)} />
+            </div>
+
+            {sugerencias.length > 0 && (
+              <ul className="absolute z-10 bg-white border border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto w-full shadow">
+                {sugerencias.map((cliente) => (
+                  <li
+                    key={cliente.id_cliente}
+                    onClick={() => {
+                      setClienteBuscado(cliente);
+                      setCorreoBusqueda(cliente.correo_cliente);
+                      setSugerencias([]);
+                    }}
+                    className="p-2 hover:bg-gray-100 cursor-pointer"
+                  >
+                    {cliente.correo_cliente}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
+
         </div>
 
-        {/* Búsqueda con autocomplete */}
-        <div className="relative" ref={contenedorRef}>
-          <div className="flex items-center gap-2 border border-gray-300 rounded px-2 py-1 bg-white">
-            <InputLabel
-              type="1"
-              ForID="correo_cliente_busqueda"
-              placeholder="Buscar cliente"
-              childLabel="Buscar cliente"
-              value={correoBusqueda}
-              onChange={e => setCorreoBusqueda(e.target.value)}
-              className="w-full"
-            />
-            <button
-              onClick={buscarCliente}
-              aria-label="Buscar cliente"
-              className="text-gray-600 hover:text-gray-900"
-            >
-              🔍
-            </button>
-          </div>
+        {errorBusqueda && <p className="text-red-600 text-sm">{errorBusqueda}</p>}
 
-          {sugerencias.length > 0 && (
-            <ul className="absolute z-10 bg-white border border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto w-full shadow">
-              {sugerencias.map((cliente) => (
-                <li
-                  key={cliente.id_cliente}
-                  onClick={() => {
-                    setClienteBuscado(cliente);
-                    setCorreoBusqueda(cliente.correo_cliente);
-                    setSugerencias([]);
-                  }}
-                  className="p-2 hover:bg-gray-100 cursor-pointer"
-                >
-                  {cliente.correo_cliente}
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-
-        <ButtonBack ClickMod={() => setShowRegisterModal(true)} Child="Registrar" />
-      </div>
-
-      {errorBusqueda && <p className="text-red-600 text-sm">{errorBusqueda}</p>}
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {clienteBuscado ? (
-          <CardClientsBack
-            key={clienteBuscado.id_cliente}
-            cliente={clienteBuscado}
-            setRefrescar={setRefrescar}
-            onUpdateClick={abrirModalActualizar}
-          />
-        ) : (
-          clientes.map((cliente) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {clienteBuscado ? (
             <CardClientsBack
-              key={cliente.id_cliente}
-              cliente={cliente}
+              key={clienteBuscado.id_cliente}
+              cliente={clienteBuscado}
               setRefrescar={setRefrescar}
               onUpdateClick={abrirModalActualizar}
             />
-          ))
+          ) : (
+            clientes.map((cliente) => (
+              <CardClientsBack
+                key={cliente.id_cliente}
+                cliente={cliente}
+                setRefrescar={setRefrescar}
+                onUpdateClick={abrirModalActualizar}
+              />
+            ))
+          )}
+        </div>
+
+        {showRegisterModal && (
+          <RegisterModal
+            onClose={() => setShowRegisterModal(false)}
+            setRefrescar={setRefrescar}
+          />
+        )}
+
+        {showUpdateModal && clienteSeleccionado && (
+          <UpdateModal
+            onClose={cerrarModal}
+            setRefrescar={setRefrescar}
+            clienteCarta={clienteSeleccionado}
+          />
         )}
       </div>
-
-      {showRegisterModal && (
-        <RegisterModal
-          onClose={() => setShowRegisterModal(false)}
-          setRefrescar={setRefrescar}
-        />
-      )}
-
-      {showUpdateModal && clienteSeleccionado && (
-        <UpdateModal
-          onClose={cerrarModal}
-          setRefrescar={setRefrescar}
-          clienteCarta={clienteSeleccionado}
-        />
-      )}
-    </div>
+    </section>
   );
 };
 

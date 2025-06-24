@@ -24,13 +24,27 @@ const URL_TECHNICIAN = 'http://localhost:10101/TecnicoServicesGetAll'
 const URL_SERVICESTECHNICIAN = 'http://localhost:10101/TecnicoServicesAdd'
 
 const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  boxShadow: 24,
-  p: 2,
+	position: 'absolute',
+	top: '50%',
+	left: '50%',
+	transform: 'translate(-50%, -50%)',
+	boxShadow: 24,
+	p: 2,
 }
+
+const getServiceColor = (label) => {
+	switch (label.toLowerCase()) {
+		case 'reparación':
+		case 'reparacion':
+			return 'var(--Font-Nav2)'
+		case 'mantenimiento':
+			return 'var(--Font-Nav)'
+		case 'instalación':
+			return 'var(--main-color)'
+		default:
+			return 'var(--Font-Nav-shadow2)'
+	}
+};
 
 export const CostumerServices = () => {
   const [isAccepting, setIsAccepting] = useState(false)
@@ -200,19 +214,19 @@ export const CostumerServices = () => {
     return () => window.removeEventListener('resize', checkHeight)
   }, [result])
 
-  const getIconByLabel = (label) => {
-    if (label === 'Reparación') return faTools
-    if (label === 'Instalación') return faPlug
-    if (label === 'Mantenimiento') return faGears
-    return faQuestion
-  }
+	const getIconByLabel = (label) => {
+		if (label === 'Reparación') return faTools
+		if (label === 'Instalación') return faPlug
+		if (label === 'Mantenimiento') return faGears
+		return faQuestion
+	}
 
-  const handleOpen = (index) => setOpenIndex(index)
-  const handleClose = () => setOpenIndex(null)
+	const handleOpen = (index) => setOpenIndex(index)
+	const handleClose = () => setOpenIndex(null)
 
-  const handleAceptServices = useCallback(async (id) => {
-    if (isAccepting) return
-    setIsAccepting(true)
+	const handleAceptServices = useCallback(async (id) => {
+		if (isAccepting) return
+		setIsAccepting(true)
 
     try {
       const res = await fetch(URL_SERVICESTECHNICIAN, {
@@ -238,16 +252,16 @@ export const CostumerServices = () => {
     }
   }, [isAccepting])
 
-  return (
-    <div>
-      <div className="flex justify-between items-center p-[0_5px] w-full">
-        <div className="btnDown">
-          <BtnBack To='/' />
-        </div>
-        <h2 className="font-bold text-4xl text-[var(--Font-Nav)]">
-          MI SERVICIO
-        </h2>
-      </div>
+	return (
+		<div>
+			<div className="flex justify-between items-center p-[0_5px] w-full">
+				<div className="btnDown">
+					<BtnBack To='/' />
+				</div>
+				<h2 className="font-bold text-4xl text-[var(--Font-Nav)]">
+					MI SERVICIO
+				</h2>
+			</div>
 
       <section className="h-fit flex flex-wrap justify-center text-[var(--main-color)] items-center gap-[40px] !p-[80px_0] bg-[var(--background-color)] MainPageContainer">
         {costumer
