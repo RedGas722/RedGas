@@ -114,6 +114,7 @@ export const ServicesBack = () => {
             value={nombreBusqueda}
             onChange={e => setNombreBusqueda(e.target.value)}
             className="w-full"
+            placeholderError={!!errorBusqueda}
           />
           {sugerencias.length > 0 && (
             <ul className="absolute z-10 bg-white border border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto w-full shadow">

@@ -164,6 +164,7 @@ export const CostumerServices = () => {
 								onClose={handleClose}
 								aria-labelledby="modal-modal-title"
 								aria-describedby="modal-modal-description"
+								disableScrollLock={true}
 							>
 								<Box sx={style} className="flex flex-col min-w-[330px] items-start justify-center gap-4 outline-none NeoContainer_outset_TL relative">
 									<IconButton

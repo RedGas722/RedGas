@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Header } from "../../Layouts/Header/Header";
 import CardsOffersGrid from "../../UI/Cards/CardsOffers/CardsOffersGrid";
 import CardsGrid from "../../UI/Cards/CardsGrid";
+import { BtnBack } from "../../UI/Login_Register/BtnBack"
 
 export const SearchPage = () => {
   const location = useLocation();
@@ -54,6 +55,9 @@ export const SearchPage = () => {
   return (
     <>
       <Header />
+      <div className='btnDown'>
+        <BtnBack To='/'  />
+      </div>
       <div className="min-h-screen bg-white text-black pt-14 px-4 sm:px-6 md:px-10 lg:px-14 xl:px-20">
         <h1 className="text-3xl font-bold mb-10">
           {query 

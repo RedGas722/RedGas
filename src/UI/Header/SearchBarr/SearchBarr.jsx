@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './SearchBarr.css';
@@ -48,7 +48,7 @@ export const SearchBarr = ({ className, productos }) => {
     return (
         <div ref={contenedorRef} className={`inputs relative w-full NeoSubContainer_inset_TOTAL ${className}`}>
             <form onSubmit={manejarSubmit} className="w-full">
-                <FontAwesomeIcon icon={faMagnifyingGlass} className="absolute left-[10px] top-[9px] text-[var(--Font-Nav)]" />
+                <FontAwesomeIcon icon={faSearch} className="absolute left-[10px] top-[9px] text-[var(--Font-Nav)]" />
                 <input
                     type="text"
                     id='Searchbarr'

@@ -55,8 +55,12 @@
 
 .card-subtitle {
     font-size: 14px;
+    width: 100%;
     font-weight: 400;
     color: var(--main-color-sub);
+    overflow-wrap: break-word;
+    word-break: break-word;
+    white-space: normal;
 }
 
 .card-divider {

@@ -97,8 +97,8 @@ export const CategoriesBack = () => {
       <div className="flex items-center gap-[20px] flex-wrap">
         <div>
           <h1 className="font-bold text-[20px]">Categoría BACK-OFFICE</h1>
-           <div className='btnDown'>
-            <BtnBack To='/Admin'  />
+          <div className='btnDown'>
+            <BtnBack To='/Admin' />
           </div>
         </div>
 
@@ -113,6 +113,7 @@ export const CategoriesBack = () => {
               value={nombreBusqueda}
               onChange={e => setNombreBusqueda(e.target.value)}
               className="w-full"
+              placeholderError={!!errorBusqueda}
             />
             <button
               onClick={buscarCategoria}

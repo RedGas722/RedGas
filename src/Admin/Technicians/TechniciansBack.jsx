@@ -2,12 +2,11 @@ import { useState, useEffect, useRef } from 'react'
 import { RegisterModal } from './Register/RegisterModal'
 import { UpdateModal } from './Update/Update'
 import { DeleteModal } from './Delete/Delete'
-import { ButtonBack } from '../UI/ButtonBack/ButtonBack'
 import { BtnBack } from "../../UI/Login_Register/BtnBack"
 import CardTechniciansBack from './Get/CardTechniciansBack'
 import { buscarTecnicoPorCorreo } from './Get/Get'
 import { InputLabel } from '../../UI/Login_Register/InputLabel/InputLabel'
-
+import { Buttons } from '../../UI/Login_Register/Buttons'
 
 export const TechniciansBack = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false)
@@ -53,6 +52,7 @@ export const TechniciansBack = () => {
   // Para buscar técnicos por correo desde el input
   const [correoBusqueda, setCorreoBusqueda] = useState("");
   const [sugerencias, setSugerencias] = useState([]);
+  const [errorBusqueda, setErrorBusqueda] = useState(false);
   const contenedorRef = useRef(null);
   const inputRef = useRef(null);
 
@@ -65,6 +65,7 @@ export const TechniciansBack = () => {
     try {
       const resultados = await buscarTecnicoPorCorreo(correoBusqueda);
       setTecnicos(resultados);
+      setErrorBusqueda(resultados.length === 0); // Si no hay resultados, activa el error
     } catch (error) {
       console.error(error);
       setTecnicos([]);
@@ -105,76 +106,87 @@ export const TechniciansBack = () => {
   }, [correoBusqueda]);
 
   return (
-    <div className="p-[20px] h-full flex flex-col gap-[20px]">
-      <div className='NeoContainer_outset_TL flex flex-col w-fit p-[0_0_0_20px]'>
-        <h1 className="font-bold text-[20px] text-[var(--main-color)]">Técnicos</h1>
-        <div className="relative" ref={contenedorRef}>
-          <InputLabel
-            type="1"
-            ForID="correo_tecnico_busqueda"
-            placeholder="Buscar técnico"
-            childLabel="Buscar técnico"
-            value={correoBusqueda}
-            onChange={e => setCorreoBusqueda(e.target.value)}
-            className="w-full"
-          />
-          {sugerencias.length > 0 && (
-            <ul className="absolute z-10 bg-white border border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto w-full shadow">
-              {sugerencias.map((tecnico) => (
-                <li
-                  key={tecnico.id_tecnico || tecnico.correo_tecnico}
-                  onClick={() => {
-                    setCorreoBusqueda(tecnico.correo_tecnico);
-                    setSugerencias([]);
-                    setTecnicos([tecnico]);
-                  }}
-                  className="p-2 hover:bg-gray-100 cursor-pointer"
-                >
-                  {tecnico.correo_tecnico}
-                </li>
-              ))}
-            </ul>
+    <section className="w-full h-full p-[5px_20px_10px_5px]">
+      <BtnBack To='/Admin' />
+      
+      <div className="p-[10px_20px_10px_20px] h-full flex flex-col gap-2">
+        <h1 className="font-bold text-3xl text-[var(--main-color)]">Técnicos</h1>
+        
+        <div className='flex flex-col gap-2'>
+          
+          <div className='NeoContainer_outset_TL flex gap-4 flex-wrap items-end w-fit p-[0_20px_10px_20px]'>
+            
+            <div ref={contenedorRef}>
+              <InputLabel
+                radius='10'
+                type="1"
+                ForID="correo_tecnico_busqueda"
+                placeholder="Buscar técnico"
+                childLabel="Buscar técnico"
+                value={correoBusqueda}
+                onChange={e => setCorreoBusqueda(e.target.value)}
+                className="w-full"
+                placeholderError={!!errorBusqueda}
+              />
+              {sugerencias.length > 0 && (
+                <ul className="absolute z-10 bg-white border w-[230px] border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto shadow">
+                  {sugerencias.map((tecnico) => (
+                    <li
+                      key={tecnico.id_tecnico || tecnico.correo_tecnico}
+                      onClick={() => {
+                        setCorreoBusqueda(tecnico.correo_tecnico);
+                        setSugerencias([]);
+                        setTecnicos([tecnico]);
+                      }}
+                      className="p-2 hover:bg-gray-100 cursor-pointer"
+                    >
+                      {tecnico.correo_tecnico}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+            <div className="flex w-fit h-fit flex-wrap justify-center justify-self-center items-center gap-[20px]">
+              <Buttons radius='10' nameButton='Registrar' textColor='var(--Font-Nav)' Onclick={() => setShowRegisterModal(true)} />
+              {/* Eliminar, Actualizar y Consultar removidos porque ya están en la card y el input de consulta ya existe */}
+            </div>
+          </div>
+          {/* Sección de técnicos */}
+          <div className="flex flex-wrap items-center gap-6">
+            {tecnicos.map(tecnico => (
+              <CardTechniciansBack
+                key={tecnico.id_tecnico || tecnico.correo_tecnico}
+                tecnico={tecnico}
+                setRefrescar={setRefrescar}
+                onUpdateClick={handleUpdateClick}
+                onDeleteClick={handleDeleteClick}
+              />
+            ))}
+          </div>
+          {/* Modales */}
+          {showRegisterModal && (
+            <RegisterModal
+              onClose={() => setShowRegisterModal(false)}
+              setRefrescar={setRefrescar}
+            />
+          )}
+          {typeof showUpdateModal === 'object' && showUpdateModal && (
+            <UpdateModal
+              onClose={() => setShowUpdateModal(false)}
+              setRefrescar={setRefrescar}
+              tecnicoCarta={showUpdateModal}
+            />
+          )}
+          {typeof showDeleteModal === 'object' && showDeleteModal && (
+            <DeleteModal
+              onClose={() => setShowDeleteModal(false)}
+              setRefrescar={setRefrescar}
+              tecnicoCarta={showDeleteModal}
+            />
           )}
         </div>
-        <div className="flex p-[20px] w-fit h-fit flex-wrap justify-center justify-self-center items-center gap-[20px]">
-          <ButtonBack ClickMod={() => setShowRegisterModal(true)} Child="Registrar" />
-          {/* Eliminar, Actualizar y Consultar removidos porque ya están en la card y el input de consulta ya existe */}
-        </div>
       </div>
-      {/* Sección de técnicos */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {tecnicos.map(tecnico => (
-          <CardTechniciansBack
-            key={tecnico.id_tecnico || tecnico.correo_tecnico}
-            tecnico={tecnico}
-            setRefrescar={setRefrescar}
-            onUpdateClick={handleUpdateClick}
-            onDeleteClick={handleDeleteClick}
-          />
-        ))}
-      </div>
-      {/* Modales */}
-      {showRegisterModal && (
-        <RegisterModal
-          onClose={() => setShowRegisterModal(false)}
-          setRefrescar={setRefrescar}
-        />
-      )}
-      {typeof showUpdateModal === 'object' && showUpdateModal && (
-        <UpdateModal
-          onClose={() => setShowUpdateModal(false)}
-          setRefrescar={setRefrescar}
-          tecnicoCarta={showUpdateModal}
-        />
-      )}
-      {typeof showDeleteModal === 'object' && showDeleteModal && (
-        <DeleteModal
-          onClose={() => setShowDeleteModal(false)}
-          setRefrescar={setRefrescar}
-          tecnicoCarta={showDeleteModal}
-        />
-      )}
-    </div>
+    </section>
   )
 }
 

@@ -107,8 +107,8 @@ export const ProductsBack = () => {
       <div className="flex items-center gap-[20px] flex-wrap">
         <div>
           <h1 className="font-bold text-[20px]">Producto BACK-OFFICE</h1>
-           <div className='btnDown'>
-            <BtnBack To='/Admin'  />
+          <div className='btnDown'>
+            <BtnBack To='/Admin' />
           </div>
         </div>
 
@@ -123,6 +123,7 @@ export const ProductsBack = () => {
               value={nombreBusqueda}
               onChange={e => setNombreBusqueda(e.target.value)}
               className="w-full"
+              placeholderError={!!errorBusqueda}
             />
             <button
               onClick={buscarProducto}

@@ -113,6 +113,7 @@ export const FacturesBack = () => {
             childLabel="Buscar por cliente"
             value={clienteCorreoBusqueda}
             onChange={(e) => handleClienteInput(e.target.value)}
+            placeholderError={!!errorBusquedaCliente}
           />
           {clienteSugerencias.length > 0 && (
             <div className="absolute z-10 bg-white border border-gray-300 rounded mt-1 shadow w-full">
@@ -140,6 +141,7 @@ export const FacturesBack = () => {
             childLabel="Buscar por empleado"
             value={empleadoBusqueda}
             onChange={(e) => handleEmpleadoInput(e.target.value)}
+            placeholderError={!!errorBusquedaEmpleado}
           />
           {empleadoSugerencias.length > 0 && (
             <div className="absolute z-10 bg-white border border-gray-300 rounded mt-1 shadow w-full">

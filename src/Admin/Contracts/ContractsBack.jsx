@@ -166,6 +166,7 @@ export const ContractsBack = () => {
               value={correoBusqueda}
               onChange={e => setCorreoBusqueda(e.target.value)}
               className="w-full"
+              placeholderError={!!errorBusqueda}
             />
             <button
               onClick={buscarContrato}

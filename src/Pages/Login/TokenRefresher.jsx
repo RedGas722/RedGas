@@ -6,6 +6,8 @@ export function startTokenRefresher() {
 
     const recordarme = localStorage.getItem('recordarme') === 'true';
 
+    let interval; // Declarar variable aquí para manejarla según el caso
+
     // Registrar actividad solo si NO marcó "recordarme"
     if (!recordarme) {
         const updateLastActivity = () => {
@@ -19,16 +21,16 @@ export function startTokenRefresher() {
         updateLastActivity();
     }
 
-    const interval = setInterval(() => {
+    const renovarToken = () => {
         const token = localStorage.getItem('token');
         if (!token) {
             console.warn('No hay token, deteniendo el refresco');
-            clearInterval(interval);
+            if (interval) clearInterval(interval);
             localStorage.removeItem('tipo_usuario');
             return;
         }
 
-        // Control de inactividad (solo si no marcó "recordarme")
+        // Solo para NO recordarme: validar inactividad
         if (!recordarme) {
             const lastActivity = parseInt(localStorage.getItem('lastActivity'), 10) || 0;
             const now = Date.now();
@@ -43,10 +45,12 @@ export function startTokenRefresher() {
 
         // Intentar renovar token
         fetch('https://redgas.onrender.com/renewToken', {
-            method: 'GET',
+            method: 'POST',
             headers: {
+                'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
-            }
+            },
+            body: JSON.stringify({ recordarme })
         })
         .then(res => {
             if (res.ok) return res.json();
@@ -60,11 +64,18 @@ export function startTokenRefresher() {
             console.error('Error al renovar token:', err);
             handleSessionExpired("Ocurrió un problema al renovar tu sesión. Serás redirigido a la página principal.");
         });
+    };
 
-    }, intervalTime);
+    if (recordarme) {
+        // Refrescar token solo una vez al inicio
+        renovarToken();
+    } else {
+        // Refrescar token cada 14 minutos + controlar inactividad
+        interval = setInterval(renovarToken, intervalTime);
+    }
 
     const handleSessionExpired = (message) => {
-        clearInterval(interval);
+        if (interval) clearInterval(interval);
         localStorage.removeItem('token');
         localStorage.removeItem('tipo_usuario');
         localStorage.removeItem('lastActivity');
