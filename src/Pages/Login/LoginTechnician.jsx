@@ -171,7 +171,7 @@ export const LoginTechnician = () => {
                         </label>
                         <div className="text-[var(--Font-Nav)] text-[14px]">
                             <Link to="/Login/ForgotPassword">
-                                <button className="cursor-pointer hover:text-[var(--Font-Nav-shadow)]">
+                                <button type="button" className="cursor-pointer hover:text-[var(--Font-Nav-shadow)]">
                                     <p>¿Olvidaste tu contraseña?</p>
                                 </button>
                             </Link>

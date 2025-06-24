@@ -1,7 +1,7 @@
 import Button from '@mui/material/Button';
 import './LR.css';
 
-export const Buttons = ({ radius, borderWidth, borderColor, textColor, nameButton, Onclick, Type, ...props }) => {
+export const Buttons = ({ padding, width, height, radius, borderWidth, borderColor, textColor, nameButton, Onclick, Type, ...props }) => {
     return (
         <div className="group">
             <Button
@@ -18,10 +18,10 @@ export const Buttons = ({ radius, borderWidth, borderColor, textColor, nameButto
                     color: textColor || 'var(--Font-Nav)',
                     whiteSpace: 'nowrap',
                     textTransform: 'none',
-                    padding: '5px 70px',
+                    padding: `${padding || '5px 70px'}`,
                     fontSize: '1rem',
-                    minWidth: 'clamp(150px, 20vw, 200px)',
-                    maxWidth: '100%',
+                    height: `${height || ' '}`,
+                    width: `${width || '100%'}`,
                     transition: 'all 0.3s ease',
                     minWidth: 'unset',
                     '&:hover': {

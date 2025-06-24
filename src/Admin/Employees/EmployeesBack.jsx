@@ -99,11 +99,11 @@ export const EmployeesBack = () => {
 
   return (
     <div className="p-[20px] flex flex-col gap-[20px]">
+      <BtnBack To='/Admin' />
       <div className="flex items-center gap-[20px]">
         <div className='flex-col ali'>
           <h1 className="font-bold text-[20px]">Empleado BACK-OFFICE</h1>
           <div className='btnDown'>
-            <BtnBack To='/Admin'  />
           </div>
         </div>
         {/* Barra de búsqueda para consultar empleado */}

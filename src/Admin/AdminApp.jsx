@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import ButtonSide from './UI/ButtonSide'
 import { BtnBack } from "../UI/Login_Register/BtnBack"
+import { Buttons } from '../UI/Login_Register/Buttons'
 import './AdminStyles.css'
 
 export const AdminApp = () => {
@@ -13,7 +14,7 @@ export const AdminApp = () => {
 
     return (
         <>
-            
+
             <div className='btnDown-left fixed flex-col'>
                 <h2 className=' font-bold text-4xl text-[var(--Font-Nav)] fixed top-5 left-5 text-shadow'>ADMINISTRADOR</h2>
                 <BtnBack To='/' />
@@ -24,6 +25,17 @@ export const AdminApp = () => {
                     {/* Si es admin, mostrar todo */}
                     {tipoUsuario === 1 && (
                         <>
+                            <Buttons width='104px' height='104px' padding='0' nameButton={<img src='src/Admin/Assets/Icons/Tecnic.png' className='w-20' />} />
+                            <Buttons width='104px' height='104px' padding='0' nameButton={<img src='src/Admin/Assets/Icons/Client.png' className='w-20' />} />
+                            <Buttons width='104px' height='104px' padding='0' nameButton={<img src='src/Admin/Assets/Icons/Employer.png' className='w-20' />} />
+                            <Buttons width='104px' height='104px' padding='0' nameButton={<img src='src/Admin/Assets/Icons/Product.png' className='w-20' />} />
+                            <Buttons width='104px' height='104px' padding='0' nameButton={<img src='src/Admin/Assets/Icons/Facture.png' className='w-20' />} />
+                            <Buttons width='104px' height='104px' padding='0' nameButton={<img src='src/Admin/Assets/Icons/Categories.png' className='w-20' />} />
+                            <Buttons width='104px' height='104px' padding='0' nameButton={<img src='src/Admin/Assets/Icons/Services.png' className='w-20' />} />
+                            <Buttons width='104px' height='104px' padding='0' nameButton={<img src='src/Admin/Assets/Icons/Admin.png' className='w-20' />} />
+                            <Buttons width='104px' height='104px' padding='0' nameButton={<img src='src/Admin/Assets/Icons/Contract.png' className='w-20' />} />
+                            <Buttons width='104px' height='104px' padding='0' nameButton={<img src='src/Admin/Assets/Icons/Sales.png' className='w-20' />} />
+                            {/* noooooooooo */}
                             <ButtonSide to='/Admin/Technicians' children='Técnicos' imgBtn='src/Admin/Assets/Icons/Tecnic.png' />
                             <ButtonSide to='/Admin/Clients' children='Clientes' imgBtn='src/Admin/Assets/Icons/Client.png' />
                             <ButtonSide to='/Admin/Employees' children='Empleados' imgBtn='src/Admin/Assets/Icons/Employer.png' />
