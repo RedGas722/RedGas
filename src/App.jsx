@@ -30,7 +30,6 @@ import { useEffect } from 'react'
 import { SearchPage } from './Pages/SearchPage/SearchPage.jsx'
 import { ProductInfo } from './Pages/ProductInfo/ProductInfo.jsx'
 import { Technica } from './Pages/Technicians/Technica/Technica.jsx'
-import { Technicas } from './Pages/Technicians/Technica/Technicas.jsx'
 import { Cursor } from './UI/Cursor/Cursor.jsx'
 
 
@@ -63,7 +62,6 @@ export function App() {
                     <Route path="/SearchPage" element={<SearchPage />} />
                     <Route path="/SearchPage" element={<SearchPage />} />
                     <Route path="/Technica" element={<Technica />} />
-                    <Route path="/Technicas" element={<Technicas />} />
                     {/* Login's Route */}
                     <Route path='/Login' element={<Login />} >
                         <Route index element={<LoginGeneral />} />

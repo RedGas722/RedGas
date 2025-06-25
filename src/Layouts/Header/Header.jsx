@@ -207,7 +207,7 @@ export const Header = () => {
                         </>
                     )}
 
-                    {token && type == 1 || type == 3 && (
+                    {token && type == 1 && (
                         <>
                             <div onClick={() => navigate('/Login')} className="menu-list">Cambiar Cuenta</div>
                             <div onClick={() => handSignOut()} className="menu-list">Cerrar Sesion</div>
@@ -219,6 +219,13 @@ export const Header = () => {
                             <div onClick={() => navigate('/Login')} className="menu-list">Perfil</div>
                             <div onClick={() => navigate('/CostumerMyService')} className="menu-list">Mi Servicio</div>
                             <div onClick={() => navigate('/Shopping')} className="menu-list">Carrito</div>
+                            <div onClick={() => navigate('/Login')} className="menu-list">Cambiar Cuenta</div>
+                            <div onClick={() => handSignOut()} className="menu-list">Cerrar Sesion</div>
+                        </>
+                    )}
+
+                    {token && type == 3 && (
+                        <>
                             <div onClick={() => navigate('/Login')} className="menu-list">Cambiar Cuenta</div>
                             <div onClick={() => handSignOut()} className="menu-list">Cerrar Sesion</div>
                         </>
