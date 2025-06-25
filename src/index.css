@@ -175,4 +175,8 @@ input[type="password"]::-webkit-reveal {
     border-radius: var(--radius-main);
     box-shadow: var(--shadow-main-inset);
   }
+
+  .dark-to-white {
+    background: linear-gradient(0deg, var(--background-color) 0%, var(--main-color) 100%);
+  }
 }
