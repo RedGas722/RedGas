@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom"
 import { jwtDecode } from "jwt-decode"
 import { Buttons } from "../../UI/Login_Register/Buttons"
 import { BtnBack } from "../../UI/Login_Register/BtnBack"
-import {EmailServicesCostumer} from "./Email/EmailServicesCostumer"
 import AccordionSummary from '@mui/material/AccordionSummary'
 import AccordionDetails from '@mui/material/AccordionDetails'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
@@ -14,45 +13,47 @@ import IconButton from '@mui/material/IconButton'
 import CloseIcon from '@mui/icons-material/Close'
 import Accordion from '@mui/material/Accordion'
 import Modal from '@mui/material/Modal'
+import emailjs from '@emailjs/browser'
 import Box from '@mui/material/Box'
 import Swal from 'sweetalert2'
 import './CostumersServices.css'
 
-const URL_TECHGET = 'http://localhost:10101/TecnicoServicesGet'
+const URL_GET = 'http://localhost:10101/ClienteServicesGet'
 const URL_COSTUMERS = 'https://redgas.onrender.com/ClienteServicesGetAll'
+const URL_TECHGET = 'http://localhost:10101/TecnicoServicesGet'
 const URL_TECHNICIAN = 'http://localhost:10101/TecnicoServicesGetAll'
 const URL_SERVICESTECHNICIAN = 'http://localhost:10101/TecnicoServicesAdd'
 
 const style = {
-	position: 'absolute',
-	top: '50%',
-	left: '50%',
-	transform: 'translate(-50%, -50%)',
-	boxShadow: 24,
-	p: 2,
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  boxShadow: 24,
+  p: 2,
 }
 
 const getServiceColor = (label) => {
-	switch (label.toLowerCase()) {
-		case 'reparación':
-		case 'reparacion':
-			return 'var(--Font-Nav2)'
-		case 'mantenimiento':
-			return 'var(--Font-Nav)'
-		case 'instalación':
-			return 'var(--main-color)'
-		default:
-			return 'var(--Font-Nav-shadow2)'
-	}
+  switch (label.toLowerCase()) {
+    case 'reparación':
+    case 'reparacion':
+      return 'var(--Font-Nav2)'
+    case 'mantenimiento':
+      return 'var(--Font-Nav)'
+    case 'instalación':
+      return 'var(--main-color)'
+    default:
+      return 'var(--Font-Nav-shadow2)'
+  }
 };
 
 export const CostumerServices = () => {
-  const [isAccepting, setIsAccepting] = useState(false)
-  const [costumer, setCosutmer] = useState([])
-  const [technician, setTechnician] = useState([])
-  const [result, setResult] = useState([])
   const [isScrollable, setIsScrollable] = useState(false)
+  const [isAccepting, setIsAccepting] = useState(false)
   const [openIndex, setOpenIndex] = useState(null)
+  const [technician, setTechnician] = useState([])
+  const [costumer, setCosutmer] = useState([])
+  const [result, setResult] = useState([])
   const accordionRef = useRef(null)
   const token = localStorage.getItem('token')
   const navigate = useNavigate()
@@ -144,12 +145,11 @@ export const CostumerServices = () => {
           })
 
           const data = await getTechRes.json()
-          console.log(data.get)
 
           if (!data.get) {
             fetchData()
           } else {
-            setTimeout(() => navigate('/'), 0)
+            setTimeout(() => navigate('/Technica'), 0)
           }
 
         } catch (error) {
@@ -214,19 +214,19 @@ export const CostumerServices = () => {
     return () => window.removeEventListener('resize', checkHeight)
   }, [result])
 
-	const getIconByLabel = (label) => {
-		if (label === 'Reparación') return faTools
-		if (label === 'Instalación') return faPlug
-		if (label === 'Mantenimiento') return faGears
-		return faQuestion
-	}
+  const getIconByLabel = (label) => {
+    if (label === 'Reparación') return faTools
+    if (label === 'Instalación') return faPlug
+    if (label === 'Mantenimiento') return faGears
+    return faQuestion
+  }
 
-	const handleOpen = (index) => setOpenIndex(index)
-	const handleClose = () => setOpenIndex(null)
+  const handleOpen = (index) => setOpenIndex(index)
+  const handleClose = () => setOpenIndex(null)
 
-	const handleAceptServices = useCallback(async (id) => {
-		if (isAccepting) return
-		setIsAccepting(true)
+  const handleAceptServices = useCallback(async (id) => {
+    if (isAccepting) return
+    setIsAccepting(true)
 
     try {
       const res = await fetch(URL_SERVICESTECHNICIAN, {
@@ -239,10 +239,8 @@ export const CostumerServices = () => {
       })
 
       if (res.ok) {
-        console.log('200 OK: servicio aceptado y correo enviado')
-        navigate('/')
-        EmailServicesCostumer(id)
-        window.location.reload()
+      EmailServicesCostumer(id)
+      console.log('200 OK: servicio aceptado')
       }
 
     } catch (error) {
@@ -252,16 +250,104 @@ export const CostumerServices = () => {
     }
   }, [isAccepting])
 
-	return (
-		<div>
-			<div className="flex justify-between items-center p-[0_5px] w-full">
-				<div className="btnDown">
-					<BtnBack To='/' />
-				</div>
-				<h2 className="font-bold text-4xl text-[var(--Font-Nav)]">
-					MI SERVICIO
-				</h2>
-			</div>
+  const EmailServicesCostumer = async (id) => {
+
+    try {
+      const response = await fetch(`${URL_GET}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId: id }),
+      })
+
+      if (!response.ok) {
+        throw new Error('Error fetching data')
+      }
+
+      const datainfo = await response.json()
+      const firstParse = JSON.parse(datainfo.get)
+      const secondParse = JSON.parse(JSON.parse(firstParse.item))
+
+      const userData = {
+        user: firstParse.userName,
+        phone: firstParse.userPhone,
+        email: firstParse.userEmail,
+        address:firstParse.userAddress,
+        label: secondParse.resultado.etiqueta
+      }
+
+      handleForgotPassword(userData)
+    } catch (error) {
+      console.error('Error:', error)
+    }
+  }
+
+  const handleForgotPassword = async ({ user, phone, email, address, label }) => {
+
+    const serviceId = 'service_82gyxy6'
+    const templateId = 'template_fwkby0l'
+    const publicKey = 'SHHYhi-xHJeCovrBP'
+
+    try {
+      const templateParams = {
+        to_email: email,
+        company: 'RED-GAS',
+        user: user || 'Usuario',
+        message: `Hola ${user},
+
+               Te informamos que tu solicitud de servicio ha sido aceptada por uno de nuestros técnicos.
+
+               🛠️ Tipo de servicio: ${label}
+               📍 Dirección registrada: ${address}
+               📞 Teléfono de contacto: ${phone}
+
+               Un técnico especializado se comunicará contigo muy pronto para iniciar el proceso. Te recomendamos estar atento(a) a tu teléfono o correo electrónico.
+
+               Gracias por confiar en RedGas, trabajamos para brindarte un servicio rápido, seguro y profesional.
+
+               —------------------------------------
+               RedGas Soporte Técnico
+               `,
+        link: ` `,
+      }
+
+      emailjs.send(serviceId, templateId, templateParams, publicKey)
+        .then(() => {
+          console.log(
+            200,
+            '¡Correo de recuperación enviado!',
+            'Hemos enviado un enlace a tu correo electrónico para que puedas restablecer tu contraseña.'
+          );
+          setTimeout(() => navigate('/Technica'), 100)
+        })
+        .catch(() => {
+          console.log(
+            402,
+            'No se pudo enviar el correo',
+            'Ocurrió un error al enviar el mensaje. Inténtalo nuevamente.'
+          )
+        })
+
+    } catch {
+      console.log(
+        401,
+        'Correo no encontrado',
+        ''
+      )
+    }
+  }
+
+  return (
+    <div>
+      <div className="flex justify-between items-center p-[0_5px] w-full">
+        <div className="btnDown">
+          <BtnBack To='/' />
+        </div>
+        <h2 className="font-bold text-4xl text-[var(--Font-Nav)]">
+          MI SERVICIO
+        </h2>
+      </div>
 
       <section className="h-fit flex flex-wrap justify-center text-[var(--main-color)] items-center gap-[40px] !p-[80px_0] bg-[var(--background-color)] MainPageContainer">
         {costumer
