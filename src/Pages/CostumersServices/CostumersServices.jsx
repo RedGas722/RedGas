@@ -83,7 +83,7 @@ export const CostumerServices = () => {
           allowOutsideClick: false,
           allowEscapeKey: false,
           showConfirmButton: false,
-          timer: 2000,
+          timer: 1000,
           timerProgressBar: true,
         })
         break
@@ -240,7 +240,6 @@ export const CostumerServices = () => {
 
       if (res.ok) {
       EmailServicesCostumer(id)
-      console.log('200 OK: servicio aceptado')
       }
 
     } catch (error) {
@@ -314,23 +313,23 @@ export const CostumerServices = () => {
 
       emailjs.send(serviceId, templateId, templateParams, publicKey)
         .then(() => {
-          console.log(
+          alertTech(
             200,
-            '¡Correo de recuperación enviado!',
-            'Hemos enviado un enlace a tu correo electrónico para que puedas restablecer tu contraseña.'
+            'Servicio Aceptado',
+            'has aceptado el servicio'
           );
           setTimeout(() => navigate('/Technica'), 100)
         })
         .catch(() => {
-          console.log(
+          alertTech(
             402,
-            'No se pudo enviar el correo',
-            'Ocurrió un error al enviar el mensaje. Inténtalo nuevamente.'
+            'No se pudo Aceptar el servicio',
+            'Ocurrió un error '
           )
         })
 
     } catch {
-      console.log(
+      alertTech(
         401,
         'Correo no encontrado',
         ''

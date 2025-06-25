@@ -1,17 +1,18 @@
-import { useState, useEffect} from "react"
-import { jwtDecode } from "jwt-decode"
-import { faUser } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { useNavigate } from "react-router-dom"
+import { faUser } from "@fortawesome/free-solid-svg-icons"
 import { BtnBack } from "../../UI/Login_Register/BtnBack"
 import { Buttons } from "../../UI/Login_Register/Buttons"
+import { useNavigate } from "react-router-dom"
+import { useState, useEffect } from "react"
+import { jwtDecode } from "jwt-decode"
+import withReactContent from 'sweetalert2-react-content'
+import Swal from 'sweetalert2'
 import './CostumerMyService.css'
 
 const URL_GET = 'https://redgas.onrender.com/ClienteServicesGet'
 const URL_DELETE = 'https://redgas.onrender.com/ClienteServicesDelete'
 
 export const CostumerMyService = () => {
-
   const navigate = useNavigate()
   const [id, setId] = useState('')
   const [user, setUser] = useState('')
@@ -21,30 +22,28 @@ export const CostumerMyService = () => {
 
   useEffect(() => {
     const token = localStorage.getItem('token')
-
     if (token) {
       const decoded = jwtDecode(token)
       const userId = decoded.data.id
-
       setId(userId)
 
       const fetchData = async () => {
+        alertSendForm('wait', 'Cargando...', 'Obteniendo datos del servicio...')
         try {
-          const response = await fetch(`${URL_GET}`, {
+          const response = await fetch(URL_GET, {
             method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ userId: userId }),
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userId }),
           })
 
           if (!response.ok) {
-            throw new Error('Error fetching data')
+            alertSendForm(502, 'Error al cargar servicio', 'Intenta nuevamente más tarde.')
+            return
           }
 
           const datainfo = await response.json()
-          
           if (!datainfo.get) {
+            alertSendForm('change', '', '')
             navigate('/Services')
           }
 
@@ -55,65 +54,142 @@ export const CostumerMyService = () => {
           setPhone(firstParse.userPhone)
           setAddress(firstParse.userAddress)
           setDescription(secondParse.resultado.input)
-
+          Swal.close()
         } catch (error) {
-          console.error('Error:', error)
         }
       }
+
       fetchData()
     }
-
   }, [])
 
   const handleChangeService = async () => {
+    const confirmed = await Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'Esto eliminará tu servicio actual para que puedas crear uno nuevo.',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#19A9A4',
+      confirmButtonText: 'Sí, cambiar',
+      cancelButtonText: 'Cancelar',
+    })
 
+    if (!confirmed.isConfirmed) return
+
+    alertSendForm('wait', 'Cambiando servicio...', 'Estamos procesando tu solicitud')
     try {
-      const responseChange = await fetch(`${URL_DELETE}`, {
+      const response = await fetch(URL_DELETE, {
         method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId: id }),
       })
 
-      if (!responseChange.ok) {
-        throw new Error('Error al eliminar el servicio')
-      }
-      const dataChange = await responseChange.json()
+      if (!response.ok) throw new Error('Error al cambiar el servicio')
 
-      if (dataChange.status = 'Service info Deleted') {
-        navigate('/Services')
+      const data = await response.json()
+      if (data.status === 'Service info Deleted') {
+        alertSendForm('change', '', '')
+        setTimeout(() => navigate('/Services'), 0)
       }
-
     } catch (error) {
-      console.error('Error al eliminar el servicio:', error)
+      console.error('Error al cambiar el servicio:', error)
+      alertSendForm(502, 'Error al cambiar el servicio', error.message)
     }
   }
 
   const handleDeleteService = async () => {
+    const confirmed = await Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'Esta acción eliminará tu servicio permanentemente.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#A9191E',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+    })
+
+    if (!confirmed.isConfirmed) return
+
+    alertSendForm('wait', 'Eliminando servicio...', 'Estamos procesando tu solicitud')
     try {
-      const responseDelete = await fetch(`${URL_DELETE}`, {
+      const response = await fetch(URL_DELETE, {
         method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId: id }),
       })
 
-      if (!responseDelete.ok) {
-        throw new Error('Error al eliminar el servicio')
-      }
-      const dataDelete = await responseDelete.json()
+      if (!response.ok) throw new Error('Error al eliminar el servicio')
 
-      if (dataDelete.status = 'Service info Deleted') {
-        setTimeout(() => {
-          alert('Servicio eliminado correctamente')
-          navigate('/')
-        }, 1000)
+      const data = await response.json()
+      if (data.status === 'Service info Deleted') {
+        alertSendForm(200, 'Servicio eliminado correctamente', 'Tu servicio ha sido eliminado.')
+        setTimeout(() => navigate('/'), 1500)
       }
-
     } catch (error) {
       console.error('Error al eliminar el servicio:', error)
+      alertSendForm(502, 'Error al eliminar el servicio', error.message)
+    }
+  }
+
+  const alertSendForm = (status, title, message) => {
+    const MySwal = withReactContent(Swal)
+
+    switch (status) {
+      case 'wait':
+        Swal.fire({
+          title: title || 'Procesando...',
+          text: message || 'Estamos procesando tu solicitud.',
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+          showConfirmButton: false,
+          timerProgressBar: true,
+          didOpen: () => Swal.showLoading(),
+        })
+        break
+
+      case 'change':
+        Swal.fire({
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+          showConfirmButton: false,
+          timer: 10,
+        })
+        break
+
+      case 200:
+        MySwal.fire({
+          icon: 'success',
+          title: title || 'Operación exitosa',
+          text: message || 'Tu solicitud fue completada correctamente.',
+          showConfirmButton: false,
+          timer: 2000,
+          timerProgressBar: true,
+        })
+        break
+
+      case 502:
+        MySwal.fire({
+          icon: 'error',
+          title: title || 'Ocurrió un error',
+          text: message || 'No pudimos completar tu solicitud. Intenta de nuevo más tarde.',
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+          showConfirmButton: true,
+          confirmButtonText: 'Cerrar',
+        })
+        break
+
+      default:
+        MySwal.fire({
+          icon: 'error',
+          title: title || 'Error inesperado',
+          text: message || 'No se pudo procesar tu solicitud. Intenta nuevamente más tarde.',
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+          showConfirmButton: true,
+          confirmButtonText: 'Cerrar'
+        })
+        break
     }
   }
 
@@ -143,8 +219,18 @@ export const CostumerMyService = () => {
           </div>
 
           <div className="flex justify-center items-center gap-4">
-            <Buttons type="submit" nameButton="Eliminar Servicio" Onclick={handleDeleteService} />
-            <Buttons type="submit" nameButton="Cambiar Servicio" Onclick={handleChangeService} />
+            <Buttons
+              type="submit"
+              nameButton="Eliminar Servicio"
+              Onclick={handleDeleteService}
+              className="bg-[var(--Font-Nav2)] hover:bg-[var(--Font-Nav2-shadow)] text-white font-semibold py-2 px-4 rounded-xl shadow-md transition duration-300"
+            />
+            <Buttons
+              type="submit"
+              nameButton="Cambiar Servicio"
+              Onclick={handleChangeService}
+              className="bg-[var(--Font-Nav)] hover:bg-[var(--Font-Nav-shadow)] text-white font-semibold py-2 px-4 rounded-xl shadow-md transition duration-300"
+            />
           </div>
         </div>
       </section>
