@@ -10,8 +10,9 @@ import AccordionSummary from '@mui/material/AccordionSummary'
 import AccordionDetails from '@mui/material/AccordionDetails'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import BtnBack from "../../../UI/Login_Register/BtnBack"
-import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
+import emailjs from '@emailjs/browser'
+import Swal from 'sweetalert2'
 
 const URL_GET_TECHNICIAN = 'http://localhost:10101/TecnicoServicesGet'
 const URL_DELETE_TECHNICIAN = 'http://localhost:10101/TecnicoServicesDelete'
@@ -34,7 +35,10 @@ export const Technica = () => {
   const [address, setAddress] = useState('')
   const [email, setEmail] = useState('')
   const [description, setDescription] = useState('')
+  const [total, setTotal] = useState('')
+  const [descriptionWork, setDescriptionWork] = useState('')
   const [services, setServices] = useState({})
+  const [isAccept, setIsAccept] = useState(false)
   const [isScrollable, setIsScrollable] = useState(false)
   const accordionRef = useRef(null)
   const token = localStorage.getItem('token')
@@ -68,7 +72,8 @@ export const Technica = () => {
         }
 
         const firstParse = JSON.parse(dataInfo.get)
-        await costumerGet(firstParse.userid)
+
+        costumerGet(firstParse.userid)
       } catch (err) {
         alertSendForm(502, 'Error al obtener datos del técnico', err.message)
       }
@@ -123,7 +128,7 @@ export const Technica = () => {
         body: JSON.stringify({
           id_cliente: costumerId,
           id_tecnico: technicianId,
-          estado_pedido: 'finalizado'
+          estado_pedido: 'Completado'
         }),
       })
 
@@ -131,7 +136,6 @@ export const Technica = () => {
 
       const data = await response.json()
       if (!data.get) {
-        alertSendForm(200, 'Servicio finalizado', 'El servicio fue marcado como finalizado.')
         handleDeleteServices()
       }
     } catch (err) {
@@ -157,8 +161,35 @@ export const Technica = () => {
       if (!resDeleteCostumer.ok || !resDeleteTechnician.ok)
         throw new Error('Error eliminando servicios')
 
-      alertSendForm(200, 'Servicio finalizado', 'Los datos fueron eliminados correctamente.')
-      navigate('/')
+      alertSendForm(200, 'Servicio finalizado', 'el servicio se finalizo correctamente.')
+      const templateParams = {
+        to_email: email,
+        company: 'RED-GAS',
+        user: user || 'Usuario',
+        message: `Hola ${user},  
+
+            Te informamos que tu solicitud de servicio ha sido completada con éxito por uno de nuestros técnicos especializados.
+
+            🛠️ Tipo de servicio realizado: ${description}
+            📍 Dirección: ${address}  
+            📞 Teléfono de contacto registrado: ${phone}
+
+            --------------------------------------------------
+            📃 Descripcion del servicio: ${descriptionWork}.
+            💲 Total: ${total}
+
+            Esperamos que tu experiencia haya sido satisfactoria. Si tienes algún comentario, sugerencia o necesitas asistencia adicional, no dudes en comunicarte con nosotros.
+
+            Gracias por confiar en RedGas. Seguimos trabajando para brindarte un servicio rápido, seguro y profesional.
+
+            -----------------------------------------  
+            RedGas Soporte Técnico  
+
+               `,
+        link: ` `,
+      }
+      handleEmail(templateParams)
+
     } catch (err) {
       alertSendForm(502, 'Error al limpiar servicios', err.message)
     }
@@ -188,9 +219,58 @@ export const Technica = () => {
         throw new Error('Error cancelando servicio')
 
       alertSendForm(200, 'Servicio cancelado', 'El servicio fue cancelado correctamente.')
-      navigate('/CostumerServices')
+      const templateParams = {
+        to_email: email,
+        company: 'RED-GAS',
+        user: user || 'Usuario',
+        message: `Hola ${user},  
+
+            Queremos informarte que, por motivos logísticos, el técnico asignado ha cancelado la atención a tu solicitud de servicio.
+
+            🛠️ Tipo de servicio solicitado: ${description}
+            📍 Dirección registrada: ${address} 
+            📞 Teléfono de contacto: ${phone}
+
+            Tu solicitud ///SIGUE ACTIVA/// y se encuentra en espera de ser asignada a otro técnico disponible. Te notificaremos tan pronto como uno de nuestros especialistas tome el caso.
+
+            Agradecemos tu paciencia y comprensión. En RedGas seguimos comprometidos con brindarte un servicio rápido, seguro y profesional.
+
+            --------------------------------------  
+            RedGas Soporte Técnico  
+            `,
+        link: ` `,
+      }
+      handleEmail(templateParams)
     } catch (err) {
       alertSendForm(502, 'Error al cancelar servicio', err.message)
+    }
+  }
+
+  const handleEmail = async (templateParams) => {
+
+    const serviceId = 'service_82gyxy6'
+    const templateId = 'template_fwkby0l'
+    const publicKey = 'SHHYhi-xHJeCovrBP'
+
+    try {
+      emailjs.send(serviceId, templateId, templateParams, publicKey)
+        .then(() => {
+          setTimeout(() => navigate('/CostumerServices'), 100)
+        })
+        .catch(() => {
+          alertTech(
+            402,
+            'No se pudo Aceptar el servicio',
+            'Ocurrió un error '
+          )
+        })
+
+    } catch {
+      alertTech(
+        401,
+        'Correo no encontrado',
+        ''
+      )
     }
   }
 
@@ -275,7 +355,7 @@ export const Technica = () => {
         <h2 className="font-bold text-4xl text-[var(--Font-Nav)]">MI SERVICIO</h2>
       </div>
 
-      <section className="h-fit flex flex-wrap justify-start text-[var(--main-color)] items-start gap-[0px] !p-[0px_0px] bg-[var(--background-color)] MainPageContainer">
+      <section className="h-fit flex flex-wrap justify-start text-[var(--main-color)] items-center gap-[50px] p-[0px_0px] bg-[var(--background-color)] MainPageContainer">
         <Box sx={style} className="flex flex-col min-w-[530px] items-start justify-start gap-4 NeoContainer_outset_TL">
           <div className="text-[var(--Font-Nav)] flex items-center gap-4">
             <FontAwesomeIcon icon={getIconByLabel(description)} className="text-4xl" />
@@ -310,12 +390,35 @@ export const Technica = () => {
           </div>
         </Box>
 
-        <div className="flex justify-center items-center gap-4">
-          <Buttons type="submit" nameButton="Terminar el servicio" Onclick={handleDoneServices} />
-          <Buttons type="submit" nameButton="Cancelar el servicio" Onclick={handleCancelServices} />
-        </div>
-      </section>
-    </div>
+        {isAccept === true && (
+          <div className="flex flex-col justify-center items-center gap-5 w-170 h-100 p-4 overflow-auto NeoSubContainer_outset_TL focus-within:!bg-white outline-none resize-none text-[var(--Font-Nav-shadow)]">
+            < input type="text" id="Total"
+              placeholder="Total..."
+              value={total}
+              onChange={e => setTotal(e.target.value)}
+              required
+              className="w-full h-5 p-4 overflow-auto NeoSubContainer_outset_TL focus-within:!bg-white outline-none resize-none text-[var(--Font-Nav-shadow)]" />
+            <textarea
+              id="Description"
+              placeholder="Descripcion del servicio..."
+              value={descriptionWork}
+              onChange={e => setDescriptionWork(e.target.value)}
+              required
+              className="w-full h-30 p-4 overflow-auto NeoSubContainer_outset_TL focus-within:!bg-white outline-none resize-none text-[var(--Font-Nav-shadow)]"
+            />
+            <Buttons type="submit" nameButton="Terminar el servicio" Onclick={handleDoneServices} />
+          </div>
+        )}
+        {isAccept === false && (
+          <div className="flex flex-col justify-center items-center gap-5 w-170 h-30 p-4 overflow-auto NeoSubContainer_outset_TL focus-within:!bg-white outline-none resize-none text-[var(--Font-Nav-shadow)]">
+            <div className="flex justify-center items-center gap-4 ">
+              <Buttons type="submit" nameButton="Cancelar el servicio" Onclick={handleCancelServices} />
+              <Buttons type="submit" nameButton="Terminar el servicio" Onclick={() => setIsAccept(true)} />
+            </div>
+          </div>
+        )}
+      </section >
+    </div >
   )
 }
 

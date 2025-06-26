@@ -10,6 +10,7 @@ import Swal from 'sweetalert2'
 import './CostumerMyService.css'
 
 const URL_GET = 'https://redgas.onrender.com/ClienteServicesGet'
+const URL_TECHNICIAN = 'http://localhost:10101/TecnicoServicesGetAll'
 const URL_DELETE = 'https://redgas.onrender.com/ClienteServicesDelete'
 
 export const CostumerMyService = () => {
@@ -19,6 +20,7 @@ export const CostumerMyService = () => {
   const [phone, setPhone] = useState('')
   const [address, setAddress] = useState('')
   const [description, setDescription] = useState('')
+  const [info, setInfo] = useState(false)
 
   useEffect(() => {
     const token = localStorage.getItem('token')
@@ -46,6 +48,7 @@ export const CostumerMyService = () => {
             alertSendForm('change', '', '')
             navigate('/Services')
           }
+          handleInProcess()
 
           const firstParse = JSON.parse(datainfo.get)
           const secondParse = JSON.parse(JSON.parse(firstParse.item))
@@ -62,6 +65,25 @@ export const CostumerMyService = () => {
       fetchData()
     }
   }, [])
+
+  const handleInProcess = async () => {
+    try{
+      const respon = await fetch(URL_TECHNICIAN,{
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+      })
+
+      const data = await respon.json()
+      data.get.map(item => {
+        if (item.userid == id) {
+          return setInfo(true)
+        }
+      })      
+    } catch (err) {
+
+    }
+
+  }
 
   const handleChangeService = async () => {
     const confirmed = await Swal.fire({
@@ -199,7 +221,19 @@ export const CostumerMyService = () => {
         <div className="btnDown">
           <BtnBack To='/' />
         </div>
+        <div>
         <h2 className=" font-bold text-4xl text-[var(--Font-Nav)]">MI SERVICIO</h2>
+        {info === false &&(
+          <div>
+            <h3>tu servicio esta en proceso de aceptacion...</h3>
+          </div>
+        )}
+        {info === true &&(
+          <div>
+            <h3>tu servicio ha sido aceptado</h3>
+          </div>
+        )}
+        </div>
       </div>
       <section className="h-fit flex flex-wrap justify-center text-[var(--main-color)] items-center gap-[20px] p-20">
         <div className="flex flex-col flex-wrap justify-center max-w-[700px] min-w-0 NeoContainer_outset_TL p-5 gap-3">

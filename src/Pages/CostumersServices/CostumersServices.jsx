@@ -276,13 +276,13 @@ export const CostumerServices = () => {
         label: secondParse.resultado.etiqueta
       }
 
-      handleForgotPassword(userData)
+      handleEmail(userData)
     } catch (error) {
       console.error('Error:', error)
     }
   }
 
-  const handleForgotPassword = async ({ user, phone, email, address, label }) => {
+  const handleEmail = async ({ user, phone, email, address, label }) => {
 
     const serviceId = 'service_82gyxy6'
     const templateId = 'template_fwkby0l'
@@ -305,7 +305,7 @@ export const CostumerServices = () => {
 
                Gracias por confiar en RedGas, trabajamos para brindarte un servicio rápido, seguro y profesional.
 
-               —------------------------------------
+               ---------------------------------------
                RedGas Soporte Técnico
                `,
         link: ` `,
