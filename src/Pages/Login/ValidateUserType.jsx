@@ -1,34 +1,32 @@
 export const validateUserType = async (correo) => {
-    const urls = [
-        { url: 'https://redgas.onrender.com/AdminGet', key: 'correo_admin', tipo: 1, ruta: 'AdminLogin' },
-        { url: 'https://redgas.onrender.com/ClienteGet', key: 'correo_cliente', tipo: 2, ruta: 'ClienteLogin' },
-        { url: 'https://redgas.onrender.com/EmpleadoGet', key: 'correo_empleado', tipo: 3, ruta: 'EmpleadoLogin' },
-        { url: 'http://localhost:10101/TecnicoLogin', key: 'correo_tecnico', tipo: 4, ruta: 'TecnicoLogin' }
-    ];
+  const urls = [
+    { url: 'https://redgas.onrender.com/AdminGetAllEmails', key: 'correo_admin', tipo: 1, ruta: 'AdminLogin' },
+    { url: 'https://redgas.onrender.com/ClienteGetAllEmails', key: 'correo_cliente', tipo: 2, ruta: 'ClienteLogin' },
+    { url: 'https://redgas.onrender.com/EmpleadoGetAllEmails', key: 'correo_empleado', tipo: 3, ruta: 'EmpleadoLogin' },
+    { url: 'https://redgas.onrender.com/TecnicoGetAllEmails', key: 'correo_tecnico', tipo: 4, ruta: 'TecnicoLogin' }
+  ];
 
-    for (const { url, key, tipo, ruta } of urls) {
-        try {
-            const res = await fetch(`${url}?${key}=${encodeURIComponent(correo)}`);
+  try {
+    const respuestas = await Promise.all(urls.map(({ url }) => fetch(url)));
 
-            // Manejo si el servidor devuelve error (como 404)
-            if (!res.ok) continue;
+    for (let i = 0; i < respuestas.length; i++) {
+      const res = respuestas[i];
+      const { key, tipo, ruta } = urls[i];
 
-            const data = await res.json();
+      if (!res.ok) continue;
 
-            // Verifica que la respuesta contenga datos reales
-            if ((data?.status === 'get ok' || data?.status === 'success') &&
-                (
-                    (Array.isArray(data.data) && data.data.length > 0) || 
-                    (typeof data.data === 'object' && Object.keys(data.data).length > 0)
-                )
-            ) {
-                return { tipo_usuario: tipo, ruta };
-            }
+      const data = await res.json();
+      const lista = data?.data || [];
 
-        } catch (err) {
-            console.error(`Error consultando ${url}:`, err);
-        }
+      const existe = lista.find(usuario => (usuario[key] || '').toLowerCase() === correo.toLowerCase());
+
+      if (existe) {
+        return { tipo_usuario: tipo, ruta };
+      }
     }
+  } catch (error) {
+    console.error("Error en la validación de tipo de usuario:", error);
+  }
 
-    return null;
+  return null;
 };
