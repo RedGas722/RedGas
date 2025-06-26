@@ -18,14 +18,13 @@ export const AdminsBack = () => {
   const [adminBuscado, setAdminBuscado] = useState(null)
   const [errorBusqueda, setErrorBusqueda] = useState('')
   const [sugerencias, setSugerencias] = useState([])
+  const [adminsEmails, setAdminsEmails] = useState([]) // [{id_admin, correo_admin}]
   const [paginaActual, setPaginaActual] = useState(1)
   const [totalPaginas, setTotalPaginas] = useState(1)
   const contenedorRef = useRef(null)
   const inputRef = useRef(null)
 
-  const URL = 'https://redgas.onrender.com/AdminGet'
-
-  async function fetchAdmins(pagina = 1) {
+  const fetchAdmins = async (pagina = 1) => {
     try {
       const res = await fetch(`https://redgas.onrender.com/AdminGetAllPaginated?page=${pagina}`)
       if (!res.ok) throw new Error('Error al obtener administradores')
@@ -40,13 +39,26 @@ export const AdminsBack = () => {
     }
   }
 
+  const fetchCorreosAdmins = async () => {
+    try {
+      const res = await fetch('https://redgas.onrender.com/AdminGetAllEmails')
+      if (!res.ok) throw new Error('Error al obtener correos')
+      const data = await res.json()
+      setAdminsEmails(data.data || []) // [{ id_admin, correo_admin }]
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   useEffect(() => {
     fetchAdmins(paginaActual)
+    fetchCorreosAdmins()
   }, [paginaActual])
 
   useEffect(() => {
     if (refrescar) {
-      fetchAdmins(1) // Reiniciar a la página 1
+      fetchAdmins(1)
+      fetchCorreosAdmins()
       setPaginaActual(1)
       setRefrescar(false)
       setAdminBuscado(null)
@@ -76,20 +88,18 @@ export const AdminsBack = () => {
     }
   }
 
-  // 🧠 Autocomplete filtrando productos localmente
   useEffect(() => {
     if (correoBusqueda.trim() === '') {
       setSugerencias([])
       return
     }
 
-    const filtrados = admins.filter((admin) =>
+    const filtrados = adminsEmails.filter((admin) =>
       admin.correo_admin.toLowerCase().includes(correoBusqueda.toLowerCase())
     )
     setSugerencias(filtrados.slice(0, 5))
-  }, [correoBusqueda, admins])
+  }, [correoBusqueda, adminsEmails])
 
-  // 🧽 Cierre del dropdown si se hace clic fuera
   useEffect(() => {
     const manejarClickFuera = (event) => {
       if (
@@ -104,7 +114,6 @@ export const AdminsBack = () => {
     return () => document.removeEventListener('mousedown', manejarClickFuera)
   }, [])
 
-  // Limpia adminBuscado y errorBusqueda si el input queda vacío
   useEffect(() => {
     if (correoBusqueda.trim() === '') {
       setAdminBuscado(null)
@@ -112,7 +121,6 @@ export const AdminsBack = () => {
     }
   }, [correoBusqueda])
 
-  // Mueve el input y el botón dentro del contenedorRef para que el click fuera funcione correctamente
   return (
     <div className="p-[20px] flex flex-col gap-[20px]">
       <div className="flex items-center gap-[20px] flex-wrap">
@@ -147,7 +155,6 @@ export const AdminsBack = () => {
                 <li
                   key={admin.id_admin}
                   onClick={() => {
-                    setAdminBuscado(admin)
                     setCorreoBusqueda(admin.correo_admin)
                     setSugerencias([])
                   }}
@@ -160,11 +167,9 @@ export const AdminsBack = () => {
           )}
         </div>
 
-        {/* Aquí agregamos el botón para abrir el modal Registrar */}
         <ButtonBack ClickMod={() => setShowRegisterModal(true)} Child="Registrar" />
       </div>
 
-      {/* resto del código igual */}
       {errorBusqueda && <p className="text-red-600 text-sm">{errorBusqueda}</p>}
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -211,6 +216,5 @@ export const AdminsBack = () => {
     </div>
   )
 }
-
 
 export default AdminsBack

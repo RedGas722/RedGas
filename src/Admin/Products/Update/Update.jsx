@@ -80,7 +80,7 @@ export const UpdateModal = ({ onClose, setRefrescar, productoCarta }) => {
       setNombreActualDb(nombreInicial)
 
       if (productoCarta.imagen) {
-        setImagenActual(`data:image/jpegbase64,${productoCarta.imagen}`)
+        setImagenActual(`data:image/jpeg;base64,${productoCarta.imagen}`)
         setImagenNueva(null)
       } else {
         setImagenActual(null)

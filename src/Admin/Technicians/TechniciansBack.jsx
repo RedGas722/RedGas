@@ -13,6 +13,7 @@ export const TechniciansBack = () => {
   const [showRegisterModal, setShowRegisterModal] = useState(false)
   const [showUpdateModal, setShowUpdateModal] = useState(false)
   const [tecnicos, setTecnicos] = useState([])
+  const [tecnicosEmails, setTecnicosEmails] = useState([])
   const [refrescar, setRefrescar] = useState(false)
   const [correoBusqueda, setCorreoBusqueda] = useState("")
   const [tecnicoBuscado, setTecnicoBuscado] = useState(null)
@@ -25,7 +26,7 @@ export const TechniciansBack = () => {
   const fetchTecnicos = async (pagina = 1) => {
     try {
       const res = await fetch(`https://redgas.onrender.com/TecnicoGetAllPaginated?page=${pagina}`)
-      if (!res.ok) throw new Error('Error al obtener tecnicos')
+      if (!res.ok) throw new Error('Error al obtener técnicos')
       const data = await res.json()
       const resultado = data.data
 
@@ -37,13 +38,26 @@ export const TechniciansBack = () => {
     }
   }
 
+  const fetchCorreosTecnicos = async () => {
+    try {
+      const res = await fetch(`https://redgas.onrender.com/TecnicoGetAllEmails`)
+      if (!res.ok) throw new Error('Error al obtener correos de técnicos')
+      const data = await res.json()
+      setTecnicosEmails(data.data || [])
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   useEffect(() => {
     fetchTecnicos(paginaActual)
+    fetchCorreosTecnicos()
   }, [paginaActual])
 
   useEffect(() => {
     if (refrescar) {
       fetchTecnicos(1)
+      fetchCorreosTecnicos()
       setPaginaActual(1)
       setRefrescar(false)
       setTecnicoBuscado(null)
@@ -73,21 +87,20 @@ export const TechniciansBack = () => {
     }
   }
 
-  // Autocompletado local
+  // Autocompletado desde los correos obtenidos
   useEffect(() => {
     if (correoBusqueda.trim() === '') {
-      setSugerencias([])  // Limpiar las sugerencias si el campo está vacío
-      setTecnicoBuscado(null)  // No mostrar un técnico específico
+      setSugerencias([])
+      setTecnicoBuscado(null)
       return
     }
 
-    const filtrados = tecnicos.filter(tecnico =>
+    const filtrados = tecnicosEmails.filter(tecnico =>
       tecnico.correo_tecnico?.toLowerCase().includes(correoBusqueda.toLowerCase())
     )
     setSugerencias(filtrados.slice(0, 5))
-  }, [correoBusqueda, tecnicos])
+  }, [correoBusqueda, tecnicosEmails])
 
-  // Cerrar sugerencias si se hace clic fuera
   useEffect(() => {
     const manejarClickFuera = (e) => {
       if (contenedorRef.current && !contenedorRef.current.contains(e.target)) {

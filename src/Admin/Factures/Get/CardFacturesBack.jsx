@@ -12,8 +12,8 @@ const CardFacturesBack = ({ factura, clientes, empleados, onUpdateClick, onViewP
         <h2 className="text-xl font-semibold text-gray-800 truncate">Factura #{factura.id_factura}</h2>
 
         <div className="mt-2 space-y-1 text-sm">
-          <p><span className="font-semibold">Cliente:</span> {cliente?.nombre_cliente || 'Desconocido'}</p>
-          <p><span className="font-semibold">Empleado:</span> {empleado?.nombre_empleado || 'Desconocido'}</p>
+          <p><span className="font-semibold">Cliente:</span> {cliente?.correo_cliente || 'Desconocido'}</p>
+          <p><span className="font-semibold">Empleado:</span> {empleado?.correo_empleado || 'Desconocido'}</p>
           <p><span className="font-semibold">Fecha:</span> {fechaSolo}</p>
           <p><span className="font-semibold">Estado:</span> {factura.estado_factura}</p>
           <p><span className="font-semibold">Total:</span> ${factura.total}</p>

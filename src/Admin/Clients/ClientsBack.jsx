@@ -12,6 +12,7 @@ export const ClientsBack = () => {
   const [showRegisterModal, setShowRegisterModal] = useState(false)
   const [showUpdateModal, setShowUpdateModal] = useState(false)
   const [clientes, setClientes] = useState([])
+  const [clientesEmails, setClientesEmails] = useState([])
   const [refrescar, setRefrescar] = useState(false)
   const [clienteSeleccionado, setClienteSeleccionado] = useState(null)
   const [correoBusqueda, setCorreoBusqueda] = useState('')
@@ -37,13 +38,26 @@ export const ClientsBack = () => {
     }
   }
 
+  const fetchClientesEmails = async () => {
+    try {
+      const res = await fetch(`https://redgas.onrender.com/ClienteGetAllEmails`)
+      if (!res.ok) throw new Error('Error al obtener correos de clientes')
+      const data = await res.json()
+      setClientesEmails(data.data || []) 
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   useEffect(() => {
     fetchClientes(paginaActual)
+    fetchClientesEmails()
   }, [paginaActual])
 
   useEffect(() => {
     if (refrescar) {
       fetchClientes(1)
+      fetchClientesEmails()
       setPaginaActual(1)
       setRefrescar(false)
       setClienteBuscado(null)
@@ -75,20 +89,18 @@ export const ClientsBack = () => {
     }
   }
 
-  // 🧠 Autocomplete filtrando localmente
   useEffect(() => {
     if ((correoBusqueda || '').trim() === '') {
       setSugerencias([])
       return
     }
 
-    const filtrados = clientes.filter((cliente) =>
+    const filtrados = clientesEmails.filter((cliente) =>
       (cliente.correo_cliente || '').toLowerCase().includes(correoBusqueda.toLowerCase())
     )
     setSugerencias(filtrados.slice(0, 5))
-  }, [correoBusqueda, clientes])
+  }, [correoBusqueda, clientesEmails])
 
-  // 🧽 Cerrar sugerencias si se hace clic fuera
   useEffect(() => {
     const manejarClickFuera = (event) => {
       if (
@@ -103,13 +115,20 @@ export const ClientsBack = () => {
     return () => document.removeEventListener('mousedown', manejarClickFuera)
   }, [])
 
+  useEffect(() => {
+    if (correoBusqueda.trim() === '') {
+      setClienteBuscado(null)
+      setErrorBusqueda('')
+    }
+  }, [correoBusqueda])
+
   return (
     <div className="p-[20px] flex flex-col gap-[20px]">
       <div className="flex items-center gap-[20px] flex-wrap">
         <div>
           <h1 className="font-bold text-[20px]">Cliente BACK-OFFICE</h1>
           <div className='btnDown'>
-            <BtnBack To='/Admin'  />
+            <BtnBack To='/Admin' />
           </div>
         </div>
 
@@ -140,7 +159,6 @@ export const ClientsBack = () => {
                 <li
                   key={cliente.id_cliente}
                   onClick={() => {
-                    setClienteBuscado(cliente)
                     setCorreoBusqueda(cliente.correo_cliente)
                     setSugerencias([])
                   }}

@@ -40,7 +40,7 @@ export const FacturesBack = () => {
 
   const fetchClientes = async () => {
     try {
-      const res = await fetch('https://redgas.onrender.com/ClienteGetAll')
+      const res = await fetch('https://redgas.onrender.com/ClienteGetAllEmails')
       const data = await res.json()
       setClientes(data.data || [])
     } catch (error) {
@@ -50,7 +50,7 @@ export const FacturesBack = () => {
 
   const fetchEmpleados = async () => {
     try {
-      const res = await fetch('https://redgas.onrender.com/EmpleadoGetAll')
+      const res = await fetch('https://redgas.onrender.com/EmpleadoGetAllEmails')
       const data = await res.json()
       setEmpleados(data.data || [])
     } catch (error) {

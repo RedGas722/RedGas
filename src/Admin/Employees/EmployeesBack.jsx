@@ -12,6 +12,7 @@ export const EmployeesBack = () => {
   const [showRegisterModal, setShowRegisterModal] = useState(false)
   const [showUpdateModal, setShowUpdateModal] = useState(false)
   const [empleados, setEmpleados] = useState([])
+  const [empleadosEmails, setEmpleadosEmails] = useState([])
   const [refrescar, setRefrescar] = useState(false)
   const [empleadoSeleccionado, setEmpleadoSeleccionado] = useState(null)
   const [correoBusqueda, setCorreoBusqueda] = useState('')
@@ -37,13 +38,26 @@ export const EmployeesBack = () => {
     }
   }
 
+  const fetchCorreosEmpleados = async () => {
+    try {
+      const res = await fetch('https://redgas.onrender.com/EmpleadoGetAllEmails')
+      if (!res.ok) throw new Error('Error al obtener correos')
+      const data = await res.json()
+      setEmpleadosEmails(data.data || [])
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   useEffect(() => {
     fetchEmpleados(paginaActual)
+    fetchCorreosEmpleados()
   }, [paginaActual])
 
   useEffect(() => {
     if (refrescar) {
       fetchEmpleados(1)
+      fetchCorreosEmpleados()
       setPaginaActual(1)
       setRefrescar(false)
       setEmpleadoBuscado(null)
@@ -75,22 +89,20 @@ export const EmployeesBack = () => {
     }
   }
 
-  // Autocompletado en vivo
   useEffect(() => {
     if ((correoBusqueda || '').trim() === '') {
       setSugerencias([])
       return
     }
 
-    const filtrados = empleados.filter((empleado) =>
+    const filtrados = empleadosEmails.filter((empleado) =>
       (empleado.correo_empleado || '')
         .toLowerCase()
         .includes(correoBusqueda.toLowerCase())
     )
     setSugerencias(filtrados.slice(0, 5))
-  }, [correoBusqueda, empleados])
+  }, [correoBusqueda, empleadosEmails])
 
-  // Cerrar sugerencias si se hace clic fuera
   useEffect(() => {
     const manejarClickFuera = (e) => {
       if (contenedorRef.current && !contenedorRef.current.contains(e.target)) {
@@ -102,13 +114,20 @@ export const EmployeesBack = () => {
     return () => document.removeEventListener('mousedown', manejarClickFuera)
   }, [])
 
+  useEffect(() => {
+    if (correoBusqueda.trim() === '') {
+      setEmpleadoBuscado(null)
+      setErrorBusqueda('')
+    }
+  }, [correoBusqueda])
+
   return (
     <div className="p-[20px] flex flex-col gap-[20px]">
       <div className="flex items-center gap-[20px]">
         <div className='flex-col ali'>
           <h1 className="font-bold text-[20px]">Empleado BACK-OFFICE</h1>
           <div className='btnDown'>
-            <BtnBack To='/Admin'  />
+            <BtnBack To='/Admin' />
           </div>
         </div>
         {/* Barra de búsqueda para consultar empleado */}
@@ -132,13 +151,12 @@ export const EmployeesBack = () => {
             </button>
           </div>
 
-          {sugerencias.length > 0 && (
+          { sugerencias.length > 0 && (
             <ul className="absolute z-10 bg-white border border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto w-full shadow">
               {sugerencias.map((empleado) => (
                 <li
-                  key={empleado.id_empleado}
+                  key={empleado.id_empleado} // <-- CAMBIO AQUÍ
                   onClick={() => {
-                    setEmpleadoBuscado(empleado)
                     setCorreoBusqueda(empleado.correo_empleado)
                     setSugerencias([])
                   }}
@@ -151,7 +169,7 @@ export const EmployeesBack = () => {
           )}
         </div>
         <ButtonBack ClickMod={() => setShowRegisterModal(true)} Child="Registrar" />
-      </div >
+      </div>
 
       {errorBusqueda && <p className="text-red-600 text-sm">{errorBusqueda}</p>}
 
@@ -188,19 +206,17 @@ export const EmployeesBack = () => {
 
       {/* Modales */}
       {showRegisterModal && (
-          <RegisterModal onClose={() => setShowRegisterModal(false)} setRefrescar={setRefrescar} />
-        )
-      }
+        <RegisterModal onClose={() => setShowRegisterModal(false)} setRefrescar={setRefrescar} />
+      )}
 
       {showUpdateModal && empleadoSeleccionado && (
-          <UpdateModal
-            onClose={cerrarModal}
-            setRefrescar={setRefrescar}
-            empleadoCarta={empleadoSeleccionado}
-          />
-        )
-      }
-    </div >
+        <UpdateModal
+          onClose={cerrarModal}
+          setRefrescar={setRefrescar}
+          empleadoCarta={empleadoSeleccionado}
+        />
+      )}
+    </div>
   )
 }
 

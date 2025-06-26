@@ -18,6 +18,7 @@ export const CategoriesBack = () => {
   const [categoriaBuscada, setCategoriaBuscada] = useState(null)
   const [errorBusqueda, setErrorBusqueda] = useState('')
   const [sugerencias, setSugerencias] = useState([])
+  const [nombresCategorias, setNombresCategorias] = useState([]) // [{id_categoria, nombre_categoria}]
   const [paginaActual, setPaginaActual] = useState(1)
   const [totalPaginas, setTotalPaginas] = useState(1)
   const contenedorRef = useRef(null)
@@ -25,7 +26,7 @@ export const CategoriesBack = () => {
   const fetchCategorias = async (pagina = 1) => {
     try {
       const res = await fetch(`https://redgas.onrender.com/CategoriaGetAllPaginated?page=${pagina}`)
-      if (!res.ok) throw new Error('Error al obtener categorias')
+      if (!res.ok) throw new Error('Error al obtener categorías')
       const data = await res.json()
       const resultado = data.data
 
@@ -37,13 +38,26 @@ export const CategoriesBack = () => {
     }
   }
 
+  const fetchNombresCategorias = async () => {
+    try {
+      const res = await fetch(`https://redgas.onrender.com/CategoriaGetAllNames`)
+      if (!res.ok) throw new Error('Error al obtener nombres')
+      const data = await res.json()
+      setNombresCategorias(data.data || []) // ahora incluye id_categoria
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   useEffect(() => {
     fetchCategorias(paginaActual)
+    fetchNombresCategorias()
   }, [paginaActual])
 
   useEffect(() => {
     if (refrescar) {
       fetchCategorias(1)
+      fetchNombresCategorias()
       setPaginaActual(1)
       setRefrescar(false)
       setCategoriaBuscada(null)
@@ -81,11 +95,11 @@ export const CategoriesBack = () => {
       return
     }
 
-    const filtradas = categorias.filter((cat) =>
-      (cat.nombre_categoria || '').toLowerCase().includes(nombreBusqueda.toLowerCase())
+    const filtradas = nombresCategorias.filter((obj) =>
+      (obj.nombre_categoria || '').toLowerCase().includes(nombreBusqueda.toLowerCase())
     )
     setSugerencias(filtradas.slice(0, 5))
-  }, [nombreBusqueda, categorias])
+  }, [nombreBusqueda, nombresCategorias])
 
   useEffect(() => {
     const manejarClickFuera = (e) => {
@@ -103,8 +117,8 @@ export const CategoriesBack = () => {
       <div className="flex items-center gap-[20px] flex-wrap">
         <div>
           <h1 className="font-bold text-[20px]">Categoría BACK-OFFICE</h1>
-           <div className='btnDown'>
-            <BtnBack To='/Admin'  />
+          <div className='btnDown'>
+            <BtnBack To='/Admin' />
           </div>
         </div>
 
@@ -131,17 +145,16 @@ export const CategoriesBack = () => {
 
           {sugerencias.length > 0 && (
             <ul className="absolute z-10 bg-white border border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto w-full shadow">
-              {sugerencias.map((categoria) => (
+              {sugerencias.map((cat) => (
                 <li
-                  key={categoria.id_categoria}
+                  key={cat.id_categoria}
                   onClick={() => {
-                    setCategoriaBuscada(categoria)
-                    setNombreBusqueda(categoria.nombre_categoria)
+                    setNombreBusqueda(cat.nombre_categoria)
                     setSugerencias([])
                   }}
                   className="p-2 hover:bg-gray-100 cursor-pointer"
                 >
-                  {categoria.nombre_categoria}
+                  {cat.nombre_categoria}
                 </li>
               ))}
             </ul>

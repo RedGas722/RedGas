@@ -34,11 +34,11 @@ export const SalesBack = () => {
 
   const fetchProductos = async () => {
     try {
-      const res = await fetch('https://redgas.onrender.com/ProductoGetAll')
+      const res = await fetch('https://redgas.onrender.com/ProductoGetAllNames')
       const data = await res.json()
-      setProductos(Array.isArray(data.data.productos) ? data.data.productos : [])
+      setProductos(Array.isArray(data.data) ? data.data : [])
     } catch (error) {
-      console.error('Error al obtener productos', error)
+      console.error('Error al obtener nombres de productos', error)
     }
   }
 
@@ -56,6 +56,7 @@ export const SalesBack = () => {
   useEffect(() => {
     if (refrescar) {
       fetchVentas(1)
+      fetchProductos()
       setPaginaActual(1)
       setRefrescar(false)
       handleLimpiar()

@@ -6,13 +6,13 @@ const convertirBase64AUrl = (imagen) => {
     return null
   }
   if (typeof imagen === 'string') {
-    return `data:image/pngbase64,${imagen}`
+    return `data:image/png;base64,${imagen}`
   }
   if (typeof imagen === 'object' && imagen.type === 'Buffer' && Array.isArray(imagen.data)) {
     const byteArray = new Uint8Array(imagen.data)
     const binaryString = byteArray.reduce((acc, byte) => acc + String.fromCharCode(byte), '')
     const base64String = btoa(binaryString)
-    return `data:image/pngbase64,${base64String}`
+    return `data:image/png;base64,${base64String}`
   }
   console.warn("Formato de imagen desconocido:", imagen)
   return null
