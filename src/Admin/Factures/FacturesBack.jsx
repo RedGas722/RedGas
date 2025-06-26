@@ -22,9 +22,9 @@ export const FacturesBack = () => {
 
   const fetchFacturas = async () => {
     try {
-      const res = await fetch('https://redgas.onrender.com/FacturaGetAll');
+      const res = await fetch('https://redgas.onrender.com/FacturaGetAllPaginated');
       const data = await res.json();
-      setFacturas(data.data || []);
+      setFacturas(data.data.data || []);
       setFacturasOriginal(data.data || []);
     } catch (error) {
       console.error('Error al obtener facturas', error);

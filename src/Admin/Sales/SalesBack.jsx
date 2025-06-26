@@ -15,10 +15,10 @@ export const SalesBack = () => {
 
   const fetchVentas = async () => {
     try {
-      const res = await fetch('https://redgas.onrender.com/PedidoProductoGetAll');
+      const res = await fetch('https://redgas.onrender.com/PedidoProductoGetAllPaginated');
       const data = await res.json();
-      setVentas(data.data || []);
-      setVentasOriginal(data.data || []);
+      setVentas(data.data.data || []);
+      setVentasOriginal(data.data.data || []);
     } catch (error) {
       console.error('Error al obtener ventas', error);
     }

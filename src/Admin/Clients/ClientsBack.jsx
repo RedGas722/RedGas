@@ -24,10 +24,10 @@ export const ClientsBack = () => {
 
   const fetchClientes = async () => {
     try {
-      const res = await fetch('https://redgas.onrender.com/ClienteGetAll');
+      const res = await fetch('https://redgas.onrender.com/ClienteGetAllPaginated');
       if (!res.ok) throw new Error('Error al obtener clientes');
       const data = await res.json();
-      setClientes(data.data || []);
+      setClientes(data.data.data || []);
     } catch (error) {
       console.error(error);
     }

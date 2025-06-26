@@ -20,10 +20,10 @@ export const ServicesBack = () => {
 
   async function fetchServicios() {
     try {
-      const res = await fetch('https://redgas.onrender.com/ServicioGetAll');
+      const res = await fetch('https://redgas.onrender.com/ServicioGetAllPaginated');
       if (!res.ok) throw new Error('Error al obtener servicios');
       const data = await res.json();
-      setServicios(Array.isArray(data) ? data : (data.data || []));
+      setServicios(Array.isArray(data) ? data : (data.data.data || []));
     } catch (error) {
       setServicios([]);
       console.error(error);

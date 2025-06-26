@@ -24,10 +24,10 @@ export const EmployeesBack = () => {
 
   const fetchEmpleados = async () => {
     try {
-      const res = await fetch('https://redgas.onrender.com/EmpleadoGetAll');
+      const res = await fetch('https://redgas.onrender.com/EmpleadoGetAllPaginated');
       if (!res.ok) throw new Error('Error al obtener empleados');
       const data = await res.json();
-      setEmpleados(data.data || []);
+      setEmpleados(data.data.data || []);
     } catch (error) {
       console.error(error);
     }

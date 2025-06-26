@@ -24,14 +24,16 @@ export const ProductsBack = () => {
   const inputRef = useRef(null);
   const contenedorRef = useRef(null);
 
-  const URL_ALL = 'https://redgas.onrender.com/ProductoGetAll';
+  const URL_ALL = 'https://redgas.onrender.com/ProductoGetAllPaginated';
 
   async function fetchProductos() {
     try {
       const res = await fetch(URL_ALL);
+      console.log(res);
       if (!res.ok) throw new Error('Error al obtener productos');
       const data = await res.json();
-      setProductos(data.data.productos || []);
+      console.log(data.data)
+      setProductos(data.data.resultado.data || []);
     } catch (error) {
       console.error(error);
     }

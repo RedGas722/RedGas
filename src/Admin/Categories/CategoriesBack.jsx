@@ -23,10 +23,10 @@ export const CategoriesBack = () => {
 
   const fetchCategorias = async () => {
     try {
-      const res = await fetch('https://redgas.onrender.com/CategoriaGetAll');
+      const res = await fetch('https://redgas.onrender.com/CategoriaGetAllPaginated');
       if (!res.ok) throw new Error('Error al obtener categorías');
       const data = await res.json();
-      setCategorias(data.data || []);
+      setCategorias(data.data.data || []);
     } catch (error) {
       console.error(error);
     }

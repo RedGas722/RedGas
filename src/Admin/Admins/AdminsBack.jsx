@@ -24,10 +24,10 @@ export const AdminsBack = () => {
 
   async function fetchAdmins() {
     try {
-      const res = await fetch('https://redgas.onrender.com/AdminGetAll');
+      const res = await fetch('https://redgas.onrender.com/AdminGetAllPaginated');
       if (!res.ok) throw new Error('Error al obtener administradores');
       const data = await res.json();
-      setAdmins(data.data || []);
+      setAdmins(data.data.data || []);
     } catch (error) {
       console.error(error);
     }

@@ -24,7 +24,7 @@ export const ContractsBack = () => {
 
   const URL_EMPLEADOS = 'https://redgas.onrender.com/EmpleadoGetAll';
   const URL_ADMINS = 'https://redgas.onrender.com/AdminGetAll';
-  const URL_CONTRATOS = 'https://redgas.onrender.com/ContratoGetAll';
+  const URL_CONTRATOS = 'https://redgas.onrender.com/ContratoGetAllPaginated';
 
   async function fetchEmpleados() {
     try {
@@ -53,7 +53,7 @@ export const ContractsBack = () => {
       const res = await fetch(URL_CONTRATOS);
       if (!res.ok) throw new Error('Error al obtener contratos');
       const data = await res.json();
-      setContratos(data.data || []);
+      setContratos(data.data.data || []);
     } catch (error) {
       console.error(error);
     }
