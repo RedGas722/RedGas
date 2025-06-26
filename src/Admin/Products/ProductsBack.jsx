@@ -1,93 +1,101 @@
-import { useState, useEffect, useRef } from 'react';
-import { RegisterModal } from './Register/RegisterModal';
-import { UpdateModal } from './Update/Update';
-import { ButtonBack } from '../UI/ButtonBack/ButtonBack';
-import { BtnBack } from "../../UI/Login_Register/BtnBack";
-import { buscarProductoPorNombre } from './Get/Get';
-import CardsProductsBack from './Get/CardProductsBack';
-import { InputLabel } from '../../UI/Login_Register/InputLabel/InputLabel';
+import { useState, useEffect, useRef } from 'react'
+import { RegisterModal } from './Register/RegisterModal'
+import { UpdateModal } from './Update/Update'
+import { ButtonBack } from '../UI/ButtonBack/ButtonBack'
+import { BtnBack } from "../../UI/Login_Register/BtnBack"
+import { buscarProductoPorNombre } from './Get/Get'
+import CardsProductsBack from './Get/CardProductsBack'
+import { InputLabel } from '../../UI/Login_Register/InputLabel/InputLabel'
+import { Paginator } from '../../UI/Paginator/Paginator'
+
 
 export const ProductsBack = () => {
-  const [showRegisterModal, setShowRegisterModal] = useState(false);
-  const [showUpdateModal, setShowUpdateModal] = useState(false);
-  const [productos, setProductos] = useState([]);
-  const [refrescar, setRefrescar] = useState(false);
-  const [productoSeleccionado, setProductoSeleccionado] = useState(null);
-  const [mensaje, setMensaje] = useState('');
+  const [showRegisterModal, setShowRegisterModal] = useState(false)
+  const [showUpdateModal, setShowUpdateModal] = useState(false)
+  const [productos, setProductos] = useState([])
+  const [refrescar, setRefrescar] = useState(false)
+  const [productoSeleccionado, setProductoSeleccionado] = useState(null)
+  const [mensaje, setMensaje] = useState('')
+  const [paginaActual, setPaginaActual] = useState(1)
+  const [totalPaginas, setTotalPaginas] = useState(1)
+
 
   // Estados para búsqueda
-  const [nombreBusqueda, setNombreBusqueda] = useState('');
-  const [productoBuscado, setProductoBuscado] = useState(null);
-  const [errorBusqueda, setErrorBusqueda] = useState('');
-  const [sugerencias, setSugerencias] = useState([]);
+  const [nombreBusqueda, setNombreBusqueda] = useState('')
+  const [productoBuscado, setProductoBuscado] = useState(null)
+  const [errorBusqueda, setErrorBusqueda] = useState('')
+  const [sugerencias, setSugerencias] = useState([])
 
-  const inputRef = useRef(null);
-  const contenedorRef = useRef(null);
+  const inputRef = useRef(null)
+  const contenedorRef = useRef(null)
 
-  const URL_ALL = 'https://redgas.onrender.com/ProductoGetAllPaginated';
+  const URL_ALL = 'https://redgas.onrender.com/ProductoGetAllPaginated'
 
-  async function fetchProductos() {
+  async function fetchProductos(pagina = 1) {
     try {
-      const res = await fetch(URL_ALL);
-      console.log(res);
-      if (!res.ok) throw new Error('Error al obtener productos');
-      const data = await res.json();
-      console.log(data.data)
-      setProductos(data.data.resultado.data || []);
+      const res = await fetch(`${URL_ALL}?page=${pagina}`)
+      if (!res.ok) throw new Error('Error al obtener productos')
+      const data = await res.json()
+      const resultado = data.data.resultado
+
+      setProductos(resultado.data || [])
+      setPaginaActual(resultado.currentPage)
+      setTotalPaginas(resultado.totalPages)
     } catch (error) {
-      console.error(error);
+      console.error(error)
     }
   }
 
   useEffect(() => {
-    fetchProductos();
-  }, []);
+    fetchProductos(paginaActual)
+  }, [paginaActual])
 
   useEffect(() => {
     if (refrescar) {
-      fetchProductos();
-      setRefrescar(false);
-      setProductoBuscado(null);
-      setErrorBusqueda('');
-      setNombreBusqueda('');
+      fetchProductos(1)
+      setPaginaActual(1)
+      setRefrescar(false)
+      setProductoBuscado(null)
+      setErrorBusqueda('')
+      setNombreBusqueda('')
     }
-  }, [refrescar]);
+  }, [refrescar])
 
   const abrirModalActualizar = (producto) => {
-    setProductoSeleccionado(producto);
-    setShowUpdateModal(true);
-  };
+    setProductoSeleccionado(producto)
+    setShowUpdateModal(true)
+  }
 
   const cerrarModal = () => {
-    setProductoSeleccionado(null);
-    setShowUpdateModal(false);
-  };
+    setProductoSeleccionado(null)
+    setShowUpdateModal(false)
+  }
 
   const buscarProducto = async () => {
-    setErrorBusqueda('');
-    setProductoBuscado(null);
+    setErrorBusqueda('')
+    setProductoBuscado(null)
 
     try {
-      const resultado = await buscarProductoPorNombre(nombreBusqueda);
-      setProductoBuscado(resultado);
-      setSugerencias([]);
+      const resultado = await buscarProductoPorNombre(nombreBusqueda)
+      setProductoBuscado(resultado)
+      setSugerencias([])
     } catch (error) {
-      setErrorBusqueda(error.message);
+      setErrorBusqueda(error.message)
     }
-  };
+  }
 
   // 🧠 Autocomplete filtrando productos localmente
   useEffect(() => {
     if (nombreBusqueda.trim() === '') {
-      setSugerencias([]);
-      return;
+      setSugerencias([])
+      return
     }
 
     const filtrados = productos.filter((producto) =>
       producto.nombre_producto.toLowerCase().includes(nombreBusqueda.toLowerCase())
-    );
-    setSugerencias(filtrados.slice(0, 5));
-  }, [nombreBusqueda, productos]);
+    )
+    setSugerencias(filtrados.slice(0, 5))
+  }, [nombreBusqueda, productos])
 
   // 🧽 Cierre del dropdown si se hace clic fuera
   useEffect(() => {
@@ -96,13 +104,13 @@ export const ProductsBack = () => {
         contenedorRef.current &&
         !contenedorRef.current.contains(event.target)
       ) {
-        setSugerencias([]);
+        setSugerencias([])
       }
-    };
+    }
 
-    document.addEventListener('mousedown', manejarClickFuera);
-    return () => document.removeEventListener('mousedown', manejarClickFuera);
-  }, []);
+    document.addEventListener('mousedown', manejarClickFuera)
+    return () => document.removeEventListener('mousedown', manejarClickFuera)
+  }, [])
 
   return (
     <div className="p-[20px] flex flex-col gap-[20px]">
@@ -141,9 +149,9 @@ export const ProductsBack = () => {
                 <li
                   key={producto.id_producto}
                   onClick={() => {
-                    setProductoBuscado(producto);
-                    setNombreBusqueda(producto.nombre_producto);
-                    setSugerencias([]);
+                    setProductoBuscado(producto)
+                    setNombreBusqueda(producto.nombre_producto)
+                    setSugerencias([])
                   }}
                   className="p-2 hover:bg-gray-100 cursor-pointer"
                 >
@@ -190,6 +198,16 @@ export const ProductsBack = () => {
         )}
       </div>
 
+      <Paginator
+        currentPage={paginaActual}
+        totalPages={totalPaginas}
+        onPageChange={(nuevaPagina) => {
+          if (nuevaPagina !== paginaActual) {
+            setPaginaActual(nuevaPagina)
+          }
+        }}
+      />
+
       {/* Modales */}
       {showRegisterModal && (
         <RegisterModal
@@ -206,7 +224,7 @@ export const ProductsBack = () => {
         />
       )}
     </div>
-  );
-};
+  )
+}
 
-export default ProductsBack;
+export default ProductsBack

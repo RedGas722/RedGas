@@ -1,10 +1,10 @@
 const CardFacturesBack = ({ factura, clientes, empleados, onUpdateClick, onViewProductsClick }) => {
-  const cliente = clientes.find(c => c.id_cliente === factura.id_cliente);
-  const empleado = empleados.find(e => e.id_empleado === factura.id_empleado);
+  const cliente = clientes.find(c => c.id_cliente === factura.id_cliente)
+  const empleado = empleados.find(e => e.id_empleado === factura.id_empleado)
 
-  const fechaISO = factura.fecha_factura;
-  const fecha = new Date(fechaISO);
-  const fechaSolo = fecha.toLocaleDateString('en-GB');
+  const fechaISO = factura.fecha_factura
+  const fecha = new Date(fechaISO)
+  const fechaSolo = fecha.toLocaleDateString('en-GB')
 
   return (
     <div className="bg-white shadow-lg rounded-lg p-4 min-w-[300px] min-h-[150px] flex flex-col justify-between overflow-hidden">
@@ -35,7 +35,7 @@ const CardFacturesBack = ({ factura, clientes, empleados, onUpdateClick, onViewP
         </button>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default CardFacturesBack;
+export default CardFacturesBack

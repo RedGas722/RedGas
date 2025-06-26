@@ -1,5 +1,5 @@
 const CardSalesBack = ({ venta, productos }) => {
-  const producto = productos.find(p => p.id_producto === venta.id_producto);
+  const producto = productos.find(p => p.id_producto === venta.id_producto)
 
   return (
     <div className="bg-white shadow-lg rounded-lg p-4 min-w-[300px] min-h-[150px] flex flex-col justify-between overflow-hidden">
@@ -14,7 +14,7 @@ const CardSalesBack = ({ venta, productos }) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default CardSalesBack;
+export default CardSalesBack

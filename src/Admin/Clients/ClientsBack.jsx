@@ -1,87 +1,92 @@
-import { useState, useEffect, useRef } from 'react';
-import { RegisterModal } from './Register/RegisterModal';
-import { UpdateModal } from './Update/Update';
-import { ButtonBack } from '../UI/ButtonBack/ButtonBack';
-import CardClientsBack from './Get/CardClientsBack';
-import { buscarClientePorCorreo } from './Get/Get';
-import { BtnBack } from "../../UI/Login_Register/BtnBack";
-import { InputLabel } from '../../UI/Login_Register/InputLabel/InputLabel';
+import { useState, useEffect, useRef } from 'react'
+import { RegisterModal } from './Register/RegisterModal'
+import { UpdateModal } from './Update/Update'
+import { ButtonBack } from '../UI/ButtonBack/ButtonBack'
+import CardClientsBack from './Get/CardClientsBack'
+import { buscarClientePorCorreo } from './Get/Get'
+import { BtnBack } from "../../UI/Login_Register/BtnBack"
+import { InputLabel } from '../../UI/Login_Register/InputLabel/InputLabel'
+import { Paginator } from '../../UI/Paginator/Paginator'
 
 export const ClientsBack = () => {
-  const [showRegisterModal, setShowRegisterModal] = useState(false);
-  const [showUpdateModal, setShowUpdateModal] = useState(false);
-  const [clientes, setClientes] = useState([]);
-  const [refrescar, setRefrescar] = useState(false);
+  const [showRegisterModal, setShowRegisterModal] = useState(false)
+  const [showUpdateModal, setShowUpdateModal] = useState(false)
+  const [clientes, setClientes] = useState([])
+  const [refrescar, setRefrescar] = useState(false)
+  const [clienteSeleccionado, setClienteSeleccionado] = useState(null)
+  const [correoBusqueda, setCorreoBusqueda] = useState('')
+  const [clienteBuscado, setClienteBuscado] = useState(null)
+  const [errorBusqueda, setErrorBusqueda] = useState('')
+  const [sugerencias, setSugerencias] = useState([])
+  const [paginaActual, setPaginaActual] = useState(1)
+  const [totalPaginas, setTotalPaginas] = useState(1)
+  const contenedorRef = useRef(null)
 
-  const [clienteSeleccionado, setClienteSeleccionado] = useState(null);
-
-  const [correoBusqueda, setCorreoBusqueda] = useState('');
-  const [clienteBuscado, setClienteBuscado] = useState(null);
-  const [errorBusqueda, setErrorBusqueda] = useState('');
-  const [sugerencias, setSugerencias] = useState([]);
-
-  const contenedorRef = useRef(null);
-
-  const fetchClientes = async () => {
+  const fetchClientes = async (pagina = 1) => {
     try {
-      const res = await fetch('https://redgas.onrender.com/ClienteGetAllPaginated');
-      if (!res.ok) throw new Error('Error al obtener clientes');
-      const data = await res.json();
-      setClientes(data.data.data || []);
+      const res = await fetch(`https://redgas.onrender.com/ClienteGetAllPaginated?page=${pagina}`)
+      if (!res.ok) throw new Error('Error al obtener clientes')
+      const data = await res.json()
+      const resultado = data.data
+
+      setClientes(resultado.data || [])
+      setPaginaActual(resultado.currentPage)
+      setTotalPaginas(resultado.totalPages)
     } catch (error) {
-      console.error(error);
+      console.error(error)
     }
-  };
+  }
 
   useEffect(() => {
-    fetchClientes();
-  }, []);
+    fetchClientes(paginaActual)
+  }, [paginaActual])
 
   useEffect(() => {
     if (refrescar) {
-      fetchClientes();
-      setRefrescar(false);
-      setClienteBuscado(null);
-      setErrorBusqueda('');
-      setCorreoBusqueda('');
+      fetchClientes(1)
+      setPaginaActual(1)
+      setRefrescar(false)
+      setClienteBuscado(null)
+      setErrorBusqueda('')
+      setCorreoBusqueda('')
     }
-  }, [refrescar]);
+  }, [refrescar])
 
   const abrirModalActualizar = (cliente) => {
-    setClienteSeleccionado(cliente);
-    setShowUpdateModal(true);
-  };
+    setClienteSeleccionado(cliente)
+    setShowUpdateModal(true)
+  }
 
   const cerrarModal = () => {
-    setShowUpdateModal(false);
-    setClienteSeleccionado(null);
-  };
+    setShowUpdateModal(false)
+    setClienteSeleccionado(null)
+  }
 
   const buscarCliente = async () => {
-    setErrorBusqueda('');
-    setClienteBuscado(null);
+    setErrorBusqueda('')
+    setClienteBuscado(null)
 
     try {
-      const resultado = await buscarClientePorCorreo(correoBusqueda);
-      setClienteBuscado(resultado);
-      setSugerencias([]);
+      const resultado = await buscarClientePorCorreo(correoBusqueda)
+      setClienteBuscado(resultado)
+      setSugerencias([])
     } catch (error) {
-      setErrorBusqueda(error.message);
+      setErrorBusqueda(error.message)
     }
-  };
+  }
 
   // 🧠 Autocomplete filtrando localmente
   useEffect(() => {
     if ((correoBusqueda || '').trim() === '') {
-      setSugerencias([]);
-      return;
+      setSugerencias([])
+      return
     }
 
     const filtrados = clientes.filter((cliente) =>
       (cliente.correo_cliente || '').toLowerCase().includes(correoBusqueda.toLowerCase())
-    );
-    setSugerencias(filtrados.slice(0, 5));
-  }, [correoBusqueda, clientes]);
+    )
+    setSugerencias(filtrados.slice(0, 5))
+  }, [correoBusqueda, clientes])
 
   // 🧽 Cerrar sugerencias si se hace clic fuera
   useEffect(() => {
@@ -90,13 +95,13 @@ export const ClientsBack = () => {
         contenedorRef.current &&
         !contenedorRef.current.contains(event.target)
       ) {
-        setSugerencias([]);
+        setSugerencias([])
       }
-    };
+    }
 
-    document.addEventListener('mousedown', manejarClickFuera);
-    return () => document.removeEventListener('mousedown', manejarClickFuera);
-  }, []);
+    document.addEventListener('mousedown', manejarClickFuera)
+    return () => document.removeEventListener('mousedown', manejarClickFuera)
+  }, [])
 
   return (
     <div className="p-[20px] flex flex-col gap-[20px]">
@@ -135,9 +140,9 @@ export const ClientsBack = () => {
                 <li
                   key={cliente.id_cliente}
                   onClick={() => {
-                    setClienteBuscado(cliente);
-                    setCorreoBusqueda(cliente.correo_cliente);
-                    setSugerencias([]);
+                    setClienteBuscado(cliente)
+                    setCorreoBusqueda(cliente.correo_cliente)
+                    setSugerencias([])
                   }}
                   className="p-2 hover:bg-gray-100 cursor-pointer"
                 >
@@ -173,6 +178,16 @@ export const ClientsBack = () => {
         )}
       </div>
 
+      <Paginator
+        currentPage={paginaActual}
+        totalPages={totalPaginas}
+        onPageChange={(nuevaPagina) => {
+          if (nuevaPagina !== paginaActual) {
+            setPaginaActual(nuevaPagina)
+          }
+        }}
+      />
+
       {showRegisterModal && (
         <RegisterModal
           onClose={() => setShowRegisterModal(false)}
@@ -188,7 +203,7 @@ export const ClientsBack = () => {
         />
       )}
     </div>
-  );
-};
+  )
+}
 
-export default ClientsBack;
+export default ClientsBack

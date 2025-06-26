@@ -1,19 +1,19 @@
-import { DeleteClient } from '../Delete/Delete';
+import { DeleteClient } from '../Delete/Delete'
 
 const CardClientsBack = ({ cliente, setRefrescar, onUpdateClick }) => {
   const handleDelete = async () => {
-    const confirmar = window.confirm(`¿Seguro que quieres eliminar a ${cliente.nombre_cliente}?`);
-    if (!confirmar) return;
+    const confirmar = window.confirm(`¿Seguro que quieres eliminar a ${cliente.nombre_cliente}?`)
+    if (!confirmar) return
 
-    const { success, message } = await DeleteClient(cliente.correo_cliente);
+    const { success, message } = await DeleteClient(cliente.correo_cliente)
 
     if (success) {
-      alert(message);
-      setRefrescar(true);
+      alert(message)
+      setRefrescar(true)
     } else {
-      alert(`Error: ${message}`);
+      alert(`Error: ${message}`)
     }
-  };
+  }
 
   return (
     <div className="bg-white shadow-lg rounded-lg p-4 w-full min-h-[150px] flex flex-col justify-start overflow-hidden">
@@ -42,7 +42,7 @@ const CardClientsBack = ({ cliente, setRefrescar, onUpdateClick }) => {
         </button>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default CardClientsBack;
+export default CardClientsBack

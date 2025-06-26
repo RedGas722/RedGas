@@ -1,49 +1,49 @@
-import { useState, useEffect } from 'react';
-import { InputLabel } from '../../../UI/Login_Register/InputLabel/InputLabel';
+import { useState, useEffect } from 'react'
+import { InputLabel } from '../../../UI/Login_Register/InputLabel/InputLabel'
 
 export const UpdateModal = ({ onClose, setRefrescar, contratoCarta }) => {
   // Estados individuales para cada campo
-  const [fechaContrato, setFechaContrato] = useState('');
-  const [duracionContrato, setDuracionContrato] = useState('');
-  const [tipoContrato, setTipoContrato] = useState('');
-  const [salario, setSalario] = useState('');
-  const [idAdmin, setIdAdmin] = useState('');
-  const [idEmpleado, setIdEmpleado] = useState('');
-  const [idContrato, setIdContrato] = useState('');
-  const [mensaje, setMensaje] = useState('');
-  const [errores, setErrores] = useState({});
+  const [fechaContrato, setFechaContrato] = useState('')
+  const [duracionContrato, setDuracionContrato] = useState('')
+  const [tipoContrato, setTipoContrato] = useState('')
+  const [salario, setSalario] = useState('')
+  const [idAdmin, setIdAdmin] = useState('')
+  const [idEmpleado, setIdEmpleado] = useState('')
+  const [idContrato, setIdContrato] = useState('')
+  const [mensaje, setMensaje] = useState('')
+  const [errores, setErrores] = useState({})
 
   useEffect(() => {
     if (contratoCarta) {
-      setIdContrato(contratoCarta.id_contrato || '');
-      setFechaContrato(contratoCarta.fecha_contrato || '');
-      setDuracionContrato(contratoCarta.duracion_contrato || '');
-      setTipoContrato(contratoCarta.tipo_contrato || '');
-      setSalario(contratoCarta.salario || '');
-      setIdAdmin(contratoCarta.id_admin || '');
-      setIdEmpleado(contratoCarta.id_empleado || '');
+      setIdContrato(contratoCarta.id_contrato || '')
+      setFechaContrato(contratoCarta.fecha_contrato || '')
+      setDuracionContrato(contratoCarta.duracion_contrato || '')
+      setTipoContrato(contratoCarta.tipo_contrato || '')
+      setSalario(contratoCarta.salario || '')
+      setIdAdmin(contratoCarta.id_admin || '')
+      setIdEmpleado(contratoCarta.id_empleado || '')
     }
-  }, [contratoCarta]);
+  }, [contratoCarta])
 
   const validarCampos = () => {
-    const errores = {};
-    if (!fechaContrato || fechaContrato.trim() === '') errores.fechaContrato = 'La fecha es obligatoria';
-    if (!duracionContrato || duracionContrato.trim() === '') errores.duracionContrato = 'La duración es obligatoria';
-    if (!tipoContrato || tipoContrato.trim() === '') errores.tipoContrato = 'El tipo es obligatorio';
-    if (!salario || isNaN(salario) || Number(salario) <= 0) errores.salario = 'El salario debe ser un número mayor a 0';
-    if (!idAdmin || isNaN(idAdmin) || Number(idAdmin) <= 0) errores.idAdmin = 'ID Admin obligatorio y mayor a 0';
-    if (!idEmpleado || isNaN(idEmpleado) || Number(idEmpleado) <= 0) errores.idEmpleado = 'ID Empleado obligatorio y mayor a 0';
-    return errores;
-  };
+    const errores = {}
+    if (!fechaContrato || fechaContrato.trim() === '') errores.fechaContrato = 'La fecha es obligatoria'
+    if (!duracionContrato || duracionContrato.trim() === '') errores.duracionContrato = 'La duración es obligatoria'
+    if (!tipoContrato || tipoContrato.trim() === '') errores.tipoContrato = 'El tipo es obligatorio'
+    if (!salario || isNaN(salario) || Number(salario) <= 0) errores.salario = 'El salario debe ser un número mayor a 0'
+    if (!idAdmin || isNaN(idAdmin) || Number(idAdmin) <= 0) errores.idAdmin = 'ID Admin obligatorio y mayor a 0'
+    if (!idEmpleado || isNaN(idEmpleado) || Number(idEmpleado) <= 0) errores.idEmpleado = 'ID Empleado obligatorio y mayor a 0'
+    return errores
+  }
 
   const actualizarContrato = async () => {
-    const erroresValidados = validarCampos();
+    const erroresValidados = validarCampos()
     if (Object.keys(erroresValidados).length > 0) {
-      setErrores(erroresValidados);
-      return;
+      setErrores(erroresValidados)
+      return
     }
-    setErrores({});
-    setMensaje('');
+    setErrores({})
+    setMensaje('')
     const body = {
       contrato: {
         fecha_contrato: fechaContrato ? fechaContrato.split('T')[0] : '',
@@ -52,37 +52,37 @@ export const UpdateModal = ({ onClose, setRefrescar, contratoCarta }) => {
         salario: salario ? Number(salario) : 0,
       },
       id_empleado: idEmpleado ? Number(idEmpleado) : null,
-    };
+    }
     try {
       const res = await fetch('https://redgas.onrender.com/ContratoDataUpdate', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
-      });
+      })
       if (res.ok) {
-        setMensaje('Contrato actualizado exitosamente.');
-        setRefrescar && setRefrescar(true);
+        setMensaje('Contrato actualizado exitosamente.')
+        setRefrescar && setRefrescar(true)
       } else {
-        const data = await res.json();
-        setMensaje(data.errorInfo || 'Error al actualizar contrato.');
+        const data = await res.json()
+        setMensaje(data.errorInfo || 'Error al actualizar contrato.')
       }
     } catch {
-      setMensaje('Error de red al actualizar.');
+      setMensaje('Error de red al actualizar.')
     }
-  };
+  }
 
   const cancelarEdicion = () => {
-    setFechaContrato('');
-    setDuracionContrato('');
-    setTipoContrato('');
-    setSalario('');
-    setIdAdmin('');
-    setIdEmpleado('');
-    setIdContrato('');
-    setMensaje('');
-    setErrores({});
-    onClose();
-  };
+    setFechaContrato('')
+    setDuracionContrato('')
+    setTipoContrato('')
+    setSalario('')
+    setIdAdmin('')
+    setIdEmpleado('')
+    setIdContrato('')
+    setMensaje('')
+    setErrores({})
+    onClose()
+  }
 
   return (
     <div className="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50">
@@ -180,5 +180,5 @@ export const UpdateModal = ({ onClose, setRefrescar, contratoCarta }) => {
         )}
       </div>
     </div>
-  );
-};
+  )
+}

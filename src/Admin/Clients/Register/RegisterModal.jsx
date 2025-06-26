@@ -1,52 +1,52 @@
-import React, { useState } from 'react';
-import { InputLabel } from '../../../UI/Login_Register/InputLabel/InputLabel';
+import React, { useState } from 'react'
+import { InputLabel } from '../../../UI/Login_Register/InputLabel/InputLabel'
 
 export const RegisterModal = ({ onClose, setRefrescar }) => {
-  const [nombre, setNombre] = useState('');
-  const [apellido, setApellido] = useState('');
-  const [correo, setCorreo] = useState('');
-  const [telefono, setTelefono] = useState('');
-  const [direccion, setDireccion] = useState('');
-  const [contrasena, setContrasena] = useState('');
-  const [mensaje, setMensaje] = useState('');
-  const [errores, setErrores] = useState({});
+  const [nombre, setNombre] = useState('')
+  const [apellido, setApellido] = useState('')
+  const [correo, setCorreo] = useState('')
+  const [telefono, setTelefono] = useState('')
+  const [direccion, setDireccion] = useState('')
+  const [contrasena, setContrasena] = useState('')
+  const [mensaje, setMensaje] = useState('')
+  const [errores, setErrores] = useState({})
 
-  const URL_REGISTER = 'https://redgas.onrender.com/ClienteRegister';
-  const URL_GET = 'https://redgas.onrender.com/ClienteGet';
+  const URL_REGISTER = 'https://redgas.onrender.com/ClienteRegister'
+  const URL_GET = 'https://redgas.onrender.com/ClienteGet'
 
   const validarCampos = () => {
-    const errores = {};
-    const correoRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const errores = {}
+    const correoRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
-    if (!nombre.trim()) errores.nombre = 'Nombre es requerido.';
-    if (!apellido.trim()) errores.apellido = 'Apellido es requerido.';
-    if (!correoRegex.test(correo)) errores.correo = 'Correo inválido.';
-    if (telefono.length !== 10 || !/^\d+$/.test(telefono)) errores.telefono = 'Teléfono debe tener 10 dígitos.';
-    if (contrasena.length < 8 || contrasena.length > 15) errores.contrasena = 'Contraseña debe tener entre 8 y 15 caracteres.';
+    if (!nombre.trim()) errores.nombre = 'Nombre es requerido.'
+    if (!apellido.trim()) errores.apellido = 'Apellido es requerido.'
+    if (!correoRegex.test(correo)) errores.correo = 'Correo inválido.'
+    if (telefono.length !== 10 || !/^\d+$/.test(telefono)) errores.telefono = 'Teléfono debe tener 10 dígitos.'
+    if (contrasena.length < 8 || contrasena.length > 15) errores.contrasena = 'Contraseña debe tener entre 8 y 15 caracteres.'
 
-    return errores;
-  };
+    return errores
+  }
 
   const handleRegister = async (e) => {
-    e.preventDefault();
-    const erroresValidados = validarCampos();
+    e.preventDefault()
+    const erroresValidados = validarCampos()
 
     if (Object.keys(erroresValidados).length > 0) {
-      setErrores(erroresValidados);
-      setMensaje('');
-      return;
+      setErrores(erroresValidados)
+      setMensaje('')
+      return
     }
 
-    setErrores({});
-    setMensaje('');
+    setErrores({})
+    setMensaje('')
 
     try {
-      const resCheck = await fetch(`${URL_GET}?correo_cliente=${encodeURIComponent(correo)}`);
+      const resCheck = await fetch(`${URL_GET}?correo_cliente=${encodeURIComponent(correo)}`)
       if (resCheck.ok) {
-        const dataCheck = await resCheck.json();
+        const dataCheck = await resCheck.json()
         if (dataCheck?.data?.length > 0) {
-          setMensaje('Ya existe un cliente con ese correo.');
-          return;
+          setMensaje('Ya existe un cliente con ese correo.')
+          return
         }
       }
 
@@ -60,32 +60,32 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
           direccion_cliente: direccion.trim() === '' ? 'sin direccion' : direccion,
           contraseña_cliente: contrasena,
         }),
-      });
+      })
 
       if (!res.ok) {
-        const errorData = await res.json();
-        setMensaje('Error al registrar: ' + (errorData?.errors?.[0]?.msg || 'Datos inválidos.'));
-        return;
+        const errorData = await res.json()
+        setMensaje('Error al registrar: ' + (errorData?.errors?.[0]?.msg || 'Datos inválidos.'))
+        return
       }
 
-      setMensaje('Cliente registrado exitosamente.');
-      if (setRefrescar) setRefrescar(true);
+      setMensaje('Cliente registrado exitosamente.')
+      if (setRefrescar) setRefrescar(true)
     } catch (err) {
-      setMensaje('Error al registrar: ' + err.message);
+      setMensaje('Error al registrar: ' + err.message)
     }
-  };
+  }
 
   const cancelarRegistro = () => {
-    setNombre('');
-    setApellido('');
-    setCorreo('');
-    setTelefono('');
-    setDireccion('');
-    setContrasena('');
-    setErrores({});
-    setMensaje('');
-    onClose();
-  };
+    setNombre('')
+    setApellido('')
+    setCorreo('')
+    setTelefono('')
+    setDireccion('')
+    setContrasena('')
+    setErrores({})
+    setMensaje('')
+    onClose()
+  }
 
   return (
     <div className="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50">
@@ -173,5 +173,5 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
         )}
       </div>
     </div>
-  );
-};
+  )
+}

@@ -1,38 +1,38 @@
-import React from 'react';
-import { DeleteProduct } from '../Delete/Delete'; // Asegúrate de que esta función esté implementada
+import React from 'react'
+import { DeleteProduct } from '../Delete/Delete' // Asegúrate de que esta función esté implementada
 
 const convertirFecha = (fechaConvertir) => {
-  return fechaConvertir ? fechaConvertir.slice(0, 10) : '';
-};
+  return fechaConvertir ? fechaConvertir.slice(0, 10) : ''
+}
 
 const convertirBase64AUrl = (imagen) => {
   if (!imagen) {
-    console.warn("No hay imagen");
-    return null;
+    console.warn("No hay imagen")
+    return null
   }
   if (typeof imagen === 'string') {
-    return `data:image/png;base64,${imagen}`;
+    return `data:image/png;base64,${imagen}`
   }
-  console.warn("Formato de imagen desconocido:", imagen);
-  return null;
-};
+  console.warn("Formato de imagen desconocido:", imagen)
+  return null
+}
 
 const CardsProductsBack = ({ producto, setRefrescar, onUpdateClick }) => {
-  const imageUrl = convertirBase64AUrl(producto.imagen);
+  const imageUrl = convertirBase64AUrl(producto.imagen)
 
   const handleDelete = async () => {
-    const confirmar = window.confirm(`¿Seguro que quieres eliminar el producto "${producto.nombre_producto}"?`);
-    if (!confirmar) return;
+    const confirmar = window.confirm(`¿Seguro que quieres eliminar el producto "${producto.nombre_producto}"?`)
+    if (!confirmar) return
 
-    const { success, message } = await DeleteProduct(producto.nombre_producto);
+    const { success, message } = await DeleteProduct(producto.nombre_producto)
 
     if (success) {
-      alert(message);
-      setRefrescar(true);
+      alert(message)
+      setRefrescar(true)
     } else {
-      alert(`Error: ${message}`);
+      alert(`Error: ${message}`)
     }
-  };
+  }
 
   return (
     <div className="bg-white shadow-lg rounded-lg p-4 w-full h-[460px] flex flex-col justify-between">
@@ -87,7 +87,7 @@ const CardsProductsBack = ({ producto, setRefrescar, onUpdateClick }) => {
         </button>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default CardsProductsBack;
+export default CardsProductsBack

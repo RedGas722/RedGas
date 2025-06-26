@@ -1,57 +1,66 @@
-import { useState, useEffect } from 'react';
-import { RegisterModal } from './Register/RegisterModal';
-import { ButtonBack } from '../UI/ButtonBack/ButtonBack';
-import { BtnBack } from "../../UI/Login_Register/BtnBack";
-import CardSalesBack from './Get/CardSalesBack';
-import { InputLabel } from '../../UI/Login_Register/InputLabel/InputLabel';
-import { useBuscarSales } from './Get/Get';
+import { useState, useEffect } from 'react'
+import { RegisterModal } from './Register/RegisterModal'
+import { ButtonBack } from '../UI/ButtonBack/ButtonBack'
+import { BtnBack } from "../../UI/Login_Register/BtnBack"
+import CardSalesBack from './Get/CardSalesBack'
+import { InputLabel } from '../../UI/Login_Register/InputLabel/InputLabel'
+import { useBuscarSales } from './Get/Get'
+import { Paginator } from '../../UI/Paginator/Paginator'
 
 export const SalesBack = () => {
-  const [showRegisterModal, setShowRegisterModal] = useState(false);
-  const [ventas, setVentas] = useState([]);
-  const [ventasOriginal, setVentasOriginal] = useState([]);
-  const [productos, setProductos] = useState([]);
-  const [refrescar, setRefrescar] = useState(false);
+  const [showRegisterModal, setShowRegisterModal] = useState(false)
+  const [ventas, setVentas] = useState([])
+  const [ventasOriginal, setVentasOriginal] = useState([])
+  const [productos, setProductos] = useState([])
+  const [refrescar, setRefrescar] = useState(false)
+  const [paginaActual, setPaginaActual] = useState(1)
+  const [totalPaginas, setTotalPaginas] = useState(1)
 
-  const fetchVentas = async () => {
+  const fetchVentas = async (pagina = 1) => {
     try {
-      const res = await fetch('https://redgas.onrender.com/PedidoProductoGetAllPaginated');
-      const data = await res.json();
-      setVentas(data.data.data || []);
-      setVentasOriginal(data.data.data || []);
+      const res = await fetch(`https://redgas.onrender.com/PedidoProductoGetAllPaginated?page=${pagina}`)
+      if (!res.ok) throw new Error('Error al obtener ventas')
+      const data = await res.json()
+      const resultado = data.data
+
+      setVentas(resultado.data || [])
+      setVentasOriginal(resultado.data || [])
+      setPaginaActual(resultado.currentPage)
+      setTotalPaginas(resultado.totalPages)
     } catch (error) {
-      console.error('Error al obtener ventas', error);
+      console.error(error)
     }
-  };
+  }
 
   const fetchProductos = async () => {
     try {
-      const res = await fetch('https://redgas.onrender.com/ProductoGetAll');
-      const data = await res.json();
-      setProductos(Array.isArray(data.data.productos) ? data.data.productos : []);
+      const res = await fetch('https://redgas.onrender.com/ProductoGetAll')
+      const data = await res.json()
+      setProductos(Array.isArray(data.data.productos) ? data.data.productos : [])
     } catch (error) {
-      console.error('Error al obtener productos', error);
+      console.error('Error al obtener productos', error)
     }
-  };
+  }
 
   const {
     productoBusqueda, productoSugerencias,
     handleProductoInput, handleBuscar, handleLimpiar,
     contenedorRefProducto, setProductoBusqueda
-  } = useBuscarSales(productos, ventasOriginal, setVentas);
+  } = useBuscarSales(productos, ventasOriginal, setVentas)
 
   useEffect(() => {
-    fetchVentas();
-    fetchProductos();
-  }, []);
+    fetchVentas(paginaActual)
+    fetchProductos()
+  }, [paginaActual])
 
   useEffect(() => {
     if (refrescar) {
-      fetchVentas();
-      setRefrescar(false);
-      handleLimpiar();
+      fetchVentas(1)
+      setPaginaActual(1)
+      setRefrescar(false)
+      handleLimpiar()
     }
-  }, [refrescar]);
+  }, [refrescar])
 
   return (
     <div className="p-[20px] flex flex-col gap-[20px]">
@@ -107,6 +116,16 @@ export const SalesBack = () => {
         ))}
       </div>
 
+      <Paginator
+        currentPage={paginaActual}
+        totalPages={totalPaginas}
+        onPageChange={(nuevaPagina) => {
+          if (nuevaPagina !== paginaActual) {
+            setPaginaActual(nuevaPagina)
+          }
+        }}
+      />
+
       {showRegisterModal && (
         <RegisterModal
           onClose={() => setShowRegisterModal(false)}
@@ -114,7 +133,7 @@ export const SalesBack = () => {
         />
       )}
     </div>
-  );
-};
+  )
+}
 
-export default SalesBack;
+export default SalesBack

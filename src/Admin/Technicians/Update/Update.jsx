@@ -1,99 +1,99 @@
-import { useState, useEffect } from 'react';
-import { InputLabel } from '../../../UI/Login_Register/InputLabel/InputLabel';
+import { useState, useEffect } from 'react'
+import { InputLabel } from '../../../UI/Login_Register/InputLabel/InputLabel'
 
 export const UpdateModal = ({ onClose, setRefrescar, tecnicoCarta }) => {
-  const [tecnico, setTecnico] = useState(null);
-  const [nuevoCorreo, setNuevoCorreo] = useState('');
-  const [correoParaBusqueda, setCorreoParaBusqueda] = useState('');
-  const [mensaje, setMensaje] = useState('');
-  const [errores, setErrores] = useState({});
-  const [nombre, setNombre] = useState('');
-  const [apellido, setApellido] = useState('');
+  const [tecnico, setTecnico] = useState(null)
+  const [nuevoCorreo, setNuevoCorreo] = useState('')
+  const [correoParaBusqueda, setCorreoParaBusqueda] = useState('')
+  const [mensaje, setMensaje] = useState('')
+  const [errores, setErrores] = useState({})
+  const [nombre, setNombre] = useState('')
+  const [apellido, setApellido] = useState('')
 
   const validarCampos = () => {
-    const errores = {};
-    const correoRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (tecnico.cc_tecnico.length < 10 || tecnico.cc_tecnico.length > 15) errores.cc_tecnico = "Cédula obligatoria, entre 10 y 15 caracteres";
-    if (!nombre.trim()) errores.nombre = 'El nombre es obligatorio';
-    if (!apellido.trim()) errores.apellido = 'El apellido es obligatorio';
+    const errores = {}
+    const correoRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (tecnico.cc_tecnico.length < 10 || tecnico.cc_tecnico.length > 15) errores.cc_tecnico = "Cédula obligatoria, entre 10 y 15 caracteres"
+    if (!nombre.trim()) errores.nombre = 'El nombre es obligatorio'
+    if (!apellido.trim()) errores.apellido = 'El apellido es obligatorio'
 
     if (!nuevoCorreo.trim()) {
-      errores.nuevoCorreo = 'El correo es obligatorio.';
+      errores.nuevoCorreo = 'El correo es obligatorio.'
     } else if (!correoRegex.test(nuevoCorreo)) {
-      errores.nuevoCorreo = 'Correo inválido.';
+      errores.nuevoCorreo = 'Correo inválido.'
     }
 
     if (!tecnico?.telefono_tecnico?.trim()) {
-      errores.telefono_tecnico = 'El teléfono es obligatorio.';
+      errores.telefono_tecnico = 'El teléfono es obligatorio.'
     } else if (
       tecnico.telefono_tecnico.length !== 10 ||
       !/^\d+$/.test(tecnico.telefono_tecnico)
     ) {
-      errores.telefono_tecnico = 'Teléfono debe tener 10 dígitos numéricos.';
+      errores.telefono_tecnico = 'Teléfono debe tener 10 dígitos numéricos.'
     }
 
-    return errores;
-  };
+    return errores
+  }
 
   useEffect(() => {
     if (tecnicoCarta) {
-      setTecnico(tecnicoCarta);
-      setNuevoCorreo(tecnicoCarta.correo_tecnico);
-      setCorreoParaBusqueda(tecnicoCarta.correo_tecnico);
-      const partes = tecnicoCarta.nombre_tecnico.trim().split(/\s+/);
-      const nombre = partes.slice(0, 2).join(' ');
-      const apellido = partes.slice(2).join(' ');
-      setNombre(nombre || '');
-      setApellido(apellido || '');
+      setTecnico(tecnicoCarta)
+      setNuevoCorreo(tecnicoCarta.correo_tecnico)
+      setCorreoParaBusqueda(tecnicoCarta.correo_tecnico)
+      const partes = tecnicoCarta.nombre_tecnico.trim().split(/\s+/)
+      const nombre = partes.slice(0, 2).join(' ')
+      const apellido = partes.slice(2).join(' ')
+      setNombre(nombre || '')
+      setApellido(apellido || '')
     }
-  }, [tecnicoCarta]);
+  }, [tecnicoCarta])
 
   const actualizarTecnico = async () => {
-    const erroresValidados = validarCampos();
+    const erroresValidados = validarCampos()
     if (Object.keys(erroresValidados).length > 0) {
-      setErrores(erroresValidados);
-      return;
+      setErrores(erroresValidados)
+      return
     }
-    setErrores({});
-    setMensaje('');
+    setErrores({})
+    setMensaje('')
     const body = {
       cc_tecnico: tecnico.cc_tecnico,
       nombre_tecnico: `${nombre.trim()} ${apellido.trim()}`,
       nuevo_correo_tecnico: nuevoCorreo,
       telefono_tecnico: tecnico.telefono_tecnico,
       correo_tecnico: correoParaBusqueda,
-    };
+    }
     try {
       const res = await fetch('https://redgas.onrender.com/TecnicoDataUpdateNI', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
-      });
+      })
       if (res.ok) {
-        setMensaje('Técnico actualizado exitosamente.');
-        setRefrescar && setRefrescar(true);
+        setMensaje('Técnico actualizado exitosamente.')
+        setRefrescar && setRefrescar(true)
         if (correoParaBusqueda !== nuevoCorreo) {
-          setCorreoParaBusqueda(nuevoCorreo);
+          setCorreoParaBusqueda(nuevoCorreo)
         }
       } else {
-        const data = await res.json();
-        setMensaje(data.errorInfo || 'Error al actualizar técnico.');
+        const data = await res.json()
+        setMensaje(data.errorInfo || 'Error al actualizar técnico.')
       }
     } catch {
-      setMensaje('Error de red al actualizar.');
+      setMensaje('Error de red al actualizar.')
     }
-  };
+  }
 
   const cancelarEdicion = () => {
-    setTecnico(null);
-    setNuevoCorreo('');
-    setCorreoParaBusqueda('');
-    setMensaje('');
-    setErrores({});
-    setNombre('');
-    setApellido('');
-    onClose();
-  };
+    setTecnico(null)
+    setNuevoCorreo('')
+    setCorreoParaBusqueda('')
+    setMensaje('')
+    setErrores({})
+    setNombre('')
+    setApellido('')
+    onClose()
+  }
 
   return (
     <div className="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50">
@@ -194,5 +194,5 @@ export const UpdateModal = ({ onClose, setRefrescar, tecnicoCarta }) => {
         )}
       </div>
     </div>
-  );
-};
+  )
+}

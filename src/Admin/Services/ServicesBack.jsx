@@ -1,83 +1,74 @@
 // Delete.jsx
-import React, { useState, useEffect, useRef } from 'react';
-import { RegisterModal } from './Register/RegisterModal';
-import { UpdateModal } from './Update/Update';
-import CardServicesGetBack from './Get/CardServicesGetBack';
-import ButtonBack from '../UI/ButtonBack/ButtonBack';
-import { buscarServicioPorNombre } from './Get/Get';
-import { InputLabel } from '../../UI/Login_Register/InputLabel/InputLabel';
+import React, { useState, useEffect, useRef } from 'react'
+import { RegisterModal } from './Register/RegisterModal'
+import { UpdateModal } from './Update/Update'
+import CardServicesGetBack from './Get/CardServicesGetBack'
+import ButtonBack from '../UI/ButtonBack/ButtonBack'
+import { buscarServicioPorNombre } from './Get/Get'
+import { InputLabel } from '../../UI/Login_Register/InputLabel/InputLabel'
+import { Paginator } from '../../UI/Paginator/Paginator'
 
 export const ServicesBack = () => {
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [showRegisterModal, setShowRegisterModal] = useState(false);
-  const [showUpdateModal, setShowUpdateModal] = useState(false);
-  const [servicios, setServicios] = useState([]);
-  const [refrescar, setRefrescar] = useState(false);
-  const [nombreBusqueda, setNombreBusqueda] = useState("");
-  const [sugerencias, setSugerencias] = useState([]);
-  const contenedorRef = useRef(null);
-  const inputRef = useRef(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [showRegisterModal, setShowRegisterModal] = useState(false)
+  const [showUpdateModal, setShowUpdateModal] = useState(false)
+  const [servicios, setServicios] = useState([])
+  const [refrescar, setRefrescar] = useState(false)
+  const [nombreBusqueda, setNombreBusqueda] = useState("")
+  const [sugerencias, setSugerencias] = useState([])
+  const [paginaActual, setPaginaActual] = useState(1)
+  const [totalPaginas, setTotalPaginas] = useState(1)
+  const contenedorRef = useRef(null)
+  const inputRef = useRef(null)
 
-  async function fetchServicios() {
+  const fetchServicios = async (pagina = 1) => {
     try {
-      const res = await fetch('https://redgas.onrender.com/ServicioGetAllPaginated');
-      if (!res.ok) throw new Error('Error al obtener servicios');
-      const data = await res.json();
-      setServicios(Array.isArray(data) ? data : (data.data.data || []));
+      const res = await fetch(`https://redgas.onrender.com/ServicioGetAllPaginated?page=${pagina}`)
+      if (!res.ok) throw new Error('Error al obtener servicios')
+      const data = await res.json()
+      const resultado = data.data
+
+      setServicios(resultado.data || [])
+      setPaginaActual(resultado.currentPage)
+      setTotalPaginas(resultado.totalPages)
     } catch (error) {
-      setServicios([]);
-      console.error(error);
+      console.error(error)
     }
   }
 
   useEffect(() => {
-    fetchServicios();
-  }, []);
+    fetchServicios(paginaActual)
+  }, [paginaActual])
 
   useEffect(() => {
     if (refrescar) {
-      fetchServicios();
-      setRefrescar(false);
+      fetchServicios(1)
+      setPaginaActual(1)
+      setRefrescar(false)
     }
-  }, [refrescar]);
+  }, [refrescar])
 
   // Para actualizar un servicio desde la tarjeta
   const handleUpdateClick = (servicio) => {
-    setShowUpdateModal(servicio);
-  };
+    setShowUpdateModal(servicio)
+  }
 
   // Para eliminar un servicio desde la tarjeta
   const handleDeleteClick = (servicio) => {
-    setShowDeleteModal(servicio);
-  };
-
-  // Para buscar servicios por nombre desde el input
-  const handleBuscarServicio = async () => {
-    if (!nombreBusqueda.trim()) {
-      fetchServicios(); // Si no hay búsqueda, se recargan todos
-      return;
-    }
-
-    try {
-      const resultados = await buscarServicioPorNombre(nombreBusqueda);
-      setServicios(resultados);
-    } catch (error) {
-      console.error(error);
-      setServicios([]);
-    }
-  };
+    setShowDeleteModal(servicio)
+  }
 
   // Autocomplete: filtra servicios por nombre
   useEffect(() => {
     if (nombreBusqueda.trim() === '') {
-      setSugerencias([]);
-      return;
+      setSugerencias([])
+      return
     }
     const filtrados = servicios.filter((servicio) =>
       servicio.nombre_servicio && servicio.nombre_servicio.toLowerCase().includes(nombreBusqueda.toLowerCase())
-    );
-    setSugerencias(filtrados.slice(0, 5));
-  }, [nombreBusqueda, servicios]);
+    )
+    setSugerencias(filtrados.slice(0, 5))
+  }, [nombreBusqueda, servicios])
 
   // Cierre del dropdown si se hace clic fuera
   useEffect(() => {
@@ -86,19 +77,19 @@ export const ServicesBack = () => {
         contenedorRef.current &&
         !contenedorRef.current.contains(event.target)
       ) {
-        setSugerencias([]);
+        setSugerencias([])
       }
-    };
-    document.addEventListener('mousedown', manejarClickFuera);
-    return () => document.removeEventListener('mousedown', manejarClickFuera);
-  }, []);
+    }
+    document.addEventListener('mousedown', manejarClickFuera)
+    return () => document.removeEventListener('mousedown', manejarClickFuera)
+  }, [])
 
   // Limpia servicios si el input queda vacío
   useEffect(() => {
     if (nombreBusqueda.trim() === '') {
-      fetchServicios();
+      fetchServicios()
     }
-  }, [nombreBusqueda]);
+  }, [nombreBusqueda])
 
   return (
     <div className="flex flex-row h-screen p-[40px_0_0_40px] gap-[40px]">
@@ -121,9 +112,9 @@ export const ServicesBack = () => {
                 <li
                   key={servicio.id_servicio || servicio.nombre_servicio}
                   onClick={() => {
-                    setNombreBusqueda(servicio.nombre_servicio);
-                    setSugerencias([]);
-                    setServicios([servicio]);
+                    setNombreBusqueda(servicio.nombre_servicio)
+                    setSugerencias([])
+                    setServicios([servicio])
                   }}
                   className="p-2 hover:bg-gray-100 cursor-pointer"
                 >
@@ -153,6 +144,16 @@ export const ServicesBack = () => {
         </div>
       </div>
 
+      <Paginator
+        currentPage={paginaActual}
+        totalPages={totalPaginas}
+        onPageChange={(nuevaPagina) => {
+          if (nuevaPagina !== paginaActual) {
+            setPaginaActual(nuevaPagina)
+          }
+        }}
+      />
+
       {/* Modales */}
       {showRegisterModal && (
         <RegisterModal
@@ -160,9 +161,7 @@ export const ServicesBack = () => {
           setRefrescar={setRefrescar}
         />
       )}
-      {/* {showGetModal && (
-        <GetModal onClose={() => setShowGetModal(false)} onResult={handleShowServicios} />
-      )} */}
+
       {typeof showUpdateModal === 'object' && showUpdateModal && (
         <UpdateModal
           onClose={() => setShowUpdateModal(false)}
@@ -170,15 +169,8 @@ export const ServicesBack = () => {
           servicioCarta={showUpdateModal}
         />
       )}
-      {typeof showDeleteModal === 'object' && showDeleteModal && (
-        <DeleteModal
-          onClose={() => setShowDeleteModal(false)}
-          setRefrescar={setRefrescar}
-          servicioCarta={showDeleteModal}
-        />
-      )}
     </div>
-  );
-};
+  )
+}
 
-export default ServicesBack;
+export default ServicesBack

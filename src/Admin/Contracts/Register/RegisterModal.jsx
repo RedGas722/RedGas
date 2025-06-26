@@ -1,46 +1,46 @@
-import React, { useState, useRef, useEffect } from 'react';
-import InputLabel from '../../../UI/Login_Register/InputLabel/InputLabel';
+import React, { useState, useRef, useEffect } from 'react'
+import InputLabel from '../../../UI/Login_Register/InputLabel/InputLabel'
 
 export const RegisterModal = ({ onClose, setRefrescar, admins = [], empleados = [] }) => {
   const [fechaContrato, setFechaContrato] = useState(() => {
-    const hoy = new Date();
-    const yyyy = hoy.getFullYear();
-    const mm = String(hoy.getMonth() + 1).padStart(2, '0');
-    const dd = String(hoy.getDate()).padStart(2, '0');
-    return `${yyyy}-${mm}-${dd}`;
-  });
-  const [duracionContrato, setDuracionContrato] = useState('');
-  const [tipoContrato, setTipoContrato] = useState('');
-  const [salario, setSalario] = useState('');
-  const [correoAdmin, setCorreoAdmin] = useState('');
-  const [correoEmpleado, setCorreoEmpleado] = useState('');
-  const [mensaje, setMensaje] = useState('');
+    const hoy = new Date()
+    const yyyy = hoy.getFullYear()
+    const mm = String(hoy.getMonth() + 1).padStart(2, '0')
+    const dd = String(hoy.getDate()).padStart(2, '0')
+    return `${yyyy}-${mm}-${dd}`
+  })
+  const [duracionContrato, setDuracionContrato] = useState('')
+  const [tipoContrato, setTipoContrato] = useState('')
+  const [salario, setSalario] = useState('')
+  const [correoAdmin, setCorreoAdmin] = useState('')
+  const [correoEmpleado, setCorreoEmpleado] = useState('')
+  const [mensaje, setMensaje] = useState('')
 
-  const [sugerenciasAdmin, setSugerenciasAdmin] = useState([]);
-  const [sugerenciasEmpleado, setSugerenciasEmpleado] = useState([]);
+  const [sugerenciasAdmin, setSugerenciasAdmin] = useState([])
+  const [sugerenciasEmpleado, setSugerenciasEmpleado] = useState([])
 
-  const refAdmin = useRef(null);
-  const refEmpleado = useRef(null);
+  const refAdmin = useRef(null)
+  const refEmpleado = useRef(null)
 
-  const URL = 'https://redgas.onrender.com/ContratoRegister';
+  const URL = 'https://redgas.onrender.com/ContratoRegister'
 
   // Autocompletado para admin
   useEffect(() => {
-    if (!correoAdmin.trim()) return setSugerenciasAdmin([]);
+    if (!correoAdmin.trim()) return setSugerenciasAdmin([])
     const filtrados = admins.filter((admin) =>
       admin.correo_admin.toLowerCase().includes(correoAdmin.toLowerCase())
-    );
-    setSugerenciasAdmin(filtrados.slice(0, 5));
-  }, [correoAdmin, admins]);
+    )
+    setSugerenciasAdmin(filtrados.slice(0, 5))
+  }, [correoAdmin, admins])
 
   // Autocompletado para empleado
   useEffect(() => {
-    if (!correoEmpleado.trim()) return setSugerenciasEmpleado([]);
+    if (!correoEmpleado.trim()) return setSugerenciasEmpleado([])
     const filtrados = empleados.filter((emp) =>
       emp.correo_empleado.toLowerCase().includes(correoEmpleado.toLowerCase())
-    );
-    setSugerenciasEmpleado(filtrados.slice(0, 5));
-  }, [correoEmpleado, empleados]);
+    )
+    setSugerenciasEmpleado(filtrados.slice(0, 5))
+  }, [correoEmpleado, empleados])
 
   // Cerrar sugerencias al hacer clic fuera
   useEffect(() => {
@@ -49,35 +49,35 @@ export const RegisterModal = ({ onClose, setRefrescar, admins = [], empleados = 
         refAdmin.current && !refAdmin.current.contains(event.target) &&
         refEmpleado.current && !refEmpleado.current.contains(event.target)
       ) {
-        setSugerenciasAdmin([]);
-        setSugerenciasEmpleado([]);
+        setSugerenciasAdmin([])
+        setSugerenciasEmpleado([])
       }
-    };
-    document.addEventListener('click', handleClickOutside); // 👈 usamos 'click' en lugar de 'mousedown'
-    return () => document.removeEventListener('click', handleClickOutside);
-  }, []);
+    }
+    document.addEventListener('click', handleClickOutside) // 👈 usamos 'click' en lugar de 'mousedown'
+    return () => document.removeEventListener('click', handleClickOutside)
+  }, [])
 
   const handleRegister = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
-    if (!fechaContrato.trim()) return setMensaje('Por favor, ingresa la fecha del contrato.');
-    if (!duracionContrato.trim()) return setMensaje('Por favor, ingresa la duración del contrato.');
-    if (!tipoContrato.trim()) return setMensaje('Por favor, ingresa el tipo de contrato.');
+    if (!fechaContrato.trim()) return setMensaje('Por favor, ingresa la fecha del contrato.')
+    if (!duracionContrato.trim()) return setMensaje('Por favor, ingresa la duración del contrato.')
+    if (!tipoContrato.trim()) return setMensaje('Por favor, ingresa el tipo de contrato.')
     if (!salario || isNaN(salario) || parseFloat(salario) <= 0) {
-      return setMensaje('Por favor, ingresa un salario válido (mayor a 0).');
+      return setMensaje('Por favor, ingresa un salario válido (mayor a 0).')
     }
-    if (!correoAdmin.trim()) return setMensaje('Por favor, ingresa el correo del administrador.');
-    if (!correoEmpleado.trim()) return setMensaje('Por favor, ingresa el correo del empleado.');
+    if (!correoAdmin.trim()) return setMensaje('Por favor, ingresa el correo del administrador.')
+    if (!correoEmpleado.trim()) return setMensaje('Por favor, ingresa el correo del empleado.')
 
     const adminEncontrado = admins.find(
       (a) => a.correo_admin.toLowerCase() === correoAdmin.toLowerCase().trim()
-    );
+    )
     const empleadoEncontrado = empleados.find(
       (e) => e.correo_empleado.toLowerCase() === correoEmpleado.toLowerCase().trim()
-    );
+    )
 
-    if (!adminEncontrado) return setMensaje('Administrador no encontrado con ese correo.');
-    if (!empleadoEncontrado) return setMensaje('Empleado no encontrado con ese correo.');
+    if (!adminEncontrado) return setMensaje('Administrador no encontrado con ese correo.')
+    if (!empleadoEncontrado) return setMensaje('Empleado no encontrado con ese correo.')
 
     try {
       const res = await fetch(URL, {
@@ -91,37 +91,37 @@ export const RegisterModal = ({ onClose, setRefrescar, admins = [], empleados = 
           id_admin: adminEncontrado.id_admin,
           id_empleado: empleadoEncontrado.id_empleado
         }),
-      });
+      })
 
       if (!res.ok) {
-        let errorMsg = 'Error en el registro';
+        let errorMsg = 'Error en el registro'
         try {
-          const errorData = await res.json();
-          if (errorData?.message) errorMsg = errorData.message;
+          const errorData = await res.json()
+          if (errorData?.message) errorMsg = errorData.message
         } catch {}
-        throw new Error(errorMsg);
+        throw new Error(errorMsg)
       }
 
-      await res.json();
-      setMensaje('Registro exitoso.');
-      if (typeof setRefrescar === 'function') setRefrescar(true);
+      await res.json()
+      setMensaje('Registro exitoso.')
+      if (typeof setRefrescar === 'function') setRefrescar(true)
     } catch (err) {
-      setMensaje('Error al registrar: ' + err.message);
+      setMensaje('Error al registrar: ' + err.message)
     }
-  };
+  }
 
   const handleCancel = () => {
-    setFechaContrato('');
-    setDuracionContrato('');
-    setTipoContrato('');
-    setSalario('');
-    setCorreoAdmin('');
-    setCorreoEmpleado('');
-    setMensaje('');
-    setSugerenciasAdmin([]);
-    setSugerenciasEmpleado([]);
-    onClose();
-  };
+    setFechaContrato('')
+    setDuracionContrato('')
+    setTipoContrato('')
+    setSalario('')
+    setCorreoAdmin('')
+    setCorreoEmpleado('')
+    setMensaje('')
+    setSugerenciasAdmin([])
+    setSugerenciasEmpleado([])
+    onClose()
+  }
 
   return (
     <div className="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50">
@@ -185,8 +185,8 @@ export const RegisterModal = ({ onClose, setRefrescar, admins = [], empleados = 
                 <li
                   key={admin.id_admin}
                   onClick={() => {
-                    setCorreoAdmin(admin.correo_admin);
-                    setTimeout(() => setSugerenciasAdmin([]), 0); // 👈 ejecuta después del click
+                    setCorreoAdmin(admin.correo_admin)
+                    setTimeout(() => setSugerenciasAdmin([]), 0) // 👈 ejecuta después del click
                   }}
                   className="p-2 hover:bg-gray-100 cursor-pointer"
                 >
@@ -213,8 +213,8 @@ export const RegisterModal = ({ onClose, setRefrescar, admins = [], empleados = 
                 <li
                   key={emp.id_empleado}
                   onClick={() => {
-                    setCorreoEmpleado(emp.correo_empleado);
-                    setTimeout(() => setSugerenciasEmpleado([]), 0); 
+                    setCorreoEmpleado(emp.correo_empleado)
+                    setTimeout(() => setSugerenciasEmpleado([]), 0) 
                   }}
                   className="p-2 hover:bg-gray-100 cursor-pointer"
                 >
@@ -241,5 +241,5 @@ export const RegisterModal = ({ onClose, setRefrescar, admins = [], empleados = 
         )}
       </div>
     </div>
-  );
-};
+  )
+}

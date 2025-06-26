@@ -1,22 +1,22 @@
-import React from 'react';
-import { DeleteService } from '../Delete/Delete';
+import React from 'react'
+import { DeleteService } from '../Delete/Delete'
 
 const CardServicesGetBack = ({ servicio, setRefrescar, onUpdateClick }) => {
-  if (!servicio) return null;
+  if (!servicio) return null
 
   const handleDelete = async () => {
-    const confirmar = window.confirm(`¿Seguro que quieres eliminar el servicio ${servicio.nombre_servicio}?`);
-    if (!confirmar) return;
+    const confirmar = window.confirm(`¿Seguro que quieres eliminar el servicio ${servicio.nombre_servicio}?`)
+    if (!confirmar) return
 
-    const { success, message } = await DeleteService(servicio.nombre_servicio);
+    const { success, message } = await DeleteService(servicio.nombre_servicio)
 
     if (success) {
-      alert(message);
-      setRefrescar && setRefrescar(true);
+      alert(message)
+      setRefrescar && setRefrescar(true)
     } else {
-      alert(`Error: ${message}`);
+      alert(`Error: ${message}`)
     }
-  };
+  }
 
   return (
     <div className="bg-white shadow-lg rounded-lg p-4 w-full min-h-[180px] flex flex-col justify-between overflow-hidden">
@@ -58,7 +58,7 @@ const CardServicesGetBack = ({ servicio, setRefrescar, onUpdateClick }) => {
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default CardServicesGetBack;
+export default CardServicesGetBack

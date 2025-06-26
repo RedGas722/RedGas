@@ -1,55 +1,62 @@
-import { useState, useEffect } from 'react';
-import { RegisterModal } from './Register/RegisterModal';
-import { UpdateModal } from './Update/Update';
-import { ButtonBack } from '../UI/ButtonBack/ButtonBack';
-import { BtnBack } from "../../UI/Login_Register/BtnBack";
-import CardsFacturesBack from './Get/CardFacturesBack';
-import { InputLabel } from '../../UI/Login_Register/InputLabel/InputLabel';
-import { useBuscarFacturas } from './Get/Get';
-import { ProductsModal } from './Get/ProductsModal';
+import { useState, useEffect } from 'react'
+import { RegisterModal } from './Register/RegisterModal'
+import { UpdateModal } from './Update/Update'
+import { ButtonBack } from '../UI/ButtonBack/ButtonBack'
+import { BtnBack } from "../../UI/Login_Register/BtnBack"
+import CardsFacturesBack from './Get/CardFacturesBack'
+import { InputLabel } from '../../UI/Login_Register/InputLabel/InputLabel'
+import { useBuscarFacturas } from './Get/Get'
+import { ProductsModal } from './Get/ProductsModal'
+import { Paginator } from '../../UI/Paginator/Paginator'
 
 export const FacturesBack = () => {
-  const [showRegisterModal, setShowRegisterModal] = useState(false);
-  const [showUpdateModal, setShowUpdateModal] = useState(false);
-  const [facturas, setFacturas] = useState([]);
-  const [facturasOriginal, setFacturasOriginal] = useState([]);
-  const [clientes, setClientes] = useState([]);
-  const [empleados, setEmpleados] = useState([]);
-  const [refrescar, setRefrescar] = useState(false);
-  const [facturaSeleccionada, setFacturaSeleccionada] = useState(null);
-  const [showProductsModal, setShowProductsModal] = useState(false);
-  const [facturaParaProductos, setFacturaParaProductos] = useState(null);
+  const [showRegisterModal, setShowRegisterModal] = useState(false)
+  const [showUpdateModal, setShowUpdateModal] = useState(false)
+  const [facturas, setFacturas] = useState([])
+  const [facturasOriginal, setFacturasOriginal] = useState([])
+  const [clientes, setClientes] = useState([])
+  const [empleados, setEmpleados] = useState([])
+  const [refrescar, setRefrescar] = useState(false)
+  const [facturaSeleccionada, setFacturaSeleccionada] = useState(null)
+  const [showProductsModal, setShowProductsModal] = useState(false)
+  const [facturaParaProductos, setFacturaParaProductos] = useState(null)
+  const [paginaActual, setPaginaActual] = useState(1)
+  const [totalPaginas, setTotalPaginas] = useState(1)
 
-  const fetchFacturas = async () => {
+  const fetchFacturas = async (pagina = 1) => {
     try {
-      const res = await fetch('https://redgas.onrender.com/FacturaGetAllPaginated');
-      const data = await res.json();
-      setFacturas(data.data.data || []);
-      setFacturasOriginal(data.data || []);
+      const res = await fetch(`https://redgas.onrender.com/FacturaGetAllPaginated?page=${pagina}`)
+      if (!res.ok) throw new Error('Error al obtener facturas')
+      const data = await res.json()
+      const resultado = data.data
+
+      setFacturas(resultado.data || [])
+      setPaginaActual(resultado.currentPage)
+      setTotalPaginas(resultado.totalPages)
     } catch (error) {
-      console.error('Error al obtener facturas', error);
+      console.error(error)
     }
-  };
+  }
 
   const fetchClientes = async () => {
     try {
-      const res = await fetch('https://redgas.onrender.com/ClienteGetAll');
-      const data = await res.json();
-      setClientes(data.data || []);
+      const res = await fetch('https://redgas.onrender.com/ClienteGetAll')
+      const data = await res.json()
+      setClientes(data.data || [])
     } catch (error) {
-      console.error('Error al obtener clientes', error);
+      console.error('Error al obtener clientes', error)
     }
-  };
+  }
 
   const fetchEmpleados = async () => {
     try {
-      const res = await fetch('https://redgas.onrender.com/EmpleadoGetAll');
-      const data = await res.json();
-      setEmpleados(data.data || []);
+      const res = await fetch('https://redgas.onrender.com/EmpleadoGetAll')
+      const data = await res.json()
+      setEmpleados(data.data || [])
     } catch (error) {
-      console.error('Error al obtener empleados', error);
+      console.error('Error al obtener empleados', error)
     }
-  };
+  }
 
   const {
     clienteCorreoBusqueda, empleadoBusqueda,
@@ -58,41 +65,42 @@ export const FacturesBack = () => {
     handleBuscar, handleLimpiar,
     contenedorRefCliente, contenedorRefEmpleado,
     setClienteCorreoBusqueda, setEmpleadoBusqueda
-  } = useBuscarFacturas(clientes, empleados, facturasOriginal, setFacturas);
+  } = useBuscarFacturas(clientes, empleados, facturasOriginal, setFacturas)
 
   const abrirModalActualizar = (factura) => {
-    setFacturaSeleccionada(factura);
-    setShowUpdateModal(true);
-  };
+    setFacturaSeleccionada(factura)
+    setShowUpdateModal(true)
+  }
 
   const cerrarModalActualizar = () => {
-    setFacturaSeleccionada(null);
-    setShowUpdateModal(false);
-  };
+    setFacturaSeleccionada(null)
+    setShowUpdateModal(false)
+  }
 
   useEffect(() => {
-    fetchFacturas();
-    fetchClientes();
-    fetchEmpleados();
-  }, []);
+    fetchFacturas(paginaActual)
+    fetchClientes()
+    fetchEmpleados()
+  }, [paginaActual])
 
   useEffect(() => {
     if (refrescar) {
-      fetchFacturas();
-      setRefrescar(false);
-      handleLimpiar();
+      fetchFacturas(1)
+      setPaginaActual(1)
+      setRefrescar(false)
+      handleLimpiar()
     }
-  }, [refrescar]);
+  }, [refrescar])
 
     const abrirModalProductos = (factura) => {
-    setFacturaParaProductos(factura);
-    setShowProductsModal(true);
-  };
+    setFacturaParaProductos(factura)
+    setShowProductsModal(true)
+  }
 
   const cerrarModalProductos = () => {
-    setShowProductsModal(false);
-    setFacturaParaProductos(null);
-  };
+    setShowProductsModal(false)
+    setFacturaParaProductos(null)
+  }
 
   return (
     <div className="p-[20px] flex flex-col gap-[20px]">
@@ -120,7 +128,7 @@ export const FacturesBack = () => {
                 <div
                   key={cliente.id_cliente}
                   onClick={() => {
-                    setClienteCorreoBusqueda(cliente.correo_cliente);
+                    setClienteCorreoBusqueda(cliente.correo_cliente)
                   }}
                   className="p-2 hover:bg-gray-100 cursor-pointer"
                 >
@@ -147,7 +155,7 @@ export const FacturesBack = () => {
                 <div
                   key={empleado.id_empleado}
                   onClick={() => {
-                    setEmpleadoBusqueda(empleado.correo_empleado);
+                    setEmpleadoBusqueda(empleado.correo_empleado)
                   }}
                   className="p-2 hover:bg-gray-100 cursor-pointer"
                 >
@@ -181,6 +189,16 @@ export const FacturesBack = () => {
         ))}
       </div>
 
+      <Paginator
+        currentPage={paginaActual}
+        totalPages={totalPaginas}
+        onPageChange={(nuevaPagina) => {
+          if (nuevaPagina !== paginaActual) {
+            setPaginaActual(nuevaPagina)
+          }
+        }}
+      />
+
       {showRegisterModal && (
         <RegisterModal
           onClose={() => setShowRegisterModal(false)}
@@ -201,7 +219,7 @@ export const FacturesBack = () => {
         <ProductsModal factura={facturaParaProductos} onClose={cerrarModalProductos} />
       )}
     </div>
-  );
-};
+  )
+}
 
-export default FacturesBack;
+export default FacturesBack
