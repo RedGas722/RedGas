@@ -109,6 +109,15 @@ export const ConfirmacionPayPal = () => {
               console.error("Error al registrar pedido producto:", dataPedidoProducto);
             }
 
+            const resStockUpdate = await fetch("https://redgas.onrender.com/ProductoUpdateStock", {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                id_producto: item.productId,
+                stock: item.quantity
+              })
+            });
+            const stockUpdateData = await resStockUpdate.json();
           } else {
             // Pago total: registrar todos los productos
             for (const item of cartData) {
@@ -130,8 +139,9 @@ export const ConfirmacionPayPal = () => {
               if (!resPedidoProducto.ok) {
                 console.error("Error al registrar pedido producto:", dataPedidoProducto);
               }
+              console.log("Actualizando stock:", { id_producto, stock: cantidad_producto });
 
-              await fetch("https://redgas.onrender.com/ProductoUpdateStock", {
+              const resStockUpdate = await fetch("https://redgas.onrender.com/ProductoUpdateStock", {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -139,6 +149,7 @@ export const ConfirmacionPayPal = () => {
                   stock: cantidad_producto
                 })
               });
+              const stockUpdateData = await resStockUpdate.json();
             }
           }
         // Marcar factura como generada
