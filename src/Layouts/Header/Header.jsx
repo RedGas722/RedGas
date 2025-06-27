@@ -58,18 +58,18 @@ export const Header = () => {
 
     // Cargar productos al iniciar
     useEffect(() => {
-        const fetchProductos = async () => {
-            try {
-                const res = await fetch("https://redgas.onrender.com/ProductoGetAll");
-                const data = await res.json();
-                const productosData = data.data.productos;
-                setProductos(productosData);
-            } catch (error) {
-                console.error("Error al cargar productos:", error);
-            }
-        };
+    const fetchProductos = async () => {
+        try {
+        const res = await fetch("https://redgas.onrender.com/ProductoGetAllNames");
+        const data = await res.json();
+        const productosData = data.data; // [{ id_producto, nombre_producto }]
+        setProductos(productosData);
+        } catch (error) {
+        console.error("Error al cargar nombres de productos:", error);
+        }
+    };
 
-        fetchProductos();
+    fetchProductos();
     }, []);
 
     useEffect(() => {
@@ -182,7 +182,10 @@ export const Header = () => {
             </div>
 
             {/* Aquí enviamos productos a la barra de búsqueda */}
-            <SearchBarr productos={productos} className={`flex-1 items-center justify-center md:flex ${hamburger ? '' : 'hidden'}`} />
+            <SearchBarr
+            productos={productos}
+            className={`flex-1 items-center justify-center md:flex ${hamburger ? '' : 'hidden'}`}
+            />   
             <Navs ref1={navRef1} ref2={navRef2} ref3={navRef3} ref4={navRef4} className={`flex-1 items-center justify-center md:flex ${hamburger ? '' : 'hidden'}`} />
             {/* <ProfilePhoto className={`flex-1 items-center justify-center md:flex ${hamburger ? '' : 'hidden'}`} /> */}
             <label className={`dropdown flex-1 flex justify-self-end items-center text-[var(--Font-Nav)] justify-between md:flex ${hamburger ? '' : 'hidden'}`} >
