@@ -44,7 +44,7 @@ export const AdminsBack = () => {
       const res = await fetch('https://redgas.onrender.com/AdminGetAllEmails')
       if (!res.ok) throw new Error('Error al obtener correos')
       const data = await res.json()
-      setAdminsEmails(data.data || []) // [{ id_admin, correo_admin }]
+      setAdminsEmails(data.data || [])
     } catch (error) {
       console.error(error)
     }
@@ -82,7 +82,7 @@ export const AdminsBack = () => {
     setAdminBuscado(null)
     try {
       const admin = await buscarAdminPorCorreo(correoBusqueda)
-      setAdminBuscado(admin)
+      setAdminBuscado(admin[0])
     } catch (error) {
       setErrorBusqueda(error.message)
     }

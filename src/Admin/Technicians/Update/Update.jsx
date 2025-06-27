@@ -9,11 +9,13 @@ export const UpdateModal = ({ onClose, setRefrescar, tecnicoCarta }) => {
   const [errores, setErrores] = useState({})
   const [nombre, setNombre] = useState('')
   const [apellido, setApellido] = useState('')
+  const [imagenFile, setImagenFile] = useState(null) // 📸 Nuevo estado
+  const [imagenPreview, setImagenPreview] = useState(null)
 
   const validarCampos = () => {
     const errores = {}
     const correoRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (tecnico.cc_tecnico.length < 10 || tecnico.cc_tecnico.length > 15) errores.cc_tecnico = "Cédula obligatoria, entre 10 y 15 caracteres"
+    if (tecnico.cc_tecnico.length < 1 || tecnico.cc_tecnico.length > 15) errores.cc_tecnico = "Cédula obligatoria, entre 10 y 15 caracteres"
     if (!nombre.trim()) errores.nombre = 'El nombre es obligatorio'
     if (!apellido.trim()) errores.apellido = 'El apellido es obligatorio'
 
@@ -35,6 +37,22 @@ export const UpdateModal = ({ onClose, setRefrescar, tecnicoCarta }) => {
     return errores
   }
 
+  const convertirBase64AUrl = (imagen) => {
+    if (!imagen) return null
+
+    if (typeof imagen === 'string') {
+      return `data:image/png;base64,${imagen}`
+    }
+
+    if (imagen.type === 'Buffer' && Array.isArray(imagen.data)) {
+      const binary = imagen.data.reduce((acc, byte) => acc + String.fromCharCode(byte), '')
+      const base64 = btoa(binary)
+      return `data:image/png;base64,${base64}`
+    }
+
+    return null
+  }
+
   useEffect(() => {
     if (tecnicoCarta) {
       setTecnico(tecnicoCarta)
@@ -45,6 +63,9 @@ export const UpdateModal = ({ onClose, setRefrescar, tecnicoCarta }) => {
       const apellido = partes.slice(2).join(' ')
       setNombre(nombre || '')
       setApellido(apellido || '')
+
+      const urlImagen = convertirBase64AUrl(tecnicoCarta.imagen)
+      setImagenPreview(urlImagen)
     }
   }, [tecnicoCarta])
 
@@ -54,21 +75,42 @@ export const UpdateModal = ({ onClose, setRefrescar, tecnicoCarta }) => {
       setErrores(erroresValidados)
       return
     }
+
     setErrores({})
     setMensaje('')
-    const body = {
-      cc_tecnico: tecnico.cc_tecnico,
-      nombre_tecnico: `${nombre.trim()} ${apellido.trim()}`,
-      nuevo_correo_tecnico: nuevoCorreo,
-      telefono_tecnico: tecnico.telefono_tecnico,
-      correo_tecnico: correoParaBusqueda,
-    }
+
     try {
-      const res = await fetch('https://redgas.onrender.com/TecnicoDataUpdateNI', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-      })
+      let res
+      if (imagenFile) {
+        // 📸 Si se seleccionó una nueva imagen
+        const formData = new FormData()
+        formData.append('cc_tecnico', tecnico.cc_tecnico)
+        formData.append('nombre_tecnico', `${nombre.trim()} ${apellido.trim()}`)
+        formData.append('nuevo_correo_tecnico', nuevoCorreo)
+        formData.append('telefono_tecnico', tecnico.telefono_tecnico)
+        formData.append('correo_tecnico', correoParaBusqueda)
+        formData.append('imagen', imagenFile)
+
+        res = await fetch('https://redgas.onrender.com/TecnicoDataUpdate', {
+          method: 'PUT',
+          body: formData,
+        })
+      } else {
+        // 📝 Sin imagen
+        const body = {
+          cc_tecnico: tecnico.cc_tecnico,
+          nombre_tecnico: `${nombre.trim()} ${apellido.trim()}`,
+          nuevo_correo_tecnico: nuevoCorreo,
+          telefono_tecnico: tecnico.telefono_tecnico,
+          correo_tecnico: correoParaBusqueda,
+        }
+
+        res = await fetch('https://redgas.onrender.com/TecnicoDataUpdateNI', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body),
+        })
+      }
       if (res.ok) {
         setMensaje('Técnico actualizado exitosamente.')
         setRefrescar && setRefrescar(true)
@@ -92,6 +134,7 @@ export const UpdateModal = ({ onClose, setRefrescar, tecnicoCarta }) => {
     setErrores({})
     setNombre('')
     setApellido('')
+    setImagenFile(null)
     onClose()
   }
 
@@ -128,6 +171,7 @@ export const UpdateModal = ({ onClose, setRefrescar, tecnicoCarta }) => {
             {errores.nombre && (
               <p className="text-red-600 text-sm">{errores.nombre}</p>
             )}
+
             <InputLabel
               type="1"
               ForID="apellido_tecnico"
@@ -141,6 +185,7 @@ export const UpdateModal = ({ onClose, setRefrescar, tecnicoCarta }) => {
             {errores.apellido && (
               <p className="text-red-600 text-sm">{errores.apellido}</p>
             )}
+
             <InputLabel
               type="2"
               ForID="correo_tecnico"
@@ -154,6 +199,7 @@ export const UpdateModal = ({ onClose, setRefrescar, tecnicoCarta }) => {
             {errores.nuevoCorreo && (
               <p className="text-red-600 text-sm">{errores.nuevoCorreo}</p>
             )}
+
             <InputLabel
               type="6"
               ForID="telefono_tecnico"
@@ -167,6 +213,33 @@ export const UpdateModal = ({ onClose, setRefrescar, tecnicoCarta }) => {
             {errores.telefono_tecnico && (
               <p className="text-red-600 text-sm">{errores.telefono_tecnico}</p>
             )}
+
+            {imagenPreview && (
+              <div className="flex justify-center">
+                <img
+                  src={imagenPreview}
+                  alt="Vista previa"
+                  className="max-w-[150px] max-h-[150px] rounded-lg shadow-md object-cover"
+                />
+              </div>
+            )}
+
+            {/* 📸 Input de imagen */}
+            <InputLabel
+              type="4"
+              ForID="imagen_tecnico"
+              placeholder="Imagen"
+              childLabel="Imagen"
+              onChange={(e) => {
+                const file = e.target.files[0]
+                if (file) {
+                  setImagenFile(file)
+                  setImagenPreview(URL.createObjectURL(file)) // Vista previa temporal
+                }
+              }}
+              className="w-full"
+            />
+
             <div className="flex justify-between gap-2">
               <button
                 onClick={cancelarEdicion}

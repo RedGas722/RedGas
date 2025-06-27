@@ -58,7 +58,6 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
           return
         }
       }
-      console.log(cc_tecnico)
       const formData = new FormData()
       formData.append('cc_tecnico', cc_tecnico)
       formData.append('nombre_tecnico', nombre + ' ' + apellido)

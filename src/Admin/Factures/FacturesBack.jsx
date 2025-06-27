@@ -65,7 +65,7 @@ export const FacturesBack = () => {
     handleBuscar, handleLimpiar,
     contenedorRefCliente, contenedorRefEmpleado,
     setClienteCorreoBusqueda, setEmpleadoBusqueda
-  } = useBuscarFacturas(clientes, empleados, facturasOriginal, setFacturas)
+  } = useBuscarFacturas(clientes, empleados, facturasOriginal, setFacturas, fetchFacturas)
 
   const abrirModalActualizar = (factura) => {
     setFacturaSeleccionada(factura)

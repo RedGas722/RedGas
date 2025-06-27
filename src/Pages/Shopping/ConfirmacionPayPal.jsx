@@ -130,6 +130,15 @@ export const ConfirmacionPayPal = () => {
               if (!resPedidoProducto.ok) {
                 console.error("Error al registrar pedido producto:", dataPedidoProducto);
               }
+
+              await fetch("https://redgas.onrender.com/ProductoUpdateStock", {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  id_producto: id_producto,
+                  stock: cantidad_producto
+                })
+              });
             }
           }
         // Marcar factura como generada

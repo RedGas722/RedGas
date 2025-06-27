@@ -1,9 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { RegisterModal } from './Register/RegisterModal'
 import { UpdateModal } from './Update/Update'
-import { DeleteModal } from './Delete/Delete'
 import { ButtonBack } from '../UI/ButtonBack/ButtonBack'
-import { BtnBack } from "../../UI/Login_Register/BtnBack"
 import CardTechniciansBack from './Get/CardTechniciansBack'
 import { buscarTecnicoPorCorreo } from './Get/Get'
 import { InputLabel } from '../../UI/Login_Register/InputLabel/InputLabel'
@@ -67,7 +65,6 @@ export const TechniciansBack = () => {
   }, [refrescar])
 
   const handleUpdateClick = (tecnico) => setShowUpdateModal(tecnico)
-  const handleDeleteClick = (tecnico) => setShowDeleteModal(tecnico)
 
   // 🔍 Buscar técnico en la base de datos
   const buscarTecnico = async () => {
@@ -142,7 +139,6 @@ export const TechniciansBack = () => {
                   key={tecnico.id_tecnico || tecnico.correo_tecnico}
                   onClick={() => {
                     setCorreoBusqueda(tecnico.correo_tecnico)
-                    setTecnicoBuscado(tecnico)
                     setSugerencias([])
                   }}
                   className="p-2 hover:bg-gray-100 cursor-pointer"
@@ -172,7 +168,6 @@ export const TechniciansBack = () => {
             tecnico={tecnicoBuscado}
             setRefrescar={setRefrescar}
             onUpdateClick={handleUpdateClick}
-            onDeleteClick={handleDeleteClick}
           />
         ) : (
           tecnicos.map(tecnico => (
@@ -181,7 +176,6 @@ export const TechniciansBack = () => {
               tecnico={tecnico}
               setRefrescar={setRefrescar}
               onUpdateClick={handleUpdateClick}
-              onDeleteClick={handleDeleteClick}
             />
           ))
         )}

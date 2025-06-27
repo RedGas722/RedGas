@@ -14,7 +14,7 @@ export const UpdateModal = ({ onClose, setRefrescar, empleadoCarta }) => {
     const errores = {}
     const correoRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
-    if (empleado.cc_empleado.length < 10 || empleado.cc_empleado.length > 15) {
+    if (empleado.cc_empleado.length < 1 || empleado.cc_empleado.length > 15) {
       errores.cc_empleado = "La cedula es obligatoria, entre 10 y 15 caracteres"
     }
     if (!nombre.trim()) errores.nombre = "El nombre es obligatorio"

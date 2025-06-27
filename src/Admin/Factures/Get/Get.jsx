@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 
-export const useBuscarFacturas = (clientes, empleados, facturasOriginal, setFacturas) => {
+export const useBuscarFacturas = (clientes, empleados, facturasOriginal, setFacturas, fetchFacturas) => {
   const [clienteCorreoBusqueda, setClienteCorreoBusqueda] = useState('')
   const [empleadoBusqueda, setEmpleadoBusqueda] = useState('')
   const [clienteSugerencias, setClienteSugerencias] = useState([])
@@ -66,6 +66,7 @@ export const useBuscarFacturas = (clientes, empleados, facturasOriginal, setFact
   const handleLimpiar = () => {
     setClienteCorreoBusqueda('')
     setEmpleadoBusqueda('')
+    fetchFacturas(1)
     setClienteSugerencias([])
     setEmpleadoSugerencias([])
     setFacturas(facturasOriginal)

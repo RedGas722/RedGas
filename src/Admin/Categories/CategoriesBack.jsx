@@ -43,7 +43,7 @@ export const CategoriesBack = () => {
       const res = await fetch(`https://redgas.onrender.com/CategoriaGetAllNames`)
       if (!res.ok) throw new Error('Error al obtener nombres')
       const data = await res.json()
-      setNombresCategorias(data.data || []) // ahora incluye id_categoria
+      setNombresCategorias(data.data || [])
     } catch (error) {
       console.error(error)
     }
