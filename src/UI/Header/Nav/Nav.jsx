@@ -46,7 +46,6 @@ export const Navs = ({ className, ref1, ref2, ref3, ref4 }) => {
             { label: 'Inicio', action: () => document.getElementById('linkHero')?.click() },
             { label: 'Ofertas', action: () => document.getElementById('linkOffers')?.click() },
             { label: 'Productos', action: () => document.getElementById('linkMainPage')?.click() },
-            { label: 'Técnicos', action: () => navigate('/Technic') },
         ]
 
         if (tipoUsuario === 4) {

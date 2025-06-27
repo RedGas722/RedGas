@@ -3,7 +3,6 @@ import { MainPage } from './Pages/MainPage/MainPage'
 import { CostumerMyService } from './Pages/CostumerMyService/CostumerMyService'
 import { CostumerServices } from './Pages/CostumersServices/CostumersServices'
 import { ServicesInfo } from './Pages/Services/Services'
-import { TechniciansPage } from './Pages/Technicians/TechniciansPage'
 import { Shopping } from './Pages/Shopping/Shopping.jsx'
 import { Register } from './Pages/Register/Register'
 import { Login } from './Pages/Login/Login'
@@ -53,7 +52,6 @@ export function App() {
                     <Route path="/" element={<MainPage />} />
                     <Route path="/CostumerMyService" element={<CostumerMyService />} />
                     <Route path="/Services" element={<ServicesInfo />} />
-                    <Route path="/Technic" element={<TechniciansPage />} />
                     <Route path="/Shopping" element={<Shopping />} />
                     <Route path='/Register' element={<Register />} />
                     <Route path="/SearchPage" element={<SearchPage />} />
