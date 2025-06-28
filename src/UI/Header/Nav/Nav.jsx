@@ -30,7 +30,7 @@ export const Navs = ({ className, ref1, ref2, ref3, ref4 }) => {
                     }
                 })
             },
-            { rootMargin: '-100px 0px 0px 0px', threshold: 0.1 }
+            { rootMargin: '-100px 0px 0px 0px', threshold: 0.2 }
         )
 
         sectionIds.forEach(id => {
@@ -99,7 +99,7 @@ export const Navs = ({ className, ref1, ref2, ref3, ref4 }) => {
                     '&.Mui-disabled': { opacity: 0.3 },
                 },
                 '& .MuiTab-root': {
-                    color: 'inherit',
+                    color: 'var(--main-color)',
                     borderBottom: isMdUp ? '3px solid transparent' : 'none',
                     borderLeft: !isMdUp ? '3px solid transparent' : 'none',
                     '&.Mui-selected': {

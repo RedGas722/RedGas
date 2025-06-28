@@ -36,7 +36,7 @@ export const InputLabel = ({ radius, type, ForID, placeholder, childLabel, value
     return (
         <div className="min-w-[230px] w-full flex flex-col gap-2">
             <label htmlFor={ForID} className={`text-[var(--main-color)] text-[18px] w-full ${className}`}>{childLabel}</label>
-            <div className="w-full">
+            <div className="w-full relative">
                 {inputType !== "file" ? (
                     <input
                         onPaste={type === "3" ? (e => e.preventDefault()) : undefined}
