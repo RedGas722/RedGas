@@ -1,9 +1,9 @@
 import Button from '@mui/material/Button';
 import './LR.css';
 
-export const Buttons = ({ padding, width, height, radius, borderWidth, borderColor, textColor, nameButton, Onclick, Type, ...props }) => {
+export const Buttons = ({ padding, width, height, radius, borderWidth, borderColor, textColor, nameButton, subTextBTN, Onclick, Type, ...props }) => {
     return (
-        <div className="group">
+        <div className="group flex flex-col items-center gap-[5px]">
             <Button
                 data-cursor-hover
                 onClick={Onclick}
@@ -30,7 +30,7 @@ export const Buttons = ({ padding, width, height, radius, borderWidth, borderCol
                         boxShadow: 'var(--shadow-sub-outset)',
                         '& .textBtn': {
                             filter: 'brightness(1.2)',
-                        }
+                        },
                     },
                     '&:active': {
                         color: textColor || 'var(--Font-Nav)',
@@ -47,6 +47,9 @@ export const Buttons = ({ padding, width, height, radius, borderWidth, borderCol
                     {nameButton}
                 </p>
             </Button>
+            <p className='subTextBTN text-[var(--main-color)] font-semibold'>
+                {subTextBTN}
+            </p>
         </div>
     );
 };

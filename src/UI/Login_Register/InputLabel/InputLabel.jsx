@@ -19,29 +19,30 @@ export const InputLabel = ({ radius, type, ForID, placeholder, childLabel, value
 
     const inputType =
         type === "1" ? "text" :
-        type === "2" ? "email" :
-        type === "3" ? (ForID === "password" ? (showPassword ? "text" : "password") : ForID === "passwordConfirm" ? (showConfirmPassword ? "text" : "password") : ForID === "Password" ? (showCapPassword ? "text" : "password") : "password") :
-        type === "4" ? "file" :
-        type === "5" ? "number" :
-        type === "6" ? "tel" :
-        type === "7" ? "date" :
-        "text"
+            type === "2" ? "email" :
+                type === "3" ? (ForID === "password" ? (showPassword ? "text" : "password") : ForID === "passwordConfirm" ? (showConfirmPassword ? "text" : "password") : ForID === "Password" ? (showCapPassword ? "text" : "password") : "password") :
+                    type === "4" ? "file" :
+                        type === "5" ? "number" :
+                            type === "6" ? "tel" :
+                                type === "7" ? "date" :
+                                    "text"
 
     const placeholderText =
         type === "3" && ForID === "password" ? (showPassword ? "Contraseña" : "**********") :
-        type === "3" && ForID === "Password" ? (showCapPassword ? "Contraseña" : "**********") :
-        type === "3" && ForID === "passwordConfirm" ? (showConfirmPassword ? "Confirmar Contraseña" : "**********") :
-        placeholder
+            type === "3" && ForID === "Password" ? (showCapPassword ? "Contraseña" : "**********") :
+                type === "3" && ForID === "passwordConfirm" ? (showConfirmPassword ? "Confirmar Contraseña" : "**********") :
+                    placeholder
 
     return (
-        <div className="min-w-[230px] w-full flex flex-col gap-2 ">
+        <div className="min-w-[230px] w-full flex flex-col gap-2">
             <label htmlFor={ForID} className={`text-[var(--main-color)] text-[18px] w-full ${className}`}>{childLabel}</label>
-            <div className="relative w-full ">
+            <div className="w-full">
                 {inputType !== "file" ? (
                     <input
+                        onPaste={type === "3" ? (e => e.preventDefault()) : undefined}
                         type={inputType}
                         className={`NeoSubContainer_inset_TOTAL inputs relative text-[var(--main-color)] w-full p-[10px_10px_10px_15px] border-0 outline-0 ${placeholderError ? 'placeholder:text-red-500' : 'placeholder:text-[var(--main-color-sub)]'}`}
-                        style={{ 
+                        style={{
                             borderRadius: `${radius || 20}px`,
                         }}
                         value={value}

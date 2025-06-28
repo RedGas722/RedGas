@@ -112,8 +112,6 @@ export const TechniciansBack = () => {
       <div className="p-[var(--p-admin-sub)] h-full flex flex-col gap-2">
         <h1 className="font-bold text-3xl text-[var(--main-color)]">Técnicos</h1>
         
-        <div className='flex flex-col gap-2'>
-          
           <div className='NeoContainer_outset_TL flex gap-4 flex-wrap items-end w-fit p-[var(--p-admin-control)]'>
             
             <div ref={contenedorRef}>
@@ -184,7 +182,6 @@ export const TechniciansBack = () => {
               tecnicoCarta={showDeleteModal}
             />
           )}
-        </div>
       </div>
     </section>
   )

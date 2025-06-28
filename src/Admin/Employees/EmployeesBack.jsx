@@ -6,6 +6,8 @@ import { buscarEmpleadoPorCorreo } from './Get/Get';
 import { BtnBack } from "../../UI/Login_Register/BtnBack"
 import CardEmployeesBack from './Get/CardEmployeesBack';
 import { InputLabel } from '../../UI/Login_Register/InputLabel/InputLabel';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
 export const EmployeesBack = () => {
   const [showRegisterModal, setShowRegisterModal] = useState(false);
@@ -98,59 +100,52 @@ export const EmployeesBack = () => {
   }, []);
 
   return (
-    <div className="p-[20px] flex flex-col gap-[20px]">
+    <section className="p-[var(--p-admin)] flex flex-col gap-[20px]">
       <BtnBack To='/Admin' />
-      <div className="flex items-center gap-[20px]">
-        <div className='flex-col ali'>
-          <h1 className="font-bold text-[20px]">Empleado BACK-OFFICE</h1>
-          <div className='btnDown'>
+      <div className="p-[var(--p-admin-sub)] h-full flex flex-col gap-2">
+        <h1 className="font-bold text-3xl text-[var(--main-color)]">Empleados</h1>
+        {/* Barra de búsqueda para consultar empleado */}
+        <div className="NeoContainer_outset_TL flex w-fit items-end gap-4 bg-white p-[var(--p-admin-control)]">
+          <div className='flex w-fit items-end gap-4'>
+            <InputLabel
+              radius='10'
+              type="1"
+              ForID="correo_empleado_busqueda"
+              placeholder="Buscar empleado"
+              childLabel="Buscar empleado"
+              value={correoBusqueda}
+              onChange={e => setCorreoBusqueda(e.target.value)}
+              className="w-full"
+              placeholderError={!!errorBusqueda}
+            />
+            <FontAwesomeIcon onClick={buscarEmpleado} icon={faSearch} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--Font-Nav)]" />
+            <ButtonBack ClickMod={() => setShowRegisterModal(true)} Child="Registrar" />
           </div>
         </div>
-        {/* Barra de búsqueda para consultar empleado */}
-        <div className="flex items-center gap-2 border border-gray-300 rounded px-2 py-1">
-          <InputLabel
-            type="1"
-            ForID="correo_empleado_busqueda"
-            placeholder="Buscar empleado"
-            childLabel="Buscar empleado"
-            value={correoBusqueda}
-            onChange={e => setCorreoBusqueda(e.target.value)}
-            className="w-full"
-            placeholderError={!!errorBusqueda}
-          />
-          <button
-            onClick={buscarEmpleado}
-            aria-label="Buscar empleado"
-            className="text-gray-600 hover:text-gray-900"
-          >
-            🔍
-          </button>
+        {errorBusqueda && <p className="text-red-600 text-sm">{errorBusqueda}</p>}
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {empleadoBuscado
+            ? (
+              <CardEmployeesBack
+                key={empleadoBuscado.id_empleado}
+                empleado={empleadoBuscado}
+                setRefrescar={setRefrescar}
+                onUpdateClick={abrirModalActualizar}
+              />
+            )
+            : empleados.map((empleado) => (
+              <CardEmployeesBack
+                key={empleado.id_empleado}
+                empleado={empleado}
+                setRefrescar={setRefrescar}
+                onUpdateClick={abrirModalActualizar}
+              />
+            ))
+          }
         </div>
-        <ButtonBack ClickMod={() => setShowRegisterModal(true)} Child="Registrar" />
       </div >
 
-      {errorBusqueda && <p className="text-red-600 text-sm">{errorBusqueda}</p>}
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {empleadoBuscado
-          ? (
-            <CardEmployeesBack
-              key={empleadoBuscado.id_empleado}
-              empleado={empleadoBuscado}
-              setRefrescar={setRefrescar}
-              onUpdateClick={abrirModalActualizar}
-            />
-          )
-          : empleados.map((empleado) => (
-            <CardEmployeesBack
-              key={empleado.id_empleado}
-              empleado={empleado}
-              setRefrescar={setRefrescar}
-              onUpdateClick={abrirModalActualizar}
-            />
-          ))
-        }
-      </div>
 
       {/* Modales */}
       {
@@ -168,7 +163,7 @@ export const EmployeesBack = () => {
           />
         )
       }
-    </div >
+    </section >
   );
 };
 

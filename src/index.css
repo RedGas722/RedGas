@@ -68,6 +68,11 @@ input[type="password"]::-webkit-reveal {
 }
 
 @layer utilities {
+  .no-drag {
+    -webkit-user-drag: none;
+    pointer-events: none;
+  }
+
   .Points {
     -webkit-text-stroke: .3px black;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);

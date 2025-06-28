@@ -120,13 +120,6 @@ export const ClientsBack = () => {
                 onChange={e => setCorreoBusqueda(e.target.value)}
                 placeholderError={!!errorBusqueda}
               />
-              {/* <button
-                onClick={buscarCliente}
-                aria-label="Buscar cliente"
-                className="absolute top-0 right-0"
-              >
-                🔍
-              </button> */}
               <FontAwesomeIcon onClick={buscarCliente} icon={faSearch} className="absolute left-[10px] top-[9px] text-[var(--Font-Nav)]" />
               <Buttons radius='10' nameButton='Registrar' textColor='var(--Font-Nav)' onClick={() => setShowRegisterModal(true)} />
             </div>
