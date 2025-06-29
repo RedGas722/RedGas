@@ -24,7 +24,7 @@
 
 .card {
     width: 230px;
-    min-height: 400px;
+    min-height: 415px;
     height: 100%;
     display: flex;
     flex-direction: column;

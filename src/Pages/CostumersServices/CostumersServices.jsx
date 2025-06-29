@@ -83,7 +83,7 @@ export const CostumerServices = () => {
           allowOutsideClick: false,
           allowEscapeKey: false,
           showConfirmButton: false,
-          timer: 2000,
+          timer: 1000,
           timerProgressBar: true,
         })
         break
@@ -240,7 +240,6 @@ export const CostumerServices = () => {
 
       if (res.ok) {
         EmailServicesCostumer(id)
-        console.log('200 OK: servicio aceptado')
       }
 
     } catch (error) {
@@ -277,13 +276,13 @@ export const CostumerServices = () => {
         label: secondParse.resultado.etiqueta
       }
 
-      handleForgotPassword(userData)
+      handleEmail(userData)
     } catch (error) {
       console.error('Error:', error)
     }
   }
 
-  const handleForgotPassword = async ({ user, phone, email, address, label }) => {
+  const handleEmail = async ({ user, phone, email, address, label }) => {
 
     const serviceId = 'service_82gyxy6'
     const templateId = 'template_fwkby0l'
@@ -306,7 +305,7 @@ export const CostumerServices = () => {
 
                Gracias por confiar en RedGas, trabajamos para brindarte un servicio rápido, seguro y profesional.
 
-               —------------------------------------
+               ---------------------------------------
                RedGas Soporte Técnico
                `,
         link: ` `,
@@ -314,23 +313,23 @@ export const CostumerServices = () => {
 
       emailjs.send(serviceId, templateId, templateParams, publicKey)
         .then(() => {
-          console.log(
+          alertTech(
             200,
-            '¡Correo de recuperación enviado!',
-            'Hemos enviado un enlace a tu correo electrónico para que puedas restablecer tu contraseña.'
-          ); ñ
+            'Servicio Aceptado',
+            'has aceptado el servicio'
+          );
           setTimeout(() => navigate('/Technica'), 100)
         })
         .catch(() => {
-          console.log(
+          alertTech(
             402,
-            'No se pudo enviar el correo',
-            'Ocurrió un error al enviar el mensaje. Inténtalo nuevamente.'
+            'No se pudo Aceptar el servicio',
+            'Ocurrió un error '
           )
         })
 
     } catch {
-      console.log(
+      alertTech(
         401,
         'Correo no encontrado',
         ''

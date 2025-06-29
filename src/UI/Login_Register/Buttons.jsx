@@ -20,10 +20,15 @@ export const Buttons = ({ padding, width, height, radius, borderWidth, borderCol
                     textTransform: 'none',
                     padding: `${padding || '5px 70px'}`,
                     fontSize: '1rem',
-                    height: `${height || ' '}`,
+                    height: `${height || ''}`,
                     width: `${width || '100%'}`,
                     transition: 'all 0.3s ease',
                     minWidth: 'unset',
+                    '@media (max-width: 600px)': {
+                        padding: '5px 30px',
+                        fontSize: '0.9rem',
+                        width: '100%',
+                    },
                     '&:hover': {
                         background: 'var(--background-color)',
                         color: textColor || 'var(--Font-Nav)',

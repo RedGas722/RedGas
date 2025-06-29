@@ -86,7 +86,7 @@ input[type="password"]::-webkit-reveal {
 
   .NeoContainer_outset_TL {
     background: var(--background-color);
-    border-radius: var(--radius-main);
+    border-radius: var(--radius-main);  
     box-shadow: var(--shadow-main);
   }
 

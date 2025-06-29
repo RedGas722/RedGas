@@ -203,7 +203,7 @@ export const Cards = ({ uniqueId, productos = [] }) => {
               <div className="flex gap-1 items-end justify-center">
                 <div className="card-title">{selectedProduct.nombre_producto}</div>
               </div>
-              <div className="card-subtitle">
+              <div className="card-subtitle line-clamp-4">
                 {selectedProduct.descripcion_producto || "Sin descripción disponible."}
               </div>
               <hr className="card-divider" />
