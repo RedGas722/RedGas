@@ -8,7 +8,7 @@ import { useState } from "react"
 import withReactContent from 'sweetalert2-react-content'
 import Swal from 'sweetalert2'
 import './Login.css'
-import { validateUserType } from './ValidateUserType'
+import { ValidateUserLogin } from './ValidateUserType'
 import { startTokenRefresher } from "./TokenRefresher"
 
 export const LoginGeneral = () => {
@@ -22,70 +22,21 @@ export const LoginGeneral = () => {
         alertSendForm('wait', 'Iniciando sesión...')
 
         try {
-            const userInfo = await validateUserType(correo)
-            if (!userInfo) {
-                alertSendForm(401, 'El correo electrónico o la contraseña son incorrectos')
-                return
-            }
+            const userInfo = await ValidateUserLogin(correo, contrasena);
+            if (userInfo?.token) {
+                const decoded = jwtDecode(userInfo.token);
+                const user = decoded.data.name;
 
-            const loginURL = `https://redgas.onrender.com/${userInfo.ruta}`
-
-            // 👇 Campos dinámicos según tipo de usuario
-            let bodyData = {}
-            switch (userInfo.tipo_usuario) {
-                case 1: // Admin
-                    bodyData = {
-                        correo_admin: correo,
-                        contraseña_admin: contrasena
-                    }
-                    break
-                case 2: // Cliente
-                    bodyData = {
-                        correo_cliente: correo,
-                        contraseña_cliente: contrasena
-                    }
-                    break
-                case 3: // Empleado
-                    bodyData = {
-                        correo_empleado: correo,
-                        contraseña_empleado: contrasena
-                    }
-                    break
-                case 4: // Tecnico
-                    bodyData = {
-                        correo_tecnico: correo,
-                        contraseña_tecnico: contrasena
-                    }
-                    break
-                default:
-                    alertSendForm(401, 'Tipo de usuario no válido')
-                    return
-            }
-
-            const res = await fetch(loginURL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(bodyData)
-            })
-
-            const data = await res.json()
-            const token = data.token
-
-            if (token) {
-                const decoded = jwtDecode(token)
-                const user = decoded.data.name
-
-                alertSendForm(200, 'Inicio de sesión exitoso', `Bienvenido de nuevo ${user || 'Usuario'}`)
-                localStorage.setItem('token', token)
-                localStorage.setItem('tipo_usuario', userInfo.tipo_usuario)
-                localStorage.setItem('recordarme', recordarme ? 'true' : 'false')
+                alertSendForm(200, 'Inicio de sesión exitoso', `Bienvenido de nuevo ${user || 'Usuario'}`);
+                localStorage.setItem('token', userInfo.token);
+                localStorage.setItem('tipo_usuario', userInfo.tipo_usuario);
+                localStorage.setItem('recordarme', recordarme ? 'true' : 'false');
                 startTokenRefresher();
                 setTimeout(() => {
-                    navigate('/')
-                }, 0)
-
+                    navigate('/');
+                }, 0);
             } else {
-                alertSendForm(401, 'El correo electrónico o la contraseña son incorrectos')
+            alertSendForm(401, 'El correo electrónico o la contraseña son incorrectos');
             }
 
         } catch (err) {

@@ -16,32 +16,53 @@ export const SearchPage = () => {
   const category = queryParams.get("category") || "";
 
   useEffect(() => {
-    const fetchProductos = async () => {
+    const fetchProductosFiltrados = async () => {
       setLoading(true);
       try {
-        const res = await fetch("https://redgas.onrender.com/ProductoGetAll");
-        const data = await res.json();
-        const productos = data.data.productos;
+        if (!query && !category) return;
 
-        let filtrados = productos;
+        let coincidencias = [];
 
+        // Para búsqueda por nombre (query)
         if (query) {
-          filtrados = productos.filter((producto) =>
-            producto.nombre_producto.toLowerCase().includes(query.toLowerCase())
+          const res = await fetch("https://redgas.onrender.com/ProductoGetAllNames");
+          const data = await res.json();
+
+          // Coincidencias de nombres
+          coincidencias = data.data.filter(p =>
+            p.nombre_producto.toLowerCase().includes(query.toLowerCase())
           );
-        } else if (category) {
-          filtrados = productos.filter((producto) =>
+        }
+
+        // ⚠️ En caso de búsqueda por categoría todavía no tienes una ruta optimizada
+        // así que por ahora sigue usando ProductoGetAll solo para eso
+        if (category) {
+          const res = await fetch("https://redgas.onrender.com/ProductoGetAll");
+          const data = await res.json();
+          const productos = data.data.productos;
+
+          const filtrados = productos.filter((producto) =>
             producto.categorias?.some(cat =>
               (cat || "").toLowerCase().trim() === category.toLowerCase().trim()
             )
           );
+
+          procesarProductos(filtrados);
+          return; // salir antes para no ejecutar lo de `query`
         }
 
-        const conDescuento = filtrados.filter(producto => producto.descuento > 0);
-        const sinDescuento = filtrados.filter(producto => producto.descuento === 0);
+        // Cargar datos completos de productos por nombre (1 fetch por producto)
+        const productosDetallados = await Promise.all(
+          coincidencias.map(async (producto) => {
+            const res = await fetch(`https://redgas.onrender.com/ProductoGet?nombre_producto=${encodeURIComponent(producto.nombre_producto)}`);
+            const data = await res.json();
+            return data?.data;
+          })
+        );
 
-        setProductosConDescuento(conDescuento);
-        setProductosSinDescuento(sinDescuento);
+        const filtrados = productosDetallados.filter(Boolean);
+        procesarProductos(filtrados);
+
       } catch (error) {
         console.error("Error al cargar productos:", error);
       } finally {
@@ -49,7 +70,14 @@ export const SearchPage = () => {
       }
     };
 
-    if (query || category) fetchProductos();
+    const procesarProductos = (productos) => {
+      const conDescuento = productos.filter(p => p.descuento > 0);
+      const sinDescuento = productos.filter(p => p.descuento === 0);
+      setProductosConDescuento(conDescuento);
+      setProductosSinDescuento(sinDescuento);
+    };
+
+    fetchProductosFiltrados();
   }, [query, category]);
 
   return (

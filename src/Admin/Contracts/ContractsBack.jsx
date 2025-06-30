@@ -1,150 +1,158 @@
-import { useState, useEffect, useRef } from 'react';
-import { RegisterModal } from './Register/RegisterModal';
-import { UpdateModal } from './Update/Update';
-import { buscarContratoPorEmpleado } from './Get/Get';
-import { BtnBack } from '../../UI/Login_Register/BtnBack';
-import ButtonBack from '../UI/ButtonBack/ButtonBack';
-import CardContractsBack from './Get/CardContractsBack';
-import { InputLabel } from '../../UI/Login_Register/InputLabel/InputLabel';
+import { useState, useEffect, useRef } from 'react'
+import { RegisterModal } from './Register/RegisterModal'
+import { UpdateModal } from './Update/Update'
+import { buscarContratoPorEmpleado } from './Get/Get'
+import { BtnBack } from '../../UI/Login_Register/BtnBack'
+import ButtonBack from '../UI/ButtonBack/ButtonBack'
+import CardContractsBack from './Get/CardContractsBack'
+import { InputLabel } from '../../UI/Login_Register/InputLabel/InputLabel'
+import { Paginator } from '../../UI/Paginator/Paginator'
 
 export const ContractsBack = () => {
-  const [showRegisterModal, setShowRegisterModal] = useState(false);
-  const [showUpdateModal, setShowUpdateModal] = useState(false);
-  const [contratos, setContratos] = useState([]);
-  const [empleados, setEmpleados] = useState([]);
-  const [admins, setAdmins] = useState([]);
-  const [refrescar, setRefrescar] = useState(false);
-  const [contratoSeleccionado, setContratoSeleccionado] = useState(null);
-  const [correoBusqueda, setCorreoBusqueda] = useState('');
-  const [contratoBuscado, setContratoBuscado] = useState(null);
-  const [errorBusqueda, setErrorBusqueda] = useState('');
-  const [sugerencias, setSugerencias] = useState([]);
-  const contenedorRef = useRef(null);
-  const inputRef = useRef(null);
+  const [showRegisterModal, setShowRegisterModal] = useState(false)
+  const [showUpdateModal, setShowUpdateModal] = useState(false)
+  const [contratos, setContratos] = useState([])
+  const [empleados, setEmpleados] = useState([])
+  const [admins, setAdmins] = useState([])
+  const [refrescar, setRefrescar] = useState(false)
+  const [contratoSeleccionado, setContratoSeleccionado] = useState(null)
+  const [correoBusqueda, setCorreoBusqueda] = useState('')
+  const [contratoBuscado, setContratoBuscado] = useState(null)
+  const [errorBusqueda, setErrorBusqueda] = useState('')
+  const [sugerencias, setSugerencias] = useState([])
+  const [paginaActual, setPaginaActual] = useState(1)
+  const [totalPaginas, setTotalPaginas] = useState(1)
+  const contenedorRef = useRef(null)
+  const inputRef = useRef(null)
 
-  const URL_EMPLEADOS = 'https://redgas.onrender.com/EmpleadoGetAll';
-  const URL_ADMINS = 'https://redgas.onrender.com/AdminGetAll';
-  const URL_CONTRATOS = 'https://redgas.onrender.com/ContratoGetAll';
+  const URL_EMPLEADOS = 'https://redgas.onrender.com/EmpleadoGetAll'
+  const URL_ADMINS = 'https://redgas.onrender.com/AdminGetAll'
+  const URL_CONTRATOS = 'https://redgas.onrender.com/ContratoGetAllPaginated'
 
   async function fetchEmpleados() {
     try {
-      const res = await fetch(URL_EMPLEADOS);
-      if (!res.ok) throw new Error('Error al obtener empleados');
-      const data = await res.json();
-      setEmpleados(data.data || []);
+      const res = await fetch(URL_EMPLEADOS)
+      if (!res.ok) throw new Error('Error al obtener empleados')
+      const data = await res.json()
+      setEmpleados(data.data || [])
     } catch (error) {
-      console.error(error);
+      console.error(error)
     }
   }
 
   async function fetchAdmins() {
     try {
-      const res = await fetch(URL_ADMINS);
-      if (!res.ok) throw new Error('Error al obtener admins');
-      const data = await res.json();
-      setAdmins(data.data || []);
+      const res = await fetch(URL_ADMINS)
+      if (!res.ok) throw new Error('Error al obtener admins')
+      const data = await res.json()
+      setAdmins(data.data || [])
     } catch (error) {
-      console.error(error);
+      console.error(error)
     }
   }
 
-  async function fetchContratos() {
+  async function fetchContratos(pagina = 1) {
     try {
-      const res = await fetch(URL_CONTRATOS);
-      if (!res.ok) throw new Error('Error al obtener contratos');
-      const data = await res.json();
-      setContratos(data.data || []);
+      const res = await fetch(`${URL_CONTRATOS}?page=${pagina}`)
+      if (!res.ok) throw new Error('Error al obtener contratos')
+      const data = await res.json()
+      const resultado = data.data
+
+      setContratos(resultado.data || [])
+      setPaginaActual(resultado.currentPage)
+      setTotalPaginas(resultado.totalPages)
     } catch (error) {
-      console.error(error);
+      console.error(error)
     }
   }
 
   useEffect(() => {
-    fetchContratos();
-    fetchEmpleados();
-    fetchAdmins();
-  }, []);
+    fetchContratos(paginaActual)
+    fetchEmpleados()
+    fetchAdmins()
+  }, [paginaActual])
 
   useEffect(() => {
     if (refrescar) {
-      fetchContratos();
-      setRefrescar(false);
-      setContratoBuscado(null);
-      setErrorBusqueda('');
-      setCorreoBusqueda('');
+      fetchContratos(1)
+      setPaginaActual(1)
+      setRefrescar(false)
+      setContratoBuscado(null)
+      setErrorBusqueda('')
+      setCorreoBusqueda('')
     }
-  }, [refrescar]);
+  }, [refrescar])
 
   useEffect(() => {
     if (correoBusqueda.trim() === '') {
-      setSugerencias([]);
-      return;
+      setSugerencias([])
+      return
     }
     const filtrados = empleados.filter((empleado) =>
       empleado.correo_empleado.toLowerCase().includes(correoBusqueda.toLowerCase())
-    );
-    setSugerencias(filtrados.slice(0, 5));
-  }, [correoBusqueda, empleados]);
+    )
+    setSugerencias(filtrados.slice(0, 5))
+  }, [correoBusqueda, empleados])
 
   useEffect(() => {
     const manejarClickFuera = (event) => {
       if (contenedorRef.current && !contenedorRef.current.contains(event.target)) {
-        setSugerencias([]);
+        setSugerencias([])
       }
-    };
-    document.addEventListener('mousedown', manejarClickFuera);
-    return () => document.removeEventListener('mousedown', manejarClickFuera);
-  }, []);
+    }
+    document.addEventListener('mousedown', manejarClickFuera)
+    return () => document.removeEventListener('mousedown', manejarClickFuera)
+  }, [])
 
   useEffect(() => {
     if (correoBusqueda.trim() === '') {
-      setContratoBuscado(null);
-      setErrorBusqueda('');
+      setContratoBuscado(null)
+      setErrorBusqueda('')
     }
-  }, [correoBusqueda]);
+  }, [correoBusqueda])
 
   const abrirModalActualizar = (contrato) => {
-    setContratoSeleccionado(contrato);
-    setShowUpdateModal(true);
-  };
+    setContratoSeleccionado(contrato)
+    setShowUpdateModal(true)
+  }
 
   const cerrarModal = () => {
-    setShowUpdateModal(false);
-    setContratoSeleccionado(null);
-  };
+    setShowUpdateModal(false)
+    setContratoSeleccionado(null)
+  }
 
   const buscarContrato = async () => {
-    setErrorBusqueda('');
-    setContratoBuscado(null);
+    setErrorBusqueda('')
+    setContratoBuscado(null)
     try {
       const empleado = empleados.find(
         (e) => e.correo_empleado.toLowerCase() === correoBusqueda.toLowerCase().trim()
-      );
+      )
       if (!empleado) {
-        setErrorBusqueda('Empleado no encontrado');
-        return;
+        setErrorBusqueda('Empleado no encontrado')
+        return
       }
-      const contrato = await buscarContratoPorEmpleado(empleado.id_empleado);
-      setContratoBuscado(contrato);
+      const contrato = await buscarContratoPorEmpleado(empleado.id_empleado)
+      setContratoBuscado(contrato)
     } catch (error) {
-      setErrorBusqueda(error.message);
+      setErrorBusqueda(error.message)
     }
-  };
+  }
 
   const buscarContratoConEmpleado = async (empleado) => {
-    setErrorBusqueda('');
-    setContratoBuscado(null);
+    setErrorBusqueda('')
+    setContratoBuscado(null)
     try {
       if (!empleado) {
-        setErrorBusqueda('Empleado no encontrado');
-        return;
+        setErrorBusqueda('Empleado no encontrado')
+        return
       }
-      const contrato = await buscarContratoPorEmpleado(empleado.id_empleado);
-      setContratoBuscado(contrato);
+      const contrato = await buscarContratoPorEmpleado(empleado.id_empleado)
+      setContratoBuscado(contrato)
     } catch (error) {
-      setErrorBusqueda(error.message);
+      setErrorBusqueda(error.message)
     }
-  };
+  }
 
   return (
     <div className="p-[20px] flex flex-col gap-[20px]">
@@ -183,9 +191,9 @@ export const ContractsBack = () => {
                 <li
                   key={empleado.id_empleado}
                   onClick={async () => {
-                    setCorreoBusqueda(empleado.correo_empleado);
-                    setSugerencias([]);
-                    await buscarContratoConEmpleado(empleado);
+                    setCorreoBusqueda(empleado.correo_empleado)
+                    setSugerencias([])
+                    await buscarContratoConEmpleado(empleado)
                   }}
                   className="p-2 hover:bg-gray-100 cursor-pointer"
                 >
@@ -238,6 +246,16 @@ export const ContractsBack = () => {
         )}
       </div>
 
+      <Paginator
+        currentPage={paginaActual}
+        totalPages={totalPaginas}
+        onPageChange={(nuevaPagina) => {
+          if (nuevaPagina !== paginaActual) {
+            setPaginaActual(nuevaPagina)
+          }
+        }}
+      />
+
       {showRegisterModal && (
         <RegisterModal
           onClose={() => setShowRegisterModal(false)}
@@ -254,7 +272,7 @@ export const ContractsBack = () => {
         />
       )}
     </div>
-  );
-};
+  )
+}
 
-export default ContractsBack;
+export default ContractsBack

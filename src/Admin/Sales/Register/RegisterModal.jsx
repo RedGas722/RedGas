@@ -1,56 +1,56 @@
-import { useState, useEffect, useRef } from 'react';
-import { InputLabel } from '../../../UI/Login_Register/InputLabel/InputLabel';
+import { useState, useEffect, useRef } from 'react'
+import { InputLabel } from '../../../UI/Login_Register/InputLabel/InputLabel'
 
 export const RegisterModal = ({ onClose, setRefrescar }) => {
-  const [nombreProducto, setNombreProducto] = useState('');
-  const [idProducto, setIdProducto] = useState('');
-  const [idFactura, setIdFactura] = useState('');
-  const [cantidadProducto, setCantidadProducto] = useState('');
-  const [estadoPedido, setEstadoPedido] = useState('');
-  const [mensaje, setMensaje] = useState('');
-  const [errores, setErrores] = useState({});
+  const [nombreProducto, setNombreProducto] = useState('')
+  const [idProducto, setIdProducto] = useState('')
+  const [idFactura, setIdFactura] = useState('')
+  const [cantidadProducto, setCantidadProducto] = useState('')
+  const [estadoPedido, setEstadoPedido] = useState('')
+  const [mensaje, setMensaje] = useState('')
+  const [errores, setErrores] = useState({})
 
-  const [productos, setProductos] = useState([]);
-  const [facturas, setFacturas] = useState([]);
-  const [sugerenciasProducto, setSugerenciasProducto] = useState([]);
-  const [sugerenciasFactura, setSugerenciasFactura] = useState([]);
+  const [productos, setProductos] = useState([])
+  const [facturas, setFacturas] = useState([])
+  const [sugerenciasProducto, setSugerenciasProducto] = useState([])
+  const [sugerenciasFactura, setSugerenciasFactura] = useState([])
 
-  const refProducto = useRef(null);
-  const refFactura = useRef(null);
+  const refProducto = useRef(null)
+  const refFactura = useRef(null)
 
-  const URL = 'https://redgas.onrender.com/PedidoProductoRegister';
+  const URL = 'https://redgas.onrender.com/PedidoProductoRegister'
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const resProductos = await fetch('https://redgas.onrender.com/ProductoGetAll');
-        const resFacturas = await fetch('https://redgas.onrender.com/FacturaGetAll');
-        const dataProductos = await resProductos.json();
-        const dataFacturas = await resFacturas.json();
-        setProductos(dataProductos.data.productos);
-        setFacturas(dataFacturas.data);
+        const resProductos = await fetch('https://redgas.onrender.com/ProductoGetAll')
+        const resFacturas = await fetch('https://redgas.onrender.com/FacturaGetAll')
+        const dataProductos = await resProductos.json()
+        const dataFacturas = await resFacturas.json()
+        setProductos(dataProductos.data.productos)
+        setFacturas(dataFacturas.data)
       } catch (err) {
-        console.error('Error al cargar productos o facturas:', err);
+        console.error('Error al cargar productos o facturas:', err)
       }
-    };
-    fetchData();
-  }, []);
+    }
+    fetchData()
+  }, [])
 
   useEffect(() => {
-    if (!nombreProducto.trim()) return setSugerenciasProducto([]);
+    if (!nombreProducto.trim()) return setSugerenciasProducto([])
     const filtrados = productos.filter(p =>
       p.nombre_producto.toLowerCase().includes(nombreProducto.toLowerCase())
-    );
-    setSugerenciasProducto(filtrados.slice(0, 5));
-  }, [nombreProducto, productos]);
+    )
+    setSugerenciasProducto(filtrados.slice(0, 5))
+  }, [nombreProducto, productos])
 
   useEffect(() => {
-    if (!idFactura.trim()) return setSugerenciasFactura([]);
+    if (!idFactura.trim()) return setSugerenciasFactura([])
     const filtrados = facturas.filter(f =>
       String(f.id_factura).includes(idFactura)
-    );
-    setSugerenciasFactura(filtrados.slice(0, 5));
-  }, [idFactura, facturas]);
+    )
+    setSugerenciasFactura(filtrados.slice(0, 5))
+  }, [idFactura, facturas])
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -58,33 +58,33 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
         refProducto.current && !refProducto.current.contains(e.target) &&
         refFactura.current && !refFactura.current.contains(e.target)
       ) {
-        setSugerenciasProducto([]);
-        setSugerenciasFactura([]);
+        setSugerenciasProducto([])
+        setSugerenciasFactura([])
       }
-    };
-    document.addEventListener('click', handleClickOutside);
-    return () => document.removeEventListener('click', handleClickOutside);
-  }, []);
+    }
+    document.addEventListener('click', handleClickOutside)
+    return () => document.removeEventListener('click', handleClickOutside)
+  }, [])
 
   const validarCampos = () => {
-    const errores = {};
-    if (!idProducto) errores.idProducto = 'Selecciona un producto válido.';
-    if (!idFactura) errores.idFactura = 'ID factura requerido.';
-    if (!cantidadProducto || parseInt(cantidadProducto) <= 0) errores.cantidad = 'Cantidad inválida.';
-    if (!estadoPedido.trim()) errores.estado = 'Estado requerido.';
-    return errores;
-  };
+    const errores = {}
+    if (!idProducto) errores.idProducto = 'Selecciona un producto válido.'
+    if (!idFactura) errores.idFactura = 'ID factura requerido.'
+    if (!cantidadProducto || parseInt(cantidadProducto) <= 0) errores.cantidad = 'Cantidad inválida.'
+    if (!estadoPedido.trim()) errores.estado = 'Estado requerido.'
+    return errores
+  }
 
   const handleRegister = async (e) => {
-    e.preventDefault();
-    const erroresValidados = validarCampos();
+    e.preventDefault()
+    const erroresValidados = validarCampos()
     if (Object.keys(erroresValidados).length > 0) {
-      setErrores(erroresValidados);
-      setMensaje('');
-      return;
+      setErrores(erroresValidados)
+      setMensaje('')
+      return
     }
 
-    setErrores({});
+    setErrores({})
     try {
       const res = await fetch(URL, {
         method: 'POST',
@@ -95,30 +95,30 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
           cantidad_producto: parseInt(cantidadProducto),
           estado_pedido: estadoPedido
         }),
-      });
+      })
 
       if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data?.errors?.[0]?.msg || 'Error en la solicitud');
+        const data = await res.json()
+        throw new Error(data?.errors?.[0]?.msg || 'Error en la solicitud')
       }
 
-      setMensaje('Pedido registrado exitosamente.');
-      if (setRefrescar) setRefrescar(true);
+      setMensaje('Pedido registrado exitosamente.')
+      if (setRefrescar) setRefrescar(true)
     } catch (err) {
-      setMensaje('Error al registrar: ' + err.message);
+      setMensaje('Error al registrar: ' + err.message)
     }
-  };
+  }
 
   const cancelarRegistro = () => {
-    setNombreProducto('');
-    setIdProducto('');
-    setIdFactura('');
-    setCantidadProducto('');
-    setEstadoPedido('');
-    setMensaje('');
-    setErrores({});
-    onClose();
-  };
+    setNombreProducto('')
+    setIdProducto('')
+    setIdFactura('')
+    setCantidadProducto('')
+    setEstadoPedido('')
+    setMensaje('')
+    setErrores({})
+    onClose()
+  }
 
   return (
     <div className="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50">
@@ -134,8 +134,8 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
             childLabel="Producto"
             value={nombreProducto}
             onChange={(e) => {
-              setNombreProducto(e.target.value);
-              setIdProducto(''); // Resetear ID al escribir
+              setNombreProducto(e.target.value)
+              setIdProducto('') // Resetear ID al escribir
             }}
             placeholderError={!!errores.idProducto}
           />
@@ -145,9 +145,9 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
                 <li
                   key={p.id_producto}
                   onClick={() => {
-                    setNombreProducto(p.nombre_producto);
-                    setIdProducto(p.id_producto.toString());
-                    setSugerenciasProducto([]);
+                    setNombreProducto(p.nombre_producto)
+                    setIdProducto(p.id_producto.toString())
+                    setSugerenciasProducto([])
                   }}
                   className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
                 >
@@ -176,8 +176,8 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
                 <li
                   key={f.id_factura}
                   onClick={() => {
-                    setIdFactura(f.id_factura.toString());
-                    setSugerenciasFactura([]);
+                    setIdFactura(f.id_factura.toString())
+                    setSugerenciasFactura([])
                   }}
                   className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
                 >
@@ -223,5 +223,5 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
         )}
       </div>
     </div>
-  );
-};
+  )
+}

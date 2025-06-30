@@ -1,52 +1,52 @@
-import React, { useState, useRef } from 'react';
-import { InputLabel } from '../../../UI/Login_Register/InputLabel/InputLabel';
+import React, { useState, useRef } from 'react'
+import { InputLabel } from '../../../UI/Login_Register/InputLabel/InputLabel'
 
 export const RegisterModal = ({ onClose, setRefrescar }) => {
-  const [nombreServicio, setNombreServicio] = useState('');
-  const [descripcionServicio, setDescripcionServicio] = useState('');
-  const [precioServicio, setPrecioServicio] = useState('');
-  const [mensaje, setMensaje] = useState('');
-  const [errores, setErrores] = useState({});
-  const [erroresActivos, setErroresActivos] = useState({});
-  const errorTimeouts = useRef({});
+  const [nombreServicio, setNombreServicio] = useState('')
+  const [descripcionServicio, setDescripcionServicio] = useState('')
+  const [precioServicio, setPrecioServicio] = useState('')
+  const [mensaje, setMensaje] = useState('')
+  const [errores, setErrores] = useState({})
+  const [erroresActivos, setErroresActivos] = useState({})
+  const errorTimeouts = useRef({})
 
-  const URL_REGISTER = 'https://redgas.onrender.com/ServicioRegister';
-  const URL_GET = 'https://redgas.onrender.com/ServicioGet';
+  const URL_REGISTER = 'https://redgas.onrender.com/ServicioRegister'
+  const URL_GET = 'https://redgas.onrender.com/ServicioGet'
 
   const validarCampos = () => {
-    const errores = {};
-    if (!nombreServicio.trim()) errores.nombreServicio = 'Nombre del servicio es requerido.';
-    if (!descripcionServicio.trim()) errores.descripcionServicio = 'Descripción es requerida.';
-    if (!precioServicio || isNaN(precioServicio) || parseFloat(precioServicio) <= 0) errores.precioServicio = 'Precio debe ser un número mayor a 0.';
-    return errores;
-  };
+    const errores = {}
+    if (!nombreServicio.trim()) errores.nombreServicio = 'Nombre del servicio es requerido.'
+    if (!descripcionServicio.trim()) errores.descripcionServicio = 'Descripción es requerida.'
+    if (!precioServicio || isNaN(precioServicio) || parseFloat(precioServicio) <= 0) errores.precioServicio = 'Precio debe ser un número mayor a 0.'
+    return errores
+  }
 
   const handleRegister = async (e) => {
-    e.preventDefault();
-    const erroresValidados = validarCampos();
+    e.preventDefault()
+    const erroresValidados = validarCampos()
     if (Object.keys(erroresValidados).length > 0) {
-      setErrores(erroresValidados);
-      setMensaje('');
-      setErroresActivos(erroresValidados);
+      setErrores(erroresValidados)
+      setMensaje('')
+      setErroresActivos(erroresValidados)
       Object.keys(erroresValidados).forEach((key) => {
-        if (errorTimeouts.current[key]) clearTimeout(errorTimeouts.current[key]);
+        if (errorTimeouts.current[key]) clearTimeout(errorTimeouts.current[key])
         errorTimeouts.current[key] = setTimeout(() => {
-          setErroresActivos((prev) => ({ ...prev, [key]: undefined }));
-        }, 2000);
-      });
-      return;
+          setErroresActivos((prev) => ({ ...prev, [key]: undefined }))
+        }, 2000)
+      })
+      return
     }
-    setErrores({});
-    setErroresActivos({});
-    setMensaje('');
+    setErrores({})
+    setErroresActivos({})
+    setMensaje('')
     try {
       // Verificar si ya existe un servicio con ese nombre
-      const resCheck = await fetch(`${URL_GET}?nombre_servicio=${encodeURIComponent(nombreServicio)}`);
+      const resCheck = await fetch(`${URL_GET}?nombre_servicio=${encodeURIComponent(nombreServicio)}`)
       if (resCheck.ok) {
-        const dataCheck = await resCheck.json();
+        const dataCheck = await resCheck.json()
         if (dataCheck?.data?.length > 0) {
-          setMensaje('Ya existe un servicio con ese nombre.');
-          return;
+          setMensaje('Ya existe un servicio con ese nombre.')
+          return
         }
       }
       const res = await fetch(URL_REGISTER, {
@@ -57,27 +57,27 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
           descripcion_servicio: descripcionServicio,
           precio_servicio: precioServicio,
         }),
-      });
+      })
       if (!res.ok) {
-        const errorData = await res.json();
-        setMensaje('Error al registrar: ' + (errorData?.errors?.[0]?.msg || 'Datos inválidos.'));
-        return;
+        const errorData = await res.json()
+        setMensaje('Error al registrar: ' + (errorData?.errors?.[0]?.msg || 'Datos inválidos.'))
+        return
       }
-      setMensaje('Servicio registrado exitosamente.');
-      if (setRefrescar) setRefrescar(true);
+      setMensaje('Servicio registrado exitosamente.')
+      if (setRefrescar) setRefrescar(true)
     } catch (err) {
-      setMensaje('Error al registrar: ' + err.message);
+      setMensaje('Error al registrar: ' + err.message)
     }
-  };
+  }
 
   const cancelarRegistro = () => {
-    setNombreServicio('');
-    setDescripcionServicio('');
-    setPrecioServicio('');
-    setErrores({});
-    setMensaje('');
-    onClose();
-  };
+    setNombreServicio('')
+    setDescripcionServicio('')
+    setPrecioServicio('')
+    setErrores({})
+    setMensaje('')
+    onClose()
+  }
 
   return (
     <div className="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50">
@@ -97,5 +97,5 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
         )}
       </div>
     </div>
-  );
-};
+  )
+}

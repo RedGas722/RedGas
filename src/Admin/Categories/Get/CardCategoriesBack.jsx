@@ -1,19 +1,19 @@
-import { DeleteCategory } from '../Delete/Delete';
+import { DeleteCategory } from '../Delete/Delete'
 
 const CardCategoriesBack = ({ categoria, setRefrescar, onUpdateClick }) => {
   const handleDelete = async () => {
-    const confirmar = window.confirm(`¿Seguro que quieres eliminar a ${categoria.nombre_categoria}?`);
-    if (!confirmar) return;
+    const confirmar = window.confirm(`¿Seguro que quieres eliminar a ${categoria.nombre_categoria}?`)
+    if (!confirmar) return
 
-    const { success, message } = await DeleteCategory(categoria.nombre_categoria);
+    const { success, message } = await DeleteCategory(categoria.nombre_categoria)
 
     if (success) {
-      alert(message);
-      setRefrescar(true);
+      alert(message)
+      setRefrescar(true)
     } else {
-      alert(`Error: ${message}`);
+      alert(`Error: ${message}`)
     }
-  };
+  }
   return (
     <div className="bg-white shadow-lg rounded-lg p-4 w-full min-h-[150px] flex flex-col justify-start overflow-hidden">
       <h2 className="text-xl font-semibold text-gray-800 truncate">{categoria.nombre_categoria}</h2>
@@ -38,7 +38,7 @@ const CardCategoriesBack = ({ categoria, setRefrescar, onUpdateClick }) => {
         </button>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default CardCategoriesBack;
+export default CardCategoriesBack

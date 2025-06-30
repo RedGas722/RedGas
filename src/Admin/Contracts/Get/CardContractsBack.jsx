@@ -1,33 +1,33 @@
-import React from 'react';
-import { DeleteContract } from "../Delete/Delete";
+import React from 'react'
+import { DeleteContract } from "../Delete/Delete"
 
 const CardContractsBack = ({ contrato, setRefrescar, onUpdateClick, empleados, admins }) => {
-  if (!contrato || !contrato.id_contrato) return null;
+  if (!contrato || !contrato.id_contrato) return null
   if (!contrato.id_empleado) {
     return (
       <div className="bg-yellow-100 text-yellow-800 p-4 rounded shadow">
         <strong>Advertencia:</strong> El contrato #{contrato.id_contrato} no tiene un ID de empleado válido. No se puede eliminar.
       </div>
-    );
+    )
   }
 
   const handleDelete = async () => {
-    const confirmar = window.confirm(`¿Seguro que quieres eliminar el(los) contrato(s) del empleado #${contrato.id_empleado}?`);
-    if (!confirmar) return;
+    const confirmar = window.confirm(`¿Seguro que quieres eliminar el(los) contrato(s) del empleado #${contrato.id_empleado}?`)
+    if (!confirmar) return
 
-    const { success, message } = await DeleteContract(contrato.id_empleado);
+    const { success, message } = await DeleteContract(contrato.id_empleado)
 
     if (success) {
-      alert(message);
-      if (setRefrescar) setRefrescar(true);
+      alert(message)
+      if (setRefrescar) setRefrescar(true)
     } else {
-      alert(`Error: ${message}`);
+      alert(`Error: ${message}`)
     }
-  };
+  }
 
   // Buscar empleado y admin por ID
-  const empleado = empleados.find(e => e.id_empleado === contrato.id_empleado);
-  const admin = admins.find(a => a.id_admin === contrato.id_admin);
+  const empleado = empleados.find(e => e.id_empleado === contrato.id_empleado)
+  const admin = admins.find(a => a.id_admin === contrato.id_admin)
 
   return (
     <div className="bg-white shadow-lg rounded-lg p-4 w-full min-h-[150px] flex flex-col justify-start overflow-hidden">
@@ -57,7 +57,7 @@ const CardContractsBack = ({ contrato, setRefrescar, onUpdateClick, empleados, a
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default CardContractsBack;
+export default CardContractsBack

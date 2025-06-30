@@ -114,7 +114,7 @@ export const CardsOffers = ({ uniqueId, productos = [] }) => {
   return (
     <section id={`CardSect-${uniqueId}`} className="flex flex-col items-center justify-center gap-[10px] h-fit w-full">
       <div className="embla w-full" ref={emblaRef}>
-        <div className="embla__container flex justify-center">
+        <div className="embla__container flex">
           {productos.map((producto, index) => (
             <div className="embla__slide flex justify-center p-[25px_10px]" key={index}>
               <div className="card relative NeoSubContainer_outset_TL max-w-[360px]">

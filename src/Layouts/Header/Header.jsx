@@ -59,18 +59,18 @@ export const Header = () => {
 
     // Cargar productos al iniciar
     useEffect(() => {
-        const fetchProductos = async () => {
-            try {
-                const res = await fetch("https://redgas.onrender.com/ProductoGetAll");
-                const data = await res.json();
-                const productosData = data.data.productos;
-                setProductos(productosData);
-            } catch (error) {
-                console.error("Error al cargar productos:", error);
-            }
-        };
+    const fetchProductos = async () => {
+        try {
+        const res = await fetch("https://redgas.onrender.com/ProductoGetAllNames");
+        const data = await res.json();
+        const productosData = data.data; // [{ id_producto, nombre_producto }]
+        setProductos(productosData);
+        } catch (error) {
+        console.error("Error al cargar nombres de productos:", error);
+        }
+    };
 
-        fetchProductos();
+    fetchProductos();
     }, []);
 
     useEffect(() => {

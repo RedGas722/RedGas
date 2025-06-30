@@ -1,73 +1,73 @@
-import React, { useState, useRef } from 'react';
-import { InputLabel } from '../../../UI/Login_Register/InputLabel/InputLabel';
+import React, { useState, useRef } from 'react'
+import { InputLabel } from '../../../UI/Login_Register/InputLabel/InputLabel'
 
 export const RegisterModal = ({ onClose, setRefrescar }) => {
-  const [nombre, setNombre] = useState('');
-  const [mensaje, setMensaje] = useState('');
-  const [errores, setErrores] = useState({});
-  const [erroresActivos, setErroresActivos] = useState({});
-  const errorTimeouts = useRef({});
+  const [nombre, setNombre] = useState('')
+  const [mensaje, setMensaje] = useState('')
+  const [errores, setErrores] = useState({})
+  const [erroresActivos, setErroresActivos] = useState({})
+  const errorTimeouts = useRef({})
 
-  const URL = 'https://redgas.onrender.com/CategoriaRegister';
+  const URL = 'https://redgas.onrender.com/CategoriaRegister'
 
   // Validación del campo en el frontend
   const validarCampos = () => {
-    const errores = {};
+    const errores = {}
     if (!nombre.trim()) {
-      errores.nombre = 'El nombre de la categoría es obligatorio.';
+      errores.nombre = 'El nombre de la categoría es obligatorio.'
     } else if (/^\d+$/.test(nombre)) {
-      errores.nombre = 'El nombre no puede ser solo números.';
+      errores.nombre = 'El nombre no puede ser solo números.'
     }
-    return errores;
-  };
+    return errores
+  }
 
   const handleRegister = async (e) => {
-    e.preventDefault();
-    const erroresValidados = validarCampos();
+    e.preventDefault()
+    const erroresValidados = validarCampos()
     if (Object.keys(erroresValidados).length > 0) {
-      setErrores(erroresValidados);
-      setMensaje('');
-      setErroresActivos(erroresValidados);
+      setErrores(erroresValidados)
+      setMensaje('')
+      setErroresActivos(erroresValidados)
       Object.keys(erroresValidados).forEach((key) => {
-        if (errorTimeouts.current[key]) clearTimeout(errorTimeouts.current[key]);
+        if (errorTimeouts.current[key]) clearTimeout(errorTimeouts.current[key])
         errorTimeouts.current[key] = setTimeout(() => {
-          setErroresActivos((prev) => ({ ...prev, [key]: undefined }));
-        }, 2000);
-      });
-      return;
+          setErroresActivos((prev) => ({ ...prev, [key]: undefined }))
+        }, 2000)
+      })
+      return
     }
-    setErrores({});
-    setErroresActivos({});
-    setMensaje("");
+    setErrores({})
+    setErroresActivos({})
+    setMensaje("")
     try {
       const res = await fetch(URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ nombre_categoria: nombre }),
-      });
-      const data = await res.json();
+      })
+      const data = await res.json()
       if (!res.ok) {
         if (res.status === 500 && data.errorInfo?.includes('Duplicate')) {
-          setMensaje('La categoría ya existe.');
-          return;
+          setMensaje('La categoría ya existe.')
+          return
         }
-        const errorMsg = data?.errors?.[0]?.msg || 'Error al registrar categoría.';
-        throw new Error(errorMsg);
+        const errorMsg = data?.errors?.[0]?.msg || 'Error al registrar categoría.'
+        throw new Error(errorMsg)
       }
-      setMensaje('Registro exitoso.');
-      setRefrescar(true); 
+      setMensaje('Registro exitoso.')
+      setRefrescar(true) 
     } catch (err) {
-      setMensaje('Error: ' + err.message);
+      setMensaje('Error: ' + err.message)
     }
-  };
+  }
 
   const cancelarRegistro = () => {
-    setNombre("");
-    setErrores({});
-    setErroresActivos({});
-    setMensaje("");
-    onClose();
-  };
+    setNombre("")
+    setErrores({})
+    setErroresActivos({})
+    setMensaje("")
+    onClose()
+  }
 
   return (
     <div className="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50">
@@ -101,5 +101,5 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
         )}
       </div>
     </div>
-  );
-};
+  )
+}

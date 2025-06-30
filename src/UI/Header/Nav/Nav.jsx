@@ -59,7 +59,6 @@ export const Navs = ({ className, ref1, ref2, ref3, ref4 }) => {
         if (tipoUsuario === 1 || tipoUsuario === 3) {
             baseTabs.push({ label: 'Admin', action: () => navigate('/Admin') })
         }
-
         return baseTabs
     }
 

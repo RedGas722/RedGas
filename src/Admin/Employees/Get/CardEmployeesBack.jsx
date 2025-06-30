@@ -1,19 +1,19 @@
-import { DeleteEmployee } from '../Delete/Delete';
+import { DeleteEmployee } from '../Delete/Delete'
 
 const CardEmployeesBack = ({ empleado, setRefrescar, onUpdateClick }) => {
   const handleDelete = async () => {
-    const confirmar = window.confirm(`¿Seguro que quieres eliminar a ${empleado.nombre_empleado}?`);
-    if (!confirmar) return;
+    const confirmar = window.confirm(`¿Seguro que quieres eliminar a ${empleado.nombre_empleado}?`)
+    if (!confirmar) return
 
-    const { success, message } = await DeleteEmployee(empleado.correo_empleado);
+    const { success, message } = await DeleteEmployee(empleado.correo_empleado)
 
     if (success) {
-      alert(message);
-      setRefrescar(true);
+      alert(message)
+      setRefrescar(true)
     } else {
-      alert(`Error: ${message}`);
+      alert(`Error: ${message}`)
     }
-  };
+  }
 
   return (
     <div className="bg-white shadow-lg rounded-lg p-4 w-full min-h-[150px] flex flex-col justify-start overflow-hidden">
@@ -43,7 +43,7 @@ const CardEmployeesBack = ({ empleado, setRefrescar, onUpdateClick }) => {
         </button>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default CardEmployeesBack;
+export default CardEmployeesBack
