@@ -25,14 +25,81 @@
 .card {
     width: 230px;
     min-height: 415px;
-    height: 100%;
+    height: auto;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-start;
     padding: 20px;
+    overflow: visible;
     gap: 10px;
     box-sizing: border-box;
 }
+
+.embla {
+    align-items: center;
+    overflow: hidden;
+    width: 100%;
+}
+
+.embla__container {
+    padding: 15px 10px 25px 0;
+    display: flex;
+    gap: 10px;
+}
+
+.embla__slide {
+    flex: 0 0 auto;
+    padding: 0 5px;
+}
+
+/* Breakpoints */
+@media (max-width: 499px) {
+    .embla__slide {
+        width: 100%;
+        /* 1 slide */
+    }
+}
+
+@media (min-width: 500px) and (max-width: 851px) {
+    .embla__slide {
+        width: 50%;
+        /* 2 slides */
+    }
+}
+
+@media (min-width: 852px) and (max-width: 1079px) {
+    .embla__slide {
+        width: 33.3333%;
+        /* 3 slides */
+    }
+}
+
+@media (min-width: 1080px) and (max-width: 1389px) {
+    .embla__slide {
+        width: 25%;
+        /* 4 slides */
+    }
+}
+
+@media (min-width: 1390px) {
+    .embla__slide {
+        width: 20%;
+        /* 5 slides */
+    }
+}
+
+/* .swiper-slide {
+    overflow: visible !important;
+}
+
+.swiper-slide {
+    overflow: visible !important;
+} */
+
+/* 
+.swiper-wrapper {
+    align-items: stretch !important;
+} */
 
 .card:last-child {
     justify-content: flex-end;
@@ -63,10 +130,15 @@
     white-space: normal;
 }
 
-.card-divider {
-    width: 100%;
-    border: 1px solid var(--main-color);
-    border-radius: 50px;
+.short-description {
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    word-break: break-word;
 }
 
 .card-footer {
