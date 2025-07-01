@@ -1,3 +1,5 @@
+import { Buttons } from '../../../UI/Login_Register/Buttons'
+
 const CardFacturesBack = ({ factura, clientes, empleados, onUpdateClick, onViewProductsClick }) => {
   const cliente = clientes.find(c => c.id_cliente === factura.id_cliente)
   const empleado = empleados.find(e => e.id_empleado === factura.id_empleado)
@@ -7,32 +9,49 @@ const CardFacturesBack = ({ factura, clientes, empleados, onUpdateClick, onViewP
   const fechaSolo = fecha.toLocaleDateString('en-GB')
 
   return (
-    <div className="bg-white shadow-lg rounded-lg p-4 min-w-[300px] min-h-[150px] flex flex-col justify-between overflow-hidden">
-      <div>
-        <h2 className="text-xl font-semibold text-gray-800 truncate">Factura #{factura.id_factura}</h2>
+    <div className="text-center items-center NeoContainer_outset_TL w-[300px] p-4 h-fit flex flex-col justify-start gap-2">
+      <h2 className="text-xl font-bold text-[var(--Font-Nav)] truncate w-full">Factura #{factura.id_factura}</h2>
 
-        <div className="mt-2 space-y-1 text-sm">
-          <p><span className="font-semibold">Cliente:</span> {cliente?.correo_cliente || 'Desconocido'}</p>
-          <p><span className="font-semibold">Empleado:</span> {empleado?.correo_empleado || 'Desconocido'}</p>
-          <p><span className="font-semibold">Fecha:</span> {fechaSolo}</p>
-          <p><span className="font-semibold">Estado:</span> {factura.estado_factura}</p>
-          <p><span className="font-semibold">Total:</span> ${factura.total}</p>
-        </div>
+      <div className="flex flex-col text-sm text-[var(--main-color)] w-full text-left">
+        <p className="font-medium flex items-center gap-1">
+          <span className="font-bold text-[15px]">Cliente:</span>
+          <span className="break-words">{cliente?.correo_cliente || 'Desconocido'}</span>
+        </p>
+        <p className="font-medium flex items-center gap-1">
+          <span className="font-bold text-[15px]">Empleado:</span>
+          <span className="break-words">{empleado?.correo_empleado || 'Desconocido'}</span>
+        </p>
+        <p className="font-medium flex items-center gap-1">
+          <span className="font-bold text-[15px]">Fecha:</span>
+          <span className="break-words">{fechaSolo}</span>
+        </p>
+        <p className="font-medium flex items-center gap-1">
+          <span className="font-bold text-[15px]">Estado:</span>
+          <span className="break-words">{factura.estado_factura}</span>
+        </p>
+        <p className="font-medium flex items-center gap-1">
+          <span className="font-bold text-[15px]">Total:</span>
+          <span className="break-words">${factura.total}</span>
+        </p>
       </div>
 
-      <div className="mt-4 flex flex-col gap-2">
-        <button
-          onClick={() => onUpdateClick(factura)}
-          className="bg-yellow-500 hover:bg-yellow-600 text-white py-1 px-3 rounded"
-        >
-          Actualizar Estado
-        </button>
-        <button
+      <div className="flex flex-col gap-2 w-full">
+        <Buttons
           onClick={() => onViewProductsClick(factura)}
-          className="bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded"
-        >
-          Ver Productos
-        </button>
+          nameButton="Ver Productos"
+          textColor="var(--Font-Nav2)"
+          radius="12"
+          borderWidth="1"
+          borderColor="var(--Font-Nav2)"
+        />
+        <Buttons
+          onClick={() => onUpdateClick(factura)}
+          nameButton="Actualizar Estado"
+          textColor="var(--Font-Yellow)"
+          radius="12"
+          borderWidth="1"
+          borderColor="var(--Font-Yellow)"
+        />
       </div>
     </div>
   )
