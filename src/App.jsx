@@ -1,33 +1,35 @@
-import { Routes, Route } from 'react-router-dom'
-import { MainPage } from './Pages/MainPage/MainPage'
 import { CostumerMyService } from './Pages/CostumerMyService/CostumerMyService'
 import { CostumerServices } from './Pages/CostumersServices/CostumersServices'
-import { ServicesInfo } from './Pages/Services/Services'
-import { Shopping } from './Pages/Shopping/Shopping.jsx'
-import { Register } from './Pages/Register/Register'
-import { Login } from './Pages/Login/Login'
-import { ForgotPassword } from './Pages/ForgotPassword/ForgotPassword'
 import { RecoveryPassword } from './Pages/RecoveryPassword/RecoveryPassword'
-import { AdminApp } from './Admin/AdminApp'
-import { ClientsBack } from './Admin/Clients/ClientsBack'
-import { ProductsBack } from './Admin/Products/ProductsBack'
-import { EmployeesBack } from './Admin/Employees/EmployeesBack'
-import { FacturesBack } from './Admin/Factures/FacturesBack'
-import { CategoriesBack } from './Admin/Categories/CategoriesBack'
+import { ForgotPassword } from './Pages/ForgotPassword/ForgotPassword'
+import { startTokenRefresher } from './Pages/Login/TokenRefresher.jsx'
 import { TechniciansBack } from './Admin/Technicians/TechniciansBack'
-import { ServicesBack } from './Admin/Services/ServicesBack'
-import { AdminsBack } from './Admin/Admins/AdminsBack'
+import { Technica } from './Pages/Technicians/Technica/Technica.jsx'
 import { ContractsBack } from './Admin/Contracts/ContractsBack.jsx'
+import { LoginTechnician } from './Pages/Login/LoginTechnician.jsx'
+import { CategoriesBack } from './Admin/Categories/CategoriesBack'
+import { ProductInfo } from './Pages/ProductInfo/ProductInfo.jsx'
+import { EmployeesBack } from './Admin/Employees/EmployeesBack'
+import { SearchPage } from './Pages/SearchPage/SearchPage.jsx'
+import { LoginGeneral } from './Pages/Login/LoginGeneral.jsx'
+import { ProductsBack } from './Admin/Products/ProductsBack'
+import { FacturesBack } from './Admin/Factures/FacturesBack'
+import { ServicesBack } from './Admin/Services/ServicesBack'
 import { Cancelado } from './Pages/Shopping/Cancelado.jsx'
+import { ClientsBack } from './Admin/Clients/ClientsBack'
+import { Shopping } from './Pages/Shopping/Shopping.jsx'
+import { NotFound } from './Pages/NotFound/NotFound.jsx'
+import { ServicesInfo } from './Pages/Services/Services'
+import { AdminsBack } from './Admin/Admins/AdminsBack'
+import { Register } from './Pages/Register/Register'
+import { MainPage } from './Pages/MainPage/MainPage'
+import { Routes, Route } from 'react-router-dom'
+import { Cursor } from './UI/Cursor/Cursor.jsx'
+import { AdminApp } from './Admin/AdminApp'
+import { Login } from './Pages/Login/Login'
+import { useEffect } from 'react'
 import ConfirmacionPayPal from './Pages/Shopping/ConfirmacionPayPal.jsx'
 import ConfirmacionPsE from './Pages/Shopping/ConfirmacionPsE.jsx'
-import { NotFound } from './Pages/NotFound/NotFound.jsx'
-import { LoginGeneral } from './Pages/Login/LoginGeneral.jsx'
-import { LoginTechnician } from './Pages/Login/LoginTechnician.jsx'
-import { startTokenRefresher } from './Pages/Login/TokenRefresher.jsx';
-import { useEffect } from 'react'
-import { SearchPage } from './Pages/SearchPage/SearchPage.jsx'
-import { ProductInfo } from './Pages/ProductInfo/ProductInfo.jsx'
 
 
 // 👇 Importar ruta protegida
@@ -48,6 +50,7 @@ export function App() {
     return (
         <>
             <div>
+                <Cursor />
                 <Routes>
                     <Route path="/" element={<MainPage />} />
                     <Route path="/CostumerMyService" element={<CostumerMyService />} />
@@ -55,6 +58,8 @@ export function App() {
                     <Route path="/Shopping" element={<Shopping />} />
                     <Route path='/Register' element={<Register />} />
                     <Route path="/SearchPage" element={<SearchPage />} />
+                    <Route path="/SearchPage" element={<SearchPage />} />
+                    <Route path="/Technica" element={<Technica />} />
                     {/* Login's Route */}
                     <Route path='/Login' element={<Login />} >
                         <Route index element={<LoginGeneral />} />

@@ -149,6 +149,7 @@ export const RegisterModal = ({ onClose, setRefrescar, admins = [], empleados = 
           onChange={(e) => setDuracionContrato(e.target.value)}
           min={new Date().toISOString().split('T')[0]}
           required
+          placeholderError={!!(mensaje && mensaje.toLowerCase().includes('duración'))}
         />
         <InputLabel
           type="1"
@@ -158,6 +159,7 @@ export const RegisterModal = ({ onClose, setRefrescar, admins = [], empleados = 
           value={tipoContrato}
           onChange={(e) => setTipoContrato(e.target.value)}
           required
+          placeholderError={!!(mensaje && mensaje.toLowerCase().includes('tipo'))}
         />
         <InputLabel
           type="5"
@@ -167,6 +169,7 @@ export const RegisterModal = ({ onClose, setRefrescar, admins = [], empleados = 
           value={salario}
           onChange={(e) => setSalario(e.target.value)}
           required
+          placeholderError={!!(mensaje && mensaje.toLowerCase().includes('salario'))}
         />
 
         {/* Autocompletado ADMIN */}

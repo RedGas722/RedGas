@@ -1,0 +1,12 @@
+.custom-cursor,
+.custom-cursor-follower {
+    display: block;
+}
+
+@media (max-width: 768px) {
+
+    .custom-cursor,
+    .custom-cursor-follower {
+        display: none !important;
+    }
+}

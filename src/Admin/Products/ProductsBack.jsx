@@ -137,6 +137,7 @@ export const ProductsBack = () => {
               value={nombreBusqueda}
               onChange={e => setNombreBusqueda(e.target.value)}
               className="w-full"
+              placeholderError={!!errorBusqueda}
             />
             <button
               onClick={buscarProducto}

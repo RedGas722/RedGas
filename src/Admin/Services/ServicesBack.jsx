@@ -123,25 +123,16 @@ export const ServicesBack = () => {
 
         {/* Buscador */}
         <div className="relative" ref={contenedorRef}>
-          <div className="flex items-center gap-2 border border-gray-300 rounded px-2 py-1 bg-white">
-            <InputLabel
-              type="1"
-              ForID="nombre_servicio_busqueda"
-              placeholder="Buscar servicio"
-              childLabel="Buscar servicio"
-              value={nombreBusqueda}
-              onChange={e => setNombreBusqueda(e.target.value)}
-              className="w-full"
-            />
-            <button
-              onClick={buscarServicio}
-              aria-label="Buscar servicio"
-              className="text-gray-600 hover:text-gray-900"
-            >
-              🔍
-            </button>
-          </div>
-
+          <InputLabel
+            type="1"
+            ForID="nombre_servicio_busqueda"
+            placeholder="Buscar servicio"
+            childLabel="Buscar servicio"
+            value={nombreBusqueda}
+            onChange={e => setNombreBusqueda(e.target.value)}
+            className="w-full"
+            placeholderError={!!errorBusqueda}
+          />
           {sugerencias.length > 0 && (
             <ul className="absolute z-10 bg-white border border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto w-full shadow">
               {sugerencias.map((servicio) => (

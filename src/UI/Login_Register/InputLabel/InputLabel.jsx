@@ -2,7 +2,7 @@ import { useState } from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons"
 
-export const InputLabel = ({ type, ForID, placeholder, childLabel, value, onChange, required, autoComplete, className, placeholderError }) => {
+export const InputLabel = ({ radius, type, ForID, placeholder, childLabel, value, onChange, required, autoComplete, className, placeholderError }) => {
     const [showPassword, setShowPassword] = useState(false)
     const [showCapPassword, setShowCapPassword] = useState(false)
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)
@@ -41,6 +41,9 @@ export const InputLabel = ({ type, ForID, placeholder, childLabel, value, onChan
                     <input
                         type={inputType}
                         className={`NeoSubContainer_inset_TOTAL inputs relative text-[var(--main-color)] w-full p-[10px_10px_10px_15px] border-0 outline-0 ${placeholderError ? 'placeholder:text-red-500' : 'placeholder:text-[var(--main-color-sub)]'}`}
+                        style={{ 
+                            borderRadius: `${radius || 20}px`,
+                        }}
                         value={value}
                         id={ForID}
                         onChange={onChange}

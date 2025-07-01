@@ -9,24 +9,25 @@ import './Header.css'
 
 export const Header = () => {
     const navigate = useNavigate();
+    const type = localStorage.getItem('tipo_usuario')
     const rawToken = localStorage.getItem('token');
     let token = null;
 
     if (rawToken) {
-    try {
-        const decoded = jwtDecode(rawToken);
-        const now = Date.now() / 1000;
-        if (decoded.exp > now) {
-        token = rawToken;
-        } else {
-        localStorage.removeItem('token');
-        localStorage.removeItem('tipo_usuario');
+        try {
+            const decoded = jwtDecode(rawToken);
+            const now = Date.now() / 1000;
+            if (decoded.exp > now) {
+                token = rawToken;
+            } else {
+                localStorage.removeItem('token');
+                localStorage.removeItem('tipo_usuario');
+            }
+        } catch (e) {
+            localStorage.removeItem('token');
+            localStorage.removeItem('tipo_usuario');
         }
-    } catch (e) {
-        localStorage.removeItem('token');
-        localStorage.removeItem('tipo_usuario');
     }
-    }   
     const [userName, setUserName] = useState('');
     const [productos, setProductos] = useState([]);
     const [scrolled, setScrolled] = useState(false)
@@ -35,7 +36,7 @@ export const Header = () => {
 
     const isDesktop = () => window.innerWidth >= 768;
 
-    
+
     // Verificar si el usuario está autenticado
     useEffect(() => {
         if (token) {
@@ -153,7 +154,7 @@ export const Header = () => {
     return (
         <div ref={headerRef}
             id="Header"
-            className={`Header w-[100%] h-fit md:sticky fixed left-0 top-0 z-[10000] ${(scrolled && !hamburger && isDesktop()) ? 'scrolled NeoContainer_outset_TL' : ''} ${hamburger ? 'Burguer w-fit NeoContainer_outset_TL' : ''}`}
+            className={`Header w-[100%] h-fit md:sticky fixed left-0 top-0 z-[999] ${(scrolled && !hamburger && isDesktop()) ? 'scrolled NeoContainer_outset_TL' : ''} ${hamburger ? 'Burguer w-fit NeoContainer_outset_TL' : ''}`}
         >
             {(scrolled && !hamburger && isDesktop()) && (
                 <h2 className="justify-self-center hidden md:flex font-bold text-4xl text-[var(--Font-Nav)]">
@@ -209,7 +210,14 @@ export const Header = () => {
                         </>
                     )}
 
-                    {token && (
+                    {token && type == 1 && (
+                        <>
+                            <div onClick={() => navigate('/Login')} className="menu-list">Cambiar Cuenta</div>
+                            <div onClick={() => handSignOut()} className="menu-list">Cerrar Sesion</div>
+                        </>
+                    )}
+
+                    {token && type == 2 && (
                         <>
                             <div onClick={() => navigate('/Login')} className="menu-list">Perfil</div>
                             <div onClick={() => navigate('/CostumerMyService')} className="menu-list">Mi Servicio</div>
@@ -218,6 +226,22 @@ export const Header = () => {
                             <div onClick={() => handSignOut()} className="menu-list">Cerrar Sesion</div>
                         </>
                     )}
+
+                    {token && type == 3 && (
+                        <>
+                            <div onClick={() => navigate('/Login')} className="menu-list">Cambiar Cuenta</div>
+                            <div onClick={() => handSignOut()} className="menu-list">Cerrar Sesion</div>
+                        </>
+                    )}
+
+                    {token && type == 4 && (
+                        <>
+                            <div onClick={() => navigate('/Shopping')} className="menu-list">Carrito</div>
+                            <div onClick={() => navigate('/Login')} className="menu-list">Cambiar Cuenta</div>
+                            <div onClick={() => handSignOut()} className="menu-list">Cerrar Sesion</div>
+                        </>
+                    )}
+
                 </section>
             </label>
         </div>

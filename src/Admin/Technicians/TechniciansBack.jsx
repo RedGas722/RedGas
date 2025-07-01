@@ -1,11 +1,12 @@
 import { useState, useEffect, useRef } from 'react'
 import { RegisterModal } from './Register/RegisterModal'
 import { UpdateModal } from './Update/Update'
-import { ButtonBack } from '../UI/ButtonBack/ButtonBack'
+import { Paginator } from '../../UI/Paginator/Paginator'
 import CardTechniciansBack from './Get/CardTechniciansBack'
 import { buscarTecnicoPorCorreo } from './Get/Get'
 import { InputLabel } from '../../UI/Login_Register/InputLabel/InputLabel'
-import { Paginator } from '../../UI/Paginator/Paginator'
+import { Buttons } from '../../UI/Login_Register/Buttons'
+import BtnBack from '../../UI/Login_Register/BtnBack'
 
 export const TechniciansBack = () => {
   const [showRegisterModal, setShowRegisterModal] = useState(false)
@@ -67,21 +68,23 @@ export const TechniciansBack = () => {
   const handleUpdateClick = (tecnico) => setShowUpdateModal(tecnico)
 
   // 🔍 Buscar técnico en la base de datos
-  const buscarTecnico = async () => {
+  const buscarTecnico = async (correo) => {
     setErrorBusqueda('')
     setTecnicoBuscado(null)
 
-    try {
-      const resultado = await buscarTecnicoPorCorreo(correoBusqueda.trim())
-      if (resultado.length > 0) {
-        setTecnicoBuscado(resultado[0])
-        setSugerencias([])
-      } else {
-        setErrorBusqueda('No se encontró un técnico con ese correo.')
+    const correoFinal = (correo || correoBusqueda).trim()
+      if (!correoFinal) {
+        setErrorBusqueda('Por favor ingrese un correo válido')
+        return
       }
-    } catch (error) {
-      setErrorBusqueda(error.message)
-    }
+
+      try {
+        const resultado = await buscarTecnicoPorCorreo(correoFinal)
+        setTecnicoBuscado(resultado)
+        setSugerencias([])
+      } catch (error) {
+        setErrorBusqueda(error.message || 'No se encontró el tecnico')
+      }
   }
 
   // Autocompletado desde los correos obtenidos
@@ -109,103 +112,90 @@ export const TechniciansBack = () => {
   }, [])
 
   return (
-    <div className="p-[20px] h-full flex flex-col gap-[20px]">
-      <div className='NeoContainer_outset_TL flex flex-col w-fit p-[0_0_0_20px]'>
-        <h1 className="font-bold text-[20px] text-[var(--main-color)]">Técnicos</h1>
+    <section className="w-full h-full p-[5px_20px_10px_5px]">
+      <BtnBack To='/Admin' />
+      
+      <div className="p-[10px_20px_10px_20px] h-full flex flex-col gap-2">
+        <h1 className="font-bold text-3xl text-[var(--main-color)]">Técnicos</h1>
+        
+        <div className='flex flex-col gap-2'>
+          
+          <div className='NeoContainer_outset_TL flex gap-4 flex-wrap items-end w-fit p-[0_20px_10px_20px]'>
+            
+            <div ref={contenedorRef}>
+              <InputLabel
+                radius='10'
+                type="1"
+                ForID="correo_tecnico_busqueda"
+                placeholder="Buscar técnico"
+                childLabel="Buscar técnico"
+                value={correoBusqueda}
+                onChange={e => setCorreoBusqueda(e.target.value)}
+                className="w-full"
+                placeholderError={!!errorBusqueda}
+              />
+              {sugerencias.length > 0 && (
+                <ul className="absolute z-10 bg-white border w-[230px] border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto shadow">
+                  {sugerencias.map((tecnico) => (
+                    <li
+                      key={tecnico.id_tecnico || tecnico.correo_tecnico}
+                      onClick={() => {
+                        setCorreoBusqueda(tecnico.correo_tecnico)
+                        buscarTecnico(tecnico.correo_tecnico)
+                        setSugerencias([])
+                      }}
+                      className="p-2 hover:bg-gray-100 cursor-pointer"
+                    >
+                      {tecnico.correo_tecnico}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+            <div className="flex w-fit h-fit flex-wrap justify-center justify-self-center items-center gap-[20px]">
+              <Buttons radius='10' nameButton='Registrar' textColor='var(--Font-Nav)' Onclick={() => setShowRegisterModal(true)} />
+              {/* Eliminar, Actualizar y Consultar removidos porque ya están en la card y el input de consulta ya existe */}
+            </div>
+          </div>
+          {/* Sección de técnicos */}
+          <div className="flex flex-wrap items-center gap-6">
+            {(tecnicoBuscado || tecnicos).map(tecnico => (
+              <CardTechniciansBack
+                key={tecnico.id_tecnico || tecnico.correo_tecnico}
+                tecnico={tecnico}
+                setRefrescar={setRefrescar}
+                onUpdateClick={handleUpdateClick}
+              />
+            ))}
+          </div>
 
-        {/* 🔍 Búsqueda con botón */}
-        <div className="relative flex items-center" ref={contenedorRef}>
-          <InputLabel
-            type="1"
-            ForID="correo_tecnico_busqueda"
-            placeholder="Buscar técnico"
-            childLabel="Buscar técnico"
-            value={correoBusqueda}
-            onChange={e => setCorreoBusqueda(e.target.value)}
-            className="w-full pr-10"
-          />
-          <button
-            onClick={buscarTecnico}
-            className="absolute right-2 text-gray-600 hover:text-gray-800"
-            title="Buscar técnico"
-          >
-            🔍
-          </button>
+            <Paginator
+              currentPage={paginaActual}
+              totalPages={totalPaginas}
+              onPageChange={(nuevaPagina) => {
+                if (nuevaPagina !== paginaActual) {
+                  setPaginaActual(nuevaPagina)
+                }
+              }}
+            />
 
-          {sugerencias.length > 0 && (
-            <ul className="absolute z-10 bg-white border border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto w-full shadow">
-              {sugerencias.map((tecnico) => (
-                <li
-                  key={tecnico.id_tecnico || tecnico.correo_tecnico}
-                  onClick={() => {
-                    setCorreoBusqueda(tecnico.correo_tecnico)
-                    setSugerencias([])
-                  }}
-                  className="p-2 hover:bg-gray-100 cursor-pointer"
-                >
-                  {tecnico.correo_tecnico}
-                </li>
-              ))}
-            </ul>
+          {/* Modales */}
+          {showRegisterModal && (
+            <RegisterModal
+              onClose={() => setShowRegisterModal(false)}
+              setRefrescar={setRefrescar}
+            />
+          )}
+          {typeof showUpdateModal === 'object' && showUpdateModal && (
+            <UpdateModal
+              onClose={() => setShowUpdateModal(false)}
+              setRefrescar={setRefrescar}
+              tecnicoCarta={showUpdateModal}
+            />
           )}
         </div>
-
-        {/* Mensaje de error */}
-        {errorBusqueda && (
-          <p className="text-red-600 text-sm mt-1">{errorBusqueda}</p>
-        )}
-
-        <div className="flex p-[20px] w-fit h-fit flex-wrap justify-center justify-self-center items-center gap-[20px]">
-          <ButtonBack ClickMod={() => setShowRegisterModal(true)} Child="Registrar" />
-        </div>
       </div>
-
-      {/* 📦 Cards de técnicos */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {tecnicoBuscado ? (
-          <CardTechniciansBack
-            key={tecnicoBuscado.id_tecnico}
-            tecnico={tecnicoBuscado}
-            setRefrescar={setRefrescar}
-            onUpdateClick={handleUpdateClick}
-          />
-        ) : (
-          tecnicos.map(tecnico => (
-            <CardTechniciansBack
-              key={tecnico.id_tecnico || tecnico.correo_tecnico}
-              tecnico={tecnico}
-              setRefrescar={setRefrescar}
-              onUpdateClick={handleUpdateClick}
-            />
-          ))
-        )}
-      </div>
-
-      <Paginator
-        currentPage={paginaActual}
-        totalPages={totalPaginas}
-        onPageChange={(nuevaPagina) => {
-          if (nuevaPagina !== paginaActual) {
-            setPaginaActual(nuevaPagina)
-          }
-        }}
-      />
-
-      {/* Modales */}
-      {showRegisterModal && (
-        <RegisterModal
-          onClose={() => setShowRegisterModal(false)}
-          setRefrescar={setRefrescar}
-        />
-      )}
-      {typeof showUpdateModal === 'object' && showUpdateModal && (
-        <UpdateModal
-          onClose={() => setShowUpdateModal(false)}
-          setRefrescar={setRefrescar}
-          tecnicoCarta={showUpdateModal}
-        />
-      )}
-    </div>
+    </section>
   )
 }
 
