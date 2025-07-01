@@ -318,7 +318,6 @@ export const Technica = () => {
           icon: 'success',
           title: title || 'Operación exitosa',
           text: message || 'Tu solicitud fue completada correctamente.',
-          showConfirmButton: false,
           showConfirmButton: true,
           confirmButtonText: 'Cerrar',
         })
