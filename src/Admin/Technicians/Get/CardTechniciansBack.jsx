@@ -2,32 +2,37 @@ import { DeleteTechnician } from '../Delete/Delete';
 import { Buttons } from '../../../UI/Login_Register/Buttons';
 
 const convertirBase64AUrl = (imagen) => {
-  if (!imagen) return null;
-  if (typeof imagen === 'string') return `data:image/png;base64,${imagen}`;
-  if (imagen.type === 'Buffer' && Array.isArray(imagen.data)) {
-    const binary = imagen.data.reduce((acc, byte) => acc + String.fromCharCode(byte), '');
-    const base64 = btoa(binary);
-    return `data:image/png;base64,${base64}`;
+  if (!imagen) return null
+
+  if (typeof imagen === 'string') {
+    return `data:image/png;base64,${imagen}`
   }
-  return null;
+
+  if (imagen.type === 'Buffer' && Array.isArray(imagen.data)) {
+    const binary = imagen.data.reduce((acc, byte) => acc + String.fromCharCode(byte), '')
+    const base64 = btoa(binary)
+    return `data:image/png;base64,${base64}`
+  }
+
+  return null
 }
 
 const CardTechniciansBack = ({ tecnico, setRefrescar, onUpdateClick }) => {
-  const imageUrl = convertirBase64AUrl(tecnico.imagen);
+  const imageUrl = convertirBase64AUrl(tecnico.imagen)
 
   const handleDelete = async () => {
-    const confirmar = window.confirm(`¿Seguro que quieres eliminar al técnico ${tecnico.nombre_tecnico}?`);
-    if (!confirmar) return;
+    const confirmar = window.confirm(`¿Seguro que quieres eliminar al técnico ${tecnico.nombre_tecnico}?`)
+    if (!confirmar) return
 
-    const { success, message } = await DeleteTechnician(tecnico.correo_tecnico);
+    const { success, message } = await DeleteTechnician(tecnico.correo_tecnico)
 
     if (success) {
-      alert(message);
-      setRefrescar && setRefrescar(true);
+      alert(message)
+      setRefrescar && setRefrescar(true)
     } else {
-      alert(`Error: ${message}`);
+      alert(`Error: ${message}`)
     }
-  };
+  }
 
   return (
     <div className="text-center items-center NeoContainer_outset_TL p-4 w-[250px] h-fit flex flex-col justify-start gap-2">
@@ -72,7 +77,7 @@ const CardTechniciansBack = ({ tecnico, setRefrescar, onUpdateClick }) => {
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default CardTechniciansBack;
+export default CardTechniciansBack

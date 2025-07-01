@@ -1,110 +1,126 @@
-import { useState, useEffect, useRef } from 'react';
-import { RegisterModal } from './Register/RegisterModal';
-import { buscarAdminPorCorreo } from './Get/Get';
-import { UpdateModal } from './Update/Update';
-import CardAdminsBack from './Get/CardAdminsBack';
-import { BtnBack } from "../../UI/Login_Register/BtnBack";
-import ButtonBack from '../UI/ButtonBack/ButtonBack';
-import { InputLabel } from '../../UI/Login_Register/InputLabel/InputLabel';
+import { useState, useEffect, useRef } from 'react'
+import { RegisterModal } from './Register/RegisterModal'
+import { buscarAdminPorCorreo } from './Get/Get'
+import { UpdateModal } from './Update/Update'
+import CardAdminsBack from './Get/CardAdminsBack'
+import { BtnBack } from "../../UI/Login_Register/BtnBack"
+import ButtonBack from '../UI/ButtonBack/ButtonBack'
+import { InputLabel } from '../../UI/Login_Register/InputLabel/InputLabel'
+import { Paginator } from '../../UI/Paginator/Paginator'
 
 export const AdminsBack = () => {
-  const [showRegisterModal, setShowRegisterModal] = useState(false);
-  const [showUpdateModal, setShowUpdateModal] = useState(false);
-  const [admins, setAdmins] = useState([]);
-  const [refrescar, setRefrescar] = useState(false);
-  const [adminSeleccionado, setAdminSeleccionado] = useState(null);
-  const [correoBusqueda, setCorreoBusqueda] = useState('');
-  const [adminBuscado, setAdminBuscado] = useState(null);
-  const [errorBusqueda, setErrorBusqueda] = useState('');
-  const [sugerencias, setSugerencias] = useState([]);
-  const contenedorRef = useRef(null);
-  const inputRef = useRef(null);
+  const [showRegisterModal, setShowRegisterModal] = useState(false)
+  const [showUpdateModal, setShowUpdateModal] = useState(false)
+  const [admins, setAdmins] = useState([])
+  const [refrescar, setRefrescar] = useState(false)
+  const [adminSeleccionado, setAdminSeleccionado] = useState(null)
+  const [correoBusqueda, setCorreoBusqueda] = useState('')
+  const [adminBuscado, setAdminBuscado] = useState(null)
+  const [errorBusqueda, setErrorBusqueda] = useState('')
+  const [sugerencias, setSugerencias] = useState([])
+  const [adminsEmails, setAdminsEmails] = useState([]) // [{id_admin, correo_admin}]
+  const [paginaActual, setPaginaActual] = useState(1)
+  const [totalPaginas, setTotalPaginas] = useState(1)
+  const contenedorRef = useRef(null)
+  const inputRef = useRef(null)
 
-  const URL = 'https://redgas.onrender.com/AdminGet';
-
-  async function fetchAdmins() {
+  const fetchAdmins = async (pagina = 1) => {
     try {
-      const res = await fetch('https://redgas.onrender.com/AdminGetAll');
-      if (!res.ok) throw new Error('Error al obtener administradores');
-      const data = await res.json();
-      setAdmins(data.data || []);
+      const res = await fetch(`https://redgas.onrender.com/AdminGetAllPaginated?page=${pagina}`)
+      if (!res.ok) throw new Error('Error al obtener administradores')
+      const data = await res.json()
+      const resultado = data.data
+
+      setAdmins(resultado.data || [])
+      setPaginaActual(resultado.currentPage)
+      setTotalPaginas(resultado.totalPages)
     } catch (error) {
-      console.error(error);
+      console.error(error)
+    }
+  }
+
+  const fetchCorreosAdmins = async () => {
+    try {
+      const res = await fetch('https://redgas.onrender.com/AdminGetAllEmails')
+      if (!res.ok) throw new Error('Error al obtener correos')
+      const data = await res.json()
+      setAdminsEmails(data.data || [])
+    } catch (error) {
+      console.error(error)
     }
   }
 
   useEffect(() => {
-    fetchAdmins();
-  }, []);
+    fetchAdmins(paginaActual)
+    fetchCorreosAdmins()
+  }, [paginaActual])
 
   useEffect(() => {
     if (refrescar) {
-      fetchAdmins();
-      setRefrescar(false);
-      setAdminBuscado(null);
-      setErrorBusqueda('');
-      setCorreoBusqueda('');
+      fetchAdmins(1)
+      fetchCorreosAdmins()
+      setPaginaActual(1)
+      setRefrescar(false)
+      setAdminBuscado(null)
+      setErrorBusqueda('')
+      setCorreoBusqueda('')
     }
-  }, [refrescar]);
+  }, [refrescar])
 
   const abrirModalActualizar = (admin) => {
-    setAdminSeleccionado(admin);
-    setShowUpdateModal(true);
-  };
+    setAdminSeleccionado(admin)
+    setShowUpdateModal(true)
+  }
 
   const cerrarModal = () => {
-    setShowUpdateModal(false);
-    setAdminSeleccionado(null);
-  };
+    setShowUpdateModal(false)
+    setAdminSeleccionado(null)
+  }
 
   const buscarAdmin = async () => {
-    setErrorBusqueda('');
-    setAdminBuscado(null);
+    setErrorBusqueda('')
+    setAdminBuscado(null)
     try {
-      const admin = await buscarAdminPorCorreo(correoBusqueda);
-      setAdminBuscado(admin);
+      const admin = await buscarAdminPorCorreo(correoBusqueda)
+      setAdminBuscado(admin[0])
     } catch (error) {
-      setErrorBusqueda(error.message);
+      setErrorBusqueda(error.message)
     }
-  };
+  }
 
-  // 🧠 Autocomplete filtrando productos localmente
   useEffect(() => {
     if (correoBusqueda.trim() === '') {
-      setSugerencias([]);
-      return;
+      setSugerencias([])
+      return
     }
 
-    const filtrados = admins.filter((admin) =>
+    const filtrados = adminsEmails.filter((admin) =>
       admin.correo_admin.toLowerCase().includes(correoBusqueda.toLowerCase())
-    );
-    setSugerencias(filtrados.slice(0, 5));
-  }, [correoBusqueda, admins]);
+    )
+    setSugerencias(filtrados.slice(0, 5))
+  }, [correoBusqueda, adminsEmails])
 
-  // 🧽 Cierre del dropdown si se hace clic fuera
   useEffect(() => {
     const manejarClickFuera = (event) => {
       if (
         contenedorRef.current &&
         !contenedorRef.current.contains(event.target)
       ) {
-        setSugerencias([]);
+        setSugerencias([])
       }
-    };
+    }
 
-    document.addEventListener('mousedown', manejarClickFuera);
-    return () => document.removeEventListener('mousedown', manejarClickFuera);
-  }, []);
+    document.addEventListener('mousedown', manejarClickFuera)
+    return () => document.removeEventListener('mousedown', manejarClickFuera)
+  }, [])
 
-  // Limpia adminBuscado y errorBusqueda si el input queda vacío
   useEffect(() => {
     if (correoBusqueda.trim() === '') {
-      setAdminBuscado(null);
-      setErrorBusqueda('');
+      setAdminBuscado(null)
+      setErrorBusqueda('')
     }
-  }, [correoBusqueda]);
+  }, [correoBusqueda])
 
-  // Mueve el input y el botón dentro del contenedorRef para que el click fuera funcione correctamente
   return (
     <div className="p-[20px] flex flex-col gap-[20px]">
       <div className="flex items-center gap-[20px] flex-wrap">
@@ -139,9 +155,8 @@ export const AdminsBack = () => {
                 <li
                   key={admin.id_admin}
                   onClick={() => {
-                    setAdminBuscado(admin);
-                    setCorreoBusqueda(admin.correo_admin);
-                    setSugerencias([]);
+                    setCorreoBusqueda(admin.correo_admin)
+                    setSugerencias([])
                   }}
                   className="p-2 hover:bg-gray-100 cursor-pointer"
                 >
@@ -152,11 +167,9 @@ export const AdminsBack = () => {
           )}
         </div>
 
-        {/* Aquí agregamos el botón para abrir el modal Registrar */}
         <ButtonBack ClickMod={() => setShowRegisterModal(true)} Child="Registrar" />
       </div>
 
-      {/* resto del código igual */}
       {errorBusqueda && <p className="text-red-600 text-sm">{errorBusqueda}</p>}
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -179,6 +192,16 @@ export const AdminsBack = () => {
         )}
       </div>
 
+      <Paginator
+        currentPage={paginaActual}
+        totalPages={totalPaginas}
+        onPageChange={(nuevaPagina) => {
+          if (nuevaPagina !== paginaActual) {
+            setPaginaActual(nuevaPagina)
+          }
+        }}
+      />
+
       {showRegisterModal && (
         <RegisterModal onClose={() => setShowRegisterModal(false)} setRefrescar={setRefrescar} />
       )}
@@ -191,8 +214,7 @@ export const AdminsBack = () => {
         />
       )}
     </div>
-  );
-};
+  )
+}
 
-
-export default AdminsBack;
+export default AdminsBack

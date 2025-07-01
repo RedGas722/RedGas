@@ -1,38 +1,38 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react'
 
 const convertirBase64AUrl = (imagen) => {
   if (!imagen) {
-    console.warn("No hay imagen");
-    return null;
+    console.warn("No hay imagen")
+    return null
   }
   if (typeof imagen === 'string') {
-    return `data:image/png;base64,${imagen}`;
+    return `data:image/png;base64,${imagen}`
   }
   if (typeof imagen === 'object' && imagen.type === 'Buffer' && Array.isArray(imagen.data)) {
-    const byteArray = new Uint8Array(imagen.data);
-    const binaryString = byteArray.reduce((acc, byte) => acc + String.fromCharCode(byte), '');
-    const base64String = btoa(binaryString);
-    return `data:image/png;base64,${base64String}`;
+    const byteArray = new Uint8Array(imagen.data)
+    const binaryString = byteArray.reduce((acc, byte) => acc + String.fromCharCode(byte), '')
+    const base64String = btoa(binaryString)
+    return `data:image/png;base64,${base64String}`
   }
-  console.warn("Formato de imagen desconocido:", imagen);
-  return null;
-};
+  console.warn("Formato de imagen desconocido:", imagen)
+  return null
+}
 
 export const ProductsModal = ({ factura, onClose }) => {
-  const [productos, setProductos] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [productos, setProductos] = useState([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const fetchProductos = async () => {
       try {
-        const resPedidos = await fetch(`https://redgas.onrender.com/PedidoProductoGet?id_factura=${factura.id_factura}`);
-        const pedidosData = await resPedidos.json();
+        const resPedidos = await fetch(`https://redgas.onrender.com/PedidoProductoGet?id_factura=${factura.id_factura}`)
+        const pedidosData = await resPedidos.json()
 
-        const pedidos = pedidosData.data || [];
+        const pedidos = pedidosData.data || []
 
         const productosCompletos = await Promise.all(pedidos.map(async (pedido) => {
-          const resProducto = await fetch(`https://redgas.onrender.com/ProductoGetById?id_producto=${pedido.id_producto}`);
-          const productoData = await resProducto.json();
+          const resProducto = await fetch(`https://redgas.onrender.com/ProductoGetById?id_producto=${pedido.id_producto}`)
+          const productoData = await resProducto.json()
 
           return {
             ...pedido,
@@ -40,19 +40,19 @@ export const ProductsModal = ({ factura, onClose }) => {
             precio_producto: productoData.data.precio_producto,
             descripcion_producto: productoData.data.descripcion_producto,
             imagen: productoData.data.imagen
-          };
-        }));
+          }
+        }))
 
-        setProductos(productosCompletos);
+        setProductos(productosCompletos)
       } catch (error) {
-        console.error('Error al obtener productos:', error);
+        console.error('Error al obtener productos:', error)
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
-    };
+    }
 
-    fetchProductos();
-  }, [factura]);
+    fetchProductos()
+  }, [factura])
 
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-transparent backdrop-blur-sm z-50">
@@ -66,7 +66,7 @@ export const ProductsModal = ({ factura, onClose }) => {
         ) : productos.length > 0 ? (
           <div className="grid grid-cols-2 gap-4">
             {productos.map((producto, index) => {
-              const imageUrl = convertirBase64AUrl(producto.imagen);
+              const imageUrl = convertirBase64AUrl(producto.imagen)
               return (
                 <div key={index} className="border p-4 rounded-lg shadow-md">
                   <p className="font-semibold text-lg text-gray-800 mb-2">{producto.nombre_producto}</p>
@@ -85,7 +85,7 @@ export const ProductsModal = ({ factura, onClose }) => {
                     new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(producto.precio_producto || 0)
                   }</p>
                 </div>
-              );
+              )
             })}
           </div>
         ) : (
@@ -99,5 +99,5 @@ export const ProductsModal = ({ factura, onClose }) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

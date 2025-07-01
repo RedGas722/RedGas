@@ -8,45 +8,45 @@ export const DeleteTechnician = async (correo_tecnico) => {
     const res = await fetch(`${URL}?correo_tecnico=${encodeURIComponent(correo_tecnico)}`, {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
-    });
+    })
     if (!res.ok) {
-      const errorText = await res.text();
-      throw new Error(errorText || 'Error al eliminar técnico');
+      const errorText = await res.text()
+      throw new Error(errorText || 'Error al eliminar técnico')
     }
-    return { success: true, message: 'Técnico eliminado con éxito' };
+    return { success: true, message: 'Técnico eliminado con éxito' }
   } catch (error) {
-    return { success: false, message: error.message };
+    return { success: false, message: error.message }
   }
-};
+}
 
 export const DeleteModal = ({ onClose, setRefrescar }) => {
-  const [correo, setCorreo] = useState('');
-  const [mensaje, setMensaje] = useState('');
+  const [correo, setCorreo] = useState('')
+  const [mensaje, setMensaje] = useState('')
 
   const validarCorreo = (correo) => {
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return regex.test(correo);
-  };
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    return regex.test(correo)
+  }
 
   const handleDelete = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
     if (!correo.trim()) {
-      setMensaje('Por favor, ingrese un correo.');
-      return;
+      setMensaje('Por favor, ingrese un correo.')
+      return
     }
     if (!validarCorreo(correo)) {
-      setMensaje('Por favor, ingrese un correo válido.');
-      return;
+      setMensaje('Por favor, ingrese un correo válido.')
+      return
     }
-    const { success, message } = await DeleteTechnician(correo);
-    setMensaje(message);
-    if (success && setRefrescar) setRefrescar(true);
-  };
+    const { success, message } = await DeleteTechnician(correo)
+    setMensaje(message)
+    if (success && setRefrescar) setRefrescar(true)
+  }
 
   const handleCancel = () => {
-    setCorreo('');
-    setMensaje('');
-  };
+    setCorreo('')
+    setMensaje('')
+  }
 
   return (
     <div className="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50">
@@ -80,7 +80,7 @@ export const DeleteModal = ({ onClose, setRefrescar }) => {
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default DeleteModal;
+export default DeleteModal

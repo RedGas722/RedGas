@@ -1,69 +1,69 @@
-import { useState, useEffect } from "react";
-import { InputLabel } from '../../../UI/Login_Register/InputLabel/InputLabel';
+import { useState, useEffect } from "react"
+import { InputLabel } from '../../../UI/Login_Register/InputLabel/InputLabel'
 
 export const UpdateModal = ({ onClose, setRefrescar, empleadoCarta }) => {
-  const [empleado, setEmpleado] = useState(null);
-  const [nuevoCorreo, setNuevoCorreo] = useState("");
-  const [correoParaBusqueda, setCorreoParaBusqueda] = useState(""); // correo para buscar empleado en backend
-  const [mensaje, setMensaje] = useState("");
-  const [errores, setErrores] = useState({});
-  const [nombre, setNombre] = useState("");
-  const [apellido, setApellido] = useState("");
+  const [empleado, setEmpleado] = useState(null)
+  const [nuevoCorreo, setNuevoCorreo] = useState("")
+  const [correoParaBusqueda, setCorreoParaBusqueda] = useState("") // correo para buscar empleado en backend
+  const [mensaje, setMensaje] = useState("")
+  const [errores, setErrores] = useState({})
+  const [nombre, setNombre] = useState("")
+  const [apellido, setApellido] = useState("")
 
   const validarCampos = () => {
-    const errores = {};
-    const correoRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const errores = {}
+    const correoRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
-    if (empleado.cc_empleado.length < 10 || empleado.cc_empleado.length > 15) {
+    if (empleado.cc_empleado.length < 1 || empleado.cc_empleado.length > 15) {
       errores.cc_empleado = "La cedula es obligatoria, entre 10 y 15 caracteres"
     }
-    if (!nombre.trim()) errores.nombre = "El nombre es obligatorio";
-    if (!apellido.trim()) errores.apellido = "El apellido es obligatorio";
+    if (!nombre.trim()) errores.nombre = "El nombre es obligatorio"
+    if (!apellido.trim()) errores.apellido = "El apellido es obligatorio"
 
     if (!nuevoCorreo.trim()) {
-      errores.nuevoCorreo = "El correo es obligatorio.";
+      errores.nuevoCorreo = "El correo es obligatorio."
     } else if (!correoRegex.test(nuevoCorreo)) {
-      errores.nuevoCorreo = "Correo inválido.";
+      errores.nuevoCorreo = "Correo inválido."
     }
 
     if (!empleado?.telefono_empleado?.trim()) {
-      errores.telefono_empleado = "El teléfono es obligatorio.";
+      errores.telefono_empleado = "El teléfono es obligatorio."
     } else if (
       empleado.telefono_empleado.length !== 10 ||
       !/^\d+$/.test(empleado.telefono_empleado)
     ) {
-      errores.telefono_empleado = "Teléfono debe tener 10 dígitos numéricos.";
+      errores.telefono_empleado = "Teléfono debe tener 10 dígitos numéricos."
     }
 
-    return errores;
-  };
+    return errores
+  }
 
   useEffect(() => {
     if (empleadoCarta) {
-      setEmpleado(empleadoCarta);
-      setNuevoCorreo(empleadoCarta.correo_empleado);
-      setCorreoParaBusqueda(empleadoCarta.correo_empleado); // Inicialmente, el correo para búsqueda es el actual
+      setEmpleado(empleadoCarta)
+      setNuevoCorreo(empleadoCarta.correo_empleado)
+      setCorreoParaBusqueda(empleadoCarta.correo_empleado) // Inicialmente, el correo para búsqueda es el actual
 
-      const partesNombre = empleadoCarta.nombre_empleado.split(' ');
-      const nombre = partesNombre.slice(0, Math.ceil(partesNombre.length / 2)).join(' ');
-      const apellido = partesNombre.slice(Math.ceil(partesNombre.length / 2)).join(' ');
+      const partesNombre = empleadoCarta.nombre_empleado.split(' ')
+      const nombre = partesNombre.slice(0, Math.ceil(partesNombre.length / 2)).join(' ')
+      const apellido = partesNombre.slice(Math.ceil(partesNombre.length / 2)).join(' ')
 
-        setNombre(nombre || "");
-        setApellido(apellido || "");
+        setNombre(nombre || "")
+        setApellido(apellido || "")
     }
-  }, [empleadoCarta]);
+  }, [empleadoCarta])
 
   const actualizarEmpleado = async () => {
-    const erroresValidados = validarCampos();
+    const erroresValidados = validarCampos()
     if (Object.keys(erroresValidados).length > 0) {
-      setErrores(erroresValidados);
-      return;
+      setErrores(erroresValidados)
+      return
     }
 
-    setErrores({});
-    setMensaje("");
+    setErrores({})
+    setMensaje("")
 
-    const direccionActualizada = empleado.direccion_empleado?.trim() === "" ? "sin direccion" : empleado.direccion_empleado;
+    const direccionActualizada = empleado.direccion_empleado?.trim() === "" ? "sin direccion" : empleado.direccion_empleado
 
     const body = {
       cc_empleado: empleado.cc_empleado,
@@ -72,42 +72,42 @@ export const UpdateModal = ({ onClose, setRefrescar, empleadoCarta }) => {
       telefono_empleado: empleado.telefono_empleado,
       direccion_empleado: direccionActualizada,
       correo_empleado: correoParaBusqueda, // Usamos correo para buscar empleado (puede ser diferente al nuevoCorreo)
-    };
+    }
 
     try {
       const res = await fetch("https://redgas.onrender.com/EmpleadoDataUpdate", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
-      });
+      })
 
       if (res.ok) {
-        setMensaje("Empleado actualizado exitosamente.");
-        setRefrescar(true);
+        setMensaje("Empleado actualizado exitosamente.")
+        setRefrescar(true)
 
         // Actualizar correoParaBusqueda solo si el correo nuevo cambió respecto al usado para buscar
         if (correoParaBusqueda !== nuevoCorreo) {
-          setCorreoParaBusqueda(nuevoCorreo);
+          setCorreoParaBusqueda(nuevoCorreo)
         }
       } else {
-        const data = await res.json();
-        setMensaje(data.errorInfo || "Error al actualizar empleado.");
+        const data = await res.json()
+        setMensaje(data.errorInfo || "Error al actualizar empleado.")
       }
     } catch {
-      setMensaje("Error de red al actualizar.");
+      setMensaje("Error de red al actualizar.")
     }
-  };
+  }
 
   const cancelarEdicion = () => {
-    setEmpleado(null);
-    setNuevoCorreo("");
-    setCorreoParaBusqueda("");
-    setMensaje("");
-    setErrores({});
-    setNombre("");
-    setApellido("");
-    onClose();
-  };
+    setEmpleado(null)
+    setNuevoCorreo("")
+    setCorreoParaBusqueda("")
+    setMensaje("")
+    setErrores({})
+    setNombre("")
+    setApellido("")
+    onClose()
+  }
 
   return (
     <div className="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50">
@@ -220,5 +220,5 @@ export const UpdateModal = ({ onClose, setRefrescar, empleadoCarta }) => {
         )}
       </div>
     </div>
-  );
-};
+  )
+}

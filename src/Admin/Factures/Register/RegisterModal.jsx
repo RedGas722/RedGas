@@ -1,39 +1,39 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { InputLabel } from '../../../UI/Login_Register/InputLabel/InputLabel';
+import React, { useState, useRef, useEffect } from 'react'
+import { InputLabel } from '../../../UI/Login_Register/InputLabel/InputLabel'
 
 export const RegisterModal = ({ onClose, setRefrescar, clientes, empleados }) => {
-  const [clienteCorreo, setClienteCorreo] = useState('');
-  const [empleadoCorreo, setEmpleadoCorreo] = useState('');
-  const [IDcliente, setIDcliente] = useState('');
-  const [IDempleado, setIDempleado] = useState('');
-  const [fecha, setFecha] = useState(new Date().toISOString().slice(0, 10));
-  const [totalFactura, setTotalFactura] = useState('');
-  const [mensaje, setMensaje] = useState('');
-  const [errores, setErrores] = useState({});
-  const [sugerenciasCliente, setSugerenciasCliente] = useState([]);
-  const [sugerenciasEmpleado, setSugerenciasEmpleado] = useState([]);
+  const [clienteCorreo, setClienteCorreo] = useState('')
+  const [empleadoCorreo, setEmpleadoCorreo] = useState('')
+  const [IDcliente, setIDcliente] = useState('')
+  const [IDempleado, setIDempleado] = useState('')
+  const [fecha, setFecha] = useState(new Date().toISOString().slice(0, 10))
+  const [totalFactura, setTotalFactura] = useState('')
+  const [mensaje, setMensaje] = useState('')
+  const [errores, setErrores] = useState({})
+  const [sugerenciasCliente, setSugerenciasCliente] = useState([])
+  const [sugerenciasEmpleado, setSugerenciasEmpleado] = useState([])
 
-  const URL = 'https://redgas.onrender.com/FacturaRegister';
+  const URL = 'https://redgas.onrender.com/FacturaRegister'
 
   const validarCampos = () => {
-    const errores = {};
-    if (!IDcliente) errores.IDcliente = 'Debe seleccionar un cliente.';
-    if (!IDempleado) errores.IDempleado = 'Debe seleccionar un empleado.';
-    if (!fecha.trim()) errores.fecha = 'La fecha es obligatoria.';
-    if (!totalFactura.trim() || parseFloat(totalFactura) <= 0) errores.total = 'Debe ingresar un total válido.';
-    return errores;
-  };
+    const errores = {}
+    if (!IDcliente) errores.IDcliente = 'Debe seleccionar un cliente.'
+    if (!IDempleado) errores.IDempleado = 'Debe seleccionar un empleado.'
+    if (!fecha.trim()) errores.fecha = 'La fecha es obligatoria.'
+    if (!totalFactura.trim() || parseFloat(totalFactura) <= 0) errores.total = 'Debe ingresar un total válido.'
+    return errores
+  }
 
   const handleRegister = async (e) => {
-    e.preventDefault();
-    const erroresValidados = validarCampos();
+    e.preventDefault()
+    const erroresValidados = validarCampos()
     if (Object.keys(erroresValidados).length > 0) {
-      setErrores(erroresValidados);
-      setMensaje('');
-      return;
+      setErrores(erroresValidados)
+      setMensaje('')
+      return
     }
 
-    setErrores({});
+    setErrores({})
     try {
       const res = await fetch(URL, {
         method: 'POST',
@@ -44,45 +44,45 @@ export const RegisterModal = ({ onClose, setRefrescar, clientes, empleados }) =>
           fecha_factura: fecha,
           total: parseFloat(totalFactura)
         }),
-      });
+      })
 
       if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data?.errors?.[0]?.msg || 'Error en la solicitud');
+        const data = await res.json()
+        throw new Error(data?.errors?.[0]?.msg || 'Error en la solicitud')
       }
 
-      setMensaje('Factura registrada exitosamente.');
-      if (setRefrescar) setRefrescar(true);
+      setMensaje('Factura registrada exitosamente.')
+      if (setRefrescar) setRefrescar(true)
     } catch (err) {
-      setMensaje('Error al registrar: ' + err.message);
+      setMensaje('Error al registrar: ' + err.message)
     }
-  };
+  }
 
   const cancelarRegistro = () => {
-    setClienteCorreo('');
-    setEmpleadoCorreo('');
-    setIDcliente('');
-    setIDempleado('');
-    setFecha(new Date().toISOString().slice(0, 10));
-    setTotalFactura('');
-    setMensaje('');
-    setErrores({});
-    setSugerenciasCliente([]);
-    setSugerenciasEmpleado([]);
-    onClose();
-  };
+    setClienteCorreo('')
+    setEmpleadoCorreo('')
+    setIDcliente('')
+    setIDempleado('')
+    setFecha(new Date().toISOString().slice(0, 10))
+    setTotalFactura('')
+    setMensaje('')
+    setErrores({})
+    setSugerenciasCliente([])
+    setSugerenciasEmpleado([])
+    onClose()
+  }
 
   const buscarCliente = (texto) => {
-    setClienteCorreo(texto);
-    const sugerencias = clientes.filter(c => c.correo_cliente.toLowerCase().includes(texto.toLowerCase()));
-    setSugerenciasCliente(sugerencias);
-  };
+    setClienteCorreo(texto)
+    const sugerencias = clientes.filter(c => c.correo_cliente.toLowerCase().includes(texto.toLowerCase()))
+    setSugerenciasCliente(sugerencias)
+  }
 
   const buscarEmpleado = (texto) => {
-    setEmpleadoCorreo(texto);
-    const sugerencias = empleados.filter(e => e.correo_empleado.toLowerCase().includes(texto.toLowerCase()));
-    setSugerenciasEmpleado(sugerencias);
-  };
+    setEmpleadoCorreo(texto)
+    const sugerencias = empleados.filter(e => e.correo_empleado.toLowerCase().includes(texto.toLowerCase()))
+    setSugerenciasEmpleado(sugerencias)
+  }
 
   return (
     <div className="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50">
@@ -107,9 +107,9 @@ export const RegisterModal = ({ onClose, setRefrescar, clientes, empleados }) =>
               <div
                 key={cliente.id_cliente}
                 onClick={() => {
-                  setClienteCorreo(cliente.correo_cliente);
-                  setIDcliente(cliente.id_cliente);
-                  setSugerenciasCliente([]);
+                  setClienteCorreo(cliente.correo_cliente)
+                  setIDcliente(cliente.id_cliente)
+                  setSugerenciasCliente([])
                 }}
                 className="cursor-pointer hover:bg-gray-100 p-1"
               >
@@ -137,9 +137,9 @@ export const RegisterModal = ({ onClose, setRefrescar, clientes, empleados }) =>
               <div
                 key={empleado.id_empleado}
                 onClick={() => {
-                  setEmpleadoCorreo(empleado.correo_empleado);
-                  setIDempleado(empleado.id_empleado);
-                  setSugerenciasEmpleado([]);
+                  setEmpleadoCorreo(empleado.correo_empleado)
+                  setIDempleado(empleado.id_empleado)
+                  setSugerenciasEmpleado([])
                 }}
                 className="cursor-pointer hover:bg-gray-100 p-1"
               >
@@ -185,5 +185,5 @@ export const RegisterModal = ({ onClose, setRefrescar, clientes, empleados }) =>
         )}
       </div>
     </div>
-  );
-};
+  )
+}

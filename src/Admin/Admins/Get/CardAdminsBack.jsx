@@ -1,20 +1,20 @@
-import React from 'react';
-import { DeleteAdmin } from "../Delete/Delete";
+import React from 'react'
+import { DeleteAdmin } from "../Delete/Delete"
 
 const CardAdminsBack = ({ admin, setRefrescar, onUpdateClick }) => {
   const handleDelete = async () => {
-    const confirmar = window.confirm(`¿Seguro que quieres eliminar a ${admin.nombre_admin}?`);
-    if (!confirmar) return;
+    const confirmar = window.confirm(`¿Seguro que quieres eliminar a ${admin.nombre_admin}?`)
+    if (!confirmar) return
 
-    const { success, message } = await DeleteAdmin(admin.correo_admin);
+    const { success, message } = await DeleteAdmin(admin.correo_admin)
 
     if (success) {
-      alert(message);
-      if (setRefrescar) setRefrescar(true);
+      alert(message)
+      if (setRefrescar) setRefrescar(true)
     } else {
-      alert(`Error: ${message}`);
+      alert(`Error: ${message}`)
     }
-  };
+  }
 
   return (
     <div className="bg-white shadow-lg rounded-lg p-4 w-full min-h-[150px] flex flex-col justify-start overflow-hidden">
@@ -41,7 +41,7 @@ const CardAdminsBack = ({ admin, setRefrescar, onUpdateClick }) => {
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default CardAdminsBack;
+export default CardAdminsBack

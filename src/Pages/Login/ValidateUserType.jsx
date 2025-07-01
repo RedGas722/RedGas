@@ -1,34 +1,44 @@
-export const validateUserType = async (correo) => {
-    const urls = [
-        { url: 'https://redgas.onrender.com/AdminGet', key: 'correo_admin', tipo: 1, ruta: 'AdminLogin' },
-        { url: 'https://redgas.onrender.com/ClienteGet', key: 'correo_cliente', tipo: 2, ruta: 'ClienteLogin' },
-        { url: 'https://redgas.onrender.com/EmpleadoGet', key: 'correo_empleado', tipo: 3, ruta: 'EmpleadoLogin' },
-        { url: 'http://localhost:10101/TecnicoLogin', key: 'correo_tecnico', tipo: 4, ruta: 'TecnicoLogin' }
-    ];
-
-    for (const { url, key, tipo, ruta } of urls) {
-        try {
-            const res = await fetch(`${url}?${key}=${encodeURIComponent(correo)}`);
-
-            // Manejo si el servidor devuelve error (como 404)
-            if (!res.ok) continue;
-
-            const data = await res.json();
-
-            // Verifica que la respuesta contenga datos reales
-            if ((data?.status === 'get ok' || data?.status === 'success') &&
-                (
-                    (Array.isArray(data.data) && data.data.length > 0) || 
-                    (typeof data.data === 'object' && Object.keys(data.data).length > 0)
-                )
-            ) {
-                return { tipo_usuario: tipo, ruta };
-            }
-
-        } catch (err) {
-            console.error(`Error consultando ${url}:`, err);
-        }
+export const ValidateUserLogin = async (correo, contrasena) => {
+  const loginAttempts = [
+    {
+      url: 'https://redgas.onrender.com/AdminLogin',
+      body: { correo_admin: correo, contraseña_admin: contrasena },
+      tipo: 1
+    },
+    {
+      url: 'https://redgas.onrender.com/ClienteLogin',
+      body: { correo_cliente: correo, contraseña_cliente: contrasena },
+      tipo: 2
+    },
+    {
+      url: 'https://redgas.onrender.com/EmpleadoLogin',
+      body: { correo_empleado: correo, contraseña_empleado: contrasena },
+      tipo: 3
     }
+  ];
 
-    return null;
+  for (const attempt of loginAttempts) {
+    try {
+      const res = await fetch(attempt.url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(attempt.body)
+      });
+
+      const data = await res.json();
+
+      if (res.ok && data?.token) {
+        return {
+          token: data.token,
+          tipo_usuario: attempt.tipo
+        };
+      }
+
+    } catch (error) {
+      console.error(`Error en login ${attempt.url}:`, error);
+    }
+  }
+
+  // Si ninguno funcionó
+  return null;
 };

@@ -1,21 +1,21 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react'
 
 export const UpdateModal = ({ onClose, setRefrescar, facturaCarta }) => {
-  const [estadoFactura, setEstadoFactura] = useState('inactiva');
-  const [IDfactura, setIDfactura] = useState('');
-  const [mensaje, setMensaje] = useState('');
+  const [estadoFactura, setEstadoFactura] = useState('inactiva')
+  const [IDfactura, setIDfactura] = useState('')
+  const [mensaje, setMensaje] = useState('')
 
-  const URL = 'https://redgas.onrender.com/FacturaUpdate';
+  const URL = 'https://redgas.onrender.com/FacturaUpdate'
 
   useEffect(() => {
       if (facturaCarta) {  
-          setIDfactura(facturaCarta.id_factura);
-          setEstadoFactura(facturaCarta.estado_factura);
+          setIDfactura(facturaCarta.id_factura)
+          setEstadoFactura(facturaCarta.estado_factura)
       }
-    }, [facturaCarta]);
+    }, [facturaCarta])
 
   const handleUpdate = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
     
     try {
       const res = await fetch(URL, {
@@ -25,23 +25,23 @@ export const UpdateModal = ({ onClose, setRefrescar, facturaCarta }) => {
           id_factura: IDfactura,
           estado_factura: estadoFactura
         }),
-      });
+      })
 
-      if (!res.ok) throw new Error('Error al actualizar la factura.');
-      const data = await res.json();
-      setMensaje('Actualización exitosa.');
-      if (setRefrescar) setRefrescar(true);  // Esto indica que se debe refrescar los datos
+      if (!res.ok) throw new Error('Error al actualizar la factura.')
+      const data = await res.json()
+      setMensaje('Actualización exitosa.')
+      if (setRefrescar) setRefrescar(true)  // Esto indica que se debe refrescar los datos
     } catch (err) {
-      setMensaje('Error al actualizar: ' + err.message);
+      setMensaje('Error al actualizar: ' + err.message)
     }
-  };
+  }
 
   const cancelarEdicion = () => {
-    setEstadoFactura('inactiva');
-    setIDfactura('');
-    setMensaje('');
-    onClose();
-  };
+    setEstadoFactura('inactiva')
+    setIDfactura('')
+    setMensaje('')
+    onClose()
+  }
 
   return (
     <div className="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50">
@@ -74,5 +74,5 @@ export const UpdateModal = ({ onClose, setRefrescar, facturaCarta }) => {
         )}
       </div>
     </div>
-  );
-};
+  )
+}

@@ -1,4 +1,4 @@
-import { faUser, faTools, faPlug, faGears, faQuestion } from "@fortawesome/free-solid-svg-icons"
+import { faUser, faTools, faPlug, faGears, faQuestion, faUserCircle, faPhone, faEnvelope, faLocationDot } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { Buttons } from "../../../UI/Login_Register/Buttons"
 import { useEffect, useState, useRef } from "react"
@@ -9,9 +9,13 @@ import Accordion from '@mui/material/Accordion'
 import AccordionSummary from '@mui/material/AccordionSummary'
 import AccordionDetails from '@mui/material/AccordionDetails'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import IconButton from '@mui/material/IconButton'
+import CloseIcon from '@mui/icons-material/Close'
 import BtnBack from "../../../UI/Login_Register/BtnBack"
-import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
+import emailjs from '@emailjs/browser'
+import Swal from 'sweetalert2'
+import { InputLabel } from "../../../UI/Login_Register/InputLabel/InputLabel"
 
 const URL_GET_TECHNICIAN = 'http://localhost:10101/TecnicoServicesGet'
 const URL_DELETE_TECHNICIAN = 'http://localhost:10101/TecnicoServicesDelete'
@@ -21,9 +25,10 @@ const URL_REGISTER_SERVICES = 'http://localhost:10101/PedidoServicioRegister'
 
 const style = {
   position: 'relative',
-  boxShadow: 24,
-  padding: '16px',
-  borderRadius: '24px',
+  background: 'var(--background-color)',
+  boxShadow: 'var(--shadow-main)',
+  padding: '15px',
+  borderRadius: 'var(--radius-main)',
 }
 
 export const Technica = () => {
@@ -34,7 +39,10 @@ export const Technica = () => {
   const [address, setAddress] = useState('')
   const [email, setEmail] = useState('')
   const [description, setDescription] = useState('')
+  const [total, setTotal] = useState('')
+  const [descriptionWork, setDescriptionWork] = useState('')
   const [services, setServices] = useState({})
+  const [isAccept, setIsAccept] = useState(false)
   const [isScrollable, setIsScrollable] = useState(false)
   const accordionRef = useRef(null)
   const token = localStorage.getItem('token')
@@ -68,9 +76,10 @@ export const Technica = () => {
         }
 
         const firstParse = JSON.parse(dataInfo.get)
-        await costumerGet(firstParse.userid)
+
+        costumerGet(firstParse.userid)
       } catch (err) {
-        alertSendForm(502, 'Error al obtener datos del técnico', err.message)
+        // alertSendForm(502, 'Error al obtener datos del técnico', err.message)
       }
     }
 
@@ -123,7 +132,7 @@ export const Technica = () => {
         body: JSON.stringify({
           id_cliente: costumerId,
           id_tecnico: technicianId,
-          estado_pedido: 'finalizado'
+          estado_pedido: 'Completado'
         }),
       })
 
@@ -131,7 +140,6 @@ export const Technica = () => {
 
       const data = await response.json()
       if (!data.get) {
-        alertSendForm(200, 'Servicio finalizado', 'El servicio fue marcado como finalizado.')
         handleDeleteServices()
       }
     } catch (err) {
@@ -157,8 +165,35 @@ export const Technica = () => {
       if (!resDeleteCostumer.ok || !resDeleteTechnician.ok)
         throw new Error('Error eliminando servicios')
 
-      alertSendForm(200, 'Servicio finalizado', 'Los datos fueron eliminados correctamente.')
-      navigate('/')
+      alertSendForm(200, 'Servicio finalizado', 'el servicio se finalizo correctamente.')
+      const templateParams = {
+        to_email: email,
+        company: 'RED-GAS',
+        user: user || 'Usuario',
+        message: `Hola ${user},  
+
+            Te informamos que tu solicitud de servicio ha sido completada con éxito por uno de nuestros técnicos especializados.
+
+            🛠️ Tipo de servicio realizado: ${description}
+            📍 Dirección: ${address}  
+            📞 Teléfono de contacto registrado: ${phone}
+
+            --------------------------------------------------
+            📃 Descripcion del servicio: ${descriptionWork}.
+            💲 Total: ${total}
+
+            Esperamos que tu experiencia haya sido satisfactoria. Si tienes algún comentario, sugerencia o necesitas asistencia adicional, no dudes en comunicarte con nosotros.
+
+            Gracias por confiar en RedGas. Seguimos trabajando para brindarte un servicio rápido, seguro y profesional.
+
+            -----------------------------------------  
+            RedGas Soporte Técnico  
+
+              `,
+        link: ` `,
+      }
+      handleEmail(templateParams)
+
     } catch (err) {
       alertSendForm(502, 'Error al limpiar servicios', err.message)
     }
@@ -188,9 +223,58 @@ export const Technica = () => {
         throw new Error('Error cancelando servicio')
 
       alertSendForm(200, 'Servicio cancelado', 'El servicio fue cancelado correctamente.')
-      navigate('/CostumerServices')
+      const templateParams = {
+        to_email: email,
+        company: 'RED-GAS',
+        user: user || 'Usuario',
+        message: `Hola ${user},  
+
+            Queremos informarte que, por motivos logísticos, el técnico asignado ha cancelado la atención a tu solicitud de servicio.
+
+            🛠️ Tipo de servicio solicitado: ${description}
+            📍 Dirección registrada: ${address} 
+            📞 Teléfono de contacto: ${phone}
+
+            Tu solicitud ///SIGUE ACTIVA/// y se encuentra en espera de ser asignada a otro técnico disponible. Te notificaremos tan pronto como uno de nuestros especialistas tome el caso.
+
+            Agradecemos tu paciencia y comprensión. En RedGas seguimos comprometidos con brindarte un servicio rápido, seguro y profesional.
+
+            --------------------------------------  
+            RedGas Soporte Técnico  
+            `,
+        link: ` `,
+      }
+      handleEmail(templateParams)
     } catch (err) {
       alertSendForm(502, 'Error al cancelar servicio', err.message)
+    }
+  }
+
+  const handleEmail = async (templateParams) => {
+
+    const serviceId = 'service_82gyxy6'
+    const templateId = 'template_fwkby0l'
+    const publicKey = 'SHHYhi-xHJeCovrBP'
+
+    try {
+      emailjs.send(serviceId, templateId, templateParams, publicKey)
+        .then(() => {
+          setTimeout(() => navigate('/CostumerServices'), 100)
+        })
+        .catch(() => {
+          alertTech(
+            402,
+            'No se pudo Aceptar el servicio',
+            'Ocurrió un error '
+          )
+        })
+
+    } catch {
+      alertTech(
+        401,
+        'Correo no encontrado',
+        ''
+      )
     }
   }
 
@@ -234,7 +318,6 @@ export const Technica = () => {
           icon: 'success',
           title: title || 'Operación exitosa',
           text: message || 'Tu solicitud fue completada correctamente.',
-          showConfirmButton: false,
           showConfirmButton: true,
           confirmButtonText: 'Cerrar',
         })
@@ -267,37 +350,66 @@ export const Technica = () => {
   }
 
   return (
-    <div>
-      <div className="flex justify-between items-center p-[0_5px] w-full">
+    <>
+      {/* BTN back */}
+      <div className="flex flex-col justify-between items-start sm:items-center sm:flex-row gap-2 p-[0_5px] w-full">
         <div className="btnDown">
           <BtnBack To='/' />
         </div>
         <h2 className="font-bold text-4xl text-[var(--Font-Nav)]">MI SERVICIO</h2>
       </div>
 
-      <section className="h-fit flex flex-wrap justify-start text-[var(--main-color)] items-start gap-[0px] !p-[0px_0px] bg-[var(--background-color)] MainPageContainer">
-        <Box sx={style} className="flex flex-col min-w-[530px] items-start justify-start gap-4 NeoContainer_outset_TL">
-          <div className="text-[var(--Font-Nav)] flex items-center gap-4">
-            <FontAwesomeIcon icon={getIconByLabel(description)} className="text-4xl" />
-            <p className="text-3xl font-bold">{description}</p>
-          </div>
+      <section className="h-fit flex flex-col justify-center text-[var(--main-color)] items-center gap-[20px] p-[0px_0px] MainPageContainer">
+        <section className="flex flex-wrap items-center justify-center gap-[2rem] w-full h-fit p-[15px_0] sm:p-[15px_20px] NeoContainer_outset_TL">
+          <div className="NeoContainer_outset_TL gap-2 flex flex-col sm:p-[20px_25px]">
+            {/* Problem title */}
+            <div className="text-[var(--Font-Nav2)] flex items-center justify-center gap-4">
+              <FontAwesomeIcon icon={getIconByLabel(description)} className="text-3xl sm:text-4xl" />
+              <p className="text-2xl sm:text-3xl font-bold ">Mantenimiento{/*{description}*/}</p>
+            </div>
 
-          <div className="text-[var(--main-color-sub)] pl-2 gap-3 flex items-center font-bold w-fit">
-            <FontAwesomeIcon icon={faUser} className="text-[var(--main-color)] text-5xl" />
-            <div className="flex flex-col justify-center font-light leading-[20px] gap-[8px]">
-              <p className="text-xl font-bold text-[var(--main-color)]">{user}</p>
-              <p className="text-[1rem]">{phone}</p>
-              <p className="text-[1rem]">{email}</p>
-              <p className="text-[1rem]">{address}</p>
-              <p className="text-[1rem] flex gap-2"><span className="font-black">Problema:</span> {services.input}</p>
+            {/* User information */}
+            <div className="text-[var(--main-color-sub)] leading-[20px] pl-2 gap-3 flex flex-wrap justify-start items-center font-bold w-fit">
+              <FontAwesomeIcon icon={faUser} className="text-[var(--main-color)] text-5xl" />
+              <div className="flex flex-col justify-center font-normal gap-[8px] text-[var(--main-color)]">
+                <div className="flex items-center gap-1">
+                  <FontAwesomeIcon icon={faUserCircle} className="relative top-1 text-2xl text-[var(--Font-Nav)]" />
+                  <p className="text-xl font-bold text-[var(--main-color)]">pepe{user}</p>
+                </div>
+                <div className="flex items-center gap-1">
+                  <FontAwesomeIcon icon={faPhone} className="text-1xl w-[15px] text-[var(--Font-Nav-shadow)]" />
+                  <p className="text-[1rem]">312156599{phone}</p>
+                </div>
+                <div className="flex items-center gap-1">
+                  <FontAwesomeIcon icon={faEnvelope} className="text-1xl w-[15px] text-[var(--Font-Nav-shadow)]" />
+                  <p className="text-[1rem]">asdads{email}</p>
+                </div>
+                <div className="flex items-center gap-1">
+                  <FontAwesomeIcon icon={faLocationDot} className="text-1xl w-[15px] text-[var(--Font-Nav-shadow)]" />
+                  <p className="text-[1rem]">asdads{address}</p>
+                </div>
+              </div>
+
+              <div className="w-[1px] min-h-[80px] relative bg-[var(--main-color)] hidden sm:block">
+                <span className="inline-block w-fit h-fit rotate-[45deg] absolute -left-1/2 top-1/2 transform -translate-y-1/2 -translate-x-1/2 bg-[var(--background-color)]">//</span>
+              </div>
+
+              <div className="flex flex-col items-start gap-1">
+                <h3 className="text-[1rem] font-black">Problema:</h3>
+                <p className="pl-2 max-w-[250px] font-normal"> Lorem ipsum, dolor sit amet consectetur {services.input}</p>
+              </div>
             </div>
           </div>
 
-          <div className="flex flex-col items-center justify-center gap-4">
-            <h4 className="text-3xl font-bold text-[var(--main-color)]">Pasos a seguir</h4>
-            <div ref={accordionRef} className="accordionContain flex NeoContainer_outset_TL max-w-[525px] flex-col gap-0">
-              {services.posibles_soluciones?.map((itemParsed, i) => (
-                <Accordion key={i}>
+          {/* Steeps to follow */}
+          <Box sx={style} className="w-fit items-start justify-start ">
+            <div className="flex flex-col items-center justify-center gap-4">
+              <h4 className="text-2xl sm:text-3xl font-bold text-[var(--main-color)]">Pasos a seguir</h4>
+              <div ref={accordionRef} className="accordionContain NeoContainer_outset_TL w-fit">
+                {services.posibles_soluciones?.map((itemParsed, i) => (
+                <Accordion key={i} sx={{
+                  minWidth:'100px',
+                }}>
                   <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                     <p className="font-bold">{itemParsed.titulo}</p>
                   </AccordionSummary>
@@ -305,17 +417,61 @@ export const Technica = () => {
                     <p>{itemParsed.descripcion}</p>
                   </AccordionDetails>
                 </Accordion>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
-        </Box>
+          </Box>
+        </section>
 
-        <div className="flex justify-center items-center gap-4">
-          <Buttons type="submit" nameButton="Terminar el servicio" Onclick={handleDoneServices} />
-          <Buttons type="submit" nameButton="Cancelar el servicio" Onclick={handleCancelServices} />
-        </div>
-      </section>
-    </div>
+        {isAccept === true && (
+          <Box sx={style} className="w-full md:w-[75%] items-start justify-start relative ">
+            <div className="flex flex-col justify-center items-center gap-5 w-full h-fit p-4 NeoSubContainer_outset_TL outline-none resize-none text-[var(--Font-Nav-shadow)]">
+              <InputLabel
+                type='5'
+                ForID='Total'
+                childLabel='Cobro total'
+                placeholder='Total...'
+                value={total}
+                onChange={e => setTotal(e.target.value)}
+                showCurrency={true}
+                required
+              />
+
+              <InputLabel
+                type='8'
+                ForID='Description'
+                childLabel='Descripción del servicio'
+                placeholder='Descripción del servicio...'
+                value={descriptionWork}
+                onChange={e => setDescriptionWork(e.target.value)}
+                required
+              />
+              <Buttons height='auto' type="submit" nameButton="Terminar el servicio" Onclick={handleDoneServices} />
+              <IconButton
+                aria-label="close"
+                onClick={() => setIsAccept(false)}
+                sx={{
+                  position: 'absolute',
+                  top: 19,
+                  right: 19,
+                  color: 'var(--main-color-sub)',
+                  zIndex: 10
+                }}
+              >
+                <CloseIcon />
+              </IconButton>
+            </div>
+          </Box>
+
+        )}
+        {isAccept === false && (
+          <div className="flex flex-wrap justify-center items-center gap-5 ">
+            <Buttons type="submit" nameButton="Cancelar el servicio" Onclick={handleCancelServices} />
+            <Buttons type="submit" nameButton="Terminar el servicio" Onclick={() => setIsAccept(true)} />
+          </div>
+        )}
+      </section >
+    </>
   )
 }
 

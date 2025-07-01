@@ -30,7 +30,10 @@ export const Navs = ({ className, ref1, ref2, ref3, ref4 }) => {
                     }
                 })
             },
-            { rootMargin: '-100px 0px 0px 0px', threshold: 0.2 }
+            {
+                rootMargin: '-100px 0px 0px 0px',
+                threshold: isMdUp ? 0.2 : 0.05,
+            }
         )
 
         sectionIds.forEach(id => {
@@ -39,7 +42,7 @@ export const Navs = ({ className, ref1, ref2, ref3, ref4 }) => {
         })
 
         return () => observer.disconnect()
-    }, [])
+    }, [isMdUp])
 
     const generateTabs = () => {
         const baseTabs = [
@@ -56,7 +59,6 @@ export const Navs = ({ className, ref1, ref2, ref3, ref4 }) => {
         if (tipoUsuario === 1 || tipoUsuario === 3) {
             baseTabs.push({ label: 'Admin', action: () => navigate('/Admin') })
         }
-
         return baseTabs
     }
 
@@ -80,47 +82,47 @@ export const Navs = ({ className, ref1, ref2, ref3, ref4 }) => {
             }}
         >
             <Tabs
-            value={tabIndex}
-            onChange={handleTabChange}
-            orientation={isMdUp ? 'horizontal' : 'vertical'}
-            scrollButtons
-            allowScrollButtonsMobile
-            TabIndicatorProps={{
-                style: {
-                    backgroundColor: 'var(--Font-Nav)',
-                    height: isMdUp ? '3px' : '100%',
-                    width: isMdUp ? 'auto' : '3px',
-                    left: isMdUp ? undefined : 0,
-                    right: isMdUp ? 0 : 'auto',
-                },
-            }}
-            sx={{
-                [`& .${tabsClasses.scrollButtons}`]: {
-                    '&.Mui-disabled': { opacity: 0.3 },
-                },
-                '& .MuiTab-root': {
-                    color: 'var(--main-color)',
-                    borderBottom: isMdUp ? '3px solid transparent' : 'none',
-                    borderLeft: !isMdUp ? '3px solid transparent' : 'none',
-                    '&.Mui-selected': {
-                        color: 'var(--Font-Nav)',
-                        borderRadius: isMdUp ? '0 0 3px 3px' : '3px 0 0 3px',
-                        borderBottom: isMdUp ? '3px solid var(--Font-Nav)' : 'none',
-                        borderLeft: !isMdUp ? '3px solid var(--Font-Nav)' : 'none',
+                value={tabIndex}
+                onChange={handleTabChange}
+                orientation={isMdUp ? 'horizontal' : 'vertical'}
+                scrollButtons
+                allowScrollButtonsMobile
+                TabIndicatorProps={{
+                    style: {
+                        backgroundColor: 'var(--Font-Nav)',
+                        height: isMdUp ? '3px' : '100%',
+                        width: isMdUp ? 'auto' : '3px',
+                        left: isMdUp ? undefined : 0,
+                        right: isMdUp ? 0 : 'auto',
                     },
-                    '&:hover': {
-                        color: 'var(--Font-Nav-shadow)',
+                }}
+                sx={{
+                    [`& .${tabsClasses.scrollButtons}`]: {
+                        '&.Mui-disabled': { opacity: 0.3 },
+                    },
+                    '& .MuiTab-root': {
+                        color: 'var(--main-color)',
+                        borderBottom: isMdUp ? '3px solid transparent' : 'none',
+                        borderLeft: !isMdUp ? 'none' : 'none',
                         '&.Mui-selected': {
                             color: 'var(--Font-Nav)',
+                            borderRadius: isMdUp ? '0 0 3px 3px' : '3px 0 0 3px',
+                            borderBottom: isMdUp ? '3px solid var(--Font-Nav)' : 'none',
+                            borderLeft: !isMdUp ? 'none' : 'none',
+                        },
+                        '&:hover': {
+                            color: 'var(--Font-Nav-shadow)',
+                            '&.Mui-selected': {
+                                color: 'var(--Font-Nav)',
+                            }
                         }
-                    }
-                },
-            }}
-        >
-            {tabOptions.map((tab, index) => (
-                <Tab key={index} label={tab.label} />
-            ))}
-        </Tabs>
+                    },
+                }}
+            >
+                {tabOptions.map((tab, index) => (
+                    <Tab key={index} label={tab.label} />
+                ))}
+            </Tabs>
 
             {/* LINKS OCULTOS PARA DISPARAR SCROLL */}
             <div className="hidden">

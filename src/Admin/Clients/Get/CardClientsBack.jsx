@@ -1,20 +1,20 @@
-import { DeleteClient } from '../Delete/Delete';
-import { Buttons } from '../../../UI/Login_Register/Buttons';
+import { Buttons } from '../../../UI/Login_Register/Buttons'
+import { DeleteClient } from '../Delete/Delete'
 
 const CardClientsBack = ({ cliente, setRefrescar, onUpdateClick }) => {
   const handleDelete = async () => {
-    const confirmar = window.confirm(`¿Seguro que quieres eliminar a ${cliente.nombre_cliente}?`);
-    if (!confirmar) return;
+    const confirmar = window.confirm(`¿Seguro que quieres eliminar a ${cliente.nombre_cliente}?`)
+    if (!confirmar) return
 
-    const { success, message } = await DeleteClient(cliente.correo_cliente);
+    const { success, message } = await DeleteClient(cliente.correo_cliente)
 
     if (success) {
-      alert(message);
-      setRefrescar(true);
+      alert(message)
+      setRefrescar(true)
     } else {
-      alert(`Error: ${message}`);
+      alert(`Error: ${message}`)
     }
-  };
+  }
 
   return (
     <div className="text-center items-center NeoContainer_outset_TL w-[300px] p-4 h-fit flex flex-col justify-start gap-2">
@@ -44,7 +44,7 @@ const CardClientsBack = ({ cliente, setRefrescar, onUpdateClick }) => {
         <Buttons onClick={() => onUpdateClick(cliente)} nameButton='Actualizar' textColor='var(--Font-Yellow)' radius='12' borderWidth='1' borderColor='var(--Font-Yellow)' />
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default CardClientsBack;
+export default CardClientsBack

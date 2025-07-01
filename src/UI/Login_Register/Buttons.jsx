@@ -1,9 +1,9 @@
 import Button from '@mui/material/Button';
 import './LR.css';
 
-export const Buttons = ({ padding, width, height, radius, borderWidth, borderColor, textColor, nameButton, Onclick, Type, ...props }) => {
+export const Buttons = ({ padding, width, height, radius, borderWidth, borderColor, textColor, nameButton, subTextBTN, Onclick, Type, ...props }) => {
     return (
-        <div className="group">
+        <div className="group flex flex-col items-center gap-[5px]">
             <Button
                 data-cursor-hover
                 onClick={Onclick}
@@ -20,17 +20,22 @@ export const Buttons = ({ padding, width, height, radius, borderWidth, borderCol
                     textTransform: 'none',
                     padding: `${padding || '5px 70px'}`,
                     fontSize: '1rem',
-                    height: `${height || ' '}`,
+                    height: `${height || ''}`,
                     width: `${width || '100%'}`,
                     transition: 'all 0.3s ease',
                     minWidth: 'unset',
+                    '@media (max-width: 600px)': {
+                        padding: '5px 30px',
+                        fontSize: '0.9rem',
+                        width: '100%',
+                    },
                     '&:hover': {
                         background: 'var(--background-color)',
                         color: textColor || 'var(--Font-Nav)',
                         boxShadow: 'var(--shadow-sub-outset)',
                         '& .textBtn': {
                             filter: 'brightness(1.2)',
-                        }
+                        },
                     },
                     '&:active': {
                         color: textColor || 'var(--Font-Nav)',
@@ -47,6 +52,9 @@ export const Buttons = ({ padding, width, height, radius, borderWidth, borderCol
                     {nameButton}
                 </p>
             </Button>
+            <p className='subTextBTN text-[var(--main-color)] font-semibold'>
+                {subTextBTN}
+            </p>
         </div>
     );
 };
