@@ -1,23 +1,19 @@
-import "./Cards.css";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/navigation";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRight, faArrowLeft, faCartShopping } from '@fortawesome/free-solid-svg-icons';
-import { useNavigate } from "react-router-dom";
-import Swal from 'sweetalert2';
-import { Buttons } from "../Login_Register/Buttons";
-import { useState } from 'react';
-import Modal from '@mui/material/Modal';
-import Box from '@mui/material/Box';
+import "./Cards.css"
+import { useEffect, useRef, useState } from "react"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faArrowRight, faArrowLeft, faCartShopping } from '@fortawesome/free-solid-svg-icons'
+import { useNavigate } from "react-router-dom"
+import { ExpandMore } from "./ExpandMore/ExpandMore"
+import Swal from 'sweetalert2'
+import { Buttons } from "../Login_Register/Buttons"
+import Modal from '@mui/material/Modal'
+import Box from '@mui/material/Box'
+import useEmblaCarousel from 'embla-carousel-react'
 
 async function agregarAlCarrito(item) {
   const token = localStorage.getItem("token");
-  if (!token) {
-    // Se comprobará en handleAddToCart
-    return null;
-  }
+  if (!token) return null;
+
   const res = await fetch("https://redgas.onrender.com/CartAdd", {
     method: "POST",
     headers: {
@@ -27,10 +23,7 @@ async function agregarAlCarrito(item) {
     body: JSON.stringify(item),
   });
 
-  if (!res.ok) {
-    const error = await res.json();
-    throw new Error(error.message || "Error al agregar al carrito");
-  }
+  if (!res.ok) throw new Error((await res.json()).message || "Error al agregar al carrito");
   return await res.json();
 }
 
@@ -38,6 +31,33 @@ export const Cards = ({ uniqueId, productos = [] }) => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [showArrows, setShowArrows] = useState(false);
+  const [emblaRef, embla] = useEmblaCarousel({
+    align: 'start',
+    loop: true,
+    slidesToScroll: 1,
+    breakpoints: {
+      320: { slidesToScroll: 1 },
+      500: { slidesToScroll: 1 },
+      852: { slidesToScroll: 1 },
+      1080: { slidesToScroll: 1 },
+      1390: { slidesToScroll: 1 },
+    },
+  });
+
+  useEffect(() => {
+    if (!embla) return;
+
+    const checkScroll = () => {
+      const canScroll = embla.slideNodes().length > embla.slidesInView().length;
+      setShowArrows(canScroll);
+    };
+
+    embla.on("select", checkScroll);
+    embla.on("resize", checkScroll);
+    checkScroll();
+  }, [embla]);
+
   const handleOpen = (producto) => {
     setSelectedProduct(producto);
     setOpen(true);
@@ -60,9 +80,7 @@ export const Cards = ({ uniqueId, productos = [] }) => {
         allowOutsideClick: false,
         allowEscapeKey: false
       }).then((result) => {
-        if (result.isConfirmed) {
-          navigate("/Login");
-        }
+        if (result.isConfirmed) navigate("/Login");
       });
       return;
     }
@@ -93,27 +111,11 @@ export const Cards = ({ uniqueId, productos = [] }) => {
   };
 
   return (
-    <section id={`CardSect-${uniqueId}`} className="flex flex-col gap-[10px] h-fit w-[100%]">
-      <Swiper
-        modules={[Navigation]}
-        loop={productos.length > 1}
-        navigation={{
-          prevEl: `.swiper-button-prev-${uniqueId}`,
-          nextEl: `.swiper-button-next-${uniqueId}`,
-        }}
-        breakpoints={{
-          1390: { slidesPerView: 5, spaceBetween: 0 },
-          1080: { slidesPerView: 4, spaceBetween: 5 },
-          852: { slidesPerView: 3, spaceBetween: 5 },
-          500: { slidesPerView: 2, spaceBetween: 5 },
-          320: { slidesPerView: 1, spaceBetween: 5 },
-        }}
-        id={`cardContainer-${uniqueId}`}
-        className="w-[100%] flex justify-center items-center p-[0_20px_0_20px] "
-      >
-        {productos.map((producto, index) => (
-          <SwiperSlide key={index}>
-            <div className="flex justify-center justify-self-center h-fit p-[25px_0_25px_0] items-center w-fit">
+    <section id={`CardSect-${uniqueId}`} className="flex flex-col items-center justify-center gap-[10px] h-fit w-[100%]">
+      <div className="embla" ref={emblaRef}>
+        <div className="embla__container flex " >
+          {productos.map((producto, index) => (
+            <div className="embla__slide flex justify-center p-[25px_10px]" key={index}>
               <div className="card NeoSubContainer_outset_TL">
                 <div className="card-img" onClick={() => navigate('/ProductInfo')}>
                   <div className="img">
@@ -127,35 +129,43 @@ export const Cards = ({ uniqueId, productos = [] }) => {
                 <div className="flex gap-1 items-end justify-center">
                   <div className="card-title">{producto.nombre_producto}</div>
                 </div>
-                <div className="card-subtitle break-words whitespace-pre-wrap">
-                  {producto.descripcion_producto || "Sin descripción disponible."}
-                </div>
-                <hr className="card-divider" />
+                <ExpandMore text={producto.descripcion_producto} />
+                <div className="w-full h-[2px] bg-[var(--main-color-sub)] rounded-2xl"></div>
                 <div className="card-footer">
                   <div className="card-price">
-                    <p><span className="text-[var(--Font-Nav-shadow)]">$</span> {(parseFloat(producto.precio_producto) || 0).toLocaleString()} <span className="text-[var(--main-color-sub)] text-[12px]">Cop</span> </p>
+                    <p><span className="text-[var(--Font-Nav-shadow)]">$</span> {(parseFloat(producto.precio_producto) || 0).toLocaleString()} <span className="text-[var(--main-color-sub)] text-[12px]">Cop</span></p>
                   </div>
-                  <button
-                    className="card-btn"
-                    onClick={() => handleAddToCart(producto)}
-                  >
+                  <button className="card-btn" onClick={() => handleAddToCart(producto)}>
                     <FontAwesomeIcon icon={faCartShopping} />
                   </button>
                 </div>
-                <Buttons radius='7' nameButton='Ver más...' Onclick={() => handleOpen(producto)} />
+                <Buttons radius='7' height='auto' nameButton='Ver más...' Onclick={() => handleOpen(producto)} />
               </div>
             </div>
-          </SwiperSlide>
-        ))}
-      </Swiper>
-      {/* Modal de detalle de producto */}
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-title"
-        aria-describedby="modal-description"
-        disableScrollLock={true}
-      >
+          ))}
+        </div>
+      </div>
+
+      <div className="flex flex-col justify-center items-center self-center w-fit p-[10px] NeoSubContainer_outset_TL text-[var(--main-color)]">
+        {showArrows && (
+          <div className="flex justify-center items-center gap-[20px]">
+            <button
+              className="buttonTL arrow NeoSubContainer_outset_TL p-[7px]"
+              onClick={() => embla && embla.scrollPrev()}
+            >
+              <FontAwesomeIcon icon={faArrowLeft} className="faArrowLeft text-[30px]" />
+            </button>
+            <button
+              className="buttonTL arrow NeoSubContainer_outset_TL p-[7px]"
+              onClick={() => embla && embla.scrollNext()}
+            >
+              <FontAwesomeIcon icon={faArrowRight} className="faArrowRight text-[30px]" />
+            </button>
+          </div>
+        )}
+      </div>
+
+      <Modal open={open} onClose={handleClose} disableScrollLock={true}>
         <Box
           sx={{
             position: 'absolute',
@@ -171,20 +181,9 @@ export const Cards = ({ uniqueId, productos = [] }) => {
             p: 4,
           }}
         >
-          {/* Botón X de cerrar */}
           <button
             onClick={handleClose}
-            style={{
-              position: 'absolute',
-              top: 8,
-              right: 8,
-              background: 'transparent',
-              border: 'none',
-              fontSize: 24,
-              color: '#19A9A4',
-              cursor: 'pointer',
-              zIndex: 10,
-            }}
+            style={{ position: 'absolute', top: 8, right: 8, background: 'transparent', border: 'none', fontSize: 24, color: '#19A9A4', cursor: 'pointer', zIndex: 10 }}
             aria-label="Cerrar"
           >
             &times;
@@ -203,18 +202,13 @@ export const Cards = ({ uniqueId, productos = [] }) => {
               <div className="flex gap-1 items-end justify-center">
                 <div className="card-title">{selectedProduct.nombre_producto}</div>
               </div>
-              <div className="card-subtitle">
-                {selectedProduct.descripcion_producto || "Sin descripción disponible."}
-              </div>
+              <div className="card-subtitle">{selectedProduct.descripcion_producto || "Sin descripción disponible."}</div>
               <hr className="card-divider" />
               <div className="card-footer">
                 <div className="card-price">
-                  <p><span className="text-[var(--Font-Nav-shadow)]">$</span> {(parseFloat(selectedProduct.precio_producto) || 0).toLocaleString()} <span className="text-[var(--main-color-sub)] text-[12px]">Cop</span> </p>
+                  <p><span className="text-[var(--Font-Nav-shadow)]">$</span> {(parseFloat(selectedProduct.precio_producto) || 0).toLocaleString()} <span className="text-[var(--main-color-sub)] text-[12px]">Cop</span></p>
                 </div>
-                <button
-                  className="card-btn"
-                  onClick={() => handleAddToCart(selectedProduct)}
-                >
+                <button className="card-btn" onClick={() => handleAddToCart(selectedProduct)}>
                   <FontAwesomeIcon icon={faCartShopping} />
                 </button>
               </div>
@@ -222,20 +216,6 @@ export const Cards = ({ uniqueId, productos = [] }) => {
           )}
         </Box>
       </Modal>
-      <div className="flex flex-col justify-center items-center self-center w-fit p-[10px] NeoSubContainer_outset_TL text-[var(--main-color)]">
-        <div className="flex justify-center items-center gap-[20px]">
-          <button
-            className={`buttonTL arrow NeoSubContainer_outset_TL p-[7px] swiper-button-prev-${uniqueId} cursor-pointer`}
-          >
-            <FontAwesomeIcon icon={faArrowLeft} className="faArrowLeft text-[30px]" />
-          </button>
-          <button
-            className={`buttonTL arrow NeoSubContainer_outset_TL p-[7px] swiper-button-next-${uniqueId} cursor-pointer`}
-          >
-            <FontAwesomeIcon icon={faArrowRight} className="faArrowRight text-[30px]" />
-          </button>
-        </div>
-      </div>
     </section>
   );
 };

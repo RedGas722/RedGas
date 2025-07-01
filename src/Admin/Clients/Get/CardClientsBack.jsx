@@ -1,5 +1,5 @@
-import { DeleteClient } from '../Delete/Delete';
-import { Buttons } from '../../../UI/Login_Register/Buttons';
+import { Buttons } from '../../../UI/Login_Register/Buttons'
+import { DeleteClient } from '../Delete/Delete'
 
 const CardClientsBack = ({ cliente, setRefrescar, onUpdateClick }) => {
   const handleDelete = async () => {

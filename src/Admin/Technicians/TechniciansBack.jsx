@@ -1,14 +1,17 @@
 import { useState, useEffect, useRef } from 'react'
 import { RegisterModal } from './Register/RegisterModal'
 import { UpdateModal } from './Update/Update'
-import { Paginator } from '../../UI/Paginator/Paginator'
+import { ButtonBack } from '../UI/ButtonBack/ButtonBack'
+import { BtnBack } from "../../UI/Login_Register/BtnBack"
 import CardTechniciansBack from './Get/CardTechniciansBack'
 import { buscarTecnicoPorCorreo } from './Get/Get'
 import { InputLabel } from '../../UI/Login_Register/InputLabel/InputLabel'
+import { Backdrop, CircularProgress } from '@mui/material';
+import { Paginator } from '../../UI/Paginator/Paginator'
 import { Buttons } from '../../UI/Login_Register/Buttons'
-import BtnBack from '../../UI/Login_Register/BtnBack'
 
 export const TechniciansBack = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const [showRegisterModal, setShowRegisterModal] = useState(false)
   const [showUpdateModal, setShowUpdateModal] = useState(false)
   const [tecnicos, setTecnicos] = useState([])
@@ -72,19 +75,23 @@ export const TechniciansBack = () => {
     setErrorBusqueda('')
     setTecnicoBuscado(null)
 
-    const correoFinal = (correo || correoBusqueda).trim()
-      if (!correoFinal) {
-        setErrorBusqueda('Por favor ingrese un correo válido')
-        return
-      }
+    if (!correo.trim()) {
+      fetchTecnicos(1)
+      setPaginaActual(1)
+      return
+    }
 
-      try {
-        const resultado = await buscarTecnicoPorCorreo(correoFinal)
-        setTecnicoBuscado(resultado)
+    try {
+      const resultado = await buscarTecnicoPorCorreo(correo.trim()) // ⚠️ Usa el parámetro, no el estado
+      if (resultado.length > 0) {
+        setTecnicoBuscado(resultado[0])
         setSugerencias([])
-      } catch (error) {
-        setErrorBusqueda(error.message || 'No se encontró el tecnico')
+      } else {
+        setErrorBusqueda('No se encontró un técnico con ese correo.')
       }
+    } catch (error) {
+      setErrorBusqueda('Error al buscar técnico.')
+    }
   }
 
   // Autocompletado desde los correos obtenidos
@@ -112,17 +119,16 @@ export const TechniciansBack = () => {
   }, [])
 
   return (
-    <section className="w-full h-full p-[5px_20px_10px_5px]">
-      <BtnBack To='/Admin' />
-      
-      <div className="p-[10px_20px_10px_20px] h-full flex flex-col gap-2">
-        <h1 className="font-bold text-3xl text-[var(--main-color)]">Técnicos</h1>
-        
-        <div className='flex flex-col gap-2'>
-          
-          <div className='NeoContainer_outset_TL flex gap-4 flex-wrap items-end w-fit p-[0_20px_10px_20px]'>
-            
-            <div ref={contenedorRef}>
+    <>
+      <section className="w-full h-full p-[var(--p-admin)]">
+        <BtnBack To='/Admin' />
+
+        <div className="p-[var(--p-admin-sub)] h-full flex flex-col gap-2">
+          <h1 className="font-bold text-3xl text-[var(--main-color)]">Técnicos</h1>
+
+          <div className='NeoContainer_outset_TL flex gap-4 flex-wrap items-end w-fit p-[var(--p-admin-control)]'>
+
+            <div className='relative' ref={contenedorRef}>
               <InputLabel
                 radius='10'
                 type="1"
@@ -154,12 +160,11 @@ export const TechniciansBack = () => {
             </div>
             <div className="flex w-fit h-fit flex-wrap justify-center justify-self-center items-center gap-[20px]">
               <Buttons radius='10' nameButton='Registrar' textColor='var(--Font-Nav)' Onclick={() => setShowRegisterModal(true)} />
-              {/* Eliminar, Actualizar y Consultar removidos porque ya están en la card y el input de consulta ya existe */}
             </div>
           </div>
           {/* Sección de técnicos */}
           <div className="flex flex-wrap items-center gap-6">
-            {(tecnicoBuscado || tecnicos).map(tecnico => (
+            {(tecnicoBuscado ? [tecnicoBuscado] : tecnicos).map(tecnico => (
               <CardTechniciansBack
                 key={tecnico.id_tecnico || tecnico.correo_tecnico}
                 tecnico={tecnico}
@@ -194,9 +199,8 @@ export const TechniciansBack = () => {
             />
           )}
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   )
 }
-
 export default TechniciansBack

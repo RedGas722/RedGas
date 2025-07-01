@@ -1,28 +1,26 @@
 import { useState, useEffect, useRef } from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import { RegisterModal } from './Register/RegisterModal'
 import { UpdateModal } from './Update/Update'
-import CardEmployeesBack from './Get/CardEmployeesBack'
-import { buscarEmpleadoPorCorreo } from './Get/Get'
 import { BtnBack } from "../../UI/Login_Register/BtnBack"
 import { InputLabel } from '../../UI/Login_Register/InputLabel/InputLabel'
+import CardEmployeesBack from './Get/CardEmployeesBack'
+import { buscarEmpleadoPorCorreo } from './Get/Get'
+import { Paginator } from '../../UI/Paginator/Paginator'
 import { Buttons } from '../../UI/Login_Register/Buttons'
-import Paginator from '../../UI/Paginator/Paginator'
 
 export const EmployeesBack = () => {
   const [showRegisterModal, setShowRegisterModal] = useState(false)
   const [showUpdateModal, setShowUpdateModal] = useState(false)
   const [empleados, setEmpleados] = useState([])
-  const [empleadosEmails, setEmpleadosEmails] = useState([])
+  const [correosEmpleados, setCorreosEmpleados] = useState([])
   const [refrescar, setRefrescar] = useState(false)
-  const [empleadoSeleccionado, setEmpleadoSeleccionado] = useState(null)
   const [correoBusqueda, setCorreoBusqueda] = useState('')
   const [empleadoBuscado, setEmpleadoBuscado] = useState(null)
   const [errorBusqueda, setErrorBusqueda] = useState('')
   const [sugerencias, setSugerencias] = useState([])
   const [paginaActual, setPaginaActual] = useState(1)
   const [totalPaginas, setTotalPaginas] = useState(1)
+
   const contenedorRef = useRef(null)
 
   const fetchEmpleados = async (pagina = 1) => {
@@ -45,7 +43,7 @@ export const EmployeesBack = () => {
       const res = await fetch('https://redgas.onrender.com/EmpleadoGetAllEmails')
       if (!res.ok) throw new Error('Error al obtener correos')
       const data = await res.json()
-      setEmpleadosEmails(data.data || [])
+      setCorreosEmpleados(data.data || [])
     } catch (error) {
       console.error(error)
     }
@@ -68,46 +66,43 @@ export const EmployeesBack = () => {
     }
   }, [refrescar])
 
-  const abrirModalActualizar = (empleado) => {
-    setEmpleadoSeleccionado(empleado)
-    setShowUpdateModal(true)
-  }
-
-  const cerrarModal = () => {
-    setShowUpdateModal(false)
-    setEmpleadoSeleccionado(null)
-  }
+  const handleUpdateClick = (empleado) => setShowUpdateModal(empleado)
 
   const buscarEmpleado = async (correo) => {
     setErrorBusqueda('')
     setEmpleadoBuscado(null)
 
-    const correoFinal = (correo || correoBusqueda).trim()
-    if (!correoFinal) {
-      setErrorBusqueda('Por favor ingrese un correo válido')
+    if (!correo.trim()) {
+      fetchEmpleados(1)
+      setPaginaActual(1)
       return
     }
 
     try {
-      const resultado = await buscarEmpleadoPorCorreo(correoFinal)
-      setEmpleadoBuscado(resultado)
-      setSugerencias([])
+      const resultado = await buscarEmpleadoPorCorreo(correo.trim())
+      if (resultado) {
+        setEmpleadoBuscado(resultado)
+        setSugerencias([])
+      } else {
+        setErrorBusqueda('No se encontró un empleado con ese correo.')
+      }
     } catch (error) {
-      setErrorBusqueda(error.message || 'Empleado no encontrado')
+      setErrorBusqueda('Error al buscar empleado.')
     }
   }
 
   useEffect(() => {
     if (correoBusqueda.trim() === '') {
       setSugerencias([])
+      setEmpleadoBuscado(null)
       return
     }
 
-    const filtrados = empleadosEmails.filter((empleado) =>
-      (empleado.correo_empleado || '').toLowerCase().includes(correoBusqueda.toLowerCase())
+    const filtrados = correosEmpleados.filter(emp =>
+      emp.correo_empleado?.toLowerCase().includes(correoBusqueda.toLowerCase())
     )
     setSugerencias(filtrados.slice(0, 5))
-  }, [correoBusqueda, empleadosEmails])
+  }, [correoBusqueda, correosEmpleados])
 
   useEffect(() => {
     const manejarClickFuera = (e) => {
@@ -115,99 +110,84 @@ export const EmployeesBack = () => {
         setSugerencias([])
       }
     }
-
     document.addEventListener('mousedown', manejarClickFuera)
     return () => document.removeEventListener('mousedown', manejarClickFuera)
   }, [])
 
-  useEffect(() => {
-    if (correoBusqueda.trim() === '') {
-      setEmpleadoBuscado(null)
-      setErrorBusqueda('')
-    }
-  }, [correoBusqueda])
-
   return (
-    <section className="w-full h-full flex flex-col p-[5px_20px_10px_5px]">
+    <section className="w-full h-full p-[var(--p-admin)]">
       <BtnBack To='/Admin' />
-      <div className="p-[10px_20px_10px_20px] h-full flex flex-col gap-2">
-        <h1 className="font-bold text-3xl text-[var(--main-color)]">Empleado BACK-OFFICE</h1>
 
-        <div className='NeoContainer_outset_TL flex gap-4 flex-wrap items-end w-fit p-[0_20px_10px_20px]'>
-          <div ref={contenedorRef} className="relative">
+      <div className="p-[var(--p-admin-sub)] h-full flex flex-col gap-2">
+        <h1 className="font-bold text-3xl text-[var(--main-color)]">Empleados</h1>
+
+        <div className='NeoContainer_outset_TL flex gap-4 flex-wrap items-end w-fit p-[var(--p-admin-control)]'>
+          <div className="relative" ref={contenedorRef}>
             <InputLabel
-              radius='10'
+              radius="10"
               type="1"
               ForID="correo_empleado_busqueda"
               placeholder="Buscar empleado"
               childLabel="Buscar empleado"
               value={correoBusqueda}
               onChange={e => setCorreoBusqueda(e.target.value)}
-              className="w-full pr-8"
+              className="w-full"
               placeholderError={!!errorBusqueda}
             />
-
             {sugerencias.length > 0 && (
-              <ul className="absolute z-10 bg-white border w-[230px] border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto shadow">
-                {sugerencias.map((empleado) => (
+              <ul className="absolute z-10 bg-white border border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto shadow w-[230px]">
+                {sugerencias.map((emp) => (
                   <li
-                    key={empleado.id_empleado}
+                    key={emp.id_empleado}
                     onClick={() => {
-                      setCorreoBusqueda(empleado.correo_empleado)
-                      buscarEmpleado(empleado.correo_empleado)
+                      setCorreoBusqueda(emp.correo_empleado)
+                      buscarEmpleado(emp.correo_empleado)
                       setSugerencias([])
                     }}
                     className="p-2 hover:bg-gray-100 cursor-pointer"
                   >
-                    {empleado.correo_empleado}
+                    {emp.correo_empleado}
                   </li>
                 ))}
               </ul>
             )}
           </div>
-
           <div className="flex w-fit h-fit flex-wrap justify-center items-center gap-[20px]">
             <Buttons
               radius='10'
               nameButton='Registrar'
               textColor='var(--Font-Nav)'
-              onClick={() => setShowRegisterModal(true)}
+              Onclick={() => setShowRegisterModal(true)}
             />
           </div>
         </div>
 
-        {errorBusqueda && <p className="text-red-600 text-sm">{errorBusqueda}</p>}
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {empleadoBuscado ? (
+        {/* Lista de empleados */}
+        <div className="flex flex-wrap items-center gap-6">
+          {(empleadoBuscado ? [empleadoBuscado] : empleados).map((empleado) => (
             <CardEmployeesBack
-              key={empleadoBuscado.id_empleado}
-              empleado={empleadoBuscado}
+              key={empleado.id_empleado}
+              empleado={empleado}
               setRefrescar={setRefrescar}
-              onUpdateClick={abrirModalActualizar}
+              onUpdateClick={handleUpdateClick}
             />
-          ) : (
-            empleados.map((empleado) => (
-              <CardEmployeesBack
-                key={empleado.id_empleado}
-                empleado={empleado}
-                setRefrescar={setRefrescar}
-                onUpdateClick={abrirModalActualizar}
-              />
-            ))
-          )}
+          ))}
         </div>
 
-        <Paginator
-          currentPage={paginaActual}
-          totalPages={totalPaginas}
-          onPageChange={(nuevaPagina) => {
-            if (nuevaPagina !== paginaActual) {
-              setPaginaActual(nuevaPagina)
-            }
-          }}
-        />
+        {/* Paginador */}
+        {!empleadoBuscado && (
+          <Paginator
+            currentPage={paginaActual}
+            totalPages={totalPaginas}
+            onPageChange={(nuevaPagina) => {
+              if (nuevaPagina !== paginaActual) {
+                setPaginaActual(nuevaPagina)
+              }
+            }}
+          />
+        )}
 
+        {/* Modales */}
         {showRegisterModal && (
           <RegisterModal
             onClose={() => setShowRegisterModal(false)}
@@ -215,11 +195,11 @@ export const EmployeesBack = () => {
           />
         )}
 
-        {showUpdateModal && empleadoSeleccionado && (
+        {typeof showUpdateModal === 'object' && showUpdateModal && (
           <UpdateModal
-            onClose={cerrarModal}
+            onClose={() => setShowUpdateModal(false)}
             setRefrescar={setRefrescar}
-            empleadoCarta={empleadoSeleccionado}
+            empleadoCarta={showUpdateModal}
           />
         )}
       </div>

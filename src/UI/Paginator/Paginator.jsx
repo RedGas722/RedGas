@@ -1,48 +1,40 @@
 // src/components/UI/Paginator.jsx
+import { Pagination, Box } from '@mui/material';
 
-export const Paginator = ({ currentPage, totalPages, onPageChange }) => {
+export const Paginator = ({ currentPage, totalPages, onPageChange, disabled }) => {
   if (totalPages <= 1) return null;
 
-  const getPageNumbers = () => {
-    const pages = [];
-    for (let i = 1; i <= totalPages; i++) {
-      pages.push(i);
+  const handleChange = (event, page) => {
+    if (page !== currentPage && !disabled) {
+      onPageChange(page);
     }
-    return pages;
   };
 
   return (
-    <div className="flex justify-center items-center gap-2 mt-4 flex-wrap">
-      <button
-        onClick={() => onPageChange(currentPage - 1)}
-        disabled={currentPage === 1}
-        className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
-      >
-        ← Anterior
-      </button>
-
-      {getPageNumbers().map((page) => (
-        <button
-          key={page}
-          onClick={() => onPageChange(page)}
-          className={`px-3 py-1 rounded ${
-            page === currentPage
-              ? 'bg-blue-500 text-white'
-              : 'bg-gray-200 hover:bg-gray-300'
-          }`}
-        >
-          {page}
-        </button>
-      ))}
-
-      <button
-        onClick={() => onPageChange(currentPage + 1)}
-        disabled={currentPage === totalPages}
-        className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
-      >
-        Siguiente →
-      </button>
-    </div>
+    <Box className="flex justify-center fixed bottom-0 left-1/2 transform -translate-1/2 bg-[var(--main-color)] rounded-[100px] p-[5px]">
+      <Pagination
+        sx={{
+          '& .MuiPaginationItem-root': {
+            color: 'white', // color de texto por defecto
+            backgroundColor: 'transparent',
+          },
+          '& .Mui-selected': {
+            backgroundColor: 'var(--Font-Nav)', // azul por ejemplo
+            color: 'white',          // texto blanco cuando está seleccionado
+            fontWeight: 'bold',
+            '&:hover': {
+              backgroundColor: 'var(--Font-Nav-shadow)', // azul por ejemplo
+            },
+          },
+        }}
+        count={totalPages}
+        page={currentPage}
+        onChange={handleChange}
+        shape="rounded"
+        size="small"
+        disabled={disabled} // 🔒 Bloquea clics mientras está cargando
+      />
+    </Box>
   );
 };
 

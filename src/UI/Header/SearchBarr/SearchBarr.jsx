@@ -52,7 +52,7 @@ export const SearchBarr = ({ className, productos }) => {
     <div ref={contenedorRef} className={`inputs relative w-full NeoSubContainer_inset_TOTAL ${className}`}>
       <form onSubmit={manejarSubmit} className="w-full">
         <FontAwesomeIcon
-          icon={faMagnifyingGlass}
+          icon={faSearch}
           className="absolute left-[10px] top-[9px] text-[var(--Font-Nav)]"
         />
         <input

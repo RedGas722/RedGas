@@ -1,14 +1,12 @@
-import { useState, useEffect, useRef } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import { RegisterModal } from './Register/RegisterModal';
-import { UpdateModal } from './Update/Update';
-import CardClientsBack from './Get/CardClientsBack';
-import { buscarClientePorCorreo } from './Get/Get';
-import { BtnBack } from "../../UI/Login_Register/BtnBack";
-import { InputLabel } from '../../UI/Login_Register/InputLabel/InputLabel';
-import { Buttons } from '../../UI/Login_Register/Buttons';
-import Paginator from '../../UI/Paginator/Paginator';
+import { useState, useEffect, useRef } from 'react'
+import { RegisterModal } from './Register/RegisterModal'
+import { UpdateModal } from './Update/Update'
+import CardClientsBack from './Get/CardClientsBack'
+import { buscarClientePorCorreo } from './Get/Get'
+import { BtnBack } from "../../UI/Login_Register/BtnBack"
+import { InputLabel } from '../../UI/Login_Register/InputLabel/InputLabel'
+import { Buttons } from '../../UI/Login_Register/Buttons'
+import { Paginator } from '../../UI/Paginator/Paginator'
 
 export const ClientsBack = () => {
   const [showRegisterModal, setShowRegisterModal] = useState(false)
@@ -45,7 +43,7 @@ export const ClientsBack = () => {
       const res = await fetch(`https://redgas.onrender.com/ClienteGetAllEmails`)
       if (!res.ok) throw new Error('Error al obtener correos de clientes')
       const data = await res.json()
-      setClientesEmails(data.data || []) 
+      setClientesEmails(data.data || [])
     } catch (error) {
       console.error(error)
     }
@@ -63,26 +61,19 @@ export const ClientsBack = () => {
       setPaginaActual(1)
       setRefrescar(false)
       setClienteBuscado(null)
-      setErrorBusqueda('')
       setCorreoBusqueda('')
+      setErrorBusqueda('')
     }
   }, [refrescar])
 
-  const abrirModalActualizar = (cliente) => {
-    setClienteSeleccionado(cliente)
-    setShowUpdateModal(true)
-  }
-
-  const cerrarModal = () => {
-    setShowUpdateModal(false)
-    setClienteSeleccionado(null)
-  }
-
   const buscarCliente = async (correo) => {
-  setErrorBusqueda('')
-  setClienteBuscado(null)
+    setErrorBusqueda('')
+    setClienteBuscado(null)
 
-  const correoFinal = (correo || correoBusqueda).trim()
+    const correoFinal = typeof correo === 'string'
+      ? correo.trim()
+      : (correoBusqueda || '').trim()
+
     if (!correoFinal) {
       setErrorBusqueda('Por favor ingrese un correo válido')
       return
@@ -100,6 +91,7 @@ export const ClientsBack = () => {
   useEffect(() => {
     if ((correoBusqueda || '').trim() === '') {
       setSugerencias([])
+      setClienteBuscado(null)
       return
     }
 
@@ -123,41 +115,42 @@ export const ClientsBack = () => {
     return () => document.removeEventListener('mousedown', manejarClickFuera)
   }, [])
 
-  useEffect(() => {
-    if (correoBusqueda.trim() === '') {
-      setClienteBuscado(null)
-      setErrorBusqueda('')
-    }
-  }, [correoBusqueda])
+  const abrirModalActualizar = (cliente) => {
+    setClienteSeleccionado(cliente)
+    setShowUpdateModal(true)
+  }
 
   return (
-    <section className="w-full h-full flex flex-col p-[5px_20px_10px_5px]">
-      <BtnBack To='/Admin' />
-      <div className="p-[10px_20px_10px_20px] h-full flex flex-col gap-2">
-        <h1 className="font-bold text-3xl text-[var(--main-color)]">Cliente BACK-OFFICE</h1>
-        <div className='NeoContainer_outset_TL flex gap-4 flex-wrap items-end w-fit p-[0_20px_10px_20px]'>
-          <div ref={contenedorRef} className="relative">
+    <section className="w-full h-full p-[var(--p-admin)]">
+      <BtnBack To="/Admin" />
+
+      <div className="p-[var(--p-admin-sub)] h-full flex flex-col gap-2">
+        <h1 className="font-bold text-3xl text-[var(--main-color)]">Clientes</h1>
+
+        {/* Buscador y botón */}
+        <div className="NeoContainer_outset_TL flex gap-4 flex-wrap items-end w-fit p-[var(--p-admin-control)]">
+
+          <div className="relative" ref={contenedorRef}>
             <InputLabel
-              radius='10'
+              radius="10"
               type="1"
               ForID="correo_cliente_busqueda"
               placeholder="Buscar cliente"
               childLabel="Buscar cliente"
               value={correoBusqueda}
               onChange={e => setCorreoBusqueda(e.target.value)}
-              className="w-full pr-8" // espacio para la lupa
+              className="w-full"
               placeholderError={!!errorBusqueda}
             />
-            
             {sugerencias.length > 0 && (
               <ul className="absolute z-10 bg-white border w-[230px] border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto shadow">
                 {sugerencias.map((cliente) => (
                   <li
                     key={cliente.id_cliente}
                     onClick={() => {
-                      setCorreoBusqueda(cliente.correo_cliente);
-                      buscarCliente(cliente.correo_cliente); // Pasar correo directamente
-                      setSugerencias([]);
+                      setCorreoBusqueda(cliente.correo_cliente)
+                      buscarCliente(cliente.correo_cliente)
+                      setSugerencias([])
                     }}
                     className="p-2 hover:bg-gray-100 cursor-pointer"
                   >
@@ -170,34 +163,28 @@ export const ClientsBack = () => {
 
           <div className="flex w-fit h-fit flex-wrap justify-center items-center gap-[20px]">
             <Buttons
-              radius='10'
-              nameButton='Registrar'
-              textColor='var(--Font-Nav)'
-              onClick={() => setShowRegisterModal(true)}
+              radius="10"
+              nameButton="Registrar"
+              textColor="var(--Font-Nav)"
+              Onclick={() => setShowRegisterModal(true)}
             />
           </div>
         </div>
 
-        {errorBusqueda && <p className="text-red-600 text-sm">{errorBusqueda}</p>}
+        {errorBusqueda && (
+          <p className="text-red-600 text-sm">{errorBusqueda}</p>
+        )}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {clienteBuscado ? (
+        {/* Tarjetas de clientes */}
+        <div className="flex flex-wrap items-center gap-6">
+          {(clienteBuscado ? [clienteBuscado] : clientes).map((cliente) => (
             <CardClientsBack
-              key={clienteBuscado.id_cliente}
-              cliente={clienteBuscado}
+              key={cliente.id_cliente}
+              cliente={cliente}
               setRefrescar={setRefrescar}
               onUpdateClick={abrirModalActualizar}
             />
-          ) : (
-            clientes.map((cliente) => (
-              <CardClientsBack
-                key={cliente.id_cliente}
-                cliente={cliente}
-                setRefrescar={setRefrescar}
-                onUpdateClick={abrirModalActualizar}
-              />
-            ))
-          )}
+          ))}
         </div>
 
         <Paginator
@@ -210,6 +197,7 @@ export const ClientsBack = () => {
           }}
         />
 
+        {/* Modales */}
         {showRegisterModal && (
           <RegisterModal
             onClose={() => setShowRegisterModal(false)}
@@ -219,14 +207,14 @@ export const ClientsBack = () => {
 
         {showUpdateModal && clienteSeleccionado && (
           <UpdateModal
-            onClose={cerrarModal}
+            onClose={() => setShowUpdateModal(false)}
             setRefrescar={setRefrescar}
             clienteCarta={clienteSeleccionado}
           />
         )}
       </div>
     </section>
-  );
-};
+  )
+}
 
 export default ClientsBack

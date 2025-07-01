@@ -21,7 +21,6 @@ export const PrpoductCatergories = ({ imgCategory, nameCategory, className, onCl
                 color: 'var(--main-color)',
                 fontWeight: 600,
                 fontSize: '1rem',
-                minWidth: 'unset',
                 padding: '12px 20px',
                 textTransform: 'none',
                 cursor: 'pointer',

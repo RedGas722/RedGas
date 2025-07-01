@@ -1,4 +1,4 @@
-import React from 'react'
+import { Buttons } from '../../../UI/Login_Register/Buttons'
 import { DeleteProduct } from '../Delete/Delete' // Asegúrate de que esta función esté implementada
 
 const convertirFecha = (fechaConvertir) => {
@@ -35,15 +35,14 @@ const CardsProductsBack = ({ producto, setRefrescar, onUpdateClick }) => {
   }
 
   return (
-    <div className="bg-white shadow-lg rounded-lg p-4 w-full h-[460px] flex flex-col justify-between">
+    <div className="text-start items-center NeoContainer_outset_TL p-4 max-w-[450px] h-fit flex flex-col justify-start gap-2">
+      <h2 className="text-[20px] font-semibold text-[var(--main-color)]">{producto.nombre_producto}</h2>
       <div>
-        <h2 className="text-xl font-semibold text-gray-800 truncate">{producto.nombre_producto}</h2>
-
         {imageUrl ? (
           <img
             src={imageUrl}
             alt={producto.nombre_producto}
-            className="w-full h-[180px] object-contain rounded-md my-2"
+            className="w-full object-contain rounded-[20px]"
           />
         ) : (
           <div className="w-full h-[180px] flex justify-center items-center bg-gray-200 rounded-md text-gray-500">
@@ -51,18 +50,32 @@ const CardsProductsBack = ({ producto, setRefrescar, onUpdateClick }) => {
           </div>
         )}
 
-        <h2 className="text-md text-gray-600">
-          Categoría: {producto.categorias?.join(', ') || 'Sin categoría'}
-        </h2>
-        <h2 className="text-md font-bold text-gray-600">Stock: {producto.stock}</h2>
-
-        {producto.descuento != 0 && (
-          <>
-            <h2 className="text-md font-bold text-gray-600">Descuento: {producto.descuento}%</h2>
-            <h2 className="text-md font-bold text-gray-600">Fecha Descuento: {convertirFecha(producto.fecha_descuento)}</h2>
-          </>
-        )}
-
+        <div className="text-[var(--main-color)] flex flex-col text-sm">
+          <p className="font-medium flex flex-wrap gap-2">
+            <span className="font-bold text-[15px]">Categoría:</span>
+            <span className="break-words">{producto.categorias?.join(', ') || 'Sin categoría'}</span>
+          </p>
+          <p className="font-medium flex flex-wrap gap-2">
+            <span className="font-bold text-[15px]">Stock:</span>
+            <span className="break-words">{producto.stock}</span>
+          </p>
+          <p className="font-medium flex flex-wrap gap-2">
+            {producto.descuento != 0 && (
+              <>
+                <span className="font-bold text-[15px]">Descuento:</span>
+                <span className="break-words">{producto.descuento}%</span>
+              </>
+            )}
+          </p>
+          <p className="font-medium flex flex-wrap gap-2">
+            {producto.descuento != 0 && (
+              <>
+                <span className="font-bold text-[15px]">Fecha Descuento:</span>
+                <span className="break-words">{convertirFecha(producto.fecha_descuento)}</span>
+              </>
+            )}
+          </p>
+        </div>
         <p className="text-lg font-bold text-green-600">
           {new Intl.NumberFormat('es-CO', {
             style: 'currency',
@@ -72,19 +85,8 @@ const CardsProductsBack = ({ producto, setRefrescar, onUpdateClick }) => {
       </div>
 
       <div className="mt-4 flex flex-col gap-2">
-        <button
-          onClick={handleDelete}
-          className="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded"
-        >
-          Eliminar
-        </button>
-
-        <button
-          onClick={() => onUpdateClick(producto)}
-          className="bg-yellow-500 hover:bg-yellow-600 text-white py-1 px-3 rounded"
-        >
-          Actualizar
-        </button>
+        <Buttons onClick={handleDelete} nameButton='Eliminar' textColor='var(--Font-Nav2)' radius='12' borderWidth='1' borderColor='var(--Font-Nav2)' />
+        <Buttons onClick={() => onUpdateClick(producto)} nameButton='Actualizar' textColor='var(--Font-Yellow)' radius='12' borderWidth='1' borderColor='var(--Font-Yellow)' />
       </div>
     </div>
   )

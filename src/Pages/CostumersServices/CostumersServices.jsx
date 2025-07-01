@@ -239,7 +239,7 @@ export const CostumerServices = () => {
       })
 
       if (res.ok) {
-      EmailServicesCostumer(id)
+        EmailServicesCostumer(id)
       }
 
     } catch (error) {
@@ -272,7 +272,7 @@ export const CostumerServices = () => {
         user: firstParse.userName,
         phone: firstParse.userPhone,
         email: firstParse.userEmail,
-        address:firstParse.userAddress,
+        address: firstParse.userAddress,
         label: secondParse.resultado.etiqueta
       }
 

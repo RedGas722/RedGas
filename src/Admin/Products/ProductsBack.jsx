@@ -2,13 +2,16 @@ import { useState, useEffect, useRef } from 'react'
 import { RegisterModal } from './Register/RegisterModal'
 import { UpdateModal } from './Update/Update'
 import { ButtonBack } from '../UI/ButtonBack/ButtonBack'
+import { Buttons } from '../../UI/Login_Register/Buttons'
 import { BtnBack } from "../../UI/Login_Register/BtnBack"
 import { buscarProductoPorNombre } from './Get/Get'
 import CardsProductsBack from './Get/CardProductsBack'
+import { Backdrop, CircularProgress } from '@mui/material';
 import { InputLabel } from '../../UI/Login_Register/InputLabel/InputLabel'
 import { Paginator } from '../../UI/Paginator/Paginator'
 
 export const ProductsBack = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const [showRegisterModal, setShowRegisterModal] = useState(false)
   const [showUpdateModal, setShowUpdateModal] = useState(false)
   const [productos, setProductos] = useState([])
@@ -29,20 +32,22 @@ export const ProductsBack = () => {
   const URL_NAMES = 'https://redgas.onrender.com/ProductoGetAllNames'
 
   async function fetchProductos(pagina = 1) {
+    setIsLoading(true);
     try {
-      const res = await fetch(`${URL_ALL}?page=${pagina}`)
-      if (!res.ok) throw new Error('Error al obtener productos')
-      const data = await res.json()
-      const resultado = data.data.resultado
+      const res = await fetch(`${URL_ALL}?page=${pagina}`);
+      if (!res.ok) throw new Error('Error al obtener productos');
+      const data = await res.json();
+      const resultado = data.data.resultado;
 
-      setProductos(resultado.data || [])
-      setPaginaActual(resultado.currentPage)
-      setTotalPaginas(resultado.totalPages)
+      setProductos(resultado.data || []);
+      setPaginaActual(resultado.currentPage);
+      setTotalPaginas(resultado.totalPages);
     } catch (error) {
-      console.error(error)
+      console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   }
-
   async function fetchNombresProductos() {
     try {
       const res = await fetch(URL_NAMES)
@@ -81,11 +86,11 @@ export const ProductsBack = () => {
     setShowUpdateModal(false)
   }
 
-  const buscarProducto = async () => {
+  const buscarProducto = async (correo) => {
     setErrorBusqueda('')
     setProductoBuscado(null)
     try {
-      const resultado = await buscarProductoPorNombre(nombreBusqueda)
+      const resultado = await buscarProductoPorNombre(correo)
       setProductoBuscado(resultado)
       setSugerencias([])
     } catch (error) {
@@ -118,110 +123,110 @@ export const ProductsBack = () => {
   }, [])
 
   return (
-    <div className="p-[20px] flex flex-col gap-[20px]">
-      <div className="flex items-center gap-[20px] flex-wrap">
-        <div>
-          <h1 className="font-bold text-[20px]">Producto BACK-OFFICE</h1>
-          <div className='btnDown'>
-            <BtnBack To='/Admin' />
-          </div>
-        </div>
+    <section className="w-full h-full p-[var(--p-admin)]">
+      <BtnBack To='/Admin' />
+      <div className="p-[var(--p-admin-sub)] h-full flex flex-col gap-2">
+        <h1 className="font-bold text-3xl text-[var(--main-color)]">Productos</h1>
+        <div className='NeoContainer_outset_TL flex gap-4 flex-wrap items-end w-fit p-[var(--p-admin-control)]'>
 
-        <div className="relative" ref={contenedorRef}>
-          <div className="flex items-center gap-2 border border-gray-300 rounded px-2 py-1 bg-white">
+          <div className='relative flex' ref={contenedorRef}>
             <InputLabel
+              radius='10'
               type="1"
               ForID="nombre_producto_busqueda"
               placeholder="Buscar producto"
               childLabel="Buscar producto"
               value={nombreBusqueda}
               onChange={e => setNombreBusqueda(e.target.value)}
-              className="w-full"
+              className="w-full "
               placeholderError={!!errorBusqueda}
             />
-            <button
-              onClick={buscarProducto}
-              aria-label="Buscar producto"
-              className="text-gray-600 hover:text-gray-900"
-            >
-              🔍
-            </button>
+
+            {sugerencias.length > 0 && (
+              <ul className="absolute z-10 bg-white border border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto w-full shadow">
+                {sugerencias.map((producto) => (
+                  <li
+                    key={producto.id_producto}
+                    onClick={() => {
+                      setNombreBusqueda(producto.nombre_producto)
+                      buscarProducto(producto.nombre_producto)
+                      setSugerencias([])
+                    }}
+                    className="p-2 hover:bg-gray-100 cursor-pointer"
+                  >
+                    {producto.nombre_producto}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
-
-          {sugerencias.length > 0 && (
-            <ul className="absolute z-10 bg-white border border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto w-full shadow">
-              {sugerencias.map((producto) => (
-                <li
-                  key={producto.id_producto}
-                  onClick={() => {
-                    setNombreBusqueda(producto.nombre_producto)
-                    setSugerencias([])
-                  }}
-                  className="p-2 hover:bg-gray-100 cursor-pointer"
-                >
-                  {producto.nombre_producto}
-                </li>
-              ))}
-            </ul>
-          )}
+          <div className="flex w-fit h-fit flex-wrap justify-center justify-self-center items-center gap-[20px]">
+            <Buttons radius='10' nameButton='Registrar' textColor='var(--Font-Nav)' Onclick={() => setShowRegisterModal(true)} />
+            {/* Eliminar, Actualizar y Consultar removidos porque ya están en la card y el input de consulta ya existe */}
+          </div>
         </div>
 
-        <ButtonBack ClickMod={() => setShowRegisterModal(true)} Child="Registrar" />
-      </div>
+        {errorBusqueda && <p className="text-red-600 text-sm">{errorBusqueda}</p>}
 
-      {errorBusqueda && <p className="text-red-600 text-sm">{errorBusqueda}</p>}
+        {mensaje && (
+          <div className="mt-2 text-sm text-center text-green-600 font-semibold">
+            {mensaje}
+          </div>
+        )}
 
-      {mensaje && (
-        <div className="mt-2 text-sm text-center text-green-600 font-semibold">
-          {mensaje}
-        </div>
-      )}
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {productoBuscado ? (
-          <CardsProductsBack
-            key={productoBuscado.id_producto}
-            producto={productoBuscado}
-            setRefrescar={setRefrescar}
-            onUpdateClick={abrirModalActualizar}
-          />
-        ) : (
-          productos.map((producto) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {productoBuscado ? (
             <CardsProductsBack
-              key={producto.id_producto}
-              producto={producto}
+              key={productoBuscado.id_producto}
+              producto={productoBuscado}
               setRefrescar={setRefrescar}
               onUpdateClick={abrirModalActualizar}
             />
-          ))
+          ) : (
+            productos.map((producto) => (
+              <CardsProductsBack
+                key={producto.id_producto}
+                producto={producto}
+                setRefrescar={setRefrescar}
+                onUpdateClick={abrirModalActualizar}
+              />
+            ))
+          )}
+        </div>
+
+        <Paginator
+          currentPage={paginaActual}
+          totalPages={totalPaginas}
+          onPageChange={(nuevaPagina) => {
+            if (nuevaPagina !== paginaActual) {
+              setPaginaActual(nuevaPagina);
+            }
+          }}
+          disabled={isLoading} // ⬅️ Se desactiva mientras carga
+        />
+
+        {showRegisterModal && (
+          <RegisterModal
+            onClose={() => setShowRegisterModal(false)}
+            setRefrescar={setRefrescar}
+          />
         )}
+
+        {showUpdateModal && productoSeleccionado && (
+          <UpdateModal
+            onClose={cerrarModal}
+            setRefrescar={setRefrescar}
+            productoCarta={productoSeleccionado}
+          />
+        )}
+        <Backdrop
+          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={isLoading}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
       </div>
-
-      <Paginator
-        currentPage={paginaActual}
-        totalPages={totalPaginas}
-        onPageChange={(nuevaPagina) => {
-          if (nuevaPagina !== paginaActual) {
-            setPaginaActual(nuevaPagina)
-          }
-        }}
-      />
-
-      {showRegisterModal && (
-        <RegisterModal
-          onClose={() => setShowRegisterModal(false)}
-          setRefrescar={setRefrescar}
-        />
-      )}
-
-      {showUpdateModal && productoSeleccionado && (
-        <UpdateModal
-          onClose={cerrarModal}
-          setRefrescar={setRefrescar}
-          productoCarta={productoSeleccionado}
-        />
-      )}
-    </div>
+    </section >
   )
 }
 
