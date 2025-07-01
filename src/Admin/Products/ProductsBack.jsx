@@ -111,6 +111,13 @@ export const ProductsBack = () => {
     setSugerencias(filtrados.slice(0, 5))
   }, [nombreBusqueda, productosNombres])
 
+  useEffect(() => {
+    if (nombreBusqueda.trim() === '') {
+      setProductoBuscado(null);
+      setErrorBusqueda(''); 
+    }
+  }, [nombreBusqueda]);
+
   // Cierre de dropdown si se hace clic fuera
   useEffect(() => {
     const manejarClickFuera = (event) => {

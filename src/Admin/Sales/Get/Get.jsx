@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 
 export const useBuscarSales = (productos, ventasOriginal, setVentas) => {
   const [productoBusqueda, setProductoBusqueda] = useState('')
@@ -7,17 +7,15 @@ export const useBuscarSales = (productos, ventasOriginal, setVentas) => {
 
   const handleProductoInput = (texto) => {
     setProductoBusqueda(texto)
-    const sugerencias = productos.filter(p => p.nombre_producto.toLowerCase().includes(texto.toLowerCase()))
-    setProductoSugerencias(sugerencias)
+    const sugerencias = productos.filter(p =>
+      p.nombre_producto.toLowerCase().includes(texto.toLowerCase())
+    )
+    setProductoSugerencias(sugerencias.slice(0, 5))
   }
 
-  const handleBuscar = () => {
-    if (!productoBusqueda.trim()) {
-      setVentas(ventasOriginal)
-      return
-    }
-
-    const productoFiltrado = productos.find(p => p.nombre_producto.toLowerCase() === productoBusqueda.toLowerCase())
+  const handleBuscar = (nombreProducto) => {
+    
+    const productoFiltrado = productos.find(p => p.nombre_producto.toLowerCase() === nombreProducto.toLowerCase())
     if (!productoFiltrado) {
       setVentas([])
       return
@@ -33,9 +31,26 @@ export const useBuscarSales = (productos, ventasOriginal, setVentas) => {
     setVentas(ventasOriginal)
   }
 
+  // 👇 click fuera para cerrar sugerencias
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (contenedorRefProducto.current && !contenedorRefProducto.current.contains(e.target)) {
+        setProductoSugerencias([])
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [])
+
   return {
-    productoBusqueda, productoSugerencias,
-    handleProductoInput, handleBuscar, handleLimpiar,
-    contenedorRefProducto, setProductoBusqueda
+    productoBusqueda,
+    productoSugerencias,
+    handleProductoInput,
+    handleBuscar,
+    handleLimpiar,
+    contenedorRefProducto,
+    setProductoBusqueda
   }
 }

@@ -1,28 +1,27 @@
 import { useState, useEffect, useRef } from 'react'
 import { RegisterModal } from './Register/RegisterModal'
-import { buscarAdminPorCorreo } from './Get/Get'
 import { UpdateModal } from './Update/Update'
-import CardAdminsBack from './Get/CardAdminsBack'
 import { BtnBack } from "../../UI/Login_Register/BtnBack"
-import ButtonBack from '../UI/ButtonBack/ButtonBack'
 import { InputLabel } from '../../UI/Login_Register/InputLabel/InputLabel'
+import CardAdminsBack from './Get/CardAdminsBack'
+import { buscarAdminPorCorreo } from './Get/Get'
 import { Paginator } from '../../UI/Paginator/Paginator'
+import { Buttons } from '../../UI/Login_Register/Buttons'
 
 export const AdminsBack = () => {
   const [showRegisterModal, setShowRegisterModal] = useState(false)
-  const [showUpdateModal, setShowUpdateModal] = useState(false)
+  const [showUpdateModal, setShowUpdateModal] = useState(false) // ahora puede ser false o un objeto admin seleccionado
   const [admins, setAdmins] = useState([])
+  const [adminsEmails, setAdminsEmails] = useState([])
   const [refrescar, setRefrescar] = useState(false)
-  const [adminSeleccionado, setAdminSeleccionado] = useState(null)
   const [correoBusqueda, setCorreoBusqueda] = useState('')
   const [adminBuscado, setAdminBuscado] = useState(null)
   const [errorBusqueda, setErrorBusqueda] = useState('')
   const [sugerencias, setSugerencias] = useState([])
-  const [adminsEmails, setAdminsEmails] = useState([]) // [{id_admin, correo_admin}]
   const [paginaActual, setPaginaActual] = useState(1)
   const [totalPaginas, setTotalPaginas] = useState(1)
+
   const contenedorRef = useRef(null)
-  const inputRef = useRef(null)
 
   const fetchAdmins = async (pagina = 1) => {
     try {
@@ -39,7 +38,7 @@ export const AdminsBack = () => {
     }
   }
 
-  const fetchCorreosAdmins = async () => {
+  const fetchAdminsEmails = async () => {
     try {
       const res = await fetch('https://redgas.onrender.com/AdminGetAllEmails')
       if (!res.ok) throw new Error('Error al obtener correos')
@@ -52,13 +51,13 @@ export const AdminsBack = () => {
 
   useEffect(() => {
     fetchAdmins(paginaActual)
-    fetchCorreosAdmins()
+    fetchAdminsEmails()
   }, [paginaActual])
 
   useEffect(() => {
     if (refrescar) {
       fetchAdmins(1)
-      fetchCorreosAdmins()
+      fetchAdminsEmails()
       setPaginaActual(1)
       setRefrescar(false)
       setAdminBuscado(null)
@@ -67,153 +66,144 @@ export const AdminsBack = () => {
     }
   }, [refrescar])
 
-  const abrirModalActualizar = (admin) => {
-    setAdminSeleccionado(admin)
-    setShowUpdateModal(true)
-  }
+  const handleUpdateClick = (admin) => setShowUpdateModal(admin)
 
-  const cerrarModal = () => {
-    setShowUpdateModal(false)
-    setAdminSeleccionado(null)
-  }
-
-  const buscarAdmin = async () => {
+  const buscarAdmin = async (correo) => {
     setErrorBusqueda('')
     setAdminBuscado(null)
+
+    if (!correo.trim()) {
+      fetchAdmins(1)
+      setPaginaActual(1)
+      return
+    }
+
     try {
-      const admin = await buscarAdminPorCorreo(correoBusqueda)
-      setAdminBuscado(admin[0])
+      const resultado = await buscarAdminPorCorreo(correo.trim())
+      if (resultado) {
+        setAdminBuscado(resultado)
+        setSugerencias([])
+      } else {
+        setErrorBusqueda('No se encontró un administrador con ese correo.')
+      }
     } catch (error) {
-      setErrorBusqueda(error.message)
+      setErrorBusqueda('Error al buscar administrador.')
     }
   }
 
   useEffect(() => {
     if (correoBusqueda.trim() === '') {
       setSugerencias([])
+      setAdminBuscado(null)
       return
     }
 
-    const filtrados = adminsEmails.filter((admin) =>
-      admin.correo_admin.toLowerCase().includes(correoBusqueda.toLowerCase())
+    const filtrados = adminsEmails.filter(admin =>
+      admin.correo_admin?.toLowerCase().includes(correoBusqueda.toLowerCase())
     )
     setSugerencias(filtrados.slice(0, 5))
   }, [correoBusqueda, adminsEmails])
 
   useEffect(() => {
-    const manejarClickFuera = (event) => {
-      if (
-        contenedorRef.current &&
-        !contenedorRef.current.contains(event.target)
-      ) {
+    const manejarClickFuera = (e) => {
+      if (contenedorRef.current && !contenedorRef.current.contains(e.target)) {
         setSugerencias([])
       }
     }
-
     document.addEventListener('mousedown', manejarClickFuera)
     return () => document.removeEventListener('mousedown', manejarClickFuera)
   }, [])
 
-  useEffect(() => {
-    if (correoBusqueda.trim() === '') {
-      setAdminBuscado(null)
-      setErrorBusqueda('')
-    }
-  }, [correoBusqueda])
-
   return (
-    <div className="p-[20px] flex flex-col gap-[20px]">
-      <div className="flex items-center gap-[20px] flex-wrap">
-        <div>
-          <h1 className="font-bold text-[20px]">Admin BACK-OFFICE</h1>
-          <BtnBack To='/Admin' className='btnDown' />
-        </div>
+    <section className="w-full h-full p-[var(--p-admin)]">
+      <BtnBack To='/Admin' />
 
-        <div className="relative" ref={contenedorRef}>
-          <div className="flex items-center gap-2 border border-gray-300 rounded px-2 py-1 bg-white">
+      <div className="p-[var(--p-admin-sub)] h-full flex flex-col gap-2">
+        <h1 className="font-bold text-3xl text-[var(--main-color)]">Administradores</h1>
+
+        <div className='NeoContainer_outset_TL flex gap-4 flex-wrap items-end w-fit p-[var(--p-admin-control)]'>
+          <div className="relative" ref={contenedorRef}>
             <InputLabel
+              radius="10"
               type="1"
               ForID="correo_admin_busqueda"
-              placeholder="Correo del administrador"
-              childLabel="Correo"
+              placeholder="Buscar administrador"
+              childLabel="Buscar administrador"
               value={correoBusqueda}
-              onChange={(e) => setCorreoBusqueda(e.target.value)}
-              className="outline-none"
-              ref={inputRef}
+              onChange={e => setCorreoBusqueda(e.target.value)}
+              className="w-full"
+              placeholderError={!!errorBusqueda}
             />
-            <button
-              onClick={buscarAdmin}
-              aria-label="Buscar admin"
-              className="text-gray-600 hover:text-gray-900"
-            >
-              🔍
-            </button>
+            {sugerencias.length > 0 && (
+              <ul className="absolute z-10 bg-white border border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto shadow w-[230px]">
+                {sugerencias.map((admin) => (
+                  <li
+                    key={admin.id_admin}
+                    onClick={() => {
+                      setCorreoBusqueda(admin.correo_admin)
+                      buscarAdmin(admin.correo_admin)
+                      setSugerencias([])
+                    }}
+                    className="p-2 hover:bg-gray-100 cursor-pointer"
+                  >
+                    {admin.correo_admin}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
-          {sugerencias.length > 0 && (
-            <ul className="absolute z-10 bg-white border border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto w-full shadow">
-              {sugerencias.map((admin) => (
-                <li
-                  key={admin.id_admin}
-                  onClick={() => {
-                    setCorreoBusqueda(admin.correo_admin)
-                    setSugerencias([])
-                  }}
-                  className="p-2 hover:bg-gray-100 cursor-pointer"
-                >
-                  {admin.correo_admin}
-                </li>
-              ))}
-            </ul>
-          )}
+          <div className="flex w-fit h-fit flex-wrap justify-center items-center gap-[20px]">
+            <Buttons
+              radius='10'
+              nameButton='Registrar'
+              textColor='var(--Font-Nav)'
+              Onclick={() => setShowRegisterModal(true)}
+            />
+          </div>
         </div>
 
-        <ButtonBack ClickMod={() => setShowRegisterModal(true)} Child="Registrar" />
-      </div>
-
-      {errorBusqueda && <p className="text-red-600 text-sm">{errorBusqueda}</p>}
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {adminBuscado ? (
-          <CardAdminsBack
-            key={adminBuscado.id_admin}
-            admin={adminBuscado}
-            setRefrescar={setRefrescar}
-            onUpdateClick={abrirModalActualizar}
-          />
-        ) : (
-          admins.map((admin) => (
+        {/* Lista de admins */}
+        <div className="flex flex-wrap items-center gap-6">
+          {(adminBuscado ? [adminBuscado] : admins).map((admin) => (
             <CardAdminsBack
               key={admin.id_admin}
               admin={admin}
               setRefrescar={setRefrescar}
-              onUpdateClick={abrirModalActualizar}
+              onUpdateClick={handleUpdateClick}
             />
-          ))
+          ))}
+        </div>
+
+        {/* Paginador solo si no hay adminBuscado */}
+        {!adminBuscado && (
+          <Paginator
+            currentPage={paginaActual}
+            totalPages={totalPaginas}
+            onPageChange={(nuevaPagina) => {
+              if (nuevaPagina !== paginaActual) {
+                setPaginaActual(nuevaPagina)
+              }
+            }}
+          />
+        )}
+
+        {/* Modales */}
+        {showRegisterModal && (
+          <RegisterModal
+            onClose={() => setShowRegisterModal(false)}
+            setRefrescar={setRefrescar}
+          />
+        )}
+
+        {typeof showUpdateModal === 'object' && showUpdateModal && (
+          <UpdateModal
+            onClose={() => setShowUpdateModal(false)}
+            setRefrescar={setRefrescar}
+            adminCarta={showUpdateModal}
+          />
         )}
       </div>
-
-      <Paginator
-        currentPage={paginaActual}
-        totalPages={totalPaginas}
-        onPageChange={(nuevaPagina) => {
-          if (nuevaPagina !== paginaActual) {
-            setPaginaActual(nuevaPagina)
-          }
-        }}
-      />
-
-      {showRegisterModal && (
-        <RegisterModal onClose={() => setShowRegisterModal(false)} setRefrescar={setRefrescar} />
-      )}
-
-      {showUpdateModal && adminSeleccionado && (
-        <UpdateModal
-          onClose={cerrarModal}
-          setRefrescar={setRefrescar}
-          adminCarta={adminSeleccionado}
-        />
-      )}
-    </div>
+    </section>
   )
 }
 
