@@ -22,7 +22,6 @@ export const BackgroundFire = ({
                 return { count: particleCount, speed: 1, size: 1 };
         }
     };
-    console.log('FireParticlesBackground se está renderizando');
     const config = getIntensityConfig(intensity);
 
     useEffect(() => {
