@@ -7,9 +7,15 @@ const PsePaymentForm = ({ monto, onClose }) => {
   useEffect(() => {
     const cargarBancos = async () => {
       try {
-        const res = await fetch("https://redgas.onrender.com/ListarBancosPsE");
+        const res = await fetch("https://secure.payco.co/restpagos/pse/bancos.json");
         const data = await res.json();
-        setBancos(data);
+
+        if (data.success && Array.isArray(data.data)) {
+          const bancosFiltrados = data.data.filter(b => b.codigo && b.descripcion);
+          setBancos(bancosFiltrados);
+        } else {
+          console.error("Respuesta inesperada al cargar bancos PSE", data);
+        }
       } catch (err) {
         console.error("Error cargando bancos PSE:", err);
       }
@@ -65,6 +71,12 @@ const PsePaymentForm = ({ monto, onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const bancoValido = bancos.find(b => b.codigo === formData.bank);
+    if (!bancoValido) {
+      alert("El banco seleccionado no es válido.");
+      return;
+    }
 
     const token = localStorage.getItem("token");
     if (!token) {
@@ -177,8 +189,8 @@ const PsePaymentForm = ({ monto, onClose }) => {
           >
             <option value="">Selecciona tu banco</option>
             {bancos.map((banco) => (
-              <option key={banco.bankCode} value={banco.bankCode}>
-                {banco.bankName}
+              <option key={banco.codigo} value={banco.codigo}>
+                {banco.descripcion}
               </option>
             ))}
           </select>
