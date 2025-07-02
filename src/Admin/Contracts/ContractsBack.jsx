@@ -1,12 +1,12 @@
 import { useState, useEffect, useRef } from 'react'
 import { RegisterModal } from './Register/RegisterModal'
 import { UpdateModal } from './Update/Update'
-import { buscarContratoPorEmpleado } from './Get/Get'
 import { BtnBack } from '../../UI/Login_Register/BtnBack'
-import ButtonBack from '../UI/ButtonBack/ButtonBack'
-import CardContractsBack from './Get/CardContractsBack'
 import { InputLabel } from '../../UI/Login_Register/InputLabel/InputLabel'
+import CardContractsBack from './Get/CardContractsBack'
+import { buscarContratoPorEmpleado } from './Get/Get'
 import { Paginator } from '../../UI/Paginator/Paginator'
+import { Buttons } from '../../UI/Login_Register/Buttons'
 
 export const ContractsBack = () => {
   const [showRegisterModal, setShowRegisterModal] = useState(false)
@@ -15,23 +15,18 @@ export const ContractsBack = () => {
   const [empleados, setEmpleados] = useState([])
   const [admins, setAdmins] = useState([])
   const [refrescar, setRefrescar] = useState(false)
-  const [contratoSeleccionado, setContratoSeleccionado] = useState(null)
   const [correoBusqueda, setCorreoBusqueda] = useState('')
   const [contratoBuscado, setContratoBuscado] = useState(null)
   const [errorBusqueda, setErrorBusqueda] = useState('')
   const [sugerencias, setSugerencias] = useState([])
   const [paginaActual, setPaginaActual] = useState(1)
   const [totalPaginas, setTotalPaginas] = useState(1)
+
   const contenedorRef = useRef(null)
-  const inputRef = useRef(null)
 
-  const URL_EMPLEADOS = 'https://redgas.onrender.com/EmpleadoGetAll'
-  const URL_ADMINS = 'https://redgas.onrender.com/AdminGetAll'
-  const URL_CONTRATOS = 'https://redgas.onrender.com/ContratoGetAllPaginated'
-
-  async function fetchEmpleados() {
+  const fetchEmpleados = async () => {
     try {
-      const res = await fetch(URL_EMPLEADOS)
+      const res = await fetch('https://redgas.onrender.com/EmpleadoGetAll')
       if (!res.ok) throw new Error('Error al obtener empleados')
       const data = await res.json()
       setEmpleados(data.data || [])
@@ -40,9 +35,9 @@ export const ContractsBack = () => {
     }
   }
 
-  async function fetchAdmins() {
+  const fetchAdmins = async () => {
     try {
-      const res = await fetch(URL_ADMINS)
+      const res = await fetch('https://redgas.onrender.com/AdminGetAll')
       if (!res.ok) throw new Error('Error al obtener admins')
       const data = await res.json()
       setAdmins(data.data || [])
@@ -51,9 +46,9 @@ export const ContractsBack = () => {
     }
   }
 
-  async function fetchContratos(pagina = 1) {
+  const fetchContratos = async (pagina = 1) => {
     try {
-      const res = await fetch(`${URL_CONTRATOS}?page=${pagina}`)
+      const res = await fetch(`https://redgas.onrender.com/ContratoGetAllPaginated?page=${pagina}`)
       if (!res.ok) throw new Error('Error al obtener contratos')
       const data = await res.json()
       const resultado = data.data
@@ -88,15 +83,15 @@ export const ContractsBack = () => {
       setSugerencias([])
       return
     }
-    const filtrados = empleados.filter((empleado) =>
+    const filtrados = empleados.filter(empleado =>
       empleado.correo_empleado.toLowerCase().includes(correoBusqueda.toLowerCase())
     )
     setSugerencias(filtrados.slice(0, 5))
   }, [correoBusqueda, empleados])
 
   useEffect(() => {
-    const manejarClickFuera = (event) => {
-      if (contenedorRef.current && !contenedorRef.current.contains(event.target)) {
+    const manejarClickFuera = e => {
+      if (contenedorRef.current && !contenedorRef.current.contains(e.target)) {
         setSugerencias([])
       }
     }
@@ -105,173 +100,135 @@ export const ContractsBack = () => {
   }, [])
 
   useEffect(() => {
-    if (correoBusqueda.trim() === '') {
-      setContratoBuscado(null)
-      setErrorBusqueda('')
-    }
-  }, [correoBusqueda])
+      if (correoBusqueda.trim() === '') {
+        // Cuando el input esté vacío, limpiar la búsqueda y mostrar todos los contratos
+        setContratoBuscado(null)
+        setErrorBusqueda('')
+        fetchContratos(1)
+        setPaginaActual(1)
+      }
+    }, [correoBusqueda])
 
-  const abrirModalActualizar = (contrato) => {
-    setContratoSeleccionado(contrato)
-    setShowUpdateModal(true)
-  }
-
-  const cerrarModal = () => {
-    setShowUpdateModal(false)
-    setContratoSeleccionado(null)
-  }
-
-  const buscarContrato = async () => {
+  const buscarContrato = async (correo) => {
     setErrorBusqueda('')
     setContratoBuscado(null)
+
     try {
-      const empleado = empleados.find(
-        (e) => e.correo_empleado.toLowerCase() === correoBusqueda.toLowerCase().trim()
-      )
+      const empleado = empleados.find(e => e.correo_empleado.toLowerCase() === correo.toLowerCase().trim())
       if (!empleado) {
         setErrorBusqueda('Empleado no encontrado')
         return
       }
       const contrato = await buscarContratoPorEmpleado(empleado.id_empleado)
-      setContratoBuscado(contrato)
+      if (contrato) {
+        setContratoBuscado(contrato)
+        setSugerencias([])
+      } else {
+        setErrorBusqueda('No se encontró contrato para ese empleado.')
+      }
     } catch (error) {
-      setErrorBusqueda(error.message)
+      setErrorBusqueda('Error al buscar contrato.')
     }
   }
 
-  const buscarContratoConEmpleado = async (empleado) => {
-    setErrorBusqueda('')
-    setContratoBuscado(null)
-    try {
-      if (!empleado) {
-        setErrorBusqueda('Empleado no encontrado')
-        return
-      }
-      const contrato = await buscarContratoPorEmpleado(empleado.id_empleado)
-      setContratoBuscado(contrato)
-    } catch (error) {
-      setErrorBusqueda(error.message)
-    }
-  }
+  const handleUpdateClick = (contrato) => setShowUpdateModal(contrato)
 
   return (
-    <div className="p-[20px] flex flex-col gap-[20px]">
-      <div className="flex items-center gap-[20px]">
-        <div>
-          <h1 className="font-bold text-[20px]">Contrato BACK-OFFICE</h1>
-          <div className='btnDown'>
-            <BtnBack To='/Admin' />
-          </div>
-        </div>
+    <section className="w-full h-full p-[var(--p-admin)]">
+      <BtnBack To="/Admin" />
 
-        <div className="relative" ref={contenedorRef}>
-          <div className="flex items-center gap-2 border border-gray-300 rounded px-2 py-1">
+      <div className="p-[var(--p-admin-sub)] h-full flex flex-col gap-2">
+        <h1 className="font-bold text-3xl z-[2] text-[var(--main-color)]">Contratos</h1>
+
+        <div className="NeoContainer_outset_TL z-[2] flex gap-4 flex-wrap items-end w-fit p-[var(--p-admin-control)]">
+          <div className="relative" ref={contenedorRef}>
             <InputLabel
+              radius="10"
               type="1"
-              ForID="contrato_busqueda"
-              placeholder="Buscar contrato"
+              ForID="correo_empleado_busqueda"
+              placeholder="Buscar contrato por correo"
               childLabel="Buscar contrato"
               value={correoBusqueda}
               onChange={e => setCorreoBusqueda(e.target.value)}
               className="w-full"
               placeholderError={!!errorBusqueda}
             />
-            <button
-              onClick={buscarContrato}
-              aria-label="Buscar contrato"
-              className="text-gray-600 hover:text-gray-900"
-            >
-              🔍
-            </button>
+            {sugerencias.length > 0 && (
+              <ul className="absolute z-10 bg-white border border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto shadow w-[230px]">
+                {sugerencias.map(emp => (
+                  <li
+                    key={emp.id_empleado}
+                    onClick={() => {
+                      setCorreoBusqueda(emp.correo_empleado)
+                      buscarContrato(emp.correo_empleado)
+                      setSugerencias([])
+                    }}
+                    className="p-2 hover:bg-gray-100 cursor-pointer"
+                  >
+                    {emp.nombre_empleado} - {emp.correo_empleado}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
-
-          {sugerencias.length > 0 && (
-            <ul className="absolute z-10 bg-white border border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto w-full shadow">
-              {sugerencias.map((empleado) => (
-                <li
-                  key={empleado.id_empleado}
-                  onClick={async () => {
-                    setCorreoBusqueda(empleado.correo_empleado)
-                    setSugerencias([])
-                    await buscarContratoConEmpleado(empleado)
-                  }}
-                  className="p-2 hover:bg-gray-100 cursor-pointer"
-                >
-                  {empleado.nombre_empleado} - {empleado.correo_empleado}
-                </li>
-              ))}
-            </ul>
-          )}
+          <div className="flex w-fit h-fit flex-wrap justify-center items-center gap-[20px]">
+            <Buttons
+              radius="10"
+              nameButton="Registrar"
+              textColor="var(--Font-Nav)"
+              Onclick={() => setShowRegisterModal(true)}
+            />
+          </div>
         </div>
 
-        <ButtonBack ClickMod={() => setShowRegisterModal(true)} Child="Registrar" />
-      </div>
+        {errorBusqueda && <p className="text-red-600 text-sm">{errorBusqueda}</p>}
 
-      {errorBusqueda && <p className="text-red-600 text-sm">{errorBusqueda}</p>}
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {contratoBuscado ? (
-          Array.isArray(contratoBuscado) ? (
-            contratoBuscado.map((contrato) => (
-              <CardContractsBack
-                key={contrato.id_contrato}
-                contrato={contrato}
-                setRefrescar={setRefrescar}
-                onUpdateClick={abrirModalActualizar}
-                empleados={empleados}
-                admins={admins}
-              />
-            ))
-          ) : (
-            <CardContractsBack
-              key={contratoBuscado.id_contrato}
-              contrato={contratoBuscado}
-              setRefrescar={setRefrescar}
-              onUpdateClick={abrirModalActualizar}
-              empleados={empleados}
-              admins={admins}
-            />
-          )
-        ) : (
-          contratos.map((contrato) => (
+        <div className="flex flex-wrap items-center gap-6">
+          {(contratoBuscado
+            ? Array.isArray(contratoBuscado) ? contratoBuscado : [contratoBuscado]
+            : contratos
+          ).map(contrato => (
             <CardContractsBack
               key={contrato.id_contrato}
               contrato={contrato}
               setRefrescar={setRefrescar}
-              onUpdateClick={abrirModalActualizar}
+              onUpdateClick={handleUpdateClick}
               empleados={empleados}
               admins={admins}
             />
-          ))
+          ))}
+        </div>
+
+        {!contratoBuscado && (
+          <Paginator
+            currentPage={paginaActual}
+            totalPages={totalPaginas}
+            onPageChange={nuevaPagina => {
+              if (nuevaPagina !== paginaActual) {
+                setPaginaActual(nuevaPagina)
+              }
+            }}
+          />
+        )}
+
+        {showRegisterModal && (
+          <RegisterModal
+            onClose={() => setShowRegisterModal(false)}
+            setRefrescar={setRefrescar}
+            empleados={empleados}
+            admins={admins}
+          />
+        )}
+
+        {showUpdateModal && (
+          <UpdateModal
+            onClose={() => setShowUpdateModal(false)}
+            setRefrescar={setRefrescar}
+            contratoCarta={showUpdateModal}
+          />
         )}
       </div>
-
-      <Paginator
-        currentPage={paginaActual}
-        totalPages={totalPaginas}
-        onPageChange={(nuevaPagina) => {
-          if (nuevaPagina !== paginaActual) {
-            setPaginaActual(nuevaPagina)
-          }
-        }}
-      />
-
-      {showRegisterModal && (
-        <RegisterModal
-          onClose={() => setShowRegisterModal(false)}
-          setRefrescar={setRefrescar}
-          empleados={empleados}
-          admins={admins}
-        />
-      )}
-      {showUpdateModal && contratoSeleccionado && (
-        <UpdateModal
-          onClose={cerrarModal}
-          setRefrescar={setRefrescar}
-          contratoCarta={contratoSeleccionado}
-        />
-      )}
-    </div>
+    </section>
   )
 }
 

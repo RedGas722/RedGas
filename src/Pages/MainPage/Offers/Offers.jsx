@@ -21,7 +21,7 @@ export const OffersSect = () => {
   }, [])
 
   return (
-    <section id="OffersSect" className="NeoContainer_outset_TL !rounded-[40px] flex flex-col p-[15px] gap-[20px]">
+    <section id="OffersSect" className="z-[2] NeoContainer_outset_TL !rounded-[40px] flex flex-col p-[15px] gap-[20px]">
       <TitleSectCategory IconClass='text-[var(--Font-Nav2-shadow)]' iconCategory={faDollarSign} nameCategory="Ofertas" className='flex flex-row justify-start items-center text-[var(--Font-Nav2)] gap-[8px]' />
       <CardsOffers
         uniqueId="offers"

@@ -1,5 +1,5 @@
-import React from 'react'
-import { DeleteAdmin } from "../Delete/Delete"
+import { DeleteAdmin } from '../Delete/Delete'
+import { Buttons } from '../../../UI/Login_Register/Buttons'
 
 const CardAdminsBack = ({ admin, setRefrescar, onUpdateClick }) => {
   const handleDelete = async () => {
@@ -10,35 +10,50 @@ const CardAdminsBack = ({ admin, setRefrescar, onUpdateClick }) => {
 
     if (success) {
       alert(message)
-      if (setRefrescar) setRefrescar(true)
+      setRefrescar(true)
     } else {
       alert(`Error: ${message}`)
     }
   }
 
   return (
-    <div className="bg-white shadow-lg rounded-lg p-4 w-full min-h-[150px] flex flex-col justify-start overflow-hidden">
-      <h2 className="text-xl font-semibold text-gray-800 truncate">{admin.nombre_admin}</h2>
-      <div className="mt-2 space-y-1 text-sm">
-        <p><span className="font-semibold">ID:</span> {admin.id_admin}</p>
-        <p><span className="font-semibold">Correo:</span> {admin.correo_admin}</p>
-        <p><span className="font-semibold">Teléfono:</span> {admin.telefono_admin}</p>
+    <div className="text-center z-[2] items-center NeoContainer_outset_TL w-[300px] p-4 h-fit flex flex-col justify-start gap-2">
+      <h2 className="text-xl font-bold text-[var(--Font-Nav)] truncate w-full break-words">
+        {admin.nombre_admin}
+      </h2>
+
+      <div className="flex flex-col text-sm text-[var(--main-color)]">
+        <p className="font-medium flex items-center gap-1">
+          <span className="font-bold text-[15px]">ID:</span>
+          <span className="break-words">{admin.id_admin}</span>
+        </p>
+        <p className="font-medium flex items-center gap-1">
+          <span className="font-bold text-[15px]">Correo:</span>
+          <span className="break-words">{admin.correo_admin}</span>
+        </p>
+        <p className="font-medium flex items-center gap-1">
+          <span className="font-bold text-[15px]">Teléfono:</span>
+          <span className="break-words">{admin.telefono_admin}</span>
+        </p>
       </div>
-      <div className="mt-4 flex flex-col gap-2">
-        <button
+
+      <div className="flex flex-col gap-2">
+        <Buttons
           onClick={handleDelete}
-          className="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded"
-        >
-          Eliminar
-        </button>
-        {onUpdateClick && (
-          <button
-            onClick={() => onUpdateClick(admin)}
-            className="bg-yellow-500 hover:bg-yellow-600 text-white py-1 px-3 rounded"
-          >
-            Actualizar
-          </button>
-        )}
+          nameButton='Eliminar'
+          textColor='var(--Font-Nav2)'
+          radius='12'
+          borderWidth='1'
+          borderColor='var(--Font-Nav2)'
+        />
+        <Buttons
+          onClick={() => onUpdateClick(admin)}
+          nameButton='Actualizar'
+          textColor='var(--Font-Yellow)'
+          radius='12'
+          borderWidth='1'
+          borderColor='var(--Font-Yellow)'
+        />
       </div>
     </div>
   )

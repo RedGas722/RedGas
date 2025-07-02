@@ -1,7 +1,9 @@
 import { CostumerMyService } from './Pages/CostumerMyService/CostumerMyService'
 import { CostumerServices } from './Pages/CostumersServices/CostumersServices'
 import { RecoveryPassword } from './Pages/RecoveryPassword/RecoveryPassword'
+import { BackgroundFire } from './UI/BackgroundFire/BackgroundFire.jsx'
 import { ForgotPassword } from './Pages/ForgotPassword/ForgotPassword'
+import { LoadingProvider, useLoading } from './UI/Loading/Loading.jsx'
 import { startTokenRefresher } from './Pages/Login/TokenRefresher.jsx'
 import { TechniciansBack } from './Admin/Technicians/TechniciansBack'
 import { Technica } from './Pages/Technicians/Technica/Technica.jsx'
@@ -15,6 +17,7 @@ import { LoginGeneral } from './Pages/Login/LoginGeneral.jsx'
 import { ProductsBack } from './Admin/Products/ProductsBack'
 import { FacturesBack } from './Admin/Factures/FacturesBack'
 import { ServicesBack } from './Admin/Services/ServicesBack'
+import { Backdrop, CircularProgress } from '@mui/material'
 import { Cancelado } from './Pages/Shopping/Cancelado.jsx'
 import { ClientsBack } from './Admin/Clients/ClientsBack'
 import { Shopping } from './Pages/Shopping/Shopping.jsx'
@@ -24,10 +27,10 @@ import { AdminsBack } from './Admin/Admins/AdminsBack'
 import { Register } from './Pages/Register/Register'
 import { MainPage } from './Pages/MainPage/MainPage'
 import { Routes, Route } from 'react-router-dom'
-import { Cursor } from './UI/Cursor/Cursor.jsx'
-import { AdminApp } from './Admin/AdminApp'
+// import { Cursor } from './UI/Cursor/Cursor.jsx'
 import { Login } from './Pages/Login/Login'
 import { useEffect } from 'react'
+import { AdminApp } from './Admin/AdminApp'
 import ConfirmacionPayPal from './Pages/Shopping/ConfirmacionPayPal.jsx'
 import ConfirmacionPsE from './Pages/Shopping/ConfirmacionPsE.jsx'
 
@@ -36,7 +39,8 @@ import ConfirmacionPsE from './Pages/Shopping/ConfirmacionPsE.jsx'
 import { ProtectedRoute } from './Pages/Login/ProtectedRoutes.jsx'
 import { SalesBack } from './Admin/Sales/SalesBack.jsx'
 
-export function App() {
+export function AppContent() {
+    const { isLoading } = useLoading();
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -50,7 +54,7 @@ export function App() {
     return (
         <>
             <div>
-                <Cursor />
+                {/* <Cursor /> */}
                 <Routes>
                     <Route path="/" element={<MainPage />} />
                     <Route path="/CostumerMyService" element={<CostumerMyService />} />
@@ -148,9 +152,39 @@ export function App() {
                     {/* 404 */}
                     <Route path="/NotFound" element={<NotFound />} />
                 </Routes>
+                <Backdrop
+                    sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                    open={isLoading}
+                >
+                    <CircularProgress color="inherit" />
+                </Backdrop>
             </div>
         </>
     )
 }
 
+export function App() {
+    return (
+        <LoadingProvider>
+            <div style={{ position: 'relative', minHeight: '100vh' }}>
+                {/* Fondo de fuego */}
+                <BackgroundFire
+                    particleCount={50}
+                    intensity="high"
+                    style={{
+                        position: 'fixed',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%',
+                        zIndex: 1
+                    }}
+                />
+
+                {/* Tu contenido normal */}
+                <AppContent />
+            </div>
+        </LoadingProvider>
+    )
+}
 export default App

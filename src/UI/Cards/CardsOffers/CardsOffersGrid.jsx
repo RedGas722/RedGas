@@ -76,7 +76,7 @@ export const CardsOffersGrid = ({ productos = [] }) => {
     <section className="w-full grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
       {productos.map((producto, index) => (
         <div key={index} className="flex justify-center items-center p-[25px_0] w-fit">
-          <div className="card relative NeoSubContainer_outset_TL">
+          <div className="card z-[2] relative NeoSubContainer_outset_TL">
             <div className="card-img">
               <div className="img h-full">
                 <img

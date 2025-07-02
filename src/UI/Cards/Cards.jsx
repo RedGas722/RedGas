@@ -1,5 +1,6 @@
 import "./Cards.css"
 import { useEffect, useRef, useState } from "react"
+import { useLoading } from "../Loading/Loading"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowRight, faArrowLeft, faCartShopping } from '@fortawesome/free-solid-svg-icons'
 import { useNavigate } from "react-router-dom"
@@ -28,6 +29,9 @@ async function agregarAlCarrito(item) {
 }
 
 export const Cards = ({ uniqueId, productos = [] }) => {
+  const { setIsLoading } = useLoading();
+  const [loaded, setLoaded] = useState(false);
+
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -44,6 +48,16 @@ export const Cards = ({ uniqueId, productos = [] }) => {
       1390: { slidesToScroll: 1 },
     },
   });
+
+  useEffect(() => {
+    if (productos.length === 0) {
+      setIsLoading(true);
+      setLoaded(false);
+    } else {
+      setLoaded(true);
+      setIsLoading(false);
+    }
+  }, [productos, setIsLoading]);
 
   useEffect(() => {
     if (!embla) return;
@@ -116,7 +130,7 @@ export const Cards = ({ uniqueId, productos = [] }) => {
         <div className="embla__container flex " >
           {productos.map((producto, index) => (
             <div className="embla__slide flex justify-center p-[25px_10px]" key={index}>
-              <div className="card NeoSubContainer_outset_TL">
+              <div className="card z-[2] NeoSubContainer_outset_TL">
                 <div className="card-img" onClick={() => navigate('/ProductInfo')}>
                   <div className="img">
                     <img

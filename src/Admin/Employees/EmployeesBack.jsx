@@ -119,7 +119,7 @@ export const EmployeesBack = () => {
       <BtnBack To='/Admin' />
 
       <div className="p-[var(--p-admin-sub)] h-full flex flex-col gap-2">
-        <h1 className="font-bold text-3xl text-[var(--main-color)]">Empleados</h1>
+        <h1 className="font-bold z-[2] text-3xl text-[var(--main-color)]">Empleados</h1>
 
         <div className='NeoContainer_outset_TL flex gap-4 flex-wrap items-end w-fit p-[var(--p-admin-control)]'>
           <div className="relative" ref={contenedorRef}>

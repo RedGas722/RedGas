@@ -2,7 +2,7 @@ const CardSalesBack = ({ venta, productos }) => {
   const producto = productos.find(p => p.id_producto === venta.id_producto)
 
   return (
-    <div className="bg-white shadow-lg rounded-lg p-4 min-w-[300px] min-h-[150px] flex flex-col justify-between overflow-hidden">
+    <div className="z-[2] NeoContainer_outset_TL p-4 min-w-[300px] min-h-[150px] flex flex-col justify-between overflow-hidden">
       <div>
         <h2 className="text-xl font-semibold text-gray-800 truncate">Pedido #{venta.id_pedidoProducto}</h2>
 

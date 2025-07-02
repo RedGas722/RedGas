@@ -6,7 +6,7 @@ export const Footer = () => {
     return (
         <footer className="footer py-20 px-1.5 h-350px bg-[var(--main-color)] text-white">
             <div className="flex flex-col items-center justify-center">
-                <div className="items-center flex flex-col gap-3 sm:max-w-md text-center">
+                <div className="items-center !z-[2] flex flex-col gap-3 sm:max-w-md text-center">
                     <img src={Logo} className="w-32 sm:mx-auto" />
                     <p>
                         Protege tu hogar con productos de gas certificados y técnicos especializados.

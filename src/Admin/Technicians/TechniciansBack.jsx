@@ -124,9 +124,9 @@ export const TechniciansBack = () => {
         <BtnBack To='/Admin' />
 
         <div className="p-[var(--p-admin-sub)] h-full flex flex-col gap-2">
-          <h1 className="font-bold text-3xl text-[var(--main-color)]">Técnicos</h1>
+          <h1 className="z-[2] font-bold text-3xl text-[var(--main-color)]">Técnicos</h1>
 
-          <div className='NeoContainer_outset_TL flex gap-4 flex-wrap items-end w-fit p-[var(--p-admin-control)]'>
+          <div className='NeoContainer_outset_TL z-[2] flex gap-4 flex-wrap items-end w-fit p-[var(--p-admin-control)]'>
 
             <div className='relative' ref={contenedorRef}>
               <InputLabel

@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { RegisterModal } from './Register/RegisterModal'
 import { UpdateModal } from './Update/Update'
-import { ButtonBack } from '../UI/ButtonBack/ButtonBack'
 import { Buttons } from '../../UI/Login_Register/Buttons'
 import { BtnBack } from "../../UI/Login_Register/BtnBack"
 import { buscarProductoPorNombre } from './Get/Get'
@@ -111,6 +110,13 @@ export const ProductsBack = () => {
     setSugerencias(filtrados.slice(0, 5))
   }, [nombreBusqueda, productosNombres])
 
+  useEffect(() => {
+    if (nombreBusqueda.trim() === '') {
+      setProductoBuscado(null);
+      setErrorBusqueda(''); 
+    }
+  }, [nombreBusqueda]);
+
   // Cierre de dropdown si se hace clic fuera
   useEffect(() => {
     const manejarClickFuera = (event) => {
@@ -126,8 +132,8 @@ export const ProductsBack = () => {
     <section className="w-full h-full p-[var(--p-admin)]">
       <BtnBack To='/Admin' />
       <div className="p-[var(--p-admin-sub)] h-full flex flex-col gap-2">
-        <h1 className="font-bold text-3xl text-[var(--main-color)]">Productos</h1>
-        <div className='NeoContainer_outset_TL flex gap-4 flex-wrap items-end w-fit p-[var(--p-admin-control)]'>
+        <h1 className="font-bold z-[2] text-3xl text-[var(--main-color)]">Productos</h1>
+        <div className='NeoContainer_outset_TL z-[2] flex gap-4 flex-wrap items-end w-fit p-[var(--p-admin-control)]'>
 
           <div className='relative flex' ref={contenedorRef}>
             <InputLabel
@@ -202,7 +208,7 @@ export const ProductsBack = () => {
               setPaginaActual(nuevaPagina);
             }
           }}
-          disabled={isLoading} // ⬅️ Se desactiva mientras carga
+          disabled={isLoading} 
         />
 
         {showRegisterModal && (
