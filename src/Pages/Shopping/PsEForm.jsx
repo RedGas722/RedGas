@@ -1,27 +1,21 @@
 import { useState, useEffect } from 'react';
-import { jwtDecode } from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode'; // corregí la importación
+
+const bancosLocal = [
+  { codigo: "1022", nombre: "BANCOLOMBIA" },
+  { codigo: "1052", nombre: "BANCO DE BOGOTÁ" },
+  { codigo: "1040", nombre: "DAVIVIENDA" },
+  { codigo: "1001", nombre: "BANCO AGRARIO" },
+  { codigo: "1063", nombre: "BANCO DE OCCIDENTE" },
+  { codigo: "1013", nombre: "BANCO AV VILLAS" },
+  { codigo: "1051", nombre: "BANCO POPULAR" },
+  { codigo: "1071", nombre: "BANCO ITAU" },
+  { codigo: "1062", nombre: "BANCO BBVA" },
+  { codigo: "1066", nombre: "SCOTIABANK COLPATRIA" }
+];
 
 const PsePaymentForm = ({ monto, onClose }) => {
-  const [bancos, setBancos] = useState([]);
-
-  useEffect(() => {
-    const cargarBancos = async () => {
-      try {
-        const res = await fetch("https://secure.payco.co/restpagos/pse/bancos.json");
-        const data = await res.json();
-
-        if (data.success && Array.isArray(data.data)) {
-          const bancosFiltrados = data.data.filter(b => b.codigo && b.descripcion);
-          setBancos(bancosFiltrados);
-        } else {
-          console.error("Respuesta inesperada al cargar bancos PSE", data);
-        }
-      } catch (err) {
-        console.error("Error cargando bancos PSE:", err);
-      }
-    };
-    cargarBancos();
-  }, []);
+  const [bancos, setBancos] = useState(bancosLocal); // usa lista local directamente
 
   const [userData, setUserData] = useState({
     name: '',
@@ -32,8 +26,8 @@ const PsePaymentForm = ({ monto, onClose }) => {
 
   const [formData, setFormData] = useState({
     bank: '',
-    invoice: `INV-${Date.now()}-${Math.floor(Math.random() * 10000)}`, // factura única
-    value: monto,  
+    invoice: `INV-${Date.now()}-${Math.floor(Math.random() * 10000)}`,
+    value: monto,
     doc_type: 'CC',
     doc_number: '',
     type_person: '0'
@@ -54,7 +48,7 @@ const PsePaymentForm = ({ monto, onClose }) => {
 
       setFormData(prev => ({
         ...prev,
-        value: monto  
+        value: monto
       }));
     }
   }, [monto]);
@@ -72,9 +66,10 @@ const PsePaymentForm = ({ monto, onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Validar banco seleccionado contra lista local fija
     const bancoValido = bancos.find(b => b.codigo === formData.bank);
     if (!bancoValido) {
-      alert("El banco seleccionado no es válido.");
+      alert("El banco seleccionado no es válido o ha cambiado.");
       return;
     }
 
@@ -86,11 +81,16 @@ const PsePaymentForm = ({ monto, onClose }) => {
 
     try {
       const payload = {
-        ...formData,
+        bank: formData.bank,
+        invoice: formData.invoice,
+        value: formData.value,
+        doc_type: formData.doc_type,
+        doc_number: formData.doc_number,
+        type_person: formData.type_person,
         name: userData.name,
         email: userData.email,
-        cellphone: userData.telefono,
-        direccion: userData.direccion   
+        telefono: userData.telefono,
+        direccion: userData.direccion
       };
 
       const response = await fetch('https://redgas.onrender.com/PagoPSE', {
@@ -104,9 +104,6 @@ const PsePaymentForm = ({ monto, onClose }) => {
 
       const data = await response.json();
 
-      console.log("Respuesta del backend:", data);
-
-      // ⚠ ePayco devuelve el enlace de banco en data.data.urlbanco
       if (data?.success && data?.data?.urlbanco) {
         window.location.href = data.data.urlbanco;
       } else {
@@ -190,7 +187,7 @@ const PsePaymentForm = ({ monto, onClose }) => {
             <option value="">Selecciona tu banco</option>
             {bancos.map((banco) => (
               <option key={banco.codigo} value={banco.codigo}>
-                {banco.descripcion}
+                {banco.nombre}
               </option>
             ))}
           </select>
