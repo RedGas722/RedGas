@@ -1,4 +1,5 @@
 import { DeleteEmployee } from '../Delete/Delete'
+import { Buttons } from '../../../UI/Login_Register/Buttons'
 
 const CardEmployeesBack = ({ empleado, setRefrescar, onUpdateClick }) => {
   const handleDelete = async () => {
@@ -49,20 +50,23 @@ const CardEmployeesBack = ({ empleado, setRefrescar, onUpdateClick }) => {
         <p><span className="font-semibold">Dirección:</span> {empleado.direccion_empleado}</p>
       </div>
 
-      <div className="mt-4 flex flex-col gap-2">
-        <button
+      <div className="flex flex-col gap-2">
+        <Buttons
           onClick={handleDelete}
-          className="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded"
-        >
-          Eliminar
-        </button>
-
-        <button
+          nameButton='Eliminar'
+          textColor='var(--Font-Nav2)'
+          radius='12'
+          borderWidth='1'
+          borderColor='var(--Font-Nav2)'
+        />
+        <Buttons
           onClick={() => onUpdateClick(empleado)}
-          className="bg-yellow-500 hover:bg-yellow-600 text-white py-1 px-3 rounded"
-        >
-          Actualizar
-        </button>
+          nameButton='Actualizar'
+          textColor='var(--Font-Yellow)'
+          radius='12'
+          borderWidth='1'
+          borderColor='var(--Font-Yellow)'
+        />
       </div>
     </div>
   )

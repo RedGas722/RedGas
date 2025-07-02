@@ -4,7 +4,6 @@ import { RecoveryPassword } from './Pages/RecoveryPassword/RecoveryPassword'
 import { ForgotPassword } from './Pages/ForgotPassword/ForgotPassword'
 import { startTokenRefresher } from './Pages/Login/TokenRefresher.jsx'
 import { TechniciansBack } from './Admin/Technicians/TechniciansBack'
-import { TechniciansPage } from './Pages/Technicians/TechniciansPage'
 import { Technica } from './Pages/Technicians/Technica/Technica.jsx'
 import { ContractsBack } from './Admin/Contracts/ContractsBack.jsx'
 import { LoginTechnician } from './Pages/Login/LoginTechnician.jsx'
@@ -56,7 +55,6 @@ export function App() {
                     <Route path="/" element={<MainPage />} />
                     <Route path="/CostumerMyService" element={<CostumerMyService />} />
                     <Route path="/Services" element={<ServicesInfo />} />
-                    <Route path="/Technic" element={<TechniciansPage />} />
                     <Route path="/Shopping" element={<Shopping />} />
                     <Route path='/Register' element={<Register />} />
                     <Route path="/SearchPage" element={<SearchPage />} />

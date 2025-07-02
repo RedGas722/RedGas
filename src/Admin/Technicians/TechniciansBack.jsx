@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from 'react'
 import { RegisterModal } from './Register/RegisterModal'
 import { UpdateModal } from './Update/Update'
 import { ButtonBack } from '../UI/ButtonBack/ButtonBack'
-import { DeleteModal } from './Delete/Delete'
 import { BtnBack } from "../../UI/Login_Register/BtnBack"
 import CardTechniciansBack from './Get/CardTechniciansBack'
 import { buscarTecnicoPorCorreo } from './Get/Get'
@@ -72,16 +71,18 @@ export const TechniciansBack = () => {
   const handleUpdateClick = (tecnico) => setShowUpdateModal(tecnico)
 
   // 🔍 Buscar técnico en la base de datos
-  const buscarTecnico = async () => {
+  const buscarTecnico = async (correo) => {
     setErrorBusqueda('')
     setTecnicoBuscado(null)
-    if (!correoBusqueda.trim()) {
+
+    if (!correo.trim()) {
       fetchTecnicos(1)
       setPaginaActual(1)
       return
     }
+
     try {
-      const resultado = await buscarTecnicoPorCorreo(correoBusqueda.trim())
+      const resultado = await buscarTecnicoPorCorreo(correo.trim()) // ⚠️ Usa el parámetro, no el estado
       if (resultado.length > 0) {
         setTecnicoBuscado(resultado[0])
         setSugerencias([])
@@ -117,12 +118,6 @@ export const TechniciansBack = () => {
     return () => document.removeEventListener('mousedown', manejarClickFuera)
   }, [])
 
-  // Para eliminar un técnico desde la tarjeta
-  const [showDeleteModal, setShowDeleteModal] = useState(false)
-  const handleDeleteClick = (tecnico) => {
-    setShowDeleteModal(tecnico)
-  }
-
   return (
     <>
       <section className="w-full h-full p-[var(--p-admin)]">
@@ -151,9 +146,9 @@ export const TechniciansBack = () => {
                     <li
                       key={tecnico.id_tecnico || tecnico.correo_tecnico}
                       onClick={() => {
-                        setCorreoBusqueda(tecnico.correo_tecnico);
-                        setSugerencias([]);
-                        setTecnicos([tecnico]);
+                        setCorreoBusqueda(tecnico.correo_tecnico)
+                        buscarTecnico(tecnico.correo_tecnico)
+                        setSugerencias([])
                       }}
                       className="p-2 hover:bg-gray-100 cursor-pointer"
                     >
@@ -165,21 +160,30 @@ export const TechniciansBack = () => {
             </div>
             <div className="flex w-fit h-fit flex-wrap justify-center justify-self-center items-center gap-[20px]">
               <Buttons radius='10' nameButton='Registrar' textColor='var(--Font-Nav)' Onclick={() => setShowRegisterModal(true)} />
-              {/* Eliminar, Actualizar y Consultar removidos porque ya están en la card y el input de consulta ya existe */}
             </div>
           </div>
           {/* Sección de técnicos */}
           <div className="flex flex-wrap items-center gap-6">
-            {tecnicos.map(tecnico => (
+            {(tecnicoBuscado ? [tecnicoBuscado] : tecnicos).map(tecnico => (
               <CardTechniciansBack
                 key={tecnico.id_tecnico || tecnico.correo_tecnico}
                 tecnico={tecnico}
                 setRefrescar={setRefrescar}
                 onUpdateClick={handleUpdateClick}
-                onDeleteClick={handleDeleteClick}
               />
             ))}
           </div>
+
+            <Paginator
+              currentPage={paginaActual}
+              totalPages={totalPaginas}
+              onPageChange={(nuevaPagina) => {
+                if (nuevaPagina !== paginaActual) {
+                  setPaginaActual(nuevaPagina)
+                }
+              }}
+            />
+
           {/* Modales */}
           {showRegisterModal && (
             <RegisterModal
@@ -194,112 +198,8 @@ export const TechniciansBack = () => {
               tecnicoCarta={showUpdateModal}
             />
           )}
-          {typeof showDeleteModal === 'object' && showDeleteModal && (
-            <DeleteModal
-              onClose={() => setShowDeleteModal(false)}
-              setRefrescar={setRefrescar}
-              tecnicoCarta={showDeleteModal}
-            />
-          )}
         </div>
       </section>
-      <div className="p-[20px] h-full flex flex-col gap-[20px]">
-        <div className='NeoContainer_outset_TL flex flex-col w-fit p-[0_0_0_20px]'>
-          <h1 className="font-bold text-[20px] text-[var(--main-color)]">Técnicos</h1>
-
-          {/* 🔍 Búsqueda con botón */}
-          <div className="relative flex items-center" ref={contenedorRef}>
-            <InputLabel
-              type="1"
-              ForID="correo_tecnico_busqueda"
-              placeholder="Buscar técnico"
-              childLabel="Buscar técnico"
-              value={correoBusqueda}
-              onChange={e => setCorreoBusqueda(e.target.value)}
-              className="w-full pr-10"
-            />
-            <button
-              onClick={buscarTecnico}
-              className="absolute right-2 text-gray-600 hover:text-gray-800"
-              title="Buscar técnico"
-            >
-              🔍
-            </button>
-
-            {sugerencias.length > 0 && (
-              <ul className="absolute z-10 bg-white border border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto w-full shadow">
-                {sugerencias.map((tecnico) => (
-                  <li
-                    key={tecnico.id_tecnico || tecnico.correo_tecnico}
-                    onClick={() => {
-                      setCorreoBusqueda(tecnico.correo_tecnico)
-                      setSugerencias([])
-                    }}
-                    className="p-2 hover:bg-gray-100 cursor-pointer"
-                  >
-                    {tecnico.correo_tecnico}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-
-          {/* Mensaje de error */}
-          {errorBusqueda && (
-            <p className="text-red-600 text-sm mt-1">{errorBusqueda}</p>
-          )}
-
-          <div className="flex p-[20px] w-fit h-fit flex-wrap justify-center justify-self-center items-center gap-[20px]">
-            <ButtonBack ClickMod={() => setShowRegisterModal(true)} Child="Registrar" />
-          </div>
-        </div>
-
-        {/* 📦 Cards de técnicos */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {tecnicoBuscado ? (
-            <CardTechniciansBack
-              key={tecnicoBuscado.id_tecnico}
-              tecnico={tecnicoBuscado}
-              setRefrescar={setRefrescar}
-              onUpdateClick={handleUpdateClick}
-            />
-          ) : (
-            tecnicos.map(tecnico => (
-              <CardTechniciansBack
-                key={tecnico.id_tecnico || tecnico.correo_tecnico}
-                tecnico={tecnico}
-                setRefrescar={setRefrescar}
-                onUpdateClick={handleUpdateClick}
-              />
-            ))
-          )}
-        </div>
-
-        <Paginator
-          currentPage={paginaActual}
-          totalPages={totalPaginas}
-          onPageChange={(nuevaPagina) => {
-            if (nuevaPagina !== paginaActual) {
-              setPaginaActual(nuevaPagina)
-            }
-          }}
-        />
-
-        {/* Modales */}
-        {showRegisterModal && (
-          <RegisterModal
-            onClose={() => setShowRegisterModal(false)}
-            setRefrescar={setRefrescar}
-          />
-        )}
-        {typeof showUpdateModal === 'object' && showUpdateModal && (
-          <UpdateModal
-            onClose={() => setShowUpdateModal(false)}
-            setRefrescar={setRefrescar}
-            tecnicoCarta={showUpdateModal}
-          />
-        )}
-      </div>
     </>
   )
 }

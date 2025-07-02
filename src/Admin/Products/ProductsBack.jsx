@@ -86,11 +86,11 @@ export const ProductsBack = () => {
     setShowUpdateModal(false)
   }
 
-  const buscarProducto = async () => {
+  const buscarProducto = async (correo) => {
     setErrorBusqueda('')
     setProductoBuscado(null)
     try {
-      const resultado = await buscarProductoPorNombre(nombreBusqueda)
+      const resultado = await buscarProductoPorNombre(correo)
       setProductoBuscado(resultado)
       setSugerencias([])
     } catch (error) {
@@ -141,12 +141,6 @@ export const ProductsBack = () => {
               className="w-full "
               placeholderError={!!errorBusqueda}
             />
-            <button
-              onClick={buscarProducto}
-              aria-label="Buscar producto"
-            >
-              🔍
-            </button>
 
             {sugerencias.length > 0 && (
               <ul className="absolute z-10 bg-white border border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto w-full shadow">
@@ -155,6 +149,7 @@ export const ProductsBack = () => {
                     key={producto.id_producto}
                     onClick={() => {
                       setNombreBusqueda(producto.nombre_producto)
+                      buscarProducto(producto.nombre_producto)
                       setSugerencias([])
                     }}
                     className="p-2 hover:bg-gray-100 cursor-pointer"

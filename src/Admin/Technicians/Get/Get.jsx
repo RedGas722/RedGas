@@ -15,6 +15,5 @@ export const buscarTecnicoPorCorreo = async (correoTecnico) => {
   }
 
   const data = await res.json()
-
   return data?.data ? [data.data] : []
 }

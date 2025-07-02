@@ -1,11 +1,10 @@
 import { useState, useEffect, useRef } from 'react'
 import { RegisterModal } from './Register/RegisterModal'
 import { UpdateModal } from './Update/Update'
-import { ButtonBack } from '../UI/ButtonBack/ButtonBack'
-import { buscarEmpleadoPorCorreo } from './Get/Get'
-import { BtnBack } from '../../UI/Login_Register/BtnBack'
-import CardEmployeesBack from './Get/CardEmployeesBack'
+import { BtnBack } from "../../UI/Login_Register/BtnBack"
 import { InputLabel } from '../../UI/Login_Register/InputLabel/InputLabel'
+import CardEmployeesBack from './Get/CardEmployeesBack'
+import { buscarEmpleadoPorCorreo } from './Get/Get'
 import { Paginator } from '../../UI/Paginator/Paginator'
 import { Buttons } from '../../UI/Login_Register/Buttons'
 
@@ -15,7 +14,6 @@ export const EmployeesBack = () => {
   const [empleados, setEmpleados] = useState([])
   const [correosEmpleados, setCorreosEmpleados] = useState([])
   const [refrescar, setRefrescar] = useState(false)
-  const [empleadoSeleccionado, setEmpleadoSeleccionado] = useState(null)
   const [correoBusqueda, setCorreoBusqueda] = useState('')
   const [empleadoBuscado, setEmpleadoBuscado] = useState(null)
   const [errorBusqueda, setErrorBusqueda] = useState('')
@@ -68,26 +66,28 @@ export const EmployeesBack = () => {
     }
   }, [refrescar])
 
-  const abrirModalActualizar = (empleado) => {
-    setEmpleadoSeleccionado(empleado)
-    setShowUpdateModal(true)
-  }
+  const handleUpdateClick = (empleado) => setShowUpdateModal(empleado)
 
-  const cerrarModal = () => {
-    setShowUpdateModal(false)
-    setEmpleadoSeleccionado(null)
-  }
-
-  const buscarEmpleado = async () => {
+  const buscarEmpleado = async (correo) => {
     setErrorBusqueda('')
     setEmpleadoBuscado(null)
 
+    if (!correo.trim()) {
+      fetchEmpleados(1)
+      setPaginaActual(1)
+      return
+    }
+
     try {
-      const resultado = await buscarEmpleadoPorCorreo(correoBusqueda)
-      setEmpleadoBuscado(resultado)
-      setSugerencias([])
+      const resultado = await buscarEmpleadoPorCorreo(correo.trim())
+      if (resultado) {
+        setEmpleadoBuscado(resultado)
+        setSugerencias([])
+      } else {
+        setErrorBusqueda('No se encontró un empleado con ese correo.')
+      }
     } catch (error) {
-      setErrorBusqueda(error.message)
+      setErrorBusqueda('Error al buscar empleado.')
     }
   }
 
@@ -95,12 +95,11 @@ export const EmployeesBack = () => {
     if (correoBusqueda.trim() === '') {
       setSugerencias([])
       setEmpleadoBuscado(null)
-      setErrorBusqueda('')
       return
     }
 
-    const filtrados = correosEmpleados.filter((empleado) =>
-      (empleado.correo_empleado || '').toLowerCase().includes(correoBusqueda.toLowerCase())
+    const filtrados = correosEmpleados.filter(emp =>
+      emp.correo_empleado?.toLowerCase().includes(correoBusqueda.toLowerCase())
     )
     setSugerencias(filtrados.slice(0, 5))
   }, [correoBusqueda, correosEmpleados])
@@ -111,21 +110,18 @@ export const EmployeesBack = () => {
         setSugerencias([])
       }
     }
-
     document.addEventListener('mousedown', manejarClickFuera)
     return () => document.removeEventListener('mousedown', manejarClickFuera)
   }, [])
 
   return (
-    <div className="w-full h-full p-[var(--p-admin)]">
-      <BtnBack To="/Admin" />
-      {/* Encabezado */}
+    <section className="w-full h-full p-[var(--p-admin)]">
+      <BtnBack To='/Admin' />
+
       <div className="p-[var(--p-admin-sub)] h-full flex flex-col gap-2">
+        <h1 className="font-bold text-3xl text-[var(--main-color)]">Empleados</h1>
 
-        <h1 className="font-bold text-3xl text-[var(--main-color)]">Empleado</h1>
-
-        {/* Búsqueda y Registro */}
-        <div className="NeoContainer_outset_TL flex gap-4 flex-wrap items-end w-fit p-[var(--p-admin-control)]">
+        <div className='NeoContainer_outset_TL flex gap-4 flex-wrap items-end w-fit p-[var(--p-admin-control)]'>
           <div className="relative" ref={contenedorRef}>
             <InputLabel
               radius="10"
@@ -138,82 +134,76 @@ export const EmployeesBack = () => {
               className="w-full"
               placeholderError={!!errorBusqueda}
             />
-            {/* <FontAwesomeIcon
-            icon={faSearch}
-            onClick={buscarEmpleado}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--Font-Nav)] cursor-pointer"
-          /> */}
             {sugerencias.length > 0 && (
-              <ul className="absolute z-10 bg-white border border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto w-full shadow">
-                {sugerencias.map((empleado) => (
+              <ul className="absolute z-10 bg-white border border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto shadow w-[230px]">
+                {sugerencias.map((emp) => (
                   <li
-                    key={empleado.id_empleado}
+                    key={emp.id_empleado}
                     onClick={() => {
-                      setCorreoBusqueda(empleado.correo_empleado)
+                      setCorreoBusqueda(emp.correo_empleado)
+                      buscarEmpleado(emp.correo_empleado)
                       setSugerencias([])
                     }}
                     className="p-2 hover:bg-gray-100 cursor-pointer"
                   >
-                    {empleado.correo_empleado}
+                    {emp.correo_empleado}
                   </li>
                 ))}
               </ul>
             )}
           </div>
-          <Buttons onClick={() => setShowRegisterModal(true)} nameButton='Registrar' radius='10' />
-        </div>
-        {/* Mensaje de error */}
-        {errorBusqueda && <p className="text-red-600 text-sm">{errorBusqueda}</p>}
-
-        {/* Grid de empleados */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {empleadoBuscado ? (
-            <CardEmployeesBack
-              key={empleadoBuscado.id_empleado}
-              empleado={empleadoBuscado}
-              setRefrescar={setRefrescar}
-              onUpdateClick={abrirModalActualizar}
+          <div className="flex w-fit h-fit flex-wrap justify-center items-center gap-[20px]">
+            <Buttons
+              radius='10'
+              nameButton='Registrar'
+              textColor='var(--Font-Nav)'
+              Onclick={() => setShowRegisterModal(true)}
             />
-          ) : (
-            empleados.map((empleado) => (
-              <CardEmployeesBack
-                key={empleado.id_empleado}
-                empleado={empleado}
-                setRefrescar={setRefrescar}
-                onUpdateClick={abrirModalActualizar}
-              />
-            ))
-          )}
+          </div>
         </div>
+
+        {/* Lista de empleados */}
+        <div className="flex flex-wrap items-center gap-6">
+          {(empleadoBuscado ? [empleadoBuscado] : empleados).map((empleado) => (
+            <CardEmployeesBack
+              key={empleado.id_empleado}
+              empleado={empleado}
+              setRefrescar={setRefrescar}
+              onUpdateClick={handleUpdateClick}
+            />
+          ))}
+        </div>
+
+        {/* Paginador */}
+        {!empleadoBuscado && (
+          <Paginator
+            currentPage={paginaActual}
+            totalPages={totalPaginas}
+            onPageChange={(nuevaPagina) => {
+              if (nuevaPagina !== paginaActual) {
+                setPaginaActual(nuevaPagina)
+              }
+            }}
+          />
+        )}
+
+        {/* Modales */}
+        {showRegisterModal && (
+          <RegisterModal
+            onClose={() => setShowRegisterModal(false)}
+            setRefrescar={setRefrescar}
+          />
+        )}
+
+        {typeof showUpdateModal === 'object' && showUpdateModal && (
+          <UpdateModal
+            onClose={() => setShowUpdateModal(false)}
+            setRefrescar={setRefrescar}
+            empleadoCarta={showUpdateModal}
+          />
+        )}
       </div>
-
-
-      {/* Paginador */}
-      {!empleadoBuscado && (
-        <Paginator
-          currentPage={paginaActual}
-          totalPages={totalPaginas}
-          onPageChange={(nuevaPagina) => {
-            if (nuevaPagina !== paginaActual) {
-              setPaginaActual(nuevaPagina)
-            }
-          }}
-        />
-      )}
-
-      {/* Modales */}
-      {showRegisterModal && (
-        <RegisterModal onClose={() => setShowRegisterModal(false)} setRefrescar={setRefrescar} />
-      )}
-
-      {showUpdateModal && empleadoSeleccionado && (
-        <UpdateModal
-          onClose={cerrarModal}
-          setRefrescar={setRefrescar}
-          empleadoCarta={empleadoSeleccionado}
-        />
-      )}
-    </div>
+    </section>
   )
 }
 

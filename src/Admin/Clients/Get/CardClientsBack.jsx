@@ -15,7 +15,6 @@ const CardClientsBack = ({ cliente, setRefrescar, onUpdateClick }) => {
       alert(`Error: ${message}`)
     }
   }
-
   return (
     <div className="text-center items-center NeoContainer_outset_TL w-[300px] p-4 h-fit flex flex-col justify-start gap-2">
       <h2 className="text-xl font-bold text-[var(--Font-Nav)] truncate w-full">{cliente.nombre_cliente}</h2>

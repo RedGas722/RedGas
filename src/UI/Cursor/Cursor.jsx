@@ -22,8 +22,10 @@ export const Cursor = () => {
         }
 
         const animateCursor = () => {
-            pos.current.x += (mouse.current.x - pos.current.x) * speed
-            pos.current.y += (mouse.current.y - pos.current.y) * speed
+            if (!cursorRef.current || !followerRef.current) return; // ← Esta línea es clave
+
+            pos.current.x += (mouse.current.x - pos.current.x) * speed;
+            pos.current.y += (mouse.current.y - pos.current.y) * speed;
 
             if (cursorRef.current) {
                 gsap.set(cursorRef.current, { x: mouse.current.x, y: mouse.current.y })
@@ -32,7 +34,7 @@ export const Cursor = () => {
                 gsap.set(followerRef.current, { x: pos.current.x, y: pos.current.y })
             }
 
-            requestRef.current = requestAnimationFrame(animateCursor)
+            requestRef.current = requestAnimationFrame(animateCursor);
         }
 
         const handleHover = (e) => {

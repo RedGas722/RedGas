@@ -81,7 +81,6 @@ export const SalesBack = () => {
             childLabel="Buscar por producto"
             value={productoBusqueda}
             onChange={(e) => handleProductoInput(e.target.value)}
-            placeholderError={!!errorBusquedaProducto}
           />
           {productoSugerencias.length > 0 && (
             <div className="absolute z-10 bg-white border border-gray-300 rounded mt-1 shadow w-full">
