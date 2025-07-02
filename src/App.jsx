@@ -32,8 +32,6 @@ import { Login } from './Pages/Login/Login'
 import { useEffect } from 'react'
 import { AdminApp } from './Admin/AdminApp'
 import ConfirmacionPayPal from './Pages/Shopping/ConfirmacionPayPal.jsx'
-import ConfirmacionPsE from './Pages/Shopping/ConfirmacionPsE.jsx'
-
 
 // 👇 Importar ruta protegida
 import { ProtectedRoute } from './Pages/Login/ProtectedRoutes.jsx'
@@ -146,7 +144,6 @@ export function AppContent() {
 
                     {/* Rutas de Pago */}
                     <Route path="/Shopping/ConfirmacionPayPal" element={<ConfirmacionPayPal />} />
-                    <Route path="/Shopping/ConfirmacionPsE" element={<ConfirmacionPsE />} />
                     <Route path="/Shopping/Cancelado" element={<Cancelado />} />
 
                     {/* 404 */}

@@ -6,8 +6,6 @@ import Box from '@mui/material/Box'
 import SpeedDial from '@mui/material/SpeedDial'
 import SpeedDialIcon from '@mui/material/SpeedDialIcon'
 import SpeedDialAction from '@mui/material/SpeedDialAction'
-import PsePaymentForm from "./PsEForm"
-import { SvgPSE } from "../../UI/Svg/SvgPSE"
 import { SvgPayPal } from "../../UI/Svg/SvgPayPal"
 
 export const Shopping = () => {
@@ -16,8 +14,6 @@ export const Shopping = () => {
   const [totalPrice, setTotalPrice] = useState(0)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
-  const [showPseForm, setShowPseForm] = useState(false)
-  const [pseAmount, setPseAmount] = useState(0)
   const token = localStorage.getItem("token")
 
   const fetchProducts = async () => {
@@ -238,13 +234,6 @@ export const Shopping = () => {
       name: 'Comprar todo'
     },
     {
-      icon: <SvgPSE className=' w-8 h-8' onClick={() => {
-        setPseAmount(totalPrice)
-        setShowPseForm(true)
-      }} />,
-      name: 'Pagar con PSE'
-    },
-    {
       icon: <SvgPayPal onClick={() => handlePayWithPaypal()} />,
       name: 'Pagar con PayPal'
     },
@@ -312,23 +301,11 @@ export const Shopping = () => {
                         </button>
                       </div>
                       <div className="flex items-center gap-5">
-                        <button className='buttonTL2 NeoSubContainer_outset_TL p-[7px]' onClick={() => alert("Comprar producto aún no implementado")}>
-                          Comprar!!
-                        </button>
                         <button
                           className='buttonTL2 NeoSubContainer_outset_TL p-[7px]'
                           onClick={() => handlePayWithPaypal(subtotal, producto.id_producto)}
                         >
                           Pagar con PayPal
-                        </button>
-                        <button
-                          className='buttonTL2 NeoSubContainer_outset_TL p-[7px]'
-                          onClick={() => {
-                            setPseAmount(subtotal)
-                            setShowPseForm(true)
-                          }}
-                        >
-                          Pagar con PSE
                         </button>
                         <button
                           className='buttonTL2 NeoSubContainer_outset_TL p-[7px]'
@@ -378,9 +355,6 @@ export const Shopping = () => {
           </p>
         </footer>
       </div>
-      {showPseForm && (
-        <PsePaymentForm monto={pseAmount} onClose={() => setShowPseForm(false)} />
-      )}
       {/* SpeedDial */}
       <Box sx={{ height: 330, transform: 'translateZ(0px)', flexGrow: 1, position: 'sticky', bottom: 0, right: 0, zIndex:2 }}>
         <SpeedDial
