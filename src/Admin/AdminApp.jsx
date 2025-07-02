@@ -44,7 +44,7 @@ export const AdminApp = () => {
                         <>
                             <ButtonSide to='/Admin/Products' children='Productos' imgBtn='src/Admin/Assets/Icons/Product.png' />
                             <ButtonSide to='/Admin/Services' children='Servicios' imgBtn='src/Admin/Assets/Icons/Services.png' />
-                            <ButtonSide to='/Admin/Sales' children={'Ventas'} imgBtn='...' />
+                            <ButtonSide to='/Admin/Sales' children={'Ventas'} imgBtn='src/Admin/Assets/Icons/Sales.png' />
                         </>
                     )}
 

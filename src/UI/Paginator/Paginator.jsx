@@ -15,7 +15,7 @@ export const Paginator = ({ currentPage, totalPages, onPageChange, disabled }) =
       <Pagination
         sx={{
           '& .MuiPaginationItem-root': {
-            color: 'white', // color de texto por defecto
+            color: 'white', 
             backgroundColor: 'transparent',
           },
           '& .Mui-selected': {
@@ -32,7 +32,7 @@ export const Paginator = ({ currentPage, totalPages, onPageChange, disabled }) =
         onChange={handleChange}
         shape="rounded"
         size="small"
-        disabled={disabled} // 🔒 Bloquea clics mientras está cargando
+        disabled={disabled}
       />
     </Box>
   );
