@@ -9,14 +9,6 @@
 .btnBack:hover path {
     fill: #fff;
 }
-
-.divForm {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
 /* Style for the custom checkbox */
 .custom-checkbox {
     display: inline-block;

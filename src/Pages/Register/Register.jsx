@@ -183,9 +183,12 @@ export const Register = () => {
     }
 
     return (
-        <div className="w-full h-[100%] p-[10px_0_0_10px] gap-10 grid grid-cols-2 text-[var(--main-color)]">
-            <BtnBack To='/' />
-            <div className="divForm NeoContainer_outset_TL p-6 flex flex-col items-center w-full max-w-3xl gap-4">
+        <div className="z-[2] w-full p-[5px] h-dvh gap-4 lg:gap-2 flex flex-col text-[var(--main-color)]">
+            <div className="z-[2] flex flex-col text-center gap-2 sm:gap-0 sm:flex-row sm:justify-between items-center w-full">
+                <BtnBack To='/' />
+                <h2 className="font-bold text-3xl sm:text-4xl text-[var(--Font-Nav)]">Registro</h2>
+            </div>
+            <div className="z-[2] divForm NeoContainer_outset_TL p-6 flex flex-col justify-self-center self-center items-center w-full max-w-3xl gap-4">
                 <h1 className="text-center text-3xl md:text-4xl">¡Bienvenido!</h1>
                 <form className="flex flex-col gap-6 w-full" onSubmit={handleRegister}>
                     {/* Name & LastName */}

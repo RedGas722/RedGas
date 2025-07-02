@@ -11,7 +11,7 @@ export const ProductCategory = () => {
     }
 
     return (
-        <section id="ProductCategory" className="NeoContainer_outset_TL !rounded-[40px] cardCategoryContainer p-[30px]">
+        <section id="ProductCategory" className="z-[2] NeoContainer_outset_TL !rounded-[40px] cardCategoryContainer p-[30px]">
                 <PrpoductCatergories imgCategory={faWater} onClick={() => handleCategoryClick("Calentadores")} nameCategory="Calentadores" />
                 <PrpoductCatergories imgCategory={faWrench} onClick={() => handleCategoryClick("Herramientas")} nameCategory="Herramientas" />
                 <PrpoductCatergories imgCategory={faGear} onClick={() => handleCategoryClick("Repuestos")} nameCategory="Repuestos" />

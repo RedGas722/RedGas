@@ -35,7 +35,7 @@ const CardsProductsBack = ({ producto, setRefrescar, onUpdateClick }) => {
   }
 
   return (
-    <div className="text-start items-center NeoContainer_outset_TL p-4 max-w-[450px] h-fit flex flex-col justify-start gap-2">
+    <div className="text-start z-[2] items-center NeoContainer_outset_TL p-4 max-w-[450px] h-fit flex flex-col justify-start gap-2">
       <h2 className="text-[20px] font-semibold text-[var(--main-color)]">{producto.nombre_producto}</h2>
       <div>
         {imageUrl ? (

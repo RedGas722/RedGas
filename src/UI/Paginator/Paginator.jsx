@@ -11,7 +11,7 @@ export const Paginator = ({ currentPage, totalPages, onPageChange, disabled }) =
   };
 
   return (
-    <Box className="flex justify-center fixed bottom-0 left-1/2 transform -translate-1/2 bg-[var(--main-color)] rounded-[100px] p-[5px]">
+    <Box className="flex justify-center z-[3] fixed bottom-0 left-1/2 transform -translate-1/2 bg-[var(--main-color)] rounded-[100px] p-[5px]">
       <Pagination
         sx={{
           '& .MuiPaginationItem-root': {
@@ -19,11 +19,11 @@ export const Paginator = ({ currentPage, totalPages, onPageChange, disabled }) =
             backgroundColor: 'transparent',
           },
           '& .Mui-selected': {
-            backgroundColor: 'var(--Font-Nav)', // azul por ejemplo
+            backgroundColor: '#19A9A4', // azul por ejemplo
             color: 'white',          // texto blanco cuando está seleccionado
             fontWeight: 'bold',
             '&:hover': {
-              backgroundColor: 'var(--Font-Nav-shadow)', // azul por ejemplo
+              backgroundColor: '#106A67', // azul por ejemplo
             },
           },
         }}

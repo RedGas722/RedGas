@@ -83,14 +83,14 @@ export const SearchPage = () => {
   return (
     <>
       <Header />
-      <div className='btnDown'>
+      <div className='btnDown z-[2] '>
         <BtnBack To='/'  />
       </div>
-      <div className="min-h-screen bg-white text-black pt-14 px-4 sm:px-6 md:px-10 lg:px-14 xl:px-20">
+      <div className="min-h-screen text-[var(--main-color)] pt-14 px-4 sm:px-6 md:px-10 lg:px-14 xl:px-20">
         <h1 className="text-3xl font-bold mb-10">
           {query 
-            ? <>Resultados para: <span className="text-[var(--main-color)]">{query}</span></> 
-            : <span className="text-[var(--main-color)]">{category}</span>}
+            ? <p className="z-[2]">Resultados para: <span className="z-[2] text-[var(--main-color)]">{query}</span></p> 
+            : <span className="z-[2] text-[var(--main-color)]">{category}</span>}
         </h1>
 
         {loading ? (
@@ -98,7 +98,7 @@ export const SearchPage = () => {
         ) : (
           <>
             {productosConDescuento.length > 0 && (
-              <section className="mb-24">
+              <section className="z-[2] ">
                 <h2 className="text-2xl font-semibold text-[var(--main-color)] mb-8 mt-12">Ofertas:</h2>
                 <div className="mt-10">
                   <CardsOffersGrid productos={productosConDescuento} />
@@ -107,7 +107,7 @@ export const SearchPage = () => {
             )}
 
             {productosSinDescuento.length > 0 && (
-              <section className="mb-24">
+              <section className="z-[2] ">
                 <h2 className="text-2xl font-semibold text-[var(--Font-Nav)] mb-8 mt-12">Productos:</h2>
                 <div className="mt-10">
                   <CardsGrid productos={productosSinDescuento} />

@@ -36,7 +36,7 @@ export const LoginGeneral = () => {
                     navigate('/');
                 }, 0);
             } else {
-            alertSendForm(401, 'El correo electrónico o la contraseña son incorrectos');
+                alertSendForm(401, 'El correo electrónico o la contraseña son incorrectos');
             }
 
         } catch (err) {
@@ -144,7 +144,7 @@ export const LoginGeneral = () => {
     }
 
     return (
-        <>
+        <section className="z-[2]">
             <div id='divAlert' />
             <div className="divForm p-[30px_15px_15px_15px] z-50 shadow_box_RL NeoContainer_outset_TL rounded-3xl flex flex-col items-center w-fit justify-self-center gap-[20px]">
                 <h1 className="text-center text-4xl">¡Bienvenido Cliente!</h1>
@@ -190,7 +190,7 @@ export const LoginGeneral = () => {
                     </div>
                 </form>
             </div>
-        </>
+        </section>
     )
 }
 

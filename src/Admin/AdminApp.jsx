@@ -15,14 +15,13 @@ export const AdminApp = () => {
     }, [])
 
     return (
-        <>
-
-            <div className='btnDown-left fixed flex-col'>
-                <h2 className=' font-bold text-4xl text-[var(--Font-Nav)] fixed top-5 left-5 text-shadow'>ADMINISTRADOR</h2>
+        <section className='AdminPanel flex flex-col h-dvh gap-[100px] p-[5px]'>
+            <div className='flex flex-col gap-2 items-center sm:gap-0 sm:justify-between sm:flex-row'>
                 <BtnBack To='/' />
+                <h2 className='z-[2] font-bold text-4xl text-[var(--Font-Nav)]'>ADMINISTRADOR</h2>
             </div>
-            <div className="Admin w-dvw h-dvh bg-[var(--Bacground-Admin)] flex items-center justify-center">
-                <section id="sideBarr" className="h-fit p-[0_30px] gap-10 justify-center justify-self-center self-center flex flex-wrap">
+            <div className="Admin bg-[var(--Bacground-Admin)] flex items-center justify-center">
+                <section id="sideBarr" className="z-[2] h-fit gap-10 justify-center justify-self-center self-center flex flex-wrap">
 
                     {/* Si es admin, mostrar todo */}
                     {tipoUsuario === 1 && (
@@ -51,7 +50,7 @@ export const AdminApp = () => {
 
                 </section>
             </div>
-        </>
+        </section>
     )
 }
 

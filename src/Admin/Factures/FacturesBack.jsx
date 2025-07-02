@@ -125,9 +125,9 @@ export const FacturesBack = () => {
       <BtnBack To="/Admin" />
 
       <div className="p-[var(--p-admin-sub)] h-full flex flex-col gap-2">
-        <h1 className="font-bold text-3xl text-[var(--main-color)]">Facturas</h1>
+        <h1 className="font-bold z-[2] text-3xl text-[var(--main-color)]">Facturas</h1>
 
-        <div className="NeoContainer_outset_TL flex gap-4 flex-wrap items-end w-fit p-[var(--p-admin-control)]">
+        <div className="NeoContainer_outset_TL z-[2] flex gap-4 flex-wrap items-end w-fit p-[var(--p-admin-control)]">
           {/* Cliente */}
           <div className="relative" ref={contenedorRefCliente}>
             <InputLabel

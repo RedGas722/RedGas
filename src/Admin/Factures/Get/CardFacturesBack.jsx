@@ -9,7 +9,7 @@ const CardFacturesBack = ({ factura, clientes, empleados, onUpdateClick, onViewP
   const fechaSolo = fecha.toLocaleDateString('en-GB')
 
   return (
-    <div className="text-center items-center NeoContainer_outset_TL w-[300px] p-4 h-fit flex flex-col justify-start gap-2">
+    <div className="text-center z-[2] items-center NeoContainer_outset_TL w-[300px] p-4 h-fit flex flex-col justify-start gap-2">
       <h2 className="text-xl font-bold text-[var(--Font-Nav)] truncate w-full">Factura #{factura.id_factura}</h2>
 
       <div className="flex flex-col text-sm text-[var(--main-color)] w-full text-left">

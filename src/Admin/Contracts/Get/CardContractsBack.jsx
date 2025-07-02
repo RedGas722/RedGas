@@ -31,7 +31,7 @@ const CardContractsBack = ({ contrato, setRefrescar, onUpdateClick, empleados, a
   const admin = admins.find(a => a.id_admin === contrato.id_admin)
 
   return (
-    <div className="text-center items-center NeoContainer_outset_TL w-[300px] p-4 h-fit flex flex-col justify-start gap-2">
+    <div className="z-[2] text-center items-center NeoContainer_outset_TL w-[300px] p-4 h-fit flex flex-col justify-start gap-2">
       <h2 className="text-xl font-bold text-[var(--Font-Nav)] truncate w-full">
         Contrato #{contrato.id_contrato}
       </h2>

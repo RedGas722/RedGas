@@ -21,7 +21,7 @@ export const SpaerPartsSect = () => {
     }, [])
 
     return (
-        <section id="SpareSect" className="NeoContainer_outset_TL !rounded-[40px] flex flex-col p-[15px] gap-[20px] text-[var(--Font-Nav)]">
+        <section id="SpareSect" className="z-[2] NeoContainer_outset_TL !rounded-[40px] flex flex-col p-[15px] gap-[20px] text-[var(--Font-Nav)]">
             <TitleSectCategory IconClass='text-[var(--Font-Nav-shadow)]' iconCategory={faGear} nameCategory="Repuestos" className='flex flex-row justify-start items-center gap-[8px]' />
             <Cards
                 uniqueId="spareparts"
