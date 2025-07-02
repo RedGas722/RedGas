@@ -77,8 +77,8 @@ const PsePaymentForm = ({ monto, onClose }) => {
         ...formData,
         name: userData.name,
         email: userData.email,
-        telefono: userData.telefono,
-        direccion: userData.direccion
+        cellphone: userData.telefono,
+        direccion: userData.direccion   
       };
 
       const response = await fetch('https://redgas.onrender.com/PagoPSE', {
