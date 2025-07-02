@@ -271,7 +271,7 @@ export const Shopping = () => {
           return (
             <section key={index}>
               <section className='flex justify-center gap-[20px]'>
-                <section className='NeoContainer_outset_TL flex gap-[20px] p-[20px_10px] w-[70%] h-fit'>
+                <section className='NeoContainer_outset_TL z-[2] flex gap-[20px] p-[20px_10px] w-[70%] h-fit'>
                   <div>
                     <img
                       src={producto.imagen ? `data:image/jpeg;base64,${producto.imagen}` : "https://via.placeholder.com/150"}
@@ -382,7 +382,7 @@ export const Shopping = () => {
         <PsePaymentForm monto={pseAmount} onClose={() => setShowPseForm(false)} />
       )}
       {/* SpeedDial */}
-      <Box sx={{ height: 330, transform: 'translateZ(0px)', flexGrow: 1, position: 'sticky', bottom: 0, right: 0 }}>
+      <Box sx={{ height: 330, transform: 'translateZ(0px)', flexGrow: 1, position: 'sticky', bottom: 0, right: 0, zIndex:2 }}>
         <SpeedDial
           ariaLabel="SpeedDial tooltip example"
           sx={{ position: 'absolute', bottom: 16, right: 16 }}
