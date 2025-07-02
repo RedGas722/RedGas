@@ -2,16 +2,50 @@ import { useState, useEffect } from 'react';
 import { jwtDecode } from 'jwt-decode'; // corregí la importación
 
 const bancosLocal = [
-  { codigo: "1022", nombre: "BANCOLOMBIA" },
-  { codigo: "1052", nombre: "BANCO DE BOGOTÁ" },
-  { codigo: "1040", nombre: "DAVIVIENDA" },
-  { codigo: "1001", nombre: "BANCO AGRARIO" },
-  { codigo: "1063", nombre: "BANCO DE OCCIDENTE" },
-  { codigo: "1013", nombre: "BANCO AV VILLAS" },
-  { codigo: "1051", nombre: "BANCO POPULAR" },
-  { codigo: "1071", nombre: "BANCO ITAU" },
-  { codigo: "1062", nombre: "BANCO BBVA" },
-  { codigo: "1066", nombre: "SCOTIABANK COLPATRIA" }
+  { codigo: "1001", nombre: "BANCO DE BOGOTA" },
+  { codigo: "1002", nombre: "BANCO POPULAR" },
+  { codigo: "1006", nombre: "BANCO ITAU" },
+  { codigo: "1007", nombre: "BANCOLOMBIA" },
+  { codigo: "1009", nombre: "CITIBANK" },
+  { codigo: "1012", nombre: "BANCO GNB SUDAMERIS" },
+  { codigo: "1013", nombre: "BANCO BBVA COLOMBIA S.A" },
+  { codigo: "1019", nombre: "SCOTIABANK COLPATRIA" },
+  { codigo: "1023", nombre: "BANCO DE OCCIDENTE" },
+  { codigo: "1032", nombre: "BANCO CAJA SOCIAL" },
+  { codigo: "1040", nombre: "BANCO AGRARIO" },
+  { codigo: "1047", nombre: "BANCO MUNDO MUJER S.A." },
+  { codigo: "1051", nombre: "BANCO DAVIVIENDA" },
+  { codigo: "1052", nombre: "BANCO AV VILLAS" },
+  { codigo: "1058", nombre: "BANCO PROCREDIT" },
+  { codigo: "1059", nombre: "BANCAMIA S.A" },
+  { codigo: "1060", nombre: "BANCO PICHINCHA S.A" },
+  { codigo: "1061", nombre: "BANCOOMEVA S.A." },
+  { codigo: "1062", nombre: "BANCO FALABELLA" },
+  { codigo: "1063", nombre: "BANCO FINANDINA S.A. BIC" },
+  { codigo: "1065", nombre: "BANCO SANTANDER COLOMBIA" },
+  { codigo: "1066", nombre: "BANCO COOPERATIVO COOPCENTRAL" },
+  { codigo: "1069", nombre: "BANCO SERFINANZA" },
+  { codigo: "1070", nombre: "LULO BANK" },
+  { codigo: "1071", nombre: "JP MORGAN" },
+  { codigo: "1097", nombre: "DALE" },
+  { codigo: "1151", nombre: "RAPPIPAY DAVIPLATA" },
+  { codigo: "1283", nombre: "CFA COOPERATIVA FINANCIERA" },
+  { codigo: "1286", nombre: "JFK COOPERATIVA FINANCIERA" },
+  { codigo: "1289", nombre: "COTRAFA" },
+  { codigo: "1291", nombre: "COOFINEP COOPERATIVA FINANCIERA" },
+  { codigo: "1292", nombre: "CONFIAR COOPERATIVA FINANCIERA" },
+  { codigo: "1303", nombre: "BANCO UNION antes GIROS" },
+  { codigo: "1370", nombre: "COLTEFINANCIERA" },
+  { codigo: "1507", nombre: "NEQUI" },
+  { codigo: "1551", nombre: "DAVIPLATA" },
+  { codigo: "1558", nombre: "BANCO CREDIFINANCIERA" },
+  { codigo: "1637", nombre: "IRIS" },
+  { codigo: "1801", nombre: "MOVII S.A." },
+  { codigo: "1804", nombre: "UALÁ" },
+  { codigo: "1809", nombre: "NU. COLOMBIA COMPAÑIA DE FINANCIAMIENTO S.A." },
+  { codigo: "1811", nombre: "RAPPIPAY" },
+  { codigo: "1815", nombre: "ALIANZA FIDUCIARIA" },
+  { codigo: "1816", nombre: "CREZCAMOS S.A. COMPAÑÍA DE FINANCIAMIENTO" },
 ];
 
 const PsePaymentForm = ({ monto, onClose }) => {
@@ -81,7 +115,7 @@ const PsePaymentForm = ({ monto, onClose }) => {
 
     try {
       const payload = {
-        bank: formData.bank,
+        bank: String(formData.bank),
         invoice: formData.invoice,
         value: formData.value,
         doc_type: formData.doc_type,
@@ -101,9 +135,8 @@ const PsePaymentForm = ({ monto, onClose }) => {
         },
         body: JSON.stringify(payload)
       });
-
       const data = await response.json();
-
+      console.log(data)
       if (data?.success && data?.data?.urlbanco) {
         window.location.href = data.data.urlbanco;
       } else {
@@ -147,6 +180,21 @@ const PsePaymentForm = ({ monto, onClose }) => {
               className="border rounded p-2 w-full"
             />
           </div>
+
+          <select
+            name="doc_type"
+            value={formData.doc_type}
+            onChange={handleChange}
+            required
+            className="w-full p-2 border rounded mb-2"
+          >
+            <option value="">Selecciona tipo de documento</option>
+            <option value="CC">Cédula de Ciudadanía</option>
+            <option value="NIT">NIT</option>
+            <option value="CE">Cédula de Extranjería</option>
+            <option value="TI">Tarjeta de Identidad</option>
+            <option value="PP">Pasaporte</option>
+          </select>
 
           <div className="mb-2">
             <input
