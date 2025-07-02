@@ -73,7 +73,7 @@ export function AppContent() {
                     <Route path='/ProductInfo' element={<ProductInfo />} />
                     {/* Rutas de recuperación de contraseña */}
                     <Route path='/Login/ForgotPassword' element={<ForgotPassword />} />
-                    <Route path='/Login/ForgotPassword/Recovery/:token' element={<RecoveryPassword />} />
+                    <Route path='/Login/ForgotPassword/Recovery/' element={<RecoveryPassword />} />
 
                     {/* ADMIN (tipoUsuario === 1) */}
                     <Route path="/Admin/Clients" element={
