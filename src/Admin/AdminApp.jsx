@@ -42,9 +42,10 @@ export const AdminApp = () => {
                     {/* Si es empleado, mostrar solo Productos y Servicios */}
                     {tipoUsuario === 3 && (
                         <>
-                            <ButtonSide to='/Admin/Products' children='Productos' imgBtn='src/Admin/Assets/Icons/Product.png' />
-                            <ButtonSide to='/Admin/Services' children='Servicios' imgBtn='src/Admin/Assets/Icons/Services.png' />
-                            <ButtonSide to='/Admin/Sales' children={'Ventas'} imgBtn='src/Admin/Assets/Icons/Sales.png' />
+                            <Buttons subTextBTN='Productos' onClick={() => navigate('/Admin/Products')} width='104px' height='104px' padding='0' nameButton={<img src='/Assets/Icons/Product.png' className='w-20 no-drag brightness-80' />} />
+                            <Buttons subTextBTN='Servicios' onClick={() => navigate('/Admin/Services')} width='104px' height='104px' padding='0' nameButton={<img src='/Assets/Icons/Services.png' className='w-20 no-drag brightness-80' />} />
+                            <Buttons subTextBTN='Ventas' onClick={() => navigate('/Admin/Sales')} width='104px' height='104px' padding='0' nameButton={<img src='/Assets/Icons/Sales.png' className='w-20 no-drag brightness-80' />} />
+                            <Buttons subTextBTN='Facturas' onClick={() => navigate('/Admin/Factures')} width='104px' height='104px' padding='0' nameButton={<img src='/Assets/Icons/Facture.png' className='w-20 no-drag brightness-80' />} />
                         </>
                     )}
 

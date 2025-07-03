@@ -58,7 +58,6 @@ export function AppContent() {
                     <Route path="/" element={<MainPage />} />
                     <Route path="/CostumerMyService" element={<CostumerMyService />} />
                     <Route path="/Services" element={<ServicesInfo />} />
-                    <Route path="/Shopping" element={<Shopping />} />
                     <Route path='/Register' element={<Register />} />
                     <Route path="/SearchPage" element={<SearchPage />} />
                     <Route path="/SearchPage" element={<SearchPage />} />
@@ -73,6 +72,14 @@ export function AppContent() {
                     {/* Rutas de recuperación de contraseña */}
                     <Route path='/Login/ForgotPassword' element={<ForgotPassword />} />
                     <Route path='/Login/ForgotPassword/Recovery/:token' element={<RecoveryPassword />} />
+
+                    {/*Cliente (tipoUsuario === 2)*/}
+                    
+                    <Route path="/Shopping" element={
+                        <ProtectedRoute requiredTypes={[2,4]}>
+                            <Shopping />
+                        </ProtectedRoute>
+                    } />
 
                     {/* ADMIN (tipoUsuario === 1) */}
                     <Route path="/Admin/Clients" element={
