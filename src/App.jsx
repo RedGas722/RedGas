@@ -32,10 +32,7 @@ import { Login } from './Pages/Login/Login'
 import { useEffect } from 'react'
 import { AdminApp } from './Admin/AdminApp'
 import ConfirmacionPayPal from './Pages/Shopping/ConfirmacionPayPal.jsx'
-<<<<<<< HEAD
-=======
 import ConfirmacionMercadoPago from './Pages/Shopping/ConfirmacionMP.jsx'
->>>>>>> 8e19592a7077bc8cbf3ce1564d86502664708b3f
 
 // 👇 Importar ruta protegida
 import { ProtectedRoute } from './Pages/Login/ProtectedRoutes.jsx'
