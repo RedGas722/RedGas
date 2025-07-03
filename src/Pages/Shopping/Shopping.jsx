@@ -121,9 +121,9 @@ export const Shopping = () => {
         return
       }
 
-      if (newQuantity > producto.stock) {
-        alert(`No puedes agregar más de ${producto.stock} unidades. Stock máximo alcanzado.`)
-        return
+      if (newQuantity > producto.stock && newQuantity > producto.cantidad) {
+        alert(`No puedes agregar más de ${producto.stock} unidades. Stock máximo alcanzado.`);
+        return;
       }
 
       if (newQuantity < 1) {
