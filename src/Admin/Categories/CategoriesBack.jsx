@@ -135,7 +135,7 @@ export const CategoriesBack = () => {
               placeholderError={!!errorBusqueda}
             />
             {sugerencias.length > 0 && (
-              <ul className="absolute z-50 bg-white border border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto shadow w-[230px]">
+              <ul className="absolute z-10 bg-white border border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto shadow w-[230px]">
                 {sugerencias.map(cat => (
                   <li
                     key={cat.id_categoria}
@@ -144,7 +144,7 @@ export const CategoriesBack = () => {
                       buscarCategoria(cat.nombre_categoria)
                       setSugerencias([])
                     }}
-                    className="p-2 hover:bg-gray-100 cursor-pointer"
+                    className="p-2 hover:bg-gray-100 cursor-pointer z-50"
                   >
                     {cat.nombre_categoria}
                   </li>

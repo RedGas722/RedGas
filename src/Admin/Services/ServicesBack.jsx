@@ -134,7 +134,7 @@ export const ServicesBack = () => {
               placeholderError={!!errorBusqueda}
             />
             {sugerencias.length > 0 && (
-              <ul className="absolute z-50 bg-white border w-[230px] border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto shadow">
+              <ul className="absolute z-10 bg-white border w-[230px] border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto shadow">
                 {sugerencias.map(servicio => (
                   <li
                     key={servicio.id_servicio}
@@ -143,7 +143,7 @@ export const ServicesBack = () => {
                       buscarServicio(servicio.nombre_servicio)
                       setSugerencias([])
                     }}
-                    className="p-2 hover:bg-gray-100 cursor-pointer"
+                    className="p-2 hover:bg-gray-100 cursor-pointer z-50"
                   >
                     {servicio.nombre_servicio}
                   </li>

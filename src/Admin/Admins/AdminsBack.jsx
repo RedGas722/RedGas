@@ -135,7 +135,7 @@ export const AdminsBack = () => {
               placeholderError={!!errorBusqueda}
             />
             {sugerencias.length > 0 && (
-              <ul className="absolute z-50 bg-white border border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto shadow w-[230px]">
+              <ul className="absolute z-10 bg-white border border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto shadow w-[230px]">
                 {sugerencias.map((admin) => (
                   <li
                     key={admin.id_admin}
@@ -144,7 +144,7 @@ export const AdminsBack = () => {
                       buscarAdmin(admin.correo_admin)
                       setSugerencias([])
                     }}
-                    className="p-2 hover:bg-gray-100 cursor-pointer"
+                    className="p-2 hover:bg-gray-100 cursor-pointer z-50"
                   >
                     {admin.correo_admin}
                   </li>

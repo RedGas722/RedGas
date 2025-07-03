@@ -142,7 +142,7 @@ export const ClientsBack = () => {
               placeholderError={!!errorBusqueda}
             />
             {sugerencias.length > 0 && (
-              <ul className="absolute z-50 bg-white border w-[230px] border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto shadow">
+              <ul className="absolute z-10 bg-white border w-[230px] border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto shadow">
                 {sugerencias.map((cliente) => (
                   <li
                     key={cliente.id_cliente}
@@ -151,7 +151,7 @@ export const ClientsBack = () => {
                       buscarCliente(cliente.correo_cliente)
                       setSugerencias([])
                     }}
-                    className="p-2 hover:bg-gray-100 cursor-pointer"
+                    className="p-2 hover:bg-gray-100 cursor-pointer z-50"
                   >
                     {cliente.correo_cliente}
                   </li>

@@ -139,7 +139,7 @@ export const TechniciansBack = () => {
                 placeholderError={!!errorBusqueda}
               />
               {sugerencias.length > 0 && (
-                <ul className="absolute z-50 bg-white border w-[230px] border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto shadow">
+                <ul className="absolute z-10 bg-white border w-[230px] border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto shadow">
                   {sugerencias.map((tecnico) => (
                     <li
                       key={tecnico.id_tecnico || tecnico.correo_tecnico}
@@ -148,7 +148,7 @@ export const TechniciansBack = () => {
                         buscarTecnico(tecnico.correo_tecnico)
                         setSugerencias([])
                       }}
-                      className="p-2 hover:bg-gray-100 cursor-pointer"
+                      className="p-2 hover:bg-gray-100 cursor-pointer z-50"
                     >
                       {tecnico.correo_tecnico}
                     </li>

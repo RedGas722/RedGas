@@ -90,7 +90,7 @@ export const SalesBack = () => {
               className="w-full"
             />
             {productoSugerencias.length > 0 && (
-              <ul className="absolute z-50 bg-white border border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto shadow w-[230px]">
+              <ul className="absolute z-10 bg-white border border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto shadow w-[230px]">
                 {productoSugerencias.map((prod) => (
                   <li
                     key={prod.id_producto}
@@ -98,7 +98,7 @@ export const SalesBack = () => {
                       setProductoBusqueda(prod.nombre_producto)
                       handleBuscar(prod.nombre_producto)
                     }}
-                    className="p-2 hover:bg-gray-100 cursor-pointer"
+                    className="p-2 hover:bg-gray-100 cursor-pointer z-50"
                   >
                     {prod.nombre_producto}
                   </li>

@@ -149,7 +149,7 @@ export const ProductsBack = () => {
             />
 
             {sugerencias.length > 0 && (
-              <ul className="absolute z-50 bg-white border border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto w-full shadow">
+              <ul className="absolute z-10 bg-white border border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto w-full shadow">
                 {sugerencias.map((producto) => (
                   <li
                     key={producto.id_producto}
@@ -158,7 +158,7 @@ export const ProductsBack = () => {
                       buscarProducto(producto.nombre_producto)
                       setSugerencias([])
                     }}
-                    className="p-2 hover:bg-gray-100 cursor-pointer"
+                    className="p-2 hover:bg-gray-100 cursor-pointer z-50"
                   >
                     {producto.nombre_producto}
                   </li>
