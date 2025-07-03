@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 import Header from '../../Layouts/Header/Header';
 
 export const ConfirmacionPayPal = () => {
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [resultado, setResultado] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -186,7 +188,7 @@ export const ConfirmacionPayPal = () => {
             <div className="mt-6">
               <button
                 className="buttonTL2 NeoSubContainer_outset_TL p-3 text-white font-bold"
-                onClick={() => window.location.href = '/'}
+                onClick={() => navigate('/')}
               >
                 Volver a la página principal
               </button>

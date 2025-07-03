@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 import Header from '../../Layouts/Header/Header';
 
 export const ConfirmacionMercadoPago = () => {
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [resultado, setResultado] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -18,6 +20,12 @@ export const ConfirmacionMercadoPago = () => {
       setError("Pago no aprobado o sin ID válido");
       setLoading(false);
       return;
+    }
+
+    const yaProcesado = localStorage.getItem(`mp_pago_${payment_id}`);
+    if (yaProcesado) {
+        setLoading(false);
+        return;
     }
 
     const confirmarPago = async () => {
@@ -153,13 +161,13 @@ export const ConfirmacionMercadoPago = () => {
             <p><strong>Estado:</strong> {resultado.status}</p>
             <p><strong>Monto total:</strong> {resultado.transaction_amount} {resultado.currency_id}</p>
             <p><strong>Pagado por:</strong> {resultado.payer?.email}</p>
-            <div className="mt-6">
-              <button
-                className="buttonTL2 NeoSubContainer_outset_TL p-3 text-white font-bold"
-                onClick={() => window.location.href = '/'}
-              >
-                Volver a la página principal
-              </button>
+            <div className="mt-10"> {/* antes era mt-6 */}
+                <button
+                    className="buttonTL2 NeoSubContainer_outset_TL p-3 text-white font-bold"
+                    onClick={() => navigate('/')}
+                >
+                    Volver a la página principal
+                </button>
             </div>
           </>
         )}
