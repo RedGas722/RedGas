@@ -217,7 +217,7 @@ export const CostumerMyService = () => {
 
   return (
     <div>
-      <div className="flex p-[0_5px] items-center justify-between ">
+      <div className="flex z-[2] p-[0_5px] items-center justify-between ">
         <div className="btnDown">
           <BtnBack To='/' />
         </div>
@@ -235,8 +235,8 @@ export const CostumerMyService = () => {
         )}
         </div>
       </div>
-      <section className="h-fit flex flex-wrap justify-center text-[var(--main-color)] items-center gap-[20px] p-20">
-        <div className="flex flex-col flex-wrap justify-center max-w-[700px] min-w-0 NeoContainer_outset_TL p-5 gap-3">
+      <section className="h-fit z-[2] flex flex-wrap justify-center text-[var(--main-color)] items-center gap-[20px] p-20">
+        <div className="flex flex-col z-[2] flex-wrap justify-center max-w-[700px] min-w-0 NeoContainer_outset_TL p-5 gap-3">
 
           <div className="text-[var(--main-color-sub)] pl-2 gap-3 flex items-center font-bold w-fit">
             <FontAwesomeIcon icon={faUser} className="text-[var(--main-color)] text-5xl" />
@@ -247,12 +247,12 @@ export const CostumerMyService = () => {
             </div>
           </div>
 
-          <div>
+          <div className="z-[2]">
             <h4 className="text-xl font-bold text-[var(--main-color)]">Descripción de tu servicio</h4>
             <p className="whitespace-pre-line text-[var(--main-color)]">{description}</p>
           </div>
 
-          <div className="flex justify-center items-center gap-4">
+          <div className="z-[2] flex justify-center items-center gap-4">
             <Buttons
               type="submit"
               nameButton="Eliminar Servicio"
