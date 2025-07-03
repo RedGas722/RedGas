@@ -255,7 +255,7 @@ export const Shopping = () => {
         localStorage.removeItem("mp_productId");
       }
 
-      window.location.href = window.location.href = `${window.location.origin}/Shopping/ConfirmacionMercadoPago?payment_id=...`
+      window.location.href = data.init_point;
 
     } catch (error) {
       console.error("Error al pagar con Mercado Pago:", error);
@@ -270,10 +270,6 @@ export const Shopping = () => {
     {
       icon: <FontAwesomeIcon icon={faTrash} alt='Agregar' onClick={handleClearCart} className="text-[var(--Font-Nav2)] text-2xl" />,
       name: 'Limpiar carrito'
-    },
-    {
-      icon: <FontAwesomeIcon icon={faMoneyBills} alt='Agregar' onClick={() => alert("Comprar producto aún no implementado")} className="text-[var(--Font-Nav-shadow)] text-2xl" />,
-      name: 'Comprar todo'
     },
     {
       icon: (
@@ -354,9 +350,6 @@ export const Shopping = () => {
                         </button>
                       </div>
                       <div className="flex items-center gap-5">
-                        <button className='buttonTL2 NeoSubContainer_outset_TL p-[7px]' onClick={() => alert("Comprar producto aún no implementado")}>
-                          Comprar!!
-                        </button>
                         <button
                           className='buttonTL2 NeoSubContainer_outset_TL p-[7px]'
                           onClick={() => handlePayWithPaypal(subtotal, producto.id_producto)}
