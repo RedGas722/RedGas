@@ -190,7 +190,7 @@ export const ServicesInfo = () => {
          </div>
 
          <section className="AI_history gap-4 flex flex-col-reverse items-center md:flex-row md:justify-evenly h-fit w-full">
-            <div className="w-[90%] md:w-[55%] lg:w-[40%] flex-col gap-4 flex items-center NeoContainer_outset_TL h-full overflow-y-auto p-[10px_8px]">
+            {/* <div className="w-[90%] md:w-[55%] lg:w-[40%] flex-col gap-4 flex items-center NeoContainer_outset_TL h-full overflow-y-auto p-[10px_8px]">
                <h2 className="font-bold text-3xl text-[var(--main-color)]">Historial</h2>
                <div className="w-full flex p-[0_10px_25px_0] flex-col gap-2 ">
 
@@ -249,7 +249,7 @@ export const ServicesInfo = () => {
                   </div>
 
                </div>
-            </div>
+            </div> */}
             <form
                onSubmit={handleServices}
                className="w-full max-w-xl p-6 flex flex-col gap-3 NeoContainer_outset_TL"

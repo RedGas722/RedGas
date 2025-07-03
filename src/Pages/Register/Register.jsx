@@ -23,6 +23,7 @@ export const Register = () => {
     const navigate = useNavigate()
 
     const handleRegister = async (e) => {
+        e.preventDefault() 
         alertSendForm('wait', 'Registrando usuario...', '')
 
         try {
@@ -44,8 +45,8 @@ export const Register = () => {
             const data = await res.json()
             alertSendForm(200, 'Registro exitoso', 'Tu cuenta ha sido creada con éxito. Ahora puedes iniciar sesión.')
             setTimeout(() => {
-                navigate('/login')
-            }, 0)
+                navigate('/Login')
+            }, 1500)
         } catch (err) {
             alertSendForm(502, 'Error al registrar usuario', 'Ocurrió un error al registrar tu cuenta. Por favor, intenta nuevamente más tarde.')
         }

@@ -38,7 +38,7 @@ export const Cards = ({ uniqueId, productos = [] }) => {
   const [showArrows, setShowArrows] = useState(false);
   const [emblaRef, embla] = useEmblaCarousel({
     align: 'start',
-    loop: true,
+    loop: false,
     slidesToScroll: 1,
     breakpoints: {
       320: { slidesToScroll: 1 },
@@ -189,7 +189,6 @@ export const Cards = ({ uniqueId, productos = [] }) => {
       </div>
 
       <div className="flex flex-col justify-center items-center self-center w-fit p-[10px] NeoSubContainer_outset_TL text-[var(--main-color)]">
-        {showArrows && (
           <div className="flex justify-center items-center gap-[20px]">
             <button
               className="buttonTL arrow NeoSubContainer_outset_TL p-[7px]"
@@ -204,7 +203,6 @@ export const Cards = ({ uniqueId, productos = [] }) => {
               <FontAwesomeIcon icon={faArrowRight} className="faArrowRight text-[30px]" />
             </button>
           </div>
-        )}
       </div>
 
       <Modal open={open} onClose={handleClose} disableScrollLock={true}>
