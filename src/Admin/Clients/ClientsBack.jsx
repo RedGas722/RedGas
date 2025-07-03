@@ -129,8 +129,7 @@ export const ClientsBack = () => {
 
         {/* Buscador y botón */}
         <div className="NeoContainer_outset_TL z-[2] flex gap-4 flex-wrap items-end w-fit p-[var(--p-admin-control)]">
-
-          <div className="relative" ref={contenedorRef}>
+          <div className="relative z-[20]" ref={contenedorRef}>
             <InputLabel
               radius="10"
               type="1"

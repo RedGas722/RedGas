@@ -24,8 +24,9 @@ export const ConfirmacionMercadoPago = () => {
 
     const yaProcesado = localStorage.getItem(`mp_pago_${payment_id}`);
     if (yaProcesado) {
-        setLoading(false);
-        return;
+    setError("Este pago ya fue procesado. No se pueden volver a tomar los datos.");
+    setLoading(false);
+    return;
     }
 
     const confirmarPago = async () => {
