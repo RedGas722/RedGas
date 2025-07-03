@@ -184,7 +184,7 @@ export const ServicesInfo = () => {
 
    return (
       <section className="flex flex-col gap-8 p-[5px]">
-         <div className="flex flex-col text-center gap-2 sm:gap-0 sm:flex-row sm:justify-between items-center w-full">
+         <div className="flex flex-col z-[2] text-center gap-2 sm:gap-0 sm:flex-row sm:justify-between items-center w-full">
             <BtnBack To='/' />
             <h2 className="font-bold text-3xl sm:text-4xl text-[var(--Font-Nav)]">Formulario Servicio</h2>
          </div>
@@ -252,7 +252,7 @@ export const ServicesInfo = () => {
             </div> */}
             <form
                onSubmit={handleServices}
-               className="w-full max-w-xl p-6 flex flex-col gap-3 NeoContainer_outset_TL"
+               className="w-full max-w-xl p-6 z-[2] flex flex-col gap-3 NeoContainer_outset_TL"
             >
                <div>
                   <p className="text-[18px] font-medium text-[var(--main-color)]">

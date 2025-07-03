@@ -20,15 +20,40 @@ export const Register = () => {
     const [telefono, setTelefono] = useState('')
     const [contrasena, setContrasena] = useState('')
     const [mensaje, setMensaje] = useState('')
+    const [passwordConfirm, setPasswordConfirm] = useState('')
     const navigate = useNavigate()
 
+    const validateInputs = () => {
+    const errors = []
+
+    if (!nombre.trim()) errors.push('El nombre es obligatorio.')
+    if (!apellido.trim()) errors.push('El apellido es obligatorio.')
+    if (!direccion.trim()) errors.push('La dirección es obligatoria.')
+    if (!/^\d{10}$/.test(telefono)) errors.push('El teléfono debe tener exactamente 10 dígitos.')
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) errors.push('El correo electrónico no es válido.')
+    if (contrasena.length < 8) errors.push('La contraseña debe tener al menos 8 caracteres.')
+    if (contrasena !== passwordConfirm) errors.push('Las contraseñas no coinciden.')
+
+    return errors
+}
+
+
     const handleRegister = async (e) => {
-        e.preventDefault() 
+        e.preventDefault()
+
+        const errors = validateInputs()
+        if (errors.length > 0) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Revisa los campos',
+                html: `<ul style="text-align: left">${errors.map(err => `<li>${err}</li>`).join('')}</ul>`,
+            })
+            return
+        }
+
         alertSendForm('wait', 'Registrando usuario...', '')
 
         try {
-
-
             const res = await fetch(URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -43,7 +68,9 @@ export const Register = () => {
 
             if (!res.ok) throw new Error('Credenciales inválidas')
             const data = await res.json()
+
             alertSendForm(200, 'Registro exitoso', 'Tu cuenta ha sido creada con éxito. Ahora puedes iniciar sesión.')
+
             setTimeout(() => {
                 navigate('/Login')
             }, 1500)
@@ -265,6 +292,8 @@ export const Register = () => {
                             placeholder="Confirmar contraseña"
                             autoComplete="new-password"
                             required={true}
+                            value={passwordConfirm}
+                            onChange={e => setPasswordConfirm(e.target.value)}
                         />
                     </div>
 

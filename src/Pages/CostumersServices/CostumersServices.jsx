@@ -339,15 +339,11 @@ export const CostumerServices = () => {
 
   return (
     <div>
-      <div className="flex justify-between items-center p-[0_5px] w-full">
-        <div className="btnDown">
-          <BtnBack To='/' />
-        </div>
-        <h2 className="font-bold text-4xl text-[var(--Font-Nav)]">
-          MI SERVICIO
-        </h2>
+      <div className="z-[2] flex flex-col text-center gap-2 sm:gap-0 sm:flex-row sm:justify-between items-center w-full">
+        <BtnBack To='/' />
+        <h2 className="font-bold text-3xl sm:text-4xl text-[var(--Font-Nav)]">Mi Servicio</h2>
       </div>
-
+      
       <section className="h-fit flex flex-wrap justify-center text-[var(--main-color)] items-center gap-[40px] !p-[80px_0] bg-[var(--background-color)] MainPageContainer">
         {costumer
           .filter((item, idx) => {

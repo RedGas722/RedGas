@@ -174,7 +174,7 @@ export const RecoveryPassword = () => {
 
     return (
         <section className="w-full h-dvh flex justify-center text-[var(--main-color)] items-center">
-            <div className='divForm NeoContainer_outset_TL p-[30px_15px_15px_15px] flex flex-col w-fit items-center justify-self-center gap-[20px]'>
+            <div className='z-[2] divForm NeoContainer_outset_TL p-[30px_15px_15px_15px] flex flex-col w-fit items-center justify-self-center gap-[20px]'>
                 <h1 className="text-center text-4xl">¡Recuperación Contraseña!</h1>
                 <form className="flex justify-center items-center flex-col gap-[30px] text-start w-full" onSubmit={handleChangePassword}>
                     <div className="w-full">

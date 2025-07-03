@@ -1,12 +1,12 @@
-import { LoadingProvider, useLoading } from './UI/Loading/Loading.jsx'
 import { CostumerMyService } from './Pages/CostumerMyService/CostumerMyService'
 import { CostumerServices } from './Pages/CostumersServices/CostumersServices'
 import { RecoveryPassword } from './Pages/RecoveryPassword/RecoveryPassword'
+import { BackgroundFire } from './UI/BackgroundFire/BackgroundFire.jsx'
 import { ForgotPassword } from './Pages/ForgotPassword/ForgotPassword'
+import { LoadingProvider, useLoading } from './UI/Loading/Loading.jsx'
 import { startTokenRefresher } from './Pages/Login/TokenRefresher.jsx'
 import { TechniciansBack } from './Admin/Technicians/TechniciansBack'
 import { Technica } from './Pages/Technicians/Technica/Technica.jsx'
-import { BackgroundFire } from './UI/BackgroundFire/BackgroundFire.jsx'
 import { ContractsBack } from './Admin/Contracts/ContractsBack.jsx'
 import { LoginTechnician } from './Pages/Login/LoginTechnician.jsx'
 import { CategoriesBack } from './Admin/Categories/CategoriesBack'
@@ -17,7 +17,7 @@ import { LoginGeneral } from './Pages/Login/LoginGeneral.jsx'
 import { ProductsBack } from './Admin/Products/ProductsBack'
 import { FacturesBack } from './Admin/Factures/FacturesBack'
 import { ServicesBack } from './Admin/Services/ServicesBack'
-import { Backdrop, CircularProgress } from '@mui/material';
+import { Backdrop, CircularProgress } from '@mui/material'
 import { Cancelado } from './Pages/Shopping/Cancelado.jsx'
 import { ClientsBack } from './Admin/Clients/ClientsBack'
 import { Shopping } from './Pages/Shopping/Shopping.jsx'
@@ -27,7 +27,7 @@ import { AdminsBack } from './Admin/Admins/AdminsBack'
 import { Register } from './Pages/Register/Register'
 import { MainPage } from './Pages/MainPage/MainPage'
 import { Routes, Route } from 'react-router-dom'
-import { Cursor } from './UI/Cursor/Cursor.jsx'
+// import { Cursor } from './UI/Cursor/Cursor.jsx'
 import { Login } from './Pages/Login/Login'
 import { useEffect } from 'react'
 import { AdminApp } from './Admin/AdminApp'
@@ -53,7 +53,7 @@ export function AppContent() {
     return (
         <>
             <div>
-                <Cursor />
+                {/* <Cursor /> */}
                 <Routes>
                     <Route path="/" element={<MainPage />} />
                     <Route path="/CostumerMyService" element={<CostumerMyService />} />

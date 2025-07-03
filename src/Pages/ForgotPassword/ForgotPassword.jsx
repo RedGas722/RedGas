@@ -2,7 +2,9 @@ import { Buttons } from '../../UI/Login_Register/Buttons'
 import { InputLabel } from '../../UI/Login_Register/InputLabel/InputLabel';
 import { Link, useNavigate } from "react-router-dom"
 import { jwtDecode } from 'jwt-decode'
+import { BtnBack } from '../../UI/Login_Register/BtnBack';
 import { useState } from "react"
+import { Text } from '../../UI/Login_Register/Text';
 import withReactContent from 'sweetalert2-react-content';
 import emailjs from '@emailjs/browser'
 import Swal from 'sweetalert2';
@@ -42,7 +44,7 @@ export const ForgotPassword = () => {
                     message: 'Hemos recibido su solicitud de cambio de contraseña, haga click en el siguiente enlace:',
                     link: `https://redgas-one.vercel.app/Login/ForgotPassword/Recovery/${token}`,
                 }
-                
+
                 alertSendForm('wait', 'Enviando correo de recuperación...')
                 emailjs.send(serviceId, templateId, templateParams, publicKey)
                     .then(() => {
@@ -194,20 +196,20 @@ export const ForgotPassword = () => {
 
     return (
 
-        <div className='sectionForgot w-full text-[var(--main-color)] h-dvh '>
-            <div className="divForm NeoContainer_outset_TL p-[30px_15px_15px_15px]  flex flex-col justify-self-center items-center h-fit w-fit gap-[30px]">
+        <div className='sectionForgot flex flex-col  items-center gap-28 w-full text-[var(--main-color)] h-dvh p-[5px_5px_0_5px]'>
+            <div className="z-[2] flex flex-col text-center gap-2 sm:gap-0 sm:flex-row sm:justify-between items-center w-full">
+                <BtnBack To='/Login' />
+                <h2 className="font-bold text-3xl sm:text-4xl text-[var(--Font-Nav)]">Registro</h2>
+            </div>
+            <div className="divForm NeoContainer_outset_TL z-[2] p-[30px_15px_15px_15px]  flex flex-col justify-self-center items-center h-fit w-fit gap-[30px]">
                 <h1 className="text-center text-4xl">¡Recuperar contraseña!</h1>
                 <form className=" flex flex-col gap-[35px] justify-center items-center text-start w-full" onSubmit={handleForgotPassword} >
                     {/* E-mail */}
                     <InputLabel type='2' ForID='Email' childLabel='Correo electrónico' placeholder='example@gmail.com' onChange={e => setEmail(e.target.value)} required />
-                    
+
                     <div className='flex flex-col gap-[10px] justify-center items-center text-start w-full'>
                         <Buttons type='submit' nameButton="Enviar" />
-                        <Link to="/Login/">
-                            <button className="cursor-pointer text-[var(--main-focus)]">
-                                <p>¿Quieres volver al Login?</p>
-                            </button>
-                        </Link>
+                        <Text GoTo='¿Quieres volver al Login?' nav='/Login/' />
                     </div>
                 </form>
                 <div className="text-white text-2xl w-full text-center">
