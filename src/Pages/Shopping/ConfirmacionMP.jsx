@@ -164,7 +164,20 @@ export const ConfirmacionMercadoPago = () => {
       <Header />
       <div className="MainPageContainer text-[var(--main-color)] p-8">
         {loading && <p>Confirmando pago con Mercado Pago y generando factura...</p>}
-        {error && <p className="text-red-600 font-semibold">Error: {error}</p>}
+        {error && (
+            <div>
+                <p className="text-red-600 font-semibold mb-4">Error: {error}</p>
+                <div className="mt-10 relative z-[50]">
+                <button
+                    className="buttonTL2 NeoSubContainer_outset_TL p-3 text-white font-bold relative z-[50]"
+                    onClick={() => navigate('/')}
+                >
+                    Volver a la página principal
+                </button>
+                </div>
+            </div>
+        )}        
+
         {resultado && (
           <>
             <h1 className="text-3xl font-bold mb-4">¡Pago aprobado por Mercado Pago!</h1>
