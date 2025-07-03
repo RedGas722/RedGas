@@ -23,8 +23,6 @@ export const Register = () => {
     const navigate = useNavigate()
 
     const handleRegister = async (e) => {
-        e.preventDefault()
-
         alertSendForm('wait', 'Registrando usuario...', '')
 
         try {
@@ -270,7 +268,7 @@ export const Register = () => {
                     </div>
 
                     <div className="flex flex-col items-center gap-3">
-                        <Buttons nameButton="Register" Onclick={() => handleRegister()}/>
+                        <Buttons type='submit' nameButton="Register"/>
                         <Text Have="¿Tienes cuenta?" GoTo="Inicia sesión aquí" nav="/Login" />
                     </div>
                 </form>
