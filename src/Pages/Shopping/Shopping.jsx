@@ -336,14 +336,14 @@ export const Shopping = () => {
                     <p className='text-[var(--main-color-sub)]'>Cantidad: {producto.cantidad}</p>
                     <section className="flex justify-between w-full">
                       <div className="flex gap-2 items-center">
-                        <button className="rounded-full w-6 h-6  bg-red-700" onClick={() =>
+                        <button className="rounded-full w-6 h-6  bg-red-700 relative z-[50]" onClick={() =>
                           producto.cantidad > 1 &&
                           handleUpdateQuantity(producto.id_producto, producto.cantidad - 1)
                         }>
                           <FontAwesomeIcon icon={faMinus} alt='Agregar' className="text-white" />
                         </button>
                         <span>{producto.cantidad}</span>
-                        <button className="rounded-full w-6 h-6  bg-green-700" onClick={() =>
+                        <button className="rounded-full w-6 h-6  bg-green-700 relative z-[50]" onClick={() =>
                           handleUpdateQuantity(producto.id_producto, producto.cantidad + 1)
                         }>
                           <FontAwesomeIcon icon={faPlus} alt='Quitar' className="text-white" />
@@ -351,19 +351,19 @@ export const Shopping = () => {
                       </div>
                       <div className="flex items-center gap-5">
                         <button
-                          className='buttonTL2 NeoSubContainer_outset_TL p-[7px]'
+                          className='buttonTL2 NeoSubContainer_outset_TL p-[7px] relative z-[50]'
                           onClick={() => handlePayWithPaypal(subtotal, producto.id_producto)}
                         >
                           Pagar con PayPal
                         </button>
                         <button
-                          className='buttonTL2 NeoSubContainer_outset_TL p-[7px]'
+                          className='buttonTL2 NeoSubContainer_outset_TL p-[7px] relative z-[50]'
                           onClick={() => handlePayWithMercadoPago(subtotal, producto.id_producto)}
                         >
                           Pagar con MP
                         </button>
                         <button
-                          className='buttonTL2 NeoSubContainer_outset_TL p-[7px]'
+                          className='buttonTL2 NeoSubContainer_outset_TL p-[7px] relative z-[50]'
                           onClick={() => handleRemoveProduct(producto.id_producto)}
                         >
                           Eliminar
