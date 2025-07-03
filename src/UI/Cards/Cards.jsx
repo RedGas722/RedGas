@@ -38,13 +38,13 @@ export const Cards = ({ uniqueId, productos = [] }) => {
   const [showArrows, setShowArrows] = useState(false);
   const [emblaRef, embla] = useEmblaCarousel({
     align: 'start',
-    loop: true,
+    loop: false,
     slidesToScroll: 1,
     breakpoints: {
       320: { slidesToScroll: 1 },
       500: { slidesToScroll: 1 },
       852: { slidesToScroll: 1 },
-      1080: { slidesToScroll: 1 },
+      1080: { slidesToScroll: 5 },
       1390: { slidesToScroll: 1 },
     },
   });
@@ -154,7 +154,7 @@ export const Cards = ({ uniqueId, productos = [] }) => {
 
   return (
     <section id={`CardSect-${uniqueId}`} className="flex flex-col items-center justify-center gap-[10px] h-fit w-[100%]">
-      <div className="embla" ref={emblaRef}>
+      <div className="embla p-[0_10px]" ref={emblaRef}>
         <div className="embla__container flex " >
           {productos.map((producto, index) => (
             <div className="embla__slide flex justify-center p-[25px_10px]" key={index}>
@@ -189,22 +189,20 @@ export const Cards = ({ uniqueId, productos = [] }) => {
       </div>
 
       <div className="flex flex-col justify-center items-center self-center w-fit p-[10px] NeoSubContainer_outset_TL text-[var(--main-color)]">
-        {showArrows && (
-          <div className="flex justify-center items-center gap-[20px]">
-            <button
-              className="buttonTL arrow NeoSubContainer_outset_TL p-[7px]"
-              onClick={() => embla && embla.scrollPrev()}
-            >
-              <FontAwesomeIcon icon={faArrowLeft} className="faArrowLeft text-[30px]" />
-            </button>
-            <button
-              className="buttonTL arrow NeoSubContainer_outset_TL p-[7px]"
-              onClick={() => embla && embla.scrollNext()}
-            >
-              <FontAwesomeIcon icon={faArrowRight} className="faArrowRight text-[30px]" />
-            </button>
-          </div>
-        )}
+        <div className="flex justify-center items-center gap-[20px]">
+          <button
+            className="buttonTL arrow NeoSubContainer_outset_TL p-[7px]"
+            onClick={() => embla && embla.scrollPrev()}
+          >
+            <FontAwesomeIcon icon={faArrowLeft} className="faArrowLeft text-[30px]" />
+          </button>
+          <button
+            className="buttonTL arrow NeoSubContainer_outset_TL p-[7px]"
+            onClick={() => embla && embla.scrollNext()}
+          >
+            <FontAwesomeIcon icon={faArrowRight} className="faArrowRight text-[30px]" />
+          </button>
+        </div>
       </div>
 
       <Modal open={open} onClose={handleClose} disableScrollLock={true}>
@@ -219,6 +217,10 @@ export const Cards = ({ uniqueId, productos = [] }) => {
             zIndex: '1000',
             border: '2px solid #19A9A4',
             boxShadow: 24,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
             borderRadius: 4,
             p: 4,
           }}
@@ -231,7 +233,7 @@ export const Cards = ({ uniqueId, productos = [] }) => {
             &times;
           </button>
           {selectedProduct && (
-            <div className="card relative !rounded-[25px]">
+            <div className="card relative !rounded-[25px] flex flex-col items-center justify-center">
               <div className="card-img">
                 <div className="img h-full">
                   <img
@@ -245,8 +247,12 @@ export const Cards = ({ uniqueId, productos = [] }) => {
                 <div className="card-title">{selectedProduct.nombre_producto}</div>
               </div>
               <div className="card-subtitle">{selectedProduct.descripcion_producto}</div>
+              <div className="flex gap-1 text-[var(--main-color)] items-start justify-start">
+                <p>Stock:</p>
+                <span>{selectedProduct.stock}</span>
+              </div>
               <hr className="card-divider" />
-              <div className="card-footer">
+              <div className="card-footer flex gap-2">
                 <div className="card-price">
                   <p><span className="text-[var(--Font-Nav-shadow)]">$</span> {(parseFloat(selectedProduct.precio_producto) || 0).toLocaleString()} <span className="text-[var(--main-color-sub)] text-[12px]">Cop</span></p>
                 </div>
