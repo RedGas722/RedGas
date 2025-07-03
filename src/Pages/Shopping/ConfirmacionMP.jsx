@@ -136,7 +136,7 @@ export const ConfirmacionMercadoPago = () => {
             });
           }
         }
-
+        localStorage.setItem(`mp_pago_${payment_id}`, 'true');
         setFacturaGenerada(true);
       } catch (err) {
         setError(err.message || "Error desconocido al confirmar el pago");
@@ -164,7 +164,10 @@ export const ConfirmacionMercadoPago = () => {
             <div className="mt-10"> {/* antes era mt-6 */}
                 <button
                     className="buttonTL2 NeoSubContainer_outset_TL p-3 text-white font-bold"
-                    onClick={() => navigate('/')}
+                    onClick={() => {
+                        console.log("Botón presionado");
+                        navigate('/');
+                    }}
                 >
                     Volver a la página principal
                 </button>
