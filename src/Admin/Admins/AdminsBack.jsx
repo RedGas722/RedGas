@@ -122,7 +122,7 @@ export const AdminsBack = () => {
         <h1 className="font-bold text-3xl z-[2] text-[var(--main-color)]">Administradores</h1>
 
         <div className='NeoContainer_outset_TL z-[2] flex gap-4 flex-wrap items-end w-fit p-[var(--p-admin-control)]'>
-          <div className="relative z-[20]" ref={contenedorRef}>
+          <div className="relative" ref={contenedorRef}>
             <InputLabel
               radius="10"
               type="1"
@@ -135,7 +135,7 @@ export const AdminsBack = () => {
               placeholderError={!!errorBusqueda}
             />
             {sugerencias.length > 0 && (
-              <ul className="absolute z-10 bg-white border border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto shadow w-[230px]">
+              <ul className="absolute z-50 bg-white border border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto shadow w-[230px]">
                 {sugerencias.map((admin) => (
                   <li
                     key={admin.id_admin}

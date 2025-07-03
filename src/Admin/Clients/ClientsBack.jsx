@@ -129,7 +129,7 @@ export const ClientsBack = () => {
 
         {/* Buscador y botón */}
         <div className="NeoContainer_outset_TL z-[2] flex gap-4 flex-wrap items-end w-fit p-[var(--p-admin-control)]">
-          <div className="relative z-[20]" ref={contenedorRef}>
+          <div className="relative" ref={contenedorRef}>
             <InputLabel
               radius="10"
               type="1"
@@ -142,7 +142,7 @@ export const ClientsBack = () => {
               placeholderError={!!errorBusqueda}
             />
             {sugerencias.length > 0 && (
-              <ul className="absolute z-10 bg-white border w-[230px] border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto shadow">
+              <ul className="absolute z-50 bg-white border w-[230px] border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto shadow">
                 {sugerencias.map((cliente) => (
                   <li
                     key={cliente.id_cliente}

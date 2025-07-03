@@ -135,7 +135,7 @@ export const ProductsBack = () => {
         <h1 className="font-bold z-[2] text-3xl text-[var(--main-color)]">Productos</h1>
         <div className='NeoContainer_outset_TL z-[2] flex gap-4 flex-wrap items-end w-fit p-[var(--p-admin-control)]'>
 
-          <div className="relative z-[20]" ref={contenedorRef}>
+          <div className='relative flex' ref={contenedorRef}>
             <InputLabel
               radius='10'
               type="1"
@@ -149,7 +149,7 @@ export const ProductsBack = () => {
             />
 
             {sugerencias.length > 0 && (
-              <ul className="absolute z-10 bg-white border border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto w-full shadow">
+              <ul className="absolute z-50 bg-white border border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto w-full shadow">
                 {sugerencias.map((producto) => (
                   <li
                     key={producto.id_producto}

@@ -129,7 +129,7 @@ export const FacturesBack = () => {
 
         <div className="NeoContainer_outset_TL z-[2] flex gap-4 flex-wrap items-end w-fit p-[var(--p-admin-control)]">
           {/* Cliente */}
-          <div className="relative z-[20]" ref={contenedorRefCliente}>
+          <div className="relative" ref={contenedorRefCliente}>
             <InputLabel
               radius="10"
               type="1"
@@ -142,7 +142,7 @@ export const FacturesBack = () => {
               setMostrarSugerenciasCliente(true)}}
             />
             {mostrarSugerenciasCliente && clienteSugerencias.length > 0 && (
-              <div className="absolute z-10 bg-white border border-gray-300 rounded mt-1 shadow w-full">
+              <div className="absolute z-50 bg-white border border-gray-300 rounded mt-1 shadow w-full">
                 {clienteSugerencias.map(cliente => (
                   <div
                     key={cliente.id_cliente}
@@ -160,7 +160,7 @@ export const FacturesBack = () => {
           </div>
 
           {/* Empleado */}
-          <div className="relative z-[20]" ref={contenedorRefEmpleado}>
+          <div className="relative" ref={contenedorRefEmpleado}>
             <InputLabel
               radius="10"
               type="1"
@@ -174,7 +174,7 @@ export const FacturesBack = () => {
               }}
             />
             {mostrarSugerenciasEmpleado && empleadoSugerencias.length > 0 && (
-              <div className="absolute z-10 bg-white border border-gray-300 rounded mt-1 shadow w-full">
+              <div className="absolute z-50 bg-white border border-gray-300 rounded mt-1 shadow w-full">
                 {empleadoSugerencias.map(empleado => (
                   <div
                     key={empleado.id_empleado}
