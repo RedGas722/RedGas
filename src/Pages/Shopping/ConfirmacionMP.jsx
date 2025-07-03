@@ -137,6 +137,16 @@ export const ConfirmacionMercadoPago = () => {
             });
           }
         }
+
+        // Limpiar el carrito
+        await fetch("https://redgas.onrender.com/CartClear", {
+        method: "DELETE",
+        headers: {
+            "Authorization": `Bearer ${tokenLocal}`,
+            "Content-Type": "application/json"
+        }
+        });
+
         localStorage.setItem(`mp_pago_${payment_id}`, 'true');
         setFacturaGenerada(true);
       } catch (err) {

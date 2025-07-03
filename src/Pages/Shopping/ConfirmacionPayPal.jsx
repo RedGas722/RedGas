@@ -154,6 +154,16 @@ export const ConfirmacionPayPal = () => {
               const stockUpdateData = await resStockUpdate.json();
             }
           }
+
+        // Limpiar el carrito
+        await fetch("https://redgas.onrender.com/CartClear", {
+          method: "DELETE",
+          headers: {
+            "Authorization": `Bearer ${tokenLocal}`,
+            "Content-Type": "application/json"
+          }
+        });
+        
         // Marcar factura como generada
         setFacturaGenerada(true);
       } catch (err) {
