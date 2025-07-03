@@ -126,8 +126,7 @@ export const FacturesBack = () => {
 
       <div className="p-[var(--p-admin-sub)] h-full flex flex-col gap-2">
         <h1 className="font-bold z-[2] text-3xl text-[var(--main-color)]">Facturas</h1>
-
-        <div className="NeoContainer_outset_TL z-[2] flex gap-4 flex-wrap items-end w-fit p-[var(--p-admin-control)]">
+        <div className="NeoContainer_outset_TL z-[50] flex gap-4 flex-wrap items-end w-fit p-[var(--p-admin-control)]">
           {/* Cliente */}
           <div className="relative" ref={contenedorRefCliente}>
             <InputLabel
@@ -142,7 +141,7 @@ export const FacturesBack = () => {
               setMostrarSugerenciasCliente(true)}}
             />
             {mostrarSugerenciasCliente && clienteSugerencias.length > 0 && (
-              <div className="absolute z-10 bg-white border border-gray-300 rounded mt-1 shadow w-full">
+              <div className="absolute z-[10] bg-white border border-gray-300 rounded mt-1 shadow w-full">
                 {clienteSugerencias.map(cliente => (
                   <div
                     key={cliente.id_cliente}
@@ -150,7 +149,7 @@ export const FacturesBack = () => {
                       setClienteCorreoBusqueda(cliente.correo_cliente)
                       setMostrarSugerenciasCliente(false)
                     }}
-                    className="p-2 hover:bg-gray-100 cursor-pointer z-[50]"
+                    className="p-2 hover:bg-gray-100 cursor-pointer"
                   >
                     {cliente.nombre_cliente} - {cliente.correo_cliente}
                   </div>
@@ -174,7 +173,7 @@ export const FacturesBack = () => {
               }}
             />
             {mostrarSugerenciasEmpleado && empleadoSugerencias.length > 0 && (
-              <div className="absolute z-10 bg-white border border-gray-300 rounded mt-1 shadow w-full">
+              <div className="absolute z-[10] bg-white border border-gray-300 rounded mt-1 shadow w-full">
                 {empleadoSugerencias.map(empleado => (
                   <div
                     key={empleado.id_empleado}
@@ -182,7 +181,7 @@ export const FacturesBack = () => {
                       setEmpleadoBusqueda(empleado.correo_empleado)
                       setMostrarSugerenciasEmpleado(false)
                     }}
-                    className="p-2 hover:bg-gray-100 cursor-pointer z-[50]"
+                    className="p-2 hover:bg-gray-100 cursor-pointer"
                   >
                     {empleado.nombre_empleado} - {empleado.correo_empleado}
                   </div>

@@ -121,7 +121,7 @@ export const EmployeesBack = () => {
       <div className="p-[var(--p-admin-sub)] h-full flex flex-col gap-2">
         <h1 className="font-bold z-[2] text-3xl text-[var(--main-color)]">Empleados</h1>
 
-        <div className='NeoContainer_outset_TL z-[2] flex gap-4 flex-wrap items-end w-fit p-[var(--p-admin-control)]'>
+        <div className='NeoContainer_outset_TL z-[50] flex gap-4 flex-wrap items-end w-fit p-[var(--p-admin-control)]'>
           <div className="relative" ref={contenedorRef}>
             <InputLabel
               radius="10"
@@ -135,7 +135,7 @@ export const EmployeesBack = () => {
               placeholderError={!!errorBusqueda}
             />
             {sugerencias.length > 0 && (
-              <ul className="absolute z-10 bg-white border border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto shadow w-[230px]">
+              <ul className="absolute z-[10] bg-white border border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto shadow w-[230px]">
                 {sugerencias.map((emp) => (
                   <li
                     key={emp.id_empleado}
@@ -144,7 +144,7 @@ export const EmployeesBack = () => {
                       buscarEmpleado(emp.correo_empleado)
                       setSugerencias([])
                     }}
-                    className="p-2 hover:bg-gray-100 cursor-pointer z-[50]"
+                    className="p-2 hover:bg-gray-100 cursor-pointer"
                   >
                     {emp.correo_empleado}
                   </li>

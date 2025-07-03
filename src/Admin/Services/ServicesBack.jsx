@@ -119,8 +119,7 @@ export const ServicesBack = () => {
 
       <div className="p-[var(--p-admin-sub)] h-full flex flex-col gap-4">
         <h1 className="font-bold z-[2] text-3xl text-[var(--main-color)]">Servicios</h1>
-
-        <div className="NeoContainer_outset_TL z-[2] flex gap-4 flex-wrap items-end w-fit p-[var(--p-admin-control)]">
+        <div className="NeoContainer_outset_TL z-[50] flex gap-4 flex-wrap items-end w-fit p-[var(--p-admin-control)]">
           <div className="relative" ref={contenedorRef}>
             <InputLabel
               radius="10"
@@ -134,7 +133,7 @@ export const ServicesBack = () => {
               placeholderError={!!errorBusqueda}
             />
             {sugerencias.length > 0 && (
-              <ul className="absolute z-10 bg-white border w-[230px] border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto shadow">
+              <ul className="absolute z-[10] bg-white border w-[230px] border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto shadow">
                 {sugerencias.map(servicio => (
                   <li
                     key={servicio.id_servicio}
@@ -143,7 +142,7 @@ export const ServicesBack = () => {
                       buscarServicio(servicio.nombre_servicio)
                       setSugerencias([])
                     }}
-                    className="p-2 hover:bg-gray-100 cursor-pointer z-[50]"
+                    className="p-2 hover:bg-gray-100 cursor-pointer"
                   >
                     {servicio.nombre_servicio}
                   </li>

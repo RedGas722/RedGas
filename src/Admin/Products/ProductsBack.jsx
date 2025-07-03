@@ -133,7 +133,7 @@ export const ProductsBack = () => {
       <BtnBack To='/Admin' />
       <div className="p-[var(--p-admin-sub)] h-full flex flex-col gap-2">
         <h1 className="font-bold z-[2] text-3xl text-[var(--main-color)]">Productos</h1>
-        <div className='NeoContainer_outset_TL z-[2] flex gap-4 flex-wrap items-end w-fit p-[var(--p-admin-control)]'>
+        <div className='NeoContainer_outset_TL z-[50] flex gap-4 flex-wrap items-end w-fit p-[var(--p-admin-control)]'>
 
           <div className='relative flex' ref={contenedorRef}>
             <InputLabel
@@ -149,7 +149,7 @@ export const ProductsBack = () => {
             />
 
             {sugerencias.length > 0 && (
-              <ul className="absolute z-10 bg-white border border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto w-full shadow">
+              <ul className="absolute z-[10] bg-white border border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto w-full shadow">
                 {sugerencias.map((producto) => (
                   <li
                     key={producto.id_producto}
@@ -158,7 +158,7 @@ export const ProductsBack = () => {
                       buscarProducto(producto.nombre_producto)
                       setSugerencias([])
                     }}
-                    className="p-2 hover:bg-gray-100 cursor-pointer z-[50]"
+                    className="p-2 hover:bg-gray-100 cursor-pointer"
                   >
                     {producto.nombre_producto}
                   </li>
