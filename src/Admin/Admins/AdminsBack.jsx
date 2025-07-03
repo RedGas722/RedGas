@@ -144,7 +144,7 @@ export const AdminsBack = () => {
                       buscarAdmin(admin.correo_admin)
                       setSugerencias([])
                     }}
-                    className="p-2 hover:bg-gray-100 cursor-pointer z-50"
+                    className="p-2 hover:bg-gray-100 cursor-pointer z-[50]"
                   >
                     {admin.correo_admin}
                   </li>

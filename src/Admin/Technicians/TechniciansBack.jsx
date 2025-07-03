@@ -148,7 +148,7 @@ export const TechniciansBack = () => {
                         buscarTecnico(tecnico.correo_tecnico)
                         setSugerencias([])
                       }}
-                      className="p-2 hover:bg-gray-100 cursor-pointer z-50"
+                      className="p-2 hover:bg-gray-100 cursor-pointer z-[50]"
                     >
                       {tecnico.correo_tecnico}
                     </li>

@@ -144,7 +144,7 @@ export const EmployeesBack = () => {
                       buscarEmpleado(emp.correo_empleado)
                       setSugerencias([])
                     }}
-                    className="p-2 hover:bg-gray-100 cursor-pointer z-50"
+                    className="p-2 hover:bg-gray-100 cursor-pointer z-[50]"
                   >
                     {emp.correo_empleado}
                   </li>

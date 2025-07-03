@@ -143,7 +143,7 @@ export const ServicesBack = () => {
                       buscarServicio(servicio.nombre_servicio)
                       setSugerencias([])
                     }}
-                    className="p-2 hover:bg-gray-100 cursor-pointer z-50"
+                    className="p-2 hover:bg-gray-100 cursor-pointer z-[50]"
                   >
                     {servicio.nombre_servicio}
                   </li>

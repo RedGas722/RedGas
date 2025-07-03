@@ -150,7 +150,7 @@ export const FacturesBack = () => {
                       setClienteCorreoBusqueda(cliente.correo_cliente)
                       setMostrarSugerenciasCliente(false)
                     }}
-                    className="p-2 hover:bg-gray-100 cursor-pointer z-50"
+                    className="p-2 hover:bg-gray-100 cursor-pointer z-[50]"
                   >
                     {cliente.nombre_cliente} - {cliente.correo_cliente}
                   </div>
@@ -182,7 +182,7 @@ export const FacturesBack = () => {
                       setEmpleadoBusqueda(empleado.correo_empleado)
                       setMostrarSugerenciasEmpleado(false)
                     }}
-                    className="p-2 hover:bg-gray-100 cursor-pointer z-50"
+                    className="p-2 hover:bg-gray-100 cursor-pointer z-[50]"
                   >
                     {empleado.nombre_empleado} - {empleado.correo_empleado}
                   </div>

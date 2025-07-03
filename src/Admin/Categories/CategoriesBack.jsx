@@ -144,7 +144,7 @@ export const CategoriesBack = () => {
                       buscarCategoria(cat.nombre_categoria)
                       setSugerencias([])
                     }}
-                    className="p-2 hover:bg-gray-100 cursor-pointer z-50"
+                    className="p-2 hover:bg-gray-100 cursor-pointer z-[50]"
                   >
                     {cat.nombre_categoria}
                   </li>

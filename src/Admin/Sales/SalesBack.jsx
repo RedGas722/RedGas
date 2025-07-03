@@ -98,7 +98,7 @@ export const SalesBack = () => {
                       setProductoBusqueda(prod.nombre_producto)
                       handleBuscar(prod.nombre_producto)
                     }}
-                    className="p-2 hover:bg-gray-100 cursor-pointer z-50"
+                    className="p-2 hover:bg-gray-100 cursor-pointer z-[50]"
                   >
                     {prod.nombre_producto}
                   </li>
