@@ -4,7 +4,7 @@ import { Link } from 'react-scroll'
 import Box from '@mui/material/Box'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
-import { tabsClasses } from '@mui/material/Tabs'
+import { tabsClasses } from '@mui/material/Tabs' 
 import useMediaQuery from '@mui/material/useMediaQuery'
 
 export const Navs = ({ className, ref1, ref2, ref3, ref4 }) => {

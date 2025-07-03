@@ -47,21 +47,50 @@ export const CardsOffersGrid = ({ productos = [] }) => {
       return;
     }
 
-    const item = {
-      productId: producto.id_producto,
-      productName: producto.nombre_producto,
-      quantity: 1,
-      price: producto.precio_producto,
-      discount: producto.descuento || 0
-    };
-
     try {
+      // Obtener el carrito actual del usuario
+      const resCart = await fetch("https://redgas.onrender.com/CartGet", {
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json"
+        }
+      });
+
+      if (!resCart.ok) throw new Error("Error al obtener el carrito");
+
+      const cartData = await resCart.json();
+
+      // Verificar si ya hay unidades del producto en el carrito
+      const existente = cartData.find(p => p.productId === producto.id_producto);
+      const cantidadActual = existente ? existente.quantity : 0;
+      const cantidadDeseada = cantidadActual + 1;
+
+      if (cantidadDeseada > producto.stock) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Stock insuficiente',
+          text: `Solo hay ${producto.stock} unidades disponibles de "${producto.nombre_producto}".`
+        });
+        return;
+      }
+
+      // Preparar item para agregar
+      const item = {
+        productId: producto.id_producto,
+        productName: producto.nombre_producto,
+        quantity: 1,
+        price: producto.precio_producto,
+        discount: producto.descuento || 0
+      };
+
       await agregarAlCarrito(item);
+
       Swal.fire({
         icon: 'success',
         title: 'Producto agregado',
         text: `"${producto.nombre_producto}" fue agregado al carrito`
       });
+
     } catch (error) {
       console.error("Error al agregar al carrito", error);
       Swal.fire({

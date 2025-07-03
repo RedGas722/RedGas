@@ -99,21 +99,48 @@ export const Cards = ({ uniqueId, productos = [] }) => {
       return;
     }
 
-    const item = {
-      productId: producto.id_producto,
-      productName: producto.nombre_producto,
-      quantity: 1,
-      price: producto.precio_producto,
-      discount: producto.descuento || 0
-    };
-
     try {
+      // Obtener el carrito actual
+      const resCart = await fetch("https://redgas.onrender.com/CartGet", {
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json"
+        }
+      });
+
+      if (!resCart.ok) throw new Error("Error al obtener el carrito");
+      const cartData = await resCart.json();
+
+      // Verificar si ya existe el producto en el carrito
+      const existente = cartData.find(p => p.productId === producto.id_producto);
+      const cantidadExistente = existente ? existente.quantity : 0;
+      const nuevaCantidad = cantidadExistente + 1;
+
+      if (nuevaCantidad > producto.stock) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Stock insuficiente',
+          text: `Solo hay ${producto.stock} unidades disponibles de "${producto.nombre_producto}".`
+        });
+        return;
+      }
+
+      // Agregar al carrito si hay stock disponible
+      const item = {
+        productId: producto.id_producto,
+        productName: producto.nombre_producto,
+        quantity: 1,
+        price: producto.precio_producto,
+        discount: producto.descuento || 0
+      };
+
       await agregarAlCarrito(item);
       Swal.fire({
         icon: 'success',
         title: 'Producto agregado',
         text: `"${producto.nombre_producto}" fue agregado al carrito`
       });
+
     } catch (error) {
       console.error("Error al agregar al carrito", error);
       Swal.fire({
@@ -123,6 +150,7 @@ export const Cards = ({ uniqueId, productos = [] }) => {
       });
     }
   };
+
 
   return (
     <section id={`CardSect-${uniqueId}`} className="flex flex-col items-center justify-center gap-[10px] h-fit w-[100%]">

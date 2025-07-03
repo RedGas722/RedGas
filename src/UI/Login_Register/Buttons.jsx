@@ -1,7 +1,7 @@
 import Button from '@mui/material/Button';
 import './LR.css';
 
-export const Buttons = ({ padding, width, height, radius, borderWidth, borderColor, textColor, nameButton, subTextBTN, Onclick, Type, ...props }) => {
+export const Buttons = ({ shadow, shadowActive, padding, width, height, radius, borderWidth, borderColor, textColor, nameButton, subTextBTN, Onclick, Type, ...props }) => {
     return (
         <div className="group flex flex-col items-center gap-[5px]">
             <Button
@@ -14,7 +14,7 @@ export const Buttons = ({ padding, width, height, radius, borderWidth, borderCol
                     background: 'var(--background-color)',
                     borderRadius: `${radius || 18}px`,
                     border: `${borderWidth || ''}px solid ${borderColor || ' '}`,
-                    boxShadow: 'var(--shadow-sub-outset)',
+                    boxShadow: `${shadow || 'var(--shadow-sub-outset)'}`,
                     color: textColor || 'var(--Font-Nav)',
                     whiteSpace: 'nowrap',
                     textTransform: 'none',
@@ -32,14 +32,14 @@ export const Buttons = ({ padding, width, height, radius, borderWidth, borderCol
                     '&:hover': {
                         background: 'var(--background-color)',
                         color: textColor || 'var(--Font-Nav)',
-                        boxShadow: 'var(--shadow-sub-outset)',
+                        boxShadow: `${shadow || 'var(--shadow-sub-outset)'}`,
                         '& .textBtn': {
                             filter: 'brightness(1.2)',
                         },
                     },
                     '&:active': {
                         color: textColor || 'var(--Font-Nav)',
-                        boxShadow: 'var(--shadow-sub-inset-br)',
+                        boxShadow: `${shadowActive || 'var(--shadow-sub-inset-br)'}`,
                         transform: 'scale(0.98)',
                         '& .textBtn': {
                             color: textColor || 'var(--Font-Nav)',

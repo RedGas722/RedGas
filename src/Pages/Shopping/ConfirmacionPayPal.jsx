@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 import Header from '../../Layouts/Header/Header';
 
 export const ConfirmacionPayPal = () => {
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [resultado, setResultado] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -152,6 +154,16 @@ export const ConfirmacionPayPal = () => {
               const stockUpdateData = await resStockUpdate.json();
             }
           }
+
+        // Limpiar el carrito
+        await fetch("https://redgas.onrender.com/CartClear", {
+          method: "DELETE",
+          headers: {
+            "Authorization": `Bearer ${tokenLocal}`,
+            "Content-Type": "application/json"
+          }
+        });
+        
         // Marcar factura como generada
         setFacturaGenerada(true);
       } catch (err) {
@@ -183,10 +195,10 @@ export const ConfirmacionPayPal = () => {
               {resultado.data.purchase_units[0].payments.captures[0].amount.currency_code}
             </p>
 
-            <div className="mt-6">
+            <div className="mt-10 relative z-[50]">
               <button
-                className="buttonTL2 NeoSubContainer_outset_TL p-3 text-white font-bold"
-                onClick={() => window.location.href = '/'}
+                className="buttonTL2 NeoSubContainer_outset_TL p-3 text-white font-bold relative z-[50]"
+                onClick={() => navigate('/')}
               >
                 Volver a la página principal
               </button>

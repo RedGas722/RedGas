@@ -6,8 +6,6 @@ import Box from '@mui/material/Box'
 import SpeedDial from '@mui/material/SpeedDial'
 import SpeedDialIcon from '@mui/material/SpeedDialIcon'
 import SpeedDialAction from '@mui/material/SpeedDialAction'
-import PsePaymentForm from "./PsEForm"
-import { SvgPSE } from "../../UI/Svg/SvgPSE"
 import { SvgPayPal } from "../../UI/Svg/SvgPayPal"
 
 export const Shopping = () => {
@@ -16,8 +14,6 @@ export const Shopping = () => {
   const [totalPrice, setTotalPrice] = useState(0)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
-  const [showPseForm, setShowPseForm] = useState(false)
-  const [pseAmount, setPseAmount] = useState(0)
   const token = localStorage.getItem("token")
 
   const fetchProducts = async () => {
@@ -125,9 +121,9 @@ export const Shopping = () => {
         return
       }
 
-      if (newQuantity > producto.stock) {
-        alert(`No puedes agregar más de ${producto.stock} unidades. Stock máximo alcanzado.`)
-        return
+      if (newQuantity > producto.stock && newQuantity > producto.cantidad) {
+        alert(`No puedes agregar más de ${producto.stock} unidades. Stock máximo alcanzado.`);
+        return;
       }
 
       if (newQuantity < 1) {
@@ -225,6 +221,48 @@ export const Shopping = () => {
     }
   }
 
+  const handlePayWithMercadoPago = async (monto = totalPrice, productId = null) => {
+    try {
+      if (!token) {
+        alert("Debes iniciar sesión para pagar con Mercado Pago");
+        return;
+      }
+
+      const body = {
+        cantidad: monto.toFixed(0),
+        referencia: `ORD-MP-${Date.now()}`
+      };
+
+      const res = await fetch("https://redgas.onrender.com/PagoMP", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify(body)
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) throw new Error(data.errorInfo || "Error al iniciar el pago");
+
+      if (!data.init_point) throw new Error("No se recibió el enlace de pago de Mercado Pago");
+
+      // Guardar producto si es pago individual
+      if (productId) {
+        localStorage.setItem("mp_productId", productId);
+      } else {
+        localStorage.removeItem("mp_productId");
+      }
+
+      window.location.href = data.init_point;
+
+    } catch (error) {
+      console.error("Error al pagar con Mercado Pago:", error);
+      alert("Ocurrió un error al iniciar el pago con Mercado Pago");
+    }
+  };
+
   if (loading) return <p>Cargando productos...</p>
   if (error) return <p>Error: {error}</p>
 
@@ -234,15 +272,15 @@ export const Shopping = () => {
       name: 'Limpiar carrito'
     },
     {
-      icon: <FontAwesomeIcon icon={faMoneyBills} alt='Agregar' onClick={() => alert("Comprar producto aún no implementado")} className="text-[var(--Font-Nav-shadow)] text-2xl" />,
-      name: 'Comprar todo'
-    },
-    {
-      icon: <SvgPSE className=' w-8 h-8' onClick={() => {
-        setPseAmount(totalPrice)
-        setShowPseForm(true)
-      }} />,
-      name: 'Pagar con PSE'
+      icon: (
+        <img
+          src="https://seeklogo.com/images/M/mercado-pago-logo-A50B518AF0-seeklogo.com.png"
+          alt="Mercado Pago"
+          className="w-8 h-8 rounded-full"
+          onClick={() => handlePayWithMercadoPago()}
+        />
+      ),
+      name: "Pagar con MP"
     },
     {
       icon: <SvgPayPal onClick={() => handlePayWithPaypal()} />,
@@ -271,7 +309,7 @@ export const Shopping = () => {
           return (
             <section key={index}>
               <section className='flex justify-center gap-[20px]'>
-                <section className='NeoContainer_outset_TL z-[2] flex gap-[20px] p-[20px_10px] w-[70%] h-fit'>
+                <section className='NeoContainer_outset_TL z-[50] flex gap-[20px] p-[20px_10px] w-[70%] h-fit relative'>
                   <div>
                     <img
                       src={producto.imagen ? `data:image/jpeg;base64,${producto.imagen}` : "https://via.placeholder.com/150"}
@@ -298,40 +336,34 @@ export const Shopping = () => {
                     <p className='text-[var(--main-color-sub)]'>Cantidad: {producto.cantidad}</p>
                     <section className="flex justify-between w-full">
                       <div className="flex gap-2 items-center">
-                        <button className="rounded-full w-6 h-6  bg-red-700" onClick={() =>
+                        <button className="rounded-full w-6 h-6  bg-red-700 relative z-[50]" onClick={() =>
                           producto.cantidad > 1 &&
                           handleUpdateQuantity(producto.id_producto, producto.cantidad - 1)
                         }>
                           <FontAwesomeIcon icon={faMinus} alt='Agregar' className="text-white" />
                         </button>
                         <span>{producto.cantidad}</span>
-                        <button className="rounded-full w-6 h-6  bg-green-700" onClick={() =>
+                        <button className="rounded-full w-6 h-6  bg-green-700 relative z-[50]" onClick={() =>
                           handleUpdateQuantity(producto.id_producto, producto.cantidad + 1)
                         }>
                           <FontAwesomeIcon icon={faPlus} alt='Quitar' className="text-white" />
                         </button>
                       </div>
                       <div className="flex items-center gap-5">
-                        <button className='buttonTL2 NeoSubContainer_outset_TL p-[7px]' onClick={() => alert("Comprar producto aún no implementado")}>
-                          Comprar!!
-                        </button>
                         <button
-                          className='buttonTL2 NeoSubContainer_outset_TL p-[7px]'
+                          className='buttonTL2 NeoSubContainer_outset_TL p-[7px] relative z-[50]'
                           onClick={() => handlePayWithPaypal(subtotal, producto.id_producto)}
                         >
                           Pagar con PayPal
                         </button>
                         <button
-                          className='buttonTL2 NeoSubContainer_outset_TL p-[7px]'
-                          onClick={() => {
-                            setPseAmount(subtotal)
-                            setShowPseForm(true)
-                          }}
+                          className='buttonTL2 NeoSubContainer_outset_TL p-[7px] relative z-[50]'
+                          onClick={() => handlePayWithMercadoPago(subtotal, producto.id_producto)}
                         >
-                          Pagar con PSE
+                          Pagar con MP
                         </button>
                         <button
-                          className='buttonTL2 NeoSubContainer_outset_TL p-[7px]'
+                          className='buttonTL2 NeoSubContainer_outset_TL p-[7px] relative z-[50]'
                           onClick={() => handleRemoveProduct(producto.id_producto)}
                         >
                           Eliminar
@@ -378,9 +410,6 @@ export const Shopping = () => {
           </p>
         </footer>
       </div>
-      {showPseForm && (
-        <PsePaymentForm monto={pseAmount} onClose={() => setShowPseForm(false)} />
-      )}
       {/* SpeedDial */}
       <Box sx={{ height: 330, transform: 'translateZ(0px)', flexGrow: 1, position: 'sticky', bottom: 0, right: 0, zIndex:2 }}>
         <SpeedDial

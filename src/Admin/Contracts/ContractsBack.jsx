@@ -163,7 +163,7 @@ export const ContractsBack = () => {
                       buscarContrato(emp.correo_empleado)
                       setSugerencias([])
                     }}
-                    className="p-2 hover:bg-gray-100 cursor-pointer"
+                    className="p-2 hover:bg-gray-100 cursor-pointer z-[50]"
                   >
                     {emp.nombre_empleado} - {emp.correo_empleado}
                   </li>
