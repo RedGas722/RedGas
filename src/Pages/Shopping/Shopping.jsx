@@ -6,8 +6,6 @@ import Box from '@mui/material/Box'
 import SpeedDial from '@mui/material/SpeedDial'
 import SpeedDialIcon from '@mui/material/SpeedDialIcon'
 import SpeedDialAction from '@mui/material/SpeedDialAction'
-import PsePaymentForm from "./PsEForm"
-import { SvgPSE } from "../../UI/Svg/SvgPSE"
 import { SvgPayPal } from "../../UI/Svg/SvgPayPal"
 
 export const Shopping = () => {
@@ -16,8 +14,6 @@ export const Shopping = () => {
   const [totalPrice, setTotalPrice] = useState(0)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
-  const [showPseForm, setShowPseForm] = useState(false)
-  const [pseAmount, setPseAmount] = useState(0)
   const token = localStorage.getItem("token")
 
   const fetchProducts = async () => {
@@ -225,6 +221,48 @@ export const Shopping = () => {
     }
   }
 
+  const handlePayWithMercadoPago = async (monto = totalPrice, productId = null) => {
+    try {
+      if (!token) {
+        alert("Debes iniciar sesión para pagar con Mercado Pago");
+        return;
+      }
+
+      const body = {
+        cantidad: monto.toFixed(0),
+        referencia: `ORD-MP-${Date.now()}`
+      };
+
+      const res = await fetch("https://redgas.onrender.com/PagoMP", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify(body)
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) throw new Error(data.errorInfo || "Error al iniciar el pago");
+
+      if (!data.init_point) throw new Error("No se recibió el enlace de pago de Mercado Pago");
+
+      // Guardar producto si es pago individual
+      if (productId) {
+        localStorage.setItem("mp_productId", productId);
+      } else {
+        localStorage.removeItem("mp_productId");
+      }
+
+      window.location.href = window.location.href = `${window.location.origin}/Shopping/ConfirmacionMercadoPago?payment_id=...`
+
+    } catch (error) {
+      console.error("Error al pagar con Mercado Pago:", error);
+      alert("Ocurrió un error al iniciar el pago con Mercado Pago");
+    }
+  };
+
   if (loading) return <p>Cargando productos...</p>
   if (error) return <p>Error: {error}</p>
 
@@ -238,11 +276,15 @@ export const Shopping = () => {
       name: 'Comprar todo'
     },
     {
-      icon: <SvgPSE className=' w-8 h-8' onClick={() => {
-        setPseAmount(totalPrice)
-        setShowPseForm(true)
-      }} />,
-      name: 'Pagar con PSE'
+      icon: (
+        <img
+          src="https://seeklogo.com/images/M/mercado-pago-logo-A50B518AF0-seeklogo.com.png"
+          alt="Mercado Pago"
+          className="w-8 h-8 rounded-full"
+          onClick={() => handlePayWithMercadoPago()}
+        />
+      ),
+      name: "Pagar con MP"
     },
     {
       icon: <SvgPayPal onClick={() => handlePayWithPaypal()} />,
@@ -323,12 +365,9 @@ export const Shopping = () => {
                         </button>
                         <button
                           className='buttonTL2 NeoSubContainer_outset_TL p-[7px]'
-                          onClick={() => {
-                            setPseAmount(subtotal)
-                            setShowPseForm(true)
-                          }}
+                          onClick={() => handlePayWithMercadoPago(subtotal, producto.id_producto)}
                         >
-                          Pagar con PSE
+                          Pagar con MP
                         </button>
                         <button
                           className='buttonTL2 NeoSubContainer_outset_TL p-[7px]'
@@ -378,9 +417,6 @@ export const Shopping = () => {
           </p>
         </footer>
       </div>
-      {showPseForm && (
-        <PsePaymentForm monto={pseAmount} onClose={() => setShowPseForm(false)} />
-      )}
       {/* SpeedDial */}
       <Box sx={{ height: 330, transform: 'translateZ(0px)', flexGrow: 1, position: 'sticky', bottom: 0, right: 0, zIndex:2 }}>
         <SpeedDial
