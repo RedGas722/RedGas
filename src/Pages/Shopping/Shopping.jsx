@@ -309,7 +309,7 @@ export const Shopping = () => {
           return (
             <section key={index}>
               <section className='flex justify-center gap-[20px]'>
-                <section className='NeoContainer_outset_TL z-[2] flex gap-[20px] p-[20px_10px] w-[70%] h-fit'>
+                <section className='NeoContainer_outset_TL z-[50] flex gap-[20px] p-[20px_10px] w-[70%] h-fit relative'>
                   <div>
                     <img
                       src={producto.imagen ? `data:image/jpeg;base64,${producto.imagen}` : "https://via.placeholder.com/150"}
