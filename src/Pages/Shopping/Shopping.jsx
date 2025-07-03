@@ -7,6 +7,7 @@ import SpeedDial from '@mui/material/SpeedDial'
 import SpeedDialIcon from '@mui/material/SpeedDialIcon'
 import SpeedDialAction from '@mui/material/SpeedDialAction'
 import { SvgPayPal } from "../../UI/Svg/SvgPayPal"
+import SvgMercadoPago from "../../UI/Svg/SvgMP"
 
 export const Shopping = () => {
   const [open, setOpen] = useState(false)
@@ -272,15 +273,8 @@ export const Shopping = () => {
       name: 'Limpiar carrito'
     },
     {
-      icon: (
-        <img
-          src="https://seeklogo.com/images/M/mercado-pago-logo-A50B518AF0-seeklogo.com.png"
-          alt="Mercado Pago"
-          className="w-8 h-8 rounded-full"
-          onClick={() => handlePayWithMercadoPago()}
-        />
-      ),
-      name: "Pagar con MP"
+      icon: <SvgMercadoPago onClick={() => handlePayWithMercadoPago ()} />,
+      name: "Pagar con Mercado Pago"
     },
     {
       icon: <SvgPayPal onClick={() => handlePayWithPaypal()} />,

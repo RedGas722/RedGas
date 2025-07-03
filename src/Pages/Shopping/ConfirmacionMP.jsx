@@ -163,7 +163,7 @@ export const ConfirmacionMercadoPago = () => {
     <section className="Distribution">
       <Header />
       <div className="MainPageContainer text-[var(--main-color)] p-8">
-        {loading && <p>Confirmando pago con Mercado Pago y generando factura...</p>}
+        {loading && <p>Confirmando pago y generando factura...</p>}
         {error && (
             <div>
                 <p className="text-red-600 font-semibold mb-4">Error: {error}</p>

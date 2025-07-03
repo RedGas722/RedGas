@@ -26,16 +26,16 @@ export const AdminApp = () => {
                     {/* Si es admin, mostrar todo */}
                     {tipoUsuario === 1 && (
                         <>
-                            <Buttons subTextBTN='Técnicos' onClick={() => navigate('/Admin/Technicians')} width='104px' height='104px' padding='0' nameButton={<img src='src/Admin/Assets/Icons/Tecnic.png' className='w-20 no-drag brightness-80' />} />
-                            <Buttons subTextBTN='Clientes' onClick={() => navigate('/Admin/Clients')} width='104px' height='104px' padding='0' nameButton={<img src='src/Admin/Assets/Icons/Client.png' className='w-20 no-drag brightness-80' />} />
-                            <Buttons subTextBTN='Empleados' onClick={() => navigate('/Admin/Employees')} width='104px' height='104px' padding='0' nameButton={<img src='src/Admin/Assets/Icons/Employer.png' className='w-20 no-drag brightness-80' />} />
-                            <Buttons subTextBTN='Productos' onClick={() => navigate('/Admin/Products')} width='104px' height='104px' padding='0' nameButton={<img src='src/Admin/Assets/Icons/Product.png' className='w-20 no-drag brightness-80' />} />
-                            <Buttons subTextBTN='Facturas' onClick={() => navigate('/Admin/Factures')} width='104px' height='104px' padding='0' nameButton={<img src='src/Admin/Assets/Icons/Facture.png' className='w-20 no-drag brightness-80' />} />
-                            <Buttons subTextBTN='Categorias' onClick={() => navigate('/Admin/Categories')} width='104px' height='104px' padding='0' nameButton={<img src='src/Admin/Assets/Icons/Categories.png' className='w-20 no-drag brightness-80' />} />
-                            <Buttons subTextBTN='Servicios' onClick={() => navigate('/Admin/Services')} width='104px' height='104px' padding='0' nameButton={<img src='src/Admin/Assets/Icons/Services.png' className='w-20 no-drag brightness-80' />} />
-                            <Buttons subTextBTN='Admin' onClick={() => navigate('/Admin/Admins')} width='104px' height='104px' padding='0' nameButton={<img src='src/Admin/Assets/Icons/Admin.png' className='w-20 no-drag brightness-80' />} />
-                            <Buttons subTextBTN='Contratos' onClick={() => navigate('/Admin/Contracts')} width='104px' height='104px' padding='0' nameButton={<img src='src/Admin/Assets/Icons/Contract.png' className='w-20 no-drag brightness-80' />} />
-                            <Buttons subTextBTN='Ventas' onClick={() => navigate('/Admin/Sales')} width='104px' height='104px' padding='0' nameButton={<img src='src/Admin/Assets/Icons/Sales.png' className='w-20 no-drag brightness-80' />} />
+                            <Buttons subTextBTN='Técnicos' onClick={() => navigate('/Admin/Technicians')} width='104px' height='104px' padding='0' nameButton={<img src='/Assets/Icons/Tecnic.png' className='w-20 no-drag brightness-80' />} />
+                            <Buttons subTextBTN='Clientes' onClick={() => navigate('/Admin/Clients')} width='104px' height='104px' padding='0' nameButton={<img src='/Assets/Icons/Client.png' className='w-20 no-drag brightness-80' />} />
+                            <Buttons subTextBTN='Empleados' onClick={() => navigate('/Admin/Employees')} width='104px' height='104px' padding='0' nameButton={<img src='/Assets/Icons/Employer.png' className='w-20 no-drag brightness-80' />} />
+                            <Buttons subTextBTN='Productos' onClick={() => navigate('/Admin/Products')} width='104px' height='104px' padding='0' nameButton={<img src='/Assets/Icons/Product.png' className='w-20 no-drag brightness-80' />} />
+                            <Buttons subTextBTN='Facturas' onClick={() => navigate('/Admin/Factures')} width='104px' height='104px' padding='0' nameButton={<img src='/Assets/Icons/Facture.png' className='w-20 no-drag brightness-80' />} />
+                            <Buttons subTextBTN='Categorias' onClick={() => navigate('/Admin/Categories')} width='104px' height='104px' padding='0' nameButton={<img src='/Assets/Icons/Categories.png' className='w-20 no-drag brightness-80' />} />
+                            <Buttons subTextBTN='Servicios' onClick={() => navigate('/Admin/Services')} width='104px' height='104px' padding='0' nameButton={<img src='/Assets/Icons/Services.png' className='w-20 no-drag brightness-80' />} />
+                            <Buttons subTextBTN='Admin' onClick={() => navigate('/Admin/Admins')} width='104px' height='104px' padding='0' nameButton={<img src='/Assets/Icons/Admin.png' className='w-20 no-drag brightness-80' />} />
+                            <Buttons subTextBTN='Contratos' onClick={() => navigate('/Admin/Contracts')} width='104px' height='104px' padding='0' nameButton={<img src='/Assets/Icons/Contract.png' className='w-20 no-drag brightness-80' />} />
+                            <Buttons subTextBTN='Ventas' onClick={() => navigate('/Admin/Sales')} width='104px' height='104px' padding='0' nameButton={<img src='/Assets/Icons/Sales.png' className='w-20 no-drag brightness-80' />} />
                         </>
                     )}
 
