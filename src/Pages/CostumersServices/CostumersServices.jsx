@@ -18,11 +18,11 @@ import Box from '@mui/material/Box'
 import Swal from 'sweetalert2'
 import './CostumersServices.css'
 
-const URL_GET = 'http://localhost:10101/ClienteServicesGet'
+const URL_GET = 'https://redgas.onrender.com/ClienteServicesGet'
 const URL_COSTUMERS = 'https://redgas.onrender.com/ClienteServicesGetAll'
-const URL_TECHGET = 'http://localhost:10101/TecnicoServicesGet'
-const URL_TECHNICIAN = 'http://localhost:10101/TecnicoServicesGetAll'
-const URL_SERVICESTECHNICIAN = 'http://localhost:10101/TecnicoServicesAdd'
+const URL_TECHGET = 'https://redgas.onrender.com/TecnicoServicesGet'
+const URL_TECHNICIAN = 'https://redgas.onrender.com/TecnicoServicesGetAll'
+const URL_SERVICESTECHNICIAN = 'https://redgas.onrender.com/TecnicoServicesAdd'
 
 const style = {
   position: 'absolute',
@@ -341,10 +341,10 @@ export const CostumerServices = () => {
     <div>
       <div className="z-[2] flex flex-col text-center gap-2 sm:gap-0 sm:flex-row sm:justify-between items-center w-full">
         <BtnBack To='/' />
-        <h2 className="font-bold text-3xl sm:text-4xl text-[var(--Font-Nav)]">Mi Servicio</h2>
+        <h2 className="font-bold text-3xl z-[2] sm:text-4xl text-[var(--Font-Nav)]">Mi Servicio</h2>
       </div>
       
-      <section className="h-fit flex flex-wrap justify-center text-[var(--main-color)] items-center gap-[40px] !p-[80px_0] bg-[var(--background-color)] MainPageContainer">
+      <section className="h-fit z-[2] flex flex-wrap justify-center text-[var(--main-color)] items-center gap-[40px] !p-[80px_0] bg-[var(--background-color)] MainPageContainer">
         {costumer
           .filter((item, idx) => {
             const service = result[idx]

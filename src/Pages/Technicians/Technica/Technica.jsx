@@ -17,11 +17,11 @@ import emailjs from '@emailjs/browser'
 import Swal from 'sweetalert2'
 import { InputLabel } from "../../../UI/Login_Register/InputLabel/InputLabel"
 
-const URL_GET_TECHNICIAN = 'http://localhost:10101/TecnicoServicesGet'
-const URL_DELETE_TECHNICIAN = 'http://localhost:10101/TecnicoServicesDelete'
+const URL_GET_TECHNICIAN = 'https://redgas.onrender.com/TecnicoServicesGet'
+const URL_DELETE_TECHNICIAN = 'https://redgas.onrender.com/TecnicoServicesDelete'
 const URL_GET_COSTUMER = 'https://redgas.onrender.com/ClienteServicesGet'
-const URL_DELETE_COSTUMER = 'http://localhost:10101/ClienteServicesDelete'
-const URL_REGISTER_SERVICES = 'http://localhost:10101/PedidoServicioRegister'
+const URL_DELETE_COSTUMER = 'https://redgas.onrender.com/ClienteServicesDelete'
+const URL_REGISTER_SERVICES = 'https://redgas.onrender.com/PedidoServicioRegister'
 
 const style = {
   position: 'relative',
@@ -352,14 +352,14 @@ export const Technica = () => {
   return (
     <>
       {/* BTN back */}
-      <div className="flex flex-col justify-between items-start sm:items-center sm:flex-row gap-2 p-[0_5px] w-full">
+      <div className="flex flex-col z-[2] justify-between items-start sm:items-center sm:flex-row gap-2 p-[0_5px] w-full">
         <div className="btnDown">
           <BtnBack To='/' />
         </div>
         <h2 className="font-bold text-4xl text-[var(--Font-Nav)]">MI SERVICIO</h2>
       </div>
 
-      <section className="h-fit flex flex-col justify-center text-[var(--main-color)] items-center gap-[20px] p-[0px_0px] MainPageContainer">
+      <section className="h-fit flex flex-col justify-center text-[var(--main-color)] z-[2] items-center gap-[20px] p-[0px_0px] MainPageContainer">
         <section className="flex flex-wrap items-center justify-center gap-[2rem] w-full h-fit p-[15px_0] sm:p-[15px_20px] NeoContainer_outset_TL">
           <div className="NeoContainer_outset_TL gap-2 flex flex-col sm:p-[20px_25px]">
             {/* Problem title */}
@@ -402,7 +402,7 @@ export const Technica = () => {
           </div>
 
           {/* Steeps to follow */}
-          <Box sx={style} className="w-fit items-start justify-start ">
+          <Box sx={style} className="w-fit z-[2] items-start justify-start ">
             <div className="flex flex-col items-center justify-center gap-4">
               <h4 className="text-2xl sm:text-3xl font-bold text-[var(--main-color)]">Pasos a seguir</h4>
               <div ref={accordionRef} className="accordionContain NeoContainer_outset_TL w-fit">

@@ -10,7 +10,7 @@ import Swal from 'sweetalert2'
 import './CostumerMyService.css'
 
 const URL_GET = 'https://redgas.onrender.com/ClienteServicesGet'
-const URL_TECHNICIAN = 'http://localhost:10101/TecnicoServicesGetAll'
+const URL_TECHNICIAN = 'https://redgas.onrender.com/TecnicoServicesGetAll'
 const URL_DELETE = 'https://redgas.onrender.com/ClienteServicesDelete'
 
 export const CostumerMyService = () => {

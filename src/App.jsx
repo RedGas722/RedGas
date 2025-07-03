@@ -92,11 +92,6 @@ export function AppContent() {
                             <EmployeesBack />
                         </ProtectedRoute>
                     } />
-                    <Route path="/Admin/Factures" element={
-                        <ProtectedRoute requiredTypes={[1]}>
-                            <FacturesBack />
-                        </ProtectedRoute>
-                    } />
                     <Route path="/Admin/Categories" element={
                         <ProtectedRoute requiredTypes={[1]}>
                             <CategoriesBack />
@@ -139,6 +134,11 @@ export function AppContent() {
                     <Route path="/Admin/Sales" element={
                         <ProtectedRoute requiredTypes={[1, 3]}>
                             <SalesBack />
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/Admin/Factures" element={
+                        <ProtectedRoute requiredTypes={[1, 3]}>
+                            <FacturesBack />
                         </ProtectedRoute>
                     } />
 

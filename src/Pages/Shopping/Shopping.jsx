@@ -8,6 +8,7 @@ import SpeedDialIcon from '@mui/material/SpeedDialIcon'
 import SpeedDialAction from '@mui/material/SpeedDialAction'
 import { SvgPayPal } from "../../UI/Svg/SvgPayPal"
 import SvgMercadoPago from "../../UI/Svg/SvgMP"
+import BtnBack from "../../UI/Login_Register/BtnBack"
 
 export const Shopping = () => {
   const [open, setOpen] = useState(false)
@@ -292,6 +293,8 @@ export const Shopping = () => {
     <section className='Distribution'>
       <Header />
       <div className="flex flex-col gap-[80px] text-[var(--main-color)] MainPageContainer">
+        <BtnBack To='/' />
+
         {products.length === 0 && <p>No hay productos para mostrar.</p>}
 
         {products.map((producto, index) => {
