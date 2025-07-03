@@ -183,12 +183,14 @@ export const ServicesInfo = () => {
 
 
    return (
-      <section className="flex flex-col gap-8 p-[5px]">
+      <section id="Service" className="flex flex-col gap-8 p-[5px] ">
          <div className="flex flex-col z-[2] text-center gap-2 sm:gap-0 sm:flex-row sm:justify-between items-center w-full">
             <BtnBack To='/' />
             <h2 className="font-bold text-3xl sm:text-4xl text-[var(--Font-Nav)]">Formulario Servicio</h2>
          </div>
 
+         <section className="AI_history z-[2] gap-4 flex flex-col-reverse items-center md:flex-row md:justify-evenly h-fit w-full">
+            {/* <div className="w-[90%] md:w-[55%] lg:w-[40%] flex-col gap-4 flex items-center NeoContainer_outset_TL h-full overflow-y-auto p-[10px_8px]">
          <section className="AI_history gap-4 flex flex-col-reverse items-center md:flex-row md:justify-evenly h-fit w-full">
             {/* <div className="w-[90%] md:w-[55%] lg:w-[40%] flex-col gap-4 flex items-center NeoContainer_outset_TL h-full overflow-y-auto p-[10px_8px]">
                <h2 className="font-bold text-3xl text-[var(--main-color)]">Historial</h2>
@@ -248,8 +250,8 @@ export const ServicesInfo = () => {
                      </div>
                   </div>
 
-               </div>
-            </div> */}
+               </div> 
+            </div>*/}
             <form
                onSubmit={handleServices}
                className="w-full max-w-xl p-6 z-[2] flex flex-col gap-3 NeoContainer_outset_TL"
