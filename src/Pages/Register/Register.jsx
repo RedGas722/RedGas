@@ -270,7 +270,7 @@ export const Register = () => {
                     </div>
 
                     <div className="flex flex-col items-center gap-3">
-                        <Buttons nameButton="Register" />
+                        <Buttons nameButton="Register" Onclick={() => handleRegister()}/>
                         <Text Have="¿Tienes cuenta?" GoTo="Inicia sesión aquí" nav="/Login" />
                     </div>
                 </form>
