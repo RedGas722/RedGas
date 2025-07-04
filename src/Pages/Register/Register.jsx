@@ -20,16 +20,40 @@ export const Register = () => {
     const [telefono, setTelefono] = useState('')
     const [contrasena, setContrasena] = useState('')
     const [mensaje, setMensaje] = useState('')
+    const [passwordConfirm, setPasswordConfirm] = useState('')
     const navigate = useNavigate()
+
+    const validateInputs = () => {
+    const errors = []
+
+    if (!nombre.trim()) errors.push('El nombre es obligatorio.')
+    if (!apellido.trim()) errors.push('El apellido es obligatorio.')
+    if (!direccion.trim()) errors.push('La dirección es obligatoria.')
+    if (!/^\d{10}$/.test(telefono)) errors.push('El teléfono debe tener exactamente 10 dígitos.')
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) errors.push('El correo electrónico no es válido.')
+    if (contrasena.length < 8) errors.push('La contraseña debe tener al menos 8 caracteres.')
+    if (contrasena !== passwordConfirm) errors.push('Las contraseñas no coinciden.')
+
+    return errors
+}
+
 
     const handleRegister = async (e) => {
         e.preventDefault()
 
+        const errors = validateInputs()
+        if (errors.length > 0) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Revisa los campos',
+                html: `<ul style="text-align: left">${errors.map(err => `<li>${err}</li>`).join('')}</ul>`,
+            })
+            return
+        }
+
         alertSendForm('wait', 'Registrando usuario...', '')
 
         try {
-
-
             const res = await fetch(URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -44,10 +68,12 @@ export const Register = () => {
 
             if (!res.ok) throw new Error('Credenciales inválidas')
             const data = await res.json()
+
             alertSendForm(200, 'Registro exitoso', 'Tu cuenta ha sido creada con éxito. Ahora puedes iniciar sesión.')
+
             setTimeout(() => {
-                navigate('/login')
-            }, 0)
+                navigate('/Login')
+            }, 1500)
         } catch (err) {
             alertSendForm(502, 'Error al registrar usuario', 'Ocurrió un error al registrar tu cuenta. Por favor, intenta nuevamente más tarde.')
         }
@@ -183,9 +209,12 @@ export const Register = () => {
     }
 
     return (
-        <div className="w-full h-[100%] p-[10px_0_0_10px] gap-10 grid grid-cols-2 text-[var(--main-color)]">
-            <BtnBack To='/' />
-            <div className="divForm NeoContainer_outset_TL p-6 flex flex-col items-center w-full max-w-3xl gap-4">
+        <div className="z-[2] w-full p-[5px] h-dvh gap-4 lg:gap-2 flex flex-col text-[var(--main-color)]">
+            <div className="z-[2] flex flex-col text-center gap-2 sm:gap-0 sm:flex-row sm:justify-between items-center w-full">
+                <BtnBack To='/' />
+                <h2 className="font-bold text-3xl sm:text-4xl text-[var(--Font-Nav)]">Registro</h2>
+            </div>
+            <div className="z-[2] divForm NeoContainer_outset_TL p-6 flex flex-col justify-self-center self-center items-center w-full max-w-3xl gap-4">
                 <h1 className="text-center text-3xl md:text-4xl">¡Bienvenido!</h1>
                 <form className="flex flex-col gap-6 w-full" onSubmit={handleRegister}>
                     {/* Name & LastName */}
@@ -195,6 +224,7 @@ export const Register = () => {
                             ForID="Name"
                             childLabel="Nombre"
                             placeholder="Nombre"
+                            autoComplete="given-name"
                             value={nombre}
                             onChange={e => setNombre(e.target.value)}
                         />
@@ -203,6 +233,7 @@ export const Register = () => {
                             ForID="LastName"
                             childLabel="Apellido"
                             placeholder="Apellido"
+                            autoComplete="family-name"
                             value={apellido}
                             onChange={e => setApellido(e.target.value)}
                         />
@@ -215,6 +246,7 @@ export const Register = () => {
                             ForID="Phone"
                             childLabel="Teléfono"
                             placeholder="3*********"
+                            autoComplete="tel"
                             value={telefono}
                             onChange={e => setTelefono(e.target.value)}
                         />
@@ -223,6 +255,7 @@ export const Register = () => {
                             ForID="Address"
                             childLabel="Dirección"
                             placeholder="Cra 22 #19 ******"
+                            autoComplete="street-address"
                             value={direccion}
                             onChange={e => setDireccion(e.target.value)}
                         />
@@ -235,6 +268,8 @@ export const Register = () => {
                         childLabel="Correo electrónico"
                         placeholder="example@gmail.com"
                         value={correo}
+                        autoComplete="email"
+                        required={true}
                         onChange={e => setCorreo(e.target.value)}
                     />
 
@@ -245,6 +280,8 @@ export const Register = () => {
                             ForID="password"
                             childLabel="Contraseña"
                             placeholder="Contraseña"
+                            autoComplete="new-password"
+                            required={true}
                             value={contrasena}
                             onChange={e => setContrasena(e.target.value)}
                         />
@@ -253,11 +290,15 @@ export const Register = () => {
                             ForID="passwordConfirm"
                             childLabel="Confirmar contraseña"
                             placeholder="Confirmar contraseña"
+                            autoComplete="new-password"
+                            required={true}
+                            value={passwordConfirm}
+                            onChange={e => setPasswordConfirm(e.target.value)}
                         />
                     </div>
 
                     <div className="flex flex-col items-center gap-3">
-                        <Buttons nameButton="Register" />
+                        <Buttons type='submit' nameButton="Register"/>
                         <Text Have="¿Tienes cuenta?" GoTo="Inicia sesión aquí" nav="/Login" />
                     </div>
                 </form>

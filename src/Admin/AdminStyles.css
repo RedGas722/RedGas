@@ -1,18 +1,8 @@
-.btnDown-left {
-    margin-top: 65px;
-    margin-left: 10px;
-}
-.btnDown {
-    margin-top: 5px;
-    margin-left: 0px;
-}
 .text-shadow {
     text-shadow: 0px 0px 0px rgba(0, 0, 0, 0.7);
 }
 
-/* .Admin{
-    padding: 2% 0 2% 1%;
-} */
+
 .SectionSIde {
     overflow-y: scroll;
 }

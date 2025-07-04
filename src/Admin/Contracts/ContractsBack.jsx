@@ -1,199 +1,235 @@
-import { useState, useEffect, useRef } from 'react';
-import { RegisterModal } from './Register/RegisterModal';
-import { UpdateModal } from './Update/Update';
-import { buscarContratoPorEmpleado } from './Get/Get';
-import { BtnBack } from '../../UI/Login_Register/BtnBack';
-import ButtonBack from '../UI/ButtonBack/ButtonBack';
-import CardContractsBack from './Get/CardContractsBack';
-import Inputs from '../UI/Inputs/Inputs';
+import { useState, useEffect, useRef } from 'react'
+import { RegisterModal } from './Register/RegisterModal'
+import { UpdateModal } from './Update/Update'
+import { BtnBack } from '../../UI/Login_Register/BtnBack'
+import { InputLabel } from '../../UI/Login_Register/InputLabel/InputLabel'
+import CardContractsBack from './Get/CardContractsBack'
+import { buscarContratoPorEmpleado } from './Get/Get'
+import { Paginator } from '../../UI/Paginator/Paginator'
+import { Buttons } from '../../UI/Login_Register/Buttons'
 
 export const ContractsBack = () => {
-  const [showRegisterModal, setShowRegisterModal] = useState(false);
-  const [showUpdateModal, setShowUpdateModal] = useState(false);
-  const [contratos, setContratos] = useState([]);
-  const [refrescar, setRefrescar] = useState(false);
-  const [contratoSeleccionado, setContratoSeleccionado] = useState(null);
-  const [idBusqueda, setIdBusqueda] = useState('');
-  const [contratoBuscado, setContratoBuscado] = useState(null);
-  const [errorBusqueda, setErrorBusqueda] = useState('');
-  const [sugerencias, setSugerencias] = useState([]);
-  const contenedorRef = useRef(null);
-  const inputRef = useRef(null);
+  const [showRegisterModal, setShowRegisterModal] = useState(false)
+  const [showUpdateModal, setShowUpdateModal] = useState(false)
+  const [contratos, setContratos] = useState([])
+  const [empleados, setEmpleados] = useState([])
+  const [admins, setAdmins] = useState([])
+  const [refrescar, setRefrescar] = useState(false)
+  const [correoBusqueda, setCorreoBusqueda] = useState('')
+  const [contratoBuscado, setContratoBuscado] = useState(null)
+  const [errorBusqueda, setErrorBusqueda] = useState('')
+  const [sugerencias, setSugerencias] = useState([])
+  const [paginaActual, setPaginaActual] = useState(1)
+  const [totalPaginas, setTotalPaginas] = useState(1)
 
-  const URL = 'https://redgas.onrender.com/ContratoGet';
+  const contenedorRef = useRef(null)
 
-  async function fetchContratos() {
+  const fetchEmpleados = async () => {
     try {
-      const res = await fetch('https://redgas.onrender.com/ContratoGetAll');
-      if (!res.ok) throw new Error('Error al obtener contratos');
-      const data = await res.json();
-      setContratos(data.data || []);
+      const res = await fetch('https://redgas.onrender.com/EmpleadoGetAll')
+      if (!res.ok) throw new Error('Error al obtener empleados')
+      const data = await res.json()
+      setEmpleados(data.data || [])
     } catch (error) {
-      console.error(error);
+      console.error(error)
+    }
+  }
+
+  const fetchAdmins = async () => {
+    try {
+      const res = await fetch('https://redgas.onrender.com/AdminGetAll')
+      if (!res.ok) throw new Error('Error al obtener admins')
+      const data = await res.json()
+      setAdmins(data.data || [])
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const fetchContratos = async (pagina = 1) => {
+    try {
+      const res = await fetch(`https://redgas.onrender.com/ContratoGetAllPaginated?page=${pagina}`)
+      if (!res.ok) throw new Error('Error al obtener contratos')
+      const data = await res.json()
+      const resultado = data.data
+
+      setContratos(resultado.data || [])
+      setPaginaActual(resultado.currentPage)
+      setTotalPaginas(resultado.totalPages)
+    } catch (error) {
+      console.error(error)
     }
   }
 
   useEffect(() => {
-    fetchContratos();
-  }, []);
+    fetchContratos(paginaActual)
+    fetchEmpleados()
+    fetchAdmins()
+  }, [paginaActual])
 
   useEffect(() => {
     if (refrescar) {
-      fetchContratos();
-      setRefrescar(false);
-      setContratoBuscado(null);
-      setErrorBusqueda('');
-      setIdBusqueda('');
+      fetchContratos(1)
+      setPaginaActual(1)
+      setRefrescar(false)
+      setContratoBuscado(null)
+      setErrorBusqueda('')
+      setCorreoBusqueda('')
     }
-  }, [refrescar]);
+  }, [refrescar])
 
-  // 🧠 Autocomplete filtrando contratos localmente
   useEffect(() => {
-    if (idBusqueda.trim() === '') {
-      setSugerencias([]);
-      return;
+    if (correoBusqueda.trim() === '') {
+      setSugerencias([])
+      return
     }
-    const filtrados = contratos.filter((contrato) =>
-      contrato.id_empleado && contrato.id_empleado.toString().includes(idBusqueda)
-    );
-    setSugerencias(filtrados.slice(0, 5));
-  }, [idBusqueda, contratos]);
+    const filtrados = empleados.filter(empleado =>
+      empleado.correo_empleado.toLowerCase().includes(correoBusqueda.toLowerCase())
+    )
+    setSugerencias(filtrados.slice(0, 5))
+  }, [correoBusqueda, empleados])
 
-  // 🧽 Cierre del dropdown si se hace clic fuera
   useEffect(() => {
-    const manejarClickFuera = (event) => {
-      if (
-        contenedorRef.current &&
-        !contenedorRef.current.contains(event.target)
-      ) {
-        setSugerencias([]);
+    const manejarClickFuera = e => {
+      if (contenedorRef.current && !contenedorRef.current.contains(e.target)) {
+        setSugerencias([])
       }
-    };
-    document.addEventListener('mousedown', manejarClickFuera);
-    return () => document.removeEventListener('mousedown', manejarClickFuera);
-  }, []);
+    }
+    document.addEventListener('mousedown', manejarClickFuera)
+    return () => document.removeEventListener('mousedown', manejarClickFuera)
+  }, [])
 
-  // Limpia contratoBuscado y errorBusqueda si el input queda vacío
   useEffect(() => {
-    if (idBusqueda.trim() === '') {
-      setContratoBuscado(null);
-      setErrorBusqueda('');
-    }
-  }, [idBusqueda]);
+      if (correoBusqueda.trim() === '') {
+        // Cuando el input esté vacío, limpiar la búsqueda y mostrar todos los contratos
+        setContratoBuscado(null)
+        setErrorBusqueda('')
+        fetchContratos(1)
+        setPaginaActual(1)
+      }
+    }, [correoBusqueda])
 
-  const abrirModalActualizar = (contrato) => {
-    setContratoSeleccionado(contrato);
-    setShowUpdateModal(true);
-  };
+  const buscarContrato = async (correo) => {
+    setErrorBusqueda('')
+    setContratoBuscado(null)
 
-  const cerrarModal = () => {
-    setShowUpdateModal(false);
-    setContratoSeleccionado(null);
-  };
-
-  const buscarContrato = async () => {
-    setErrorBusqueda('');
-    setContratoBuscado(null);
     try {
-      const contrato = await buscarContratoPorEmpleado(idBusqueda);
-      setContratoBuscado(contrato);
+      const empleado = empleados.find(e => e.correo_empleado.toLowerCase() === correo.toLowerCase().trim())
+      if (!empleado) {
+        setErrorBusqueda('Empleado no encontrado')
+        return
+      }
+      const contrato = await buscarContratoPorEmpleado(empleado.id_empleado)
+      if (contrato) {
+        setContratoBuscado(contrato)
+        setSugerencias([])
+      } else {
+        setErrorBusqueda('No se encontró contrato para ese empleado.')
+      }
     } catch (error) {
-      setErrorBusqueda(error.message);
+      setErrorBusqueda('Error al buscar contrato.')
     }
-  };
+  }
+
+  const handleUpdateClick = (contrato) => setShowUpdateModal(contrato)
 
   return (
-    <div className="p-[20px] flex flex-col gap-[20px]">
-      <div className="flex items-center gap-[20px]">
-        <div>
-          <h1 className="font-bold text-[20px]">Contrato BACK-OFFICE</h1>
-          <div className='btnDown'>
-            <BtnBack To='/Admin' />
-          </div>
-        </div>
-        <div className="relative" ref={contenedorRef}>
-          <div className="flex items-center gap-2 border border-gray-300 rounded px-2 py-1">
-            <Inputs
+    <section className="w-full h-full p-[var(--p-admin)]">
+      <BtnBack To="/Admin" />
+
+      <div className="p-[var(--p-admin-sub)] h-full flex flex-col gap-2">
+        <h1 className="font-bold text-3xl z-[2] text-[var(--main-color)]">Contratos</h1>
+
+        <div className="NeoContainer_outset_TL z-[2] flex gap-4 flex-wrap items-end w-fit p-[var(--p-admin-control)]">
+          <div className="relative" ref={contenedorRef}>
+            <InputLabel
+              radius="10"
               type="1"
-              placeholder="ID del empleado"
-              value={idBusqueda}
-              onChange={(e) => setIdBusqueda(e.target.value)}
-              className="outline-none"
-              ref={inputRef}
+              ForID="correo_empleado_busqueda"
+              placeholder="Buscar contrato por correo"
+              childLabel="Buscar contrato"
+              value={correoBusqueda}
+              onChange={e => setCorreoBusqueda(e.target.value)}
+              className="w-full"
+              placeholderError={!!errorBusqueda}
             />
-            <button
-              onClick={buscarContrato}
-              aria-label="Buscar contrato"
-              className="text-gray-600 hover:text-gray-900"
-            >
-              🔍
-            </button>
+            {sugerencias.length > 0 && (
+              <ul className="absolute z-10 bg-white border border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto shadow w-[230px]">
+                {sugerencias.map(emp => (
+                  <li
+                    key={emp.id_empleado}
+                    onClick={() => {
+                      setCorreoBusqueda(emp.correo_empleado)
+                      buscarContrato(emp.correo_empleado)
+                      setSugerencias([])
+                    }}
+                    className="p-2 hover:bg-gray-100 cursor-pointer z-[50]"
+                  >
+                    {emp.nombre_empleado} - {emp.correo_empleado}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
-          {sugerencias.length > 0 && (
-            <ul className="absolute z-10 bg-white border border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto w-full shadow">
-              {sugerencias.map((contrato) => (
-                <li
-                  key={contrato.id_contrato}
-                  onClick={() => {
-                    setContratoBuscado(contrato);
-                    setIdBusqueda(contrato.id_empleado.toString());
-                    setSugerencias([]);
-                  }}
-                  className="p-2 hover:bg-gray-100 cursor-pointer"
-                >
-                  {contrato.id_empleado}
-                </li>
-              ))}
-            </ul>
-          )}
+          <div className="flex w-fit h-fit flex-wrap justify-center items-center gap-[20px]">
+            <Buttons
+              radius="10"
+              nameButton="Registrar"
+              textColor="var(--Font-Nav)"
+              Onclick={() => setShowRegisterModal(true)}
+            />
+          </div>
         </div>
-        <ButtonBack ClickMod={() => setShowRegisterModal(true)} Child="Registrar" />
-      </div>
-      {errorBusqueda && <p className="text-red-600 text-sm">{errorBusqueda}</p>}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {contratoBuscado && (Array.isArray(contratoBuscado) ? contratoBuscado.length > 0 : contratoBuscado.id_contrato) ? (
-          Array.isArray(contratoBuscado)
-            ? contratoBuscado.map((contrato) => (
-              <CardContractsBack
-                key={contrato.id_contrato}
-                contrato={contrato}
-                setRefrescar={setRefrescar}
-                onUpdateClick={abrirModalActualizar}
-              />
-            ))
-            : <CardContractsBack
-              key={contratoBuscado.id_contrato}
-              contrato={contratoBuscado}
-              setRefrescar={setRefrescar}
-              onUpdateClick={abrirModalActualizar}
-            />
-        ) : contratoBuscado && (Array.isArray(contratoBuscado) ? contratoBuscado.length === 0 : !contratoBuscado.id_contrato) ? (
-          <div className="col-span-full text-yellow-700 bg-yellow-100 p-4 rounded text-center font-semibold">
-            No se encontró contrato para este empleado.
-          </div>
-        ) : (
-          contratos.map((contrato) => (
+
+        {errorBusqueda && <p className="text-red-600 text-sm">{errorBusqueda}</p>}
+
+        <div className="flex flex-wrap items-center gap-6">
+          {(contratoBuscado
+            ? Array.isArray(contratoBuscado) ? contratoBuscado : [contratoBuscado]
+            : contratos
+          ).map(contrato => (
             <CardContractsBack
               key={contrato.id_contrato}
               contrato={contrato}
               setRefrescar={setRefrescar}
-              onUpdateClick={abrirModalActualizar}
+              onUpdateClick={handleUpdateClick}
+              empleados={empleados}
+              admins={admins}
             />
-          ))
+          ))}
+        </div>
+
+        {!contratoBuscado && (
+          <Paginator
+            currentPage={paginaActual}
+            totalPages={totalPaginas}
+            onPageChange={nuevaPagina => {
+              if (nuevaPagina !== paginaActual) {
+                setPaginaActual(nuevaPagina)
+              }
+            }}
+          />
+        )}
+
+        {showRegisterModal && (
+          <RegisterModal
+            onClose={() => setShowRegisterModal(false)}
+            setRefrescar={setRefrescar}
+            empleados={empleados}
+            admins={admins}
+          />
+        )}
+
+        {showUpdateModal && (
+          <UpdateModal
+            onClose={() => setShowUpdateModal(false)}
+            setRefrescar={setRefrescar}
+            contratoCarta={showUpdateModal}
+          />
         )}
       </div>
-      {showRegisterModal && (
-        <RegisterModal onClose={() => setShowRegisterModal(false)} setRefrescar={setRefrescar} />
-      )}
-      {showUpdateModal && contratoSeleccionado && (
-        <UpdateModal
-          onClose={cerrarModal}
-          setRefrescar={setRefrescar}
-          contratoCarta={contratoSeleccionado}
-        />
-      )}
-    </div>
-  );
-};
+    </section>
+  )
+}
 
-export default ContractsBack;
+export default ContractsBack

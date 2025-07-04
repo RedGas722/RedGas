@@ -1,67 +1,67 @@
-import { useState, useEffect } from "react";
-import Inputs from "../../UI/Inputs/Inputs"; 
+import { useState, useEffect } from "react"
+import { InputLabel } from "../../../UI/Login_Register/InputLabel/InputLabel"
 
 export const UpdateModal = ({ onClose, setRefrescar, clienteCarta }) => {
-  const [cliente, setCliente] = useState(null);
-  const [nuevoCorreo, setNuevoCorreo] = useState("");
-  const [correoParaBusqueda, setCorreoParaBusqueda] = useState(""); // correo para buscar cliente en backend
-  const [mensaje, setMensaje] = useState("");
-  const [errores, setErrores] = useState({});
-  const [nombre, setNombre] = useState("");
-  const [apellido, setApellido] = useState("");
+  const [cliente, setCliente] = useState(null)
+  const [nuevoCorreo, setNuevoCorreo] = useState("")
+  const [correoParaBusqueda, setCorreoParaBusqueda] = useState("") // correo para buscar cliente en backend
+  const [mensaje, setMensaje] = useState("")
+  const [errores, setErrores] = useState({})
+  const [nombre, setNombre] = useState("")
+  const [apellido, setApellido] = useState("")
 
   const validarCampos = () => {
-    const errores = {};
-    const correoRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const errores = {}
+    const correoRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
-    if (!nombre.trim()) errores.nombre = "El nombre es obligatorio";
-    if (!apellido.trim()) errores.apellido = "El apellido es obligatorio";
+    if (!nombre.trim()) errores.nombre = "El nombre es obligatorio"
+    if (!apellido.trim()) errores.apellido = "El apellido es obligatorio"
 
     if (!nuevoCorreo.trim()) {
-      errores.nuevoCorreo = "El correo es obligatorio.";
+      errores.nuevoCorreo = "El correo es obligatorio."
     } else if (!correoRegex.test(nuevoCorreo)) {
-      errores.nuevoCorreo = "Correo inválido.";
+      errores.nuevoCorreo = "Correo inválido."
     }
 
     if (!cliente?.telefono_cliente?.trim()) {
-      errores.telefono_cliente = "El teléfono es obligatorio.";
+      errores.telefono_cliente = "El teléfono es obligatorio."
     } else if (
       cliente.telefono_cliente.length !== 10 ||
       !/^\d+$/.test(cliente.telefono_cliente)
     ) {
-      errores.telefono_cliente = "Teléfono debe tener 10 dígitos numéricos.";
+      errores.telefono_cliente = "Teléfono debe tener 10 dígitos numéricos."
     }
 
-    return errores;
-  };
+    return errores
+  }
 
   useEffect(() => {
     if (clienteCarta) {
-      setCliente(clienteCarta);
-      setNuevoCorreo(clienteCarta.correo_cliente);
-      setCorreoParaBusqueda(clienteCarta.correo_cliente); // Inicialmente, el correo para búsqueda es el actual
+      setCliente(clienteCarta)
+      setNuevoCorreo(clienteCarta.correo_cliente)
+      setCorreoParaBusqueda(clienteCarta.correo_cliente) // Inicialmente, el correo para búsqueda es el actual
 
-      const partes = clienteCarta.nombre_cliente.trim().split(/\s+/); // Maneja múltiples espacios
+      const partes = clienteCarta.nombre_cliente.trim().split(/\s+/) // Maneja múltiples espacios
 
-        const nombre = partes.slice(0, 2).join(" "); // Primeras dos palabras como nombre
-        const apellido = partes.slice(2).join(" ");  // El resto como apellido
+        const nombre = partes.slice(0, 2).join(" ") // Primeras dos palabras como nombre
+        const apellido = partes.slice(2).join(" ")  // El resto como apellido
 
-        setNombre(nombre || "");
-        setApellido(apellido || "");
+        setNombre(nombre || "")
+        setApellido(apellido || "")
     }
-  }, [clienteCarta]);
+  }, [clienteCarta])
 
   const actualizarCliente = async () => {
-    const erroresValidados = validarCampos();
+    const erroresValidados = validarCampos()
     if (Object.keys(erroresValidados).length > 0) {
-      setErrores(erroresValidados);
-      return;
+      setErrores(erroresValidados)
+      return
     }
 
-    setErrores({});
-    setMensaje("");
+    setErrores({})
+    setMensaje("")
 
-    const direccionActualizada = cliente.direccion_cliente?.trim() === "" ? "sin direccion" : cliente.direccion_cliente;
+    const direccionActualizada = cliente.direccion_cliente?.trim() === "" ? "sin direccion" : cliente.direccion_cliente
 
     const body = {
       nombre_cliente: `${nombre.trim()} ${apellido.trim()}`,
@@ -69,42 +69,42 @@ export const UpdateModal = ({ onClose, setRefrescar, clienteCarta }) => {
       telefono_cliente: cliente.telefono_cliente,
       direccion_cliente: direccionActualizada,
       correo_cliente: correoParaBusqueda, // Usamos correo para buscar cliente (puede ser diferente al nuevoCorreo)
-    };
+    }
 
     try {
       const res = await fetch("https://redgas.onrender.com/ClienteDataUpdate", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
-      });
+      })
 
       if (res.ok) {
-        setMensaje("Cliente actualizado exitosamente.");
-        setRefrescar(true);
+        setMensaje("Cliente actualizado exitosamente.")
+        setRefrescar(true)
 
         // Actualizar correoParaBusqueda solo si el correo nuevo cambió respecto al usado para buscar
         if (correoParaBusqueda !== nuevoCorreo) {
-          setCorreoParaBusqueda(nuevoCorreo);
+          setCorreoParaBusqueda(nuevoCorreo)
         }
       } else {
-        const data = await res.json();
-        setMensaje(data.errorInfo || "Error al actualizar cliente.");
+        const data = await res.json()
+        setMensaje(data.errorInfo || "Error al actualizar cliente.")
       }
     } catch {
-      setMensaje("Error de red al actualizar.");
+      setMensaje("Error de red al actualizar.")
     }
-  };
+  }
 
   const cancelarEdicion = () => {
-    setCliente(null);
-    setNuevoCorreo("");
-    setCorreoParaBusqueda("");
-    setMensaje("");
-    setErrores({});
-    setNombre("");
-    setApellido("");
-    onClose();
-  };
+    setCliente(null)
+    setNuevoCorreo("")
+    setCorreoParaBusqueda("")
+    setMensaje("")
+    setErrores({})
+    setNombre("")
+    setApellido("")
+    onClose()
+  }
 
   return (
     <div className="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50">
@@ -113,59 +113,69 @@ export const UpdateModal = ({ onClose, setRefrescar, clienteCarta }) => {
 
         {cliente && (
           <>
-            <Inputs
-              Type="1"
-              Place="Nombre"
-              Value={nombre}
+            <InputLabel
+              type="1"
+              ForID="nombre_cliente"
+              placeholder="Nombre"
+              childLabel="Nombre"
+              value={nombre}
               onChange={(e) => setNombre(e.target.value)}
               className="w-full"
+              placeholderError={!!errores.nombre}
             />
             {errores.nombre && (
               <p className="text-red-600 text-sm">{errores.nombre}</p>
             )}
-
-            <Inputs
-              Type="1"
-              Place="Apellido"
-              Value={apellido}
+            <InputLabel
+              type="1"
+              ForID="apellido_cliente"
+              placeholder="Apellido"
+              childLabel="Apellido"
+              value={apellido}
               onChange={(e) => setApellido(e.target.value)}
               className="w-full"
+              placeholderError={!!errores.apellido}
             />
             {errores.apellido && (
               <p className="text-red-600 text-sm">{errores.apellido}</p>
             )}
-
-            <Inputs
-              Type="2"
-              Place="Nuevo correo"
-              Value={nuevoCorreo}
+            <InputLabel
+              type="2"
+              ForID="correo_cliente"
+              placeholder="Nuevo correo"
+              childLabel="Correo"
+              value={nuevoCorreo}
               onChange={(e) => {
-                setNuevoCorreo(e.target.value);
-                setErrores((prev) => ({ ...prev, nuevoCorreo: null }));
+                setNuevoCorreo(e.target.value)
+                setErrores((prev) => ({ ...prev, nuevoCorreo: null }))
               }}
               className="w-full"
+              placeholderError={!!errores.nuevoCorreo}
             />
             {errores.nuevoCorreo && (
               <p className="text-red-600 text-sm">{errores.nuevoCorreo}</p>
             )}
-
-            <Inputs
-              Type="6"
-              Place="Teléfono"
-              Value={cliente.telefono_cliente}
+            <InputLabel
+              type="6"
+              ForID="telefono_cliente"
+              placeholder="Teléfono"
+              childLabel="Teléfono"
+              value={cliente.telefono_cliente}
               onChange={(e) =>
                 setCliente({ ...cliente, telefono_cliente: e.target.value })
               }
               className="w-full"
+              placeholderError={!!errores.telefono_cliente}
             />
             {errores.telefono_cliente && (
               <p className="text-red-600 text-sm">{errores.telefono_cliente}</p>
             )}
-
-            <Inputs
-              Type="1"
-              Place="Dirección"
-              Value={cliente.direccion_cliente}
+            <InputLabel
+              type="1"
+              ForID="direccion_cliente"
+              placeholder="Dirección"
+              childLabel="Dirección"
+              value={cliente.direccion_cliente}
               onChange={(e) =>
                 setCliente({ ...cliente, direccion_cliente: e.target.value })
               }
@@ -201,5 +211,5 @@ export const UpdateModal = ({ onClose, setRefrescar, clienteCarta }) => {
         )}
       </div>
     </div>
-  );
-};
+  )
+}

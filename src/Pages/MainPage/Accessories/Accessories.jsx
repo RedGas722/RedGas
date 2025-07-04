@@ -21,7 +21,7 @@ export const AccessoriesSect = () => {
     }, []);
 
     return (
-        <section id="AccessoriesSect" className="NeoContainer_outset_TL flex flex-col p-[15px] gap-[20px] text-[var(--Font-Nav)]">
+        <section id="AccessoriesSect" className="z-[2] NeoContainer_outset_TL !rounded-[40px] flex flex-col p-[15px] gap-[20px] text-[var(--Font-Nav)]">
             <TitleSectCategory IconClass='text-[var(--Font-Nav-shadow)]' iconCategory={faShower} nameCategory="Accesorios" className='flex flex-row justify-start items-center gap-[8px]' />
             <Cards
                 uniqueId="accessories"

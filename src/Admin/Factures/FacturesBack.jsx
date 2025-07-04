@@ -1,221 +1,247 @@
-import { useState, useEffect, useRef } from 'react';
-import { RegisterModal } from './Register/RegisterModal';
-import { UpdateModal } from './Update/Update';
-import { ButtonBack } from '../UI/ButtonBack/ButtonBack';
-import { BtnBack } from "../../UI/Login_Register/BtnBack";
-import CardsFacturesBack from './Get/CardFacturesBack';
-import Inputs from '../UI/Inputs/Inputs';
-import { buscarFacturaPorID } from './Get/Get';
+import { useState, useEffect, useRef } from 'react'
+import { RegisterModal } from './Register/RegisterModal'
+import { UpdateModal } from './Update/Update'
+import { ProductsModal } from './Get/ProductsModal'
+import { BtnBack } from "../../UI/Login_Register/BtnBack"
+import { InputLabel } from '../../UI/Login_Register/InputLabel/InputLabel'
+import { Paginator } from '../../UI/Paginator/Paginator'
+import { Buttons } from '../../UI/Login_Register/Buttons'
+import CardsFacturesBack from './Get/CardFacturesBack'
+import { useBuscarFacturas } from './Get/Get'
 
 export const FacturesBack = () => {
-  const [showRegisterModal, setShowRegisterModal] = useState(false);
-  const [showUpdateModal, setShowUpdateModal] = useState(false);
-  const [facturas, setFacturas] = useState([]);
-  const [clientes, setClientes] = useState([]);
-  const [empleados, setEmpleados] = useState([]);
-  const [refrescar, setRefrescar] = useState(false);
+  const [showRegisterModal, setShowRegisterModal] = useState(false)
+  const [showUpdateModal, setShowUpdateModal] = useState(null)
+  const [showProductsModal, setShowProductsModal] = useState(false)
+  const [facturaParaProductos, setFacturaParaProductos] = useState(null)
+  const [facturas, setFacturas] = useState([])
+  const [facturasOriginal, setFacturasOriginal] = useState([])
+  const [clientes, setClientes] = useState([])
+  const [empleados, setEmpleados] = useState([])
+  const [paginaActual, setPaginaActual] = useState(1)
+  const [totalPaginas, setTotalPaginas] = useState(1)
+  const [refrescar, setRefrescar] = useState(false)
+  const [mostrarSugerenciasCliente, setMostrarSugerenciasCliente] = useState(false)
+  const [mostrarSugerenciasEmpleado, setMostrarSugerenciasEmpleado] = useState(false)
+  const contenedorRefCliente = useRef(null)
+  const contenedorRefEmpleado = useRef(null)
 
-  const [facturaSeleccionada, setFacturaSeleccionada] = useState(null);
-  const [idBusqueda, setIdBusqueda] = useState('');
-  const [facturaBuscada, setFacturaBuscada] = useState(null);
-  const [errorBusqueda, setErrorBusqueda] = useState('');
-  const [sugerencias, setSugerencias] = useState([]);
+  const {
+    clienteCorreoBusqueda, empleadoBusqueda,
+    clienteSugerencias, empleadoSugerencias,
+    handleClienteInput, handleEmpleadoInput,
+    handleBuscar, handleLimpiar,
+    setClienteCorreoBusqueda, setEmpleadoBusqueda
+  } = useBuscarFacturas(clientes, empleados, facturasOriginal, setFacturas, fetchFacturas)
 
-  const contenedorRef = useRef(null);
-
-  const fetchFacturas = async () => {
+  async function fetchFacturas(pagina = 1) {
     try {
-      const res = await fetch('https://redgas.onrender.com/FacturaGetAll');
-      const data = await res.json();
-      setFacturas(data.data || []);
+      const res = await fetch(`https://redgas.onrender.com/FacturaGetAllPaginated?page=${pagina}`)
+      if (!res.ok) throw new Error('Error al obtener facturas')
+      const data = await res.json()
+      const resultado = data.data
+
+      setFacturas(resultado.data || [])
+      setFacturasOriginal(resultado.data || [])
+      setPaginaActual(resultado.currentPage)
+      setTotalPaginas(resultado.totalPages)
     } catch (error) {
-      console.error('Error al obtener facturas', error);
+      console.error(error)
     }
-  };
+  }
 
   const fetchClientes = async () => {
     try {
-      const res = await fetch('https://redgas.onrender.com/ClienteGetAll');
-      const data = await res.json();
-      setClientes(data.data || []);
+      const res = await fetch('https://redgas.onrender.com/ClienteGetAllEmails')
+      const data = await res.json()
+      setClientes(data.data || [])
     } catch (error) {
-      console.error('Error al obtener clientes', error);
+      console.error('Error al obtener clientes', error)
     }
-  };
+  }
 
   const fetchEmpleados = async () => {
     try {
-      const res = await fetch('https://redgas.onrender.com/EmpleadoGetAll');
-      const data = await res.json();
-      setEmpleados(data.data || []);
+      const res = await fetch('https://redgas.onrender.com/EmpleadoGetAllEmails')
+      const data = await res.json()
+      setEmpleados(data.data || [])
     } catch (error) {
-      console.error('Error al obtener empleados', error);
+      console.error('Error al obtener empleados', error)
     }
-  };
-
-  const handleBuscarFactura = async () => {
-    setErrorBusqueda('');
-    setFacturaBuscada(null);
-
-    if (!idBusqueda.trim()) {
-      // Si el campo está vacío, solo mostramos todas las facturas
-      setFacturaBuscada(null);
-      setSugerencias([]);
-      return;
-    }
-
-    try {
-      const resultado = await buscarFacturaPorID(idBusqueda);
-      setFacturaBuscada(resultado);
-      setSugerencias([]);
-    } catch (err) {
-      setErrorBusqueda(err.message);
-    }
-  };
-
-  const abrirModalActualizar = (factura) => {
-    setFacturaSeleccionada(factura);
-    setShowUpdateModal(true);
-  };
-
-  const cerrarModalActualizar = () => {
-    setFacturaSeleccionada(null);
-    setShowUpdateModal(false);
-  };
+  }
 
   useEffect(() => {
-    fetchFacturas();
-    fetchClientes();
-    fetchEmpleados();
-  }, []);
+    fetchFacturas(paginaActual)
+    fetchClientes()
+    fetchEmpleados()
+  }, [paginaActual])
 
   useEffect(() => {
     if (refrescar) {
-      fetchFacturas();
-      setRefrescar(false);
-      setFacturaBuscada(null);
-      setErrorBusqueda('');
-      setIdBusqueda('');
+      fetchFacturas(1)
+      fetchClientes()
+      fetchEmpleados()
+      setPaginaActual(1)
+      setRefrescar(false)
+      handleLimpiar()
     }
-  }, [refrescar]);
+  }, [refrescar])
 
   useEffect(() => {
-    if (!idBusqueda.trim()) {
-      setSugerencias([]);
-      return;
-    }
-
-    const filtradas = facturas.filter((f) =>
-      f.id_factura.toString().includes(idBusqueda.trim())
-    );
-    setSugerencias(filtradas.slice(0, 5)); // máximo 5 sugerencias
-  }, [idBusqueda, facturas]);
-
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (contenedorRef.current && !contenedorRef.current.contains(e.target)) {
-        setSugerencias([]);
+    const manejarClickFuera = (e) => {
+      if (
+        contenedorRefCliente.current && !contenedorRefCliente.current.contains(e.target)
+      ) {
+        setMostrarSugerenciasCliente(false)
       }
-    };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+      if (
+        contenedorRefEmpleado.current && !contenedorRefEmpleado.current.contains(e.target)
+      ) {
+        setMostrarSugerenciasEmpleado(false)
+      }
+    }
+
+    document.addEventListener('mousedown', manejarClickFuera)
+    return () => document.removeEventListener('mousedown', manejarClickFuera)
+  }, [])
+  
+
+  const abrirModalActualizar = (factura) => setShowUpdateModal(factura)
+  const cerrarModalActualizar = () => setShowUpdateModal(null)
+
+  const abrirModalProductos = (factura) => {
+    setFacturaParaProductos(factura)
+    setShowProductsModal(true)
+  }
+
+  const cerrarModalProductos = () => {
+    setFacturaParaProductos(null)
+    setShowProductsModal(false)
+  }
 
   return (
-    <div className="p-[20px] flex flex-col gap-[20px]">
-      <div className="flex items-center gap-[20px] flex-wrap">
-        <div>
-          <h1 className="font-bold text-[20px]">Factura BACK-OFFICE</h1>
-           <div className='btnDown'>
-            <BtnBack To='/Admin'  />
-          </div>
-        </div>
+    <section className="w-full h-full p-[var(--p-admin)]">
+      <BtnBack To="/Admin" />
 
-        {/* Buscador con sugerencias */}
-        <div className="relative" ref={contenedorRef}>
-          <div className="flex items-center gap-2 border border-gray-300 rounded px-2 py-1 bg-white">
-            <Inputs
+      <div className="p-[var(--p-admin-sub)] h-full flex flex-col gap-2">
+        <h1 className="font-bold z-[2] text-3xl text-[var(--main-color)]">Facturas</h1>
+        <div className="NeoContainer_outset_TL z-[50] flex gap-4 flex-wrap items-end w-fit p-[var(--p-admin-control)]">
+          {/* Cliente */}
+          <div className="relative" ref={contenedorRefCliente}>
+            <InputLabel
+              radius="10"
               type="1"
-              placeholder="ID de la factura"
-              value={idBusqueda}
-              onChange={(e) => setIdBusqueda(e.target.value)}
-              className="outline-none"
+              ForID="clienteBusqueda"
+              placeholder="Buscar por cliente"
+              childLabel="Buscar por cliente"
+              value={clienteCorreoBusqueda}
+              onChange={(e) => {
+              handleClienteInput(e.target.value)   
+              setMostrarSugerenciasCliente(true)}}
             />
-            <button
-              onClick={handleBuscarFactura}
-              aria-label="Buscar factura"
-              className="text-gray-600 hover:text-gray-900"
-            >
-              🔍
-            </button>
+            {mostrarSugerenciasCliente && clienteSugerencias.length > 0 && (
+              <div className="absolute z-[10] bg-white border border-gray-300 rounded mt-1 shadow w-full">
+                {clienteSugerencias.map(cliente => (
+                  <div
+                    key={cliente.id_cliente}
+                    onClick={() => {
+                      setClienteCorreoBusqueda(cliente.correo_cliente)
+                      setMostrarSugerenciasCliente(false)
+                    }}
+                    className="p-2 hover:bg-gray-100 cursor-pointer"
+                  >
+                    {cliente.nombre_cliente} - {cliente.correo_cliente}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
-          {sugerencias.length > 0 && (
-            <ul className="absolute z-10 bg-white border border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto w-full shadow">
-              {sugerencias.map((factura) => (
-                <li
-                  key={factura.id_factura}
-                  onClick={() => {
-                    setFacturaBuscada(factura);
-                    setIdBusqueda(factura.id_factura.toString());
-                    setSugerencias([]);
-                  }}
-                  className="p-2 hover:bg-gray-100 cursor-pointer"
-                >
-                  ID: {factura.id_factura}
-                </li>
-              ))}
-            </ul>
-          )}
+          {/* Empleado */}
+          <div className="relative" ref={contenedorRefEmpleado}>
+            <InputLabel
+              radius="10"
+              type="1"
+              ForID="empleadoBusqueda"
+              placeholder="Buscar por empleado"
+              childLabel="Buscar por empleado"
+              value={empleadoBusqueda}
+              onChange={(e) => {
+              handleEmpleadoInput(e.target.value)
+              setMostrarSugerenciasEmpleado(true)
+              }}
+            />
+            {mostrarSugerenciasEmpleado && empleadoSugerencias.length > 0 && (
+              <div className="absolute z-[10] bg-white border border-gray-300 rounded mt-1 shadow w-full">
+                {empleadoSugerencias.map(empleado => (
+                  <div
+                    key={empleado.id_empleado}
+                    onClick={() => {
+                      setEmpleadoBusqueda(empleado.correo_empleado)
+                      setMostrarSugerenciasEmpleado(false)
+                    }}
+                    className="p-2 hover:bg-gray-100 cursor-pointer"
+                  >
+                    {empleado.nombre_empleado} - {empleado.correo_empleado}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <Buttons nameButton="Buscar" radius="10" Onclick={handleBuscar} />
+          <Buttons nameButton="Limpiar" radius="10" Onclick={handleLimpiar} />
+          <Buttons nameButton="Registrar" radius="10" Onclick={() => setShowRegisterModal(true)} />
         </div>
 
-        <ButtonBack ClickMod={() => setShowRegisterModal(true)} Child="Registrar" />
-      </div>
-
-      {errorBusqueda && <p className="text-red-600 text-sm">{errorBusqueda}</p>}
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {facturaBuscada ? (
-          <CardsFacturesBack
-            key={facturaBuscada.id_factura}
-            factura={facturaBuscada}
-            clientes={clientes}
-            empleados={empleados}
-            onUpdateClick={abrirModalActualizar}
-          />
-        ) : (
-          facturas.map((factura) => (
+        {/* Lista de facturas */}
+        <div className="flex flex-wrap items-center gap-6">
+          {facturas.map(factura => (
             <CardsFacturesBack
               key={factura.id_factura}
               factura={factura}
               clientes={clientes}
               empleados={empleados}
               onUpdateClick={abrirModalActualizar}
+              onViewProductsClick={abrirModalProductos}
             />
-          ))
+          ))}
+        </div>
+
+        {/* Paginador */}
+        {!clienteCorreoBusqueda && !empleadoBusqueda && (
+          <Paginator
+            currentPage={paginaActual}
+            totalPages={totalPaginas}
+            onPageChange={(nuevaPagina) => {
+              if (nuevaPagina !== paginaActual) setPaginaActual(nuevaPagina)
+            }}
+          />
+        )}
+
+        {/* Modales */}
+        {showRegisterModal && (
+          <RegisterModal
+            onClose={() => setShowRegisterModal(false)}
+            setRefrescar={setRefrescar}
+            clientes={clientes}
+            empleados={empleados}
+          />
+        )}
+        {showUpdateModal && (
+          <UpdateModal
+            onClose={cerrarModalActualizar}
+            setRefrescar={setRefrescar}
+            facturaCarta={showUpdateModal}
+          />
+        )}
+        {showProductsModal && facturaParaProductos && (
+          <ProductsModal factura={facturaParaProductos} onClose={cerrarModalProductos} />
         )}
       </div>
+    </section>
+  )
+}
 
-      {showRegisterModal && (
-        <RegisterModal
-          onClose={() => setShowRegisterModal(false)}
-          onFacturaRegistrada={(nuevaFactura) => {
-            setFacturas((prev) => [nuevaFactura, ...prev]);
-          }}
-          setRefrescar={setRefrescar}
-        />
-      )}
-
-      {showUpdateModal && facturaSeleccionada && (
-        <UpdateModal
-          onClose={cerrarModalActualizar}
-          setRefrescar={setRefrescar}
-          facturaCarta={facturaSeleccionada}
-        />
-      )}
-    </div>
-  );
-};
-
-export default FacturesBack;
+export default FacturesBack

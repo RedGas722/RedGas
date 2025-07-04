@@ -1,189 +1,204 @@
-// Delete.jsx
-import React, { useState, useEffect, useRef } from 'react';
-import { RegisterModal } from './Register/RegisterModal';
-import { UpdateModal } from './Update/Update';
-import CardServicesGetBack from './Get/CardServicesGetBack';
-import ButtonBack from '../UI/ButtonBack/ButtonBack';
-import { buscarServicioPorNombre } from './Get/Get';
+import { useState, useEffect, useRef } from 'react'
+import { RegisterModal } from './Register/RegisterModal'
+import { UpdateModal } from './Update/Update'
+import { BtnBack } from '../../UI/Login_Register/BtnBack'
+import CardServicesGetBack from './Get/CardServicesBack'
+import { buscarServicioPorNombre } from './Get/Get'
+import { InputLabel } from '../../UI/Login_Register/InputLabel/InputLabel'
+import { Buttons } from '../../UI/Login_Register/Buttons'
+import { Paginator } from '../../UI/Paginator/Paginator'
 
 export const ServicesBack = () => {
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [showRegisterModal, setShowRegisterModal] = useState(false);
-  const [showUpdateModal, setShowUpdateModal] = useState(false);
-  const [servicios, setServicios] = useState([]);
-  const [refrescar, setRefrescar] = useState(false);
-  const [nombreBusqueda, setNombreBusqueda] = useState("");
-  const [sugerencias, setSugerencias] = useState([]);
-  const contenedorRef = useRef(null);
-  const inputRef = useRef(null);
+  const [showRegisterModal, setShowRegisterModal] = useState(false)
+  const [showUpdateModal, setShowUpdateModal] = useState(false)
+  const [servicios, setServicios] = useState([])
+  const [serviciosNombres, setServiciosNombres] = useState([])
+  const [refrescar, setRefrescar] = useState(false)
+  const [nombreBusqueda, setNombreBusqueda] = useState('')
+  const [servicioBuscado, setServicioBuscado] = useState(null)
+  const [errorBusqueda, setErrorBusqueda] = useState('')
+  const [sugerencias, setSugerencias] = useState([])
+  const [paginaActual, setPaginaActual] = useState(1)
+  const [totalPaginas, setTotalPaginas] = useState(1)
+  const contenedorRef = useRef(null)
 
-  async function fetchServicios() {
+  const fetchServicios = async (pagina = 1) => {
     try {
-      const res = await fetch('https://redgas.onrender.com/ServicioGetAll');
-      if (!res.ok) throw new Error('Error al obtener servicios');
-      const data = await res.json();
-      setServicios(Array.isArray(data) ? data : (data.data || []));
+      const res = await fetch(`https://redgas.onrender.com/ServicioGetAllPaginated?page=${pagina}`)
+      if (!res.ok) throw new Error('Error al obtener servicios')
+      const data = await res.json()
+      const resultado = data.data
+
+      setServicios(resultado.data || [])
+      setPaginaActual(resultado.currentPage)
+      setTotalPaginas(resultado.totalPages)
     } catch (error) {
-      setServicios([]);
-      console.error(error);
+      console.error(error)
+    }
+  }
+
+  const fetchServiciosNombres = async () => {
+    try {
+      const res = await fetch('https://redgas.onrender.com/ServicioGetAllNames')
+      if (!res.ok) throw new Error('Error al obtener nombres de servicios')
+      const data = await res.json()
+      setServiciosNombres(data.data || [])
+    } catch (error) {
+      console.error(error)
     }
   }
 
   useEffect(() => {
-    fetchServicios();
-  }, []);
+    fetchServicios(paginaActual)
+    fetchServiciosNombres()
+  }, [paginaActual])
 
   useEffect(() => {
     if (refrescar) {
-      fetchServicios();
-      setRefrescar(false);
+      fetchServicios(1)
+      fetchServiciosNombres()
+      setPaginaActual(1)
+      setRefrescar(false)
+      setServicioBuscado(null)
+      setNombreBusqueda('')
+      setErrorBusqueda('')
     }
-  }, [refrescar]);
+  }, [refrescar])
 
-  // Para actualizar un servicio desde la tarjeta
-  const handleUpdateClick = (servicio) => {
-    setShowUpdateModal(servicio);
-  };
+  const handleUpdateClick = (servicio) => setShowUpdateModal(servicio)
 
-  // Para eliminar un servicio desde la tarjeta
-  const handleDeleteClick = (servicio) => {
-    setShowDeleteModal(servicio);
-  };
+  const buscarServicio = async (nombre) => {
+    setErrorBusqueda('')
+    setServicioBuscado(null)
 
-  // Para buscar servicios por nombre desde el input
- const handleBuscarServicio = async () => {
-  if (!nombreBusqueda.trim()) {
-    fetchServicios(); // Si no hay búsqueda, se recargan todos
-    return;
-  }
-
-  try {
-    const resultados = await buscarServicioPorNombre(nombreBusqueda);
-    setServicios(resultados);
-  } catch (error) {
-    console.error(error);
-    setServicios([]);
-  }
-};
-
-// Autocomplete: filtra servicios por nombre
-useEffect(() => {
-  if (nombreBusqueda.trim() === '') {
-    setSugerencias([]);
-    return;
-  }
-  const filtrados = servicios.filter((servicio) =>
-    servicio.nombre_servicio && servicio.nombre_servicio.toLowerCase().includes(nombreBusqueda.toLowerCase())
-  );
-  setSugerencias(filtrados.slice(0, 5));
-}, [nombreBusqueda, servicios]);
-
-// Cierre del dropdown si se hace clic fuera
-useEffect(() => {
-  const manejarClickFuera = (event) => {
-    if (
-      contenedorRef.current &&
-      !contenedorRef.current.contains(event.target)
-    ) {
-      setSugerencias([]);
+    if (!nombre.trim()) {
+      fetchServicios(1)
+      setPaginaActual(1)
+      return
     }
-  };
-  document.addEventListener('mousedown', manejarClickFuera);
-  return () => document.removeEventListener('mousedown', manejarClickFuera);
-}, []);
 
-// Limpia servicios si el input queda vacío
-useEffect(() => {
-  if (nombreBusqueda.trim() === '') {
-    fetchServicios();
+    try {
+      const resultado = await buscarServicioPorNombre(nombre.trim())
+      if (resultado.length > 0) {
+        setServicioBuscado(resultado[0])
+        setSugerencias([])
+      } else {
+        setErrorBusqueda('No se encontró ningún servicio con ese nombre.')
+      }
+    } catch (error) {
+      setErrorBusqueda('Error al buscar servicio.')
+    }
   }
-}, [nombreBusqueda]);
+
+  useEffect(() => {
+    if (nombreBusqueda.trim() === '') {
+      setSugerencias([])
+      setServicioBuscado(null)
+      return
+    }
+
+    const filtrados = serviciosNombres.filter(serv =>
+      serv.nombre_servicio?.toLowerCase().includes(nombreBusqueda.toLowerCase())
+    )
+    setSugerencias(filtrados.slice(0, 5))
+  }, [nombreBusqueda, serviciosNombres])
+
+  useEffect(() => {
+    const manejarClickFuera = (e) => {
+      if (contenedorRef.current && !contenedorRef.current.contains(e.target)) {
+        setSugerencias([])
+      }
+    }
+    document.addEventListener('mousedown', manejarClickFuera)
+    return () => document.removeEventListener('mousedown', manejarClickFuera)
+  }, [])
 
   return (
-    <div className="flex flex-row h-screen p-[40px_0_0_40px] gap-[40px]">
-      {/* Panel lateral izquierdo: Backoffice y botones */}
-      <div className='flex flex-col items-start gap-[30px] min-w-[320px]'>
-        <h1 className='font-bold text-[22px] mb-2'>Servicio BACK-OFFICE</h1>
-        <div className="relative" ref={contenedorRef}>
-          <div className="flex items-center gap-2 border border-gray-300 rounded px-2 py-1 mb-2">
-            <input
-              type="text"
-              placeholder="Nombre del servicio"
+    <section className="w-full h-full p-[var(--p-admin)]">
+      <BtnBack To='/Admin' />
+
+      <div className="p-[var(--p-admin-sub)] h-full flex flex-col gap-4">
+        <h1 className="font-bold z-[2] text-3xl text-[var(--main-color)]">Servicios</h1>
+        <div className="NeoContainer_outset_TL z-[50] flex gap-4 flex-wrap items-end w-fit p-[var(--p-admin-control)]">
+          <div className="relative" ref={contenedorRef}>
+            <InputLabel
+              radius="10"
+              type="1"
+              ForID="nombre_servicio_busqueda"
+              placeholder="Buscar servicio"
+              childLabel="Buscar servicio"
               value={nombreBusqueda}
               onChange={e => setNombreBusqueda(e.target.value)}
-              className="outline-none px-2 py-1 w-[180px]"
-              ref={inputRef}
+              className="w-full"
+              placeholderError={!!errorBusqueda}
             />
-            <button
-              onClick={handleBuscarServicio}
-              aria-label="Buscar servicio"
-              className="text-gray-600 hover:text-gray-900"
-            >🔍</button>
+            {sugerencias.length > 0 && (
+              <ul className="absolute z-[10] bg-white border w-[230px] border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto shadow">
+                {sugerencias.map(servicio => (
+                  <li
+                    key={servicio.id_servicio}
+                    onClick={() => {
+                      setNombreBusqueda(servicio.nombre_servicio)
+                      buscarServicio(servicio.nombre_servicio)
+                      setSugerencias([])
+                    }}
+                    className="p-2 hover:bg-gray-100 cursor-pointer"
+                  >
+                    {servicio.nombre_servicio}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
-          {sugerencias.length > 0 && (
-            <ul className="absolute z-10 bg-white border border-gray-300 rounded mt-1 max-h-[200px] overflow-y-auto w-full shadow">
-              {sugerencias.map((servicio) => (
-                <li
-                  key={servicio.id_servicio || servicio.nombre_servicio}
-                  onClick={() => {
-                    setNombreBusqueda(servicio.nombre_servicio);
-                    setSugerencias([]);
-                    setServicios([servicio]);
-                  }}
-                  className="p-2 hover:bg-gray-100 cursor-pointer"
-                >
-                  {servicio.nombre_servicio}
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-        <ButtonBack ClickMod={() => setShowRegisterModal(true)} Child='Registrar' />
-        {/* <ButtonBack ClickMod={() => setShowGetModal(true)} Child='Consultar' /> */}
-        {/* Eliminar y Actualizar removidos porque ya están en la card y el input de consulta ya existe */}
-      </div>
 
-      {/* Sección de servicios, más abajo y a la derecha */}
-      <div className="flex flex-col justify-start w-full mt-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {servicios && servicios.length > 0 && servicios.map((servicio, idx) => (
+          <div className="flex w-fit h-fit flex-wrap justify-center items-center gap-[20px]">
+            <Buttons
+              radius="10"
+              nameButton="Registrar"
+              textColor="var(--Font-Nav)"
+              Onclick={() => setShowRegisterModal(true)}
+            />
+          </div>
+        </div>
+
+        {errorBusqueda && <p className="text-red-600 text-sm">{errorBusqueda}</p>}
+
+        <div className="flex flex-wrap items-center gap-6">
+          {(servicioBuscado ? [servicioBuscado] : servicios).map(servicio => (
             <CardServicesGetBack
-              key={servicio.id_servicio ? String(servicio.id_servicio) : `servicio-${idx}`}
+              key={servicio.id_servicio}
               servicio={servicio}
               setRefrescar={setRefrescar}
               onUpdateClick={handleUpdateClick}
-              onDeleteClick={handleDeleteClick}
+              onDeleteClick={() => {}}
             />
           ))}
         </div>
+
+        <Paginator
+          currentPage={paginaActual}
+          totalPages={totalPaginas}
+          onPageChange={nuevaPagina => {
+            if (nuevaPagina !== paginaActual) {
+              setPaginaActual(nuevaPagina)
+            }
+          }}
+        />
+
+        {/* Modales */}
+        {showRegisterModal && (
+          <RegisterModal onClose={() => setShowRegisterModal(false)} setRefrescar={setRefrescar} />
+        )}
+        {typeof showUpdateModal === 'object' && showUpdateModal && (
+          <UpdateModal
+            onClose={() => setShowUpdateModal(false)}
+            setRefrescar={setRefrescar}
+            servicioCarta={showUpdateModal}
+          />
+        )}
       </div>
+    </section>
+  )
+}
 
-      {/* Modales */}
-      {showRegisterModal && (
-        <RegisterModal
-          onClose={() => setShowRegisterModal(false)}
-          setRefrescar={setRefrescar}
-        />
-      )}
-      {/* {showGetModal && (
-        <GetModal onClose={() => setShowGetModal(false)} onResult={handleShowServicios} />
-      )} */}
-      {typeof showUpdateModal === 'object' && showUpdateModal && (
-        <UpdateModal
-          onClose={() => setShowUpdateModal(false)}
-          setRefrescar={setRefrescar}
-          servicioCarta={showUpdateModal}
-        />
-      )}
-      {typeof showDeleteModal === 'object' && showDeleteModal && (
-        <DeleteModal
-          onClose={() => setShowDeleteModal(false)}
-          setRefrescar={setRefrescar}
-          servicioCarta={showDeleteModal}
-        />
-      )}
-    </div>
-  );
-};
-
-export default ServicesBack;
+export default ServicesBack

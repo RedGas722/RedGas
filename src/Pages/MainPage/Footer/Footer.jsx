@@ -1,17 +1,52 @@
 import Logo from '../../../assets/Images/Redgas.png'
 import { useNavigate } from "react-router-dom"
+import { useEffect, useState } from "react"
+import { Link } from 'react-scroll'
+import { Buttons } from '../../../UI/Login_Register/Buttons'
 
 export const Footer = () => {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        setIsLoggedIn(!!token);
+    }, []);
+
+    if (isLoggedIn) {
+        return (
+            <footer className="footer py-20 bg-[var(--main-color)] text-white">
+                <div className='flex flex-col items-center justify-center'>
+                    <div className='items-center z-[2] flex flex-col gap-3 sm:max-w-md text-center text-white'>
+                        <img src={Logo} className="w-32 sm:mx-auto" />
+                        <p className="text-lg font-bold">Bienvenido de nuevo!</p>
+                        <Link id="linkHero" to="Hero" smooth={true} duration={500} offset={-900} >
+                            <Buttons
+                                nameButton='Volver al inicio'
+                                shadow='none'
+                                shadowActive='none'
+                                radius='10'
+                                borderWidth='1'
+                                borderColor='var(--Font-Nav2)'
+                                textColor='var(--main-color)'
+                            />
+                        </Link>
+                        <p className="text-sm">Gracias por confiar en RedGas.</p>
+                    </div>
+                </div>
+            </footer>
+        );
+    }
+
     return (
-        <footer className="py-20 bg-[var(--main-color)] text-white">
+        <footer className="footer py-20 px-1.5 h-350px bg-[var(--main-color)]">
             <div className="flex flex-col items-center justify-center">
-                <div className="items-center flex flex-col gap-3 sm:max-w-md sm:mx-auto sm:text-center">
+                <div className="items-center z-[2] flex flex-col gap-3 sm:max-w-md text-center text-white">
                     <img src={Logo} className="w-32 sm:mx-auto" />
                     <p>
                         Protege tu hogar con productos de gas certificados y técnicos especializados.
                     </p>
-                    <div className="items-center gap-3 space-y-3 sm:flex sm:justify-center sm:space-y-0">
+                    <div className="items-center gap-3 space-y-3 flex-wrap flex justify-center">
                         <button
                             className="block py-2 px-4 text-center text-white font-medium bg-[var(--Font-Nav)] duration-150 hover:bg-[var(--Font-Nav-shadow)] active:bg-[var(--Font-Nav-shadow2)] rounded-lg shadow-lg hover:shadow-none"
                             onClick={() => navigate('/Register')}
@@ -31,6 +66,5 @@ export const Footer = () => {
                 </div>
             </div>
         </footer>
-    )
+    );
 }
-export default Footer
