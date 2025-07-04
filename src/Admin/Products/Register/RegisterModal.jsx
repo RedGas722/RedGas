@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { InputLabel } from '../../../UI/Login_Register/InputLabel/InputLabel'
+import { Modal, Box, Fade, Backdrop } from '@mui/material'
 
 export const RegisterModal = ({ onClose, setRefrescar }) => {
   const [nombre, setNombre] = useState('')
@@ -160,69 +161,94 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
     setImagen(file)
   }
 
+  const modalStyle = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 320,
+    bgcolor: 'background.paper',
+    borderRadius: '16px',
+    boxShadow: 24,
+    p: 4,
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 2,
+  }
+
   return (
-    <div className="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-2xl p-6 shadow-lg w-[320px] flex flex-col gap-4 relative text-black">
-        <h2 className="text-xl font-bold text-center">Registrar Producto</h2>
+    <Modal
+      open={open}
+      onClose={cancelarRegistro}
+      closeAfterTransition
+      slots={{ backdrop: Backdrop }}
+      slotProps={{ backdrop: { timeout: 300 } }}
+    >
+      <Fade in={open}>
+        <Box sx={modalStyle}>
+          <h2 className="text-xl font-bold text-center">Registrar Producto</h2>
 
-        <InputLabel type="1" ForID="nombre" placeholder="Nombre del Producto" childLabel="Nombre del Producto" value={nombre} onChange={(e) => setNombre(e.target.value)} required placeholderError={!!errores.nombre} />
-        {errores.nombre && <p className="text-red-600 text-sm">{errores.nombre}</p>}
+          <InputLabel type="1" ForID="nombre" placeholder="Nombre del Producto" childLabel="Nombre del Producto" value={nombre} onChange={(e) => setNombre(e.target.value)} required placeholderError={!!errores.nombre} />
+          {errores.nombre && <p className="text-red-600 text-sm">{errores.nombre}</p>}
 
-        <InputLabel type="5" ForID="precio" placeholder="Precio del Producto" childLabel="Precio del Producto" value={precio} onChange={(e) => setPrecio(e.target.value)} required placeholderError={!!errores.precio} />
-        {errores.precio && <p className="text-red-600 text-sm">{errores.precio}</p>}
+          <InputLabel type="5" ForID="precio" placeholder="Precio del Producto" childLabel="Precio del Producto" value={precio} onChange={(e) => setPrecio(e.target.value)} required placeholderError={!!errores.precio} />
+          {errores.precio && <p className="text-red-600 text-sm">{errores.precio}</p>}
 
-        <InputLabel type="1" ForID="descripcion" placeholder="Descripción" childLabel="Descripción" value={descripcion} onChange={(e) => setDescripcion(e.target.value)} required placeholderError={!!errores.descripcion} />
-        {errores.descripcion && <p className="text-red-600 text-sm">{errores.descripcion}</p>}
+          <InputLabel type="1" ForID="descripcion" placeholder="Descripción" childLabel="Descripción" value={descripcion} onChange={(e) => setDescripcion(e.target.value)} required placeholderError={!!errores.descripcion} />
+          {errores.descripcion && <p className="text-red-600 text-sm">{errores.descripcion}</p>}
 
-        <InputLabel type="5" ForID="stock" placeholder="Stock" childLabel="Stock" value={stock} onChange={(e) => setStock(e.target.value)} required placeholderError={!!errores.stock} />
-        {errores.stock && <p className="text-red-600 text-sm">{errores.stock}</p>}
+          <InputLabel type="5" ForID="stock" placeholder="Stock" childLabel="Stock" value={stock} onChange={(e) => setStock(e.target.value)} required placeholderError={!!errores.stock} />
+          {errores.stock && <p className="text-red-600 text-sm">{errores.stock}</p>}
 
-        <InputLabel type="5" ForID="descuento" placeholder="Descuento" childLabel="Descuento" value={descuento} onChange={(e) => setDescuento(e.target.value)} required placeholderError={!!errores.descuento} />
-        {errores.descuento && <p className="text-red-600 text-sm">{errores.descuento}</p>}
+          <InputLabel type="5" ForID="descuento" placeholder="Descuento" childLabel="Descuento" value={descuento} onChange={(e) => setDescuento(e.target.value)} required placeholderError={!!errores.descuento} />
+          {errores.descuento && <p className="text-red-600 text-sm">{errores.descuento}</p>}
 
-        {parseFloat(descuento) > 0 && (
-          <InputLabel
-            type="7"
-            ForID="fechaDescuento"
-            placeholder="Fecha Descuento"
-            childLabel="Fecha Descuento"
-            value={fechaDescuento}
-            onChange={(e) => setFechaDescuento(e.target.value)}
-            min={new Date().toISOString().slice(0, 10)}
-            required
-            placeholderError={!!errores.fechaDescuento}
-          />
-        )}
-        {errores.fechaDescuento && <p className="text-red-600 text-sm">{errores.fechaDescuento}</p>}
+          {parseFloat(descuento) > 0 && (
+            <>
+              <InputLabel
+                type="7"
+                ForID="fechaDescuento"
+                placeholder="Fecha Descuento"
+                childLabel="Fecha Descuento"
+                value={fechaDescuento}
+                onChange={(e) => setFechaDescuento(e.target.value)}
+                min={new Date().toISOString().slice(0, 10)}
+                required
+                placeholderError={!!errores.fechaDescuento}
+              />
+              {errores.fechaDescuento && <p className="text-red-600 text-sm">{errores.fechaDescuento}</p>}
+            </>
+          )}
 
-        <select
-          value={categoriaId}
-          onChange={(e) => setCategoriaId(e.target.value)}
-          className="border rounded p-2 w-full"
-        >
-          <option value="">Seleccione una categoría</option>
-          {categorias.map((cat) => (
-            <option key={cat.id_categoria} value={cat.id_categoria}>
-              {cat.nombre_categoria}
-            </option>
-          ))}
-        </select>
-        {errores.categoria && <p className="text-red-600 text-sm">{errores.categoria}</p>}
+          <select
+            value={categoriaId}
+            onChange={(e) => setCategoriaId(e.target.value)}
+            className="border rounded p-2 w-full"
+          >
+            <option value="">Seleccione una categoría</option>
+            {categorias.map((cat) => (
+              <option key={cat.id_categoria} value={cat.id_categoria}>
+                {cat.nombre_categoria}
+              </option>
+            ))}
+          </select>
+          {errores.categoria && <p className="text-red-600 text-sm">{errores.categoria}</p>}
 
-        <InputLabel type="4" ForID="imagen" placeholder="Imagen del Producto" childLabel="Imagen del Producto" onChange={handleImageChange} required placeholderError={!!errores.imagen} />
-        {errores.imagen && <p className="text-red-600 text-sm">{errores.imagen}</p>}
+          <InputLabel type="4" ForID="imagen" placeholder="Imagen del Producto" childLabel="Imagen del Producto" onChange={handleImageChange} required placeholderError={!!errores.imagen} />
+          {errores.imagen && <p className="text-red-600 text-sm">{errores.imagen}</p>}
 
-        <div className="flex justify-between gap-2">
-          <button onClick={cancelarRegistro} className="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded">Cancelar</button>
-          <button onClick={handleRegister} className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">Registrar</button>
-        </div>
+          <div className="flex justify-between gap-2 pt-2">
+            <button onClick={cancelarRegistro} className="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded">Cancelar</button>
+            <button onClick={handleRegister} className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">Registrar</button>
+          </div>
 
-        {mensaje && (
-          <p className={`text-center font-semibold ${mensaje.includes('exitosamente') ? 'text-green-600' : 'text-red-600'}`}>
-            {mensaje}
-          </p>
-        )}
-      </div>
-    </div>
+          {mensaje && (
+            <p className={`text-center font-semibold ${mensaje.includes('exitosamente') ? 'text-green-600' : 'text-red-600'}`}>
+              {mensaje}
+            </p>
+          )}
+        </Box>
+      </Fade>
+    </Modal>
   )
 }

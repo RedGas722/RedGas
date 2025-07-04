@@ -17,17 +17,21 @@ import emailjs from '@emailjs/browser'
 import Swal from 'sweetalert2'
 import { InputLabel } from "../../../UI/Login_Register/InputLabel/InputLabel"
 
-const URL_GET_TECHNICIAN = 'http://localhost:10101/TecnicoServicesGet'
-const URL_DELETE_TECHNICIAN = 'http://localhost:10101/TecnicoServicesDelete'
+const URL_GET_TECHNICIAN = 'https://redgas.onrender.com/TecnicoServicesGet'
+const URL_DELETE_TECHNICIAN = 'https://redgas.onrender.com/TecnicoServicesDelete'
 const URL_GET_COSTUMER = 'https://redgas.onrender.com/ClienteServicesGet'
-const URL_DELETE_COSTUMER = 'http://localhost:10101/ClienteServicesDelete'
-const URL_REGISTER_SERVICES = 'http://localhost:10101/PedidoServicioRegister'
+const URL_DELETE_COSTUMER = 'https://redgas.onrender.com/ClienteServicesDelete'
+const URL_REGISTER_SERVICES = 'https://redgas.onrender.com/PedidoServicioRegister'
 
 const style = {
   position: 'relative',
   background: 'var(--background-color)',
   boxShadow: 'var(--shadow-main)',
   padding: '15px',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  gap: '20px',
   borderRadius: 'var(--radius-main)',
 }
 
@@ -352,20 +356,20 @@ export const Technica = () => {
   return (
     <>
       {/* BTN back */}
-      <div className="flex flex-col justify-between items-start sm:items-center sm:flex-row gap-2 p-[0_5px] w-full">
+      <div className="flex flex-col z-[2] justify-between items-start sm:items-center sm:flex-row gap-2 p-[5px_5px] w-full">
         <div className="btnDown">
           <BtnBack To='/' />
         </div>
         <h2 className="font-bold text-4xl text-[var(--Font-Nav)]">MI SERVICIO</h2>
       </div>
 
-      <section className="h-fit flex flex-col justify-center text-[var(--main-color)] items-center gap-[20px] p-[0px_0px] MainPageContainer">
+      <section className="h-fit flex flex-col justify-center text-[var(--main-color)] z-[2] items-center gap-[50px] p-[0px_0px] MainPageContainer">
         <section className="flex flex-wrap items-center justify-center gap-[2rem] w-full h-fit p-[15px_0] sm:p-[15px_20px] NeoContainer_outset_TL">
           <div className="NeoContainer_outset_TL gap-2 flex flex-col sm:p-[20px_25px]">
             {/* Problem title */}
             <div className="text-[var(--Font-Nav2)] flex items-center justify-center gap-4">
               <FontAwesomeIcon icon={getIconByLabel(description)} className="text-3xl sm:text-4xl" />
-              <p className="text-2xl sm:text-3xl font-bold ">Mantenimiento{/*{description}*/}</p>
+              <p className="text-2xl sm:text-3xl font-bold ">{description}</p>
             </div>
 
             {/* User information */}
@@ -374,19 +378,19 @@ export const Technica = () => {
               <div className="flex flex-col justify-center font-normal gap-[8px] text-[var(--main-color)]">
                 <div className="flex items-center gap-1">
                   <FontAwesomeIcon icon={faUserCircle} className="relative top-1 text-2xl text-[var(--Font-Nav)]" />
-                  <p className="text-xl font-bold text-[var(--main-color)]">pepe{user}</p>
+                  <p className="text-xl font-bold text-[var(--main-color)]">{user}</p>
                 </div>
                 <div className="flex items-center gap-1">
                   <FontAwesomeIcon icon={faPhone} className="text-1xl w-[15px] text-[var(--Font-Nav-shadow)]" />
-                  <p className="text-[1rem]">312156599{phone}</p>
+                  <p className="text-[1rem]">{phone}</p>
                 </div>
                 <div className="flex items-center gap-1">
                   <FontAwesomeIcon icon={faEnvelope} className="text-1xl w-[15px] text-[var(--Font-Nav-shadow)]" />
-                  <p className="text-[1rem]">asdads{email}</p>
+                  <p className="text-[1rem]">{email}</p>
                 </div>
                 <div className="flex items-center gap-1">
                   <FontAwesomeIcon icon={faLocationDot} className="text-1xl w-[15px] text-[var(--Font-Nav-shadow)]" />
-                  <p className="text-[1rem]">asdads{address}</p>
+                  <p className="text-[1rem]">{address}</p>
                 </div>
               </div>
 
@@ -396,30 +400,36 @@ export const Technica = () => {
 
               <div className="flex flex-col items-start gap-1">
                 <h3 className="text-[1rem] font-black">Problema:</h3>
-                <p className="pl-2 max-w-[250px] font-normal"> Lorem ipsum, dolor sit amet consectetur {services.input}</p>
+                <p className="pl-2 max-w-[250px] font-normal">{services.input}</p>
               </div>
             </div>
           </div>
 
           {/* Steeps to follow */}
-          <Box sx={style} className="w-fit items-start justify-start ">
+          <Box sx={style} className="w-fit z-[2] gap-2 items-center justify-start ">
             <div className="flex flex-col items-center justify-center gap-4">
               <h4 className="text-2xl sm:text-3xl font-bold text-[var(--main-color)]">Pasos a seguir</h4>
               <div ref={accordionRef} className="accordionContain NeoContainer_outset_TL w-fit">
                 {services.posibles_soluciones?.map((itemParsed, i) => (
-                <Accordion key={i} sx={{
-                  minWidth:'100px',
-                }}>
-                  <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                    <p className="font-bold">{itemParsed.titulo}</p>
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    <p>{itemParsed.descripcion}</p>
-                  </AccordionDetails>
-                </Accordion>
+                  <Accordion key={i} sx={{
+                    minWidth: '100px',
+                  }}>
+                    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                      <p className="font-bold">{itemParsed.titulo}</p>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <p>{itemParsed.descripcion}</p>
+                    </AccordionDetails>
+                  </Accordion>
                 ))}
               </div>
             </div>
+              {isAccept === false && (
+                <div className="flex flex-wrap justify-center items-center gap-5 ">
+                  <Buttons type="submit" nameButton="Cancelar el servicio" Onclick={handleCancelServices} />
+                  <Buttons type="submit" nameButton="Terminar el servicio" Onclick={() => setIsAccept(true)} />
+                </div>
+              )}
           </Box>
         </section>
 
@@ -464,12 +474,7 @@ export const Technica = () => {
           </Box>
 
         )}
-        {isAccept === false && (
-          <div className="flex flex-wrap justify-center items-center gap-5 ">
-            <Buttons type="submit" nameButton="Cancelar el servicio" Onclick={handleCancelServices} />
-            <Buttons type="submit" nameButton="Terminar el servicio" Onclick={() => setIsAccept(true)} />
-          </div>
-        )}
+
       </section >
     </>
   )

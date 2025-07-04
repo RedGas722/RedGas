@@ -8,8 +8,9 @@ import { jwtDecode } from "jwt-decode";
 // import { ProfilePhoto } from "../../UI/Header/ProfilePhoto/ProfilePhoto"
 import './Header.css'
 
-export const Header = () => {
+export const Header = ({ classUser, classNavs }) => {
     const navigate = useNavigate();
+    const [menuCount, setMenuCount] = useState(0);
     const type = localStorage.getItem('tipo_usuario')
     const rawToken = localStorage.getItem('token');
     let token = null;
@@ -59,18 +60,23 @@ export const Header = () => {
 
     // Cargar productos al iniciar
     useEffect(() => {
-    const fetchProductos = async () => {
-        try {
-        const res = await fetch("https://redgas.onrender.com/ProductoGetAllNames");
-        const data = await res.json();
-        const productosData = data.data; // [{ id_producto, nombre_producto }]
-        setProductos(productosData);
-        } catch (error) {
-        console.error("Error al cargar nombres de productos:", error);
-        }
-    };
+        const menuItems = document.querySelectorAll('.menu-container .menu-list');
+        setMenuCount(menuItems.length);
+    }, [token, type]);
 
-    fetchProductos();
+    useEffect(() => {
+        const fetchProductos = async () => {
+            try {
+                const res = await fetch("https://redgas.onrender.com/ProductoGetAllNames");
+                const data = await res.json();
+                const productosData = data.data; // [{ id_producto, nombre_producto }]
+                setProductos(productosData);
+            } catch (error) {
+                console.error("Error al cargar nombres de productos:", error);
+            }
+        };
+
+        fetchProductos();
     }, []);
 
     useEffect(() => {
@@ -150,7 +156,9 @@ export const Header = () => {
     return (
         <div ref={headerRef}
             id="Header"
-            className={`Header w-[100%] h-fit md:sticky fixed left-0 top-0 z-[999] ${(scrolled && !hamburger && isDesktop) ? 'scrolled NeoContainer_outset_TL' : ''} ${hamburger ? 'Burguer w-fit NeoContainer_outset_TL' : ''}`}
+            className={`Header w-[100%] h-fit md:sticky fixed left-0 top-0 z-[999] 
+        ${scrolled && !hamburger && isDesktop ? `scrolled NeoContainer_outset_TL menu-${menuCount}` : ''} 
+        ${hamburger ? 'Burguer w-fit NeoContainer_outset_TL' : ''}`}
         >
             {((!isDesktop && hamburger) || (isDesktop && scrolled)) && (
                 <h2 className="justify-self-center flex font-bold text-4xl text-[var(--Font-Nav)]">
@@ -180,7 +188,7 @@ export const Header = () => {
 
             {/* Aquí enviamos productos a la barra de búsqueda */}
             <SearchBarr productos={productos} className={`flex-1 items-center justify-center md:flex ${hamburger ? '' : 'hidden'}`} />
-            <Navs className={`flex-1 items-center justify-center md:flex ${hamburger ? '' : 'hidden'}`} />
+            <Navs className={`flex-1 items-center justify-center md:flex ${hamburger ? '' : 'hidden'} ${classNavs}`} />
             {/* <ProfilePhoto className={`flex-1 items-center justify-center md:flex ${hamburger ? '' : 'hidden'}`} /> */}
             <label className={`dropdown flex-1 flex justify-self-end items-center text-[var(--Font-Nav)] justify-between md:flex ${hamburger ? '' : 'hidden'}`} >
                 {userName}
@@ -195,7 +203,7 @@ export const Header = () => {
                     <span className="middle bar-list"></span>
                     <span className="bottom bar-list"></span>
                 </div>
-                <section className="menu-container bg-[var(--main-color)] text-white text-[14px]">
+                <section className={`menu-container bg-[var(--main-color)] text-[14px] ${classUser}`}>
                     {!token && (
                         <>
                             <div onClick={() => navigate('/Login')} className="menu-list">Iniciar Sesion</div>
@@ -214,7 +222,6 @@ export const Header = () => {
                         <>
                             <div onClick={() => navigate('/Login')} className="menu-list">Perfil</div>
                             <div onClick={() => navigate('/CostumerMyService')} className="menu-list">Mi Servicio</div>
-                            <div onClick={() => navigate('/Shopping')} className="menu-list">Carrito</div>
                             <div onClick={() => navigate('/Login')} className="menu-list">Cambiar Cuenta</div>
                             <div onClick={() => handSignOut()} className="menu-list">Cerrar Sesion</div>
                         </>

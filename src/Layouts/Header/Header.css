@@ -8,7 +8,12 @@
 .Header.scrolled {
     place-items: center;
     grid-template-columns: 1fr 2.5fr 3fr 1fr;
-    border-radius:0 0 40px 40px ;
+    border-radius: 0 0 40px 40px;
+}
+
+/* Aplica el grid scrolled solo cuando detecta el modo fijo con elementos */
+.Header.scrolled[class*="menu-"] {
+    grid-template-columns: 1fr 2.5fr 3fr 1fr;
 }
 
 .Header.Burguer {
