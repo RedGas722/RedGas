@@ -14,13 +14,13 @@ export const AdminApp = () => {
     }, [])
 
     return (
-        <section className='AdminPanel flex flex-col h-dvh gap-[100px] p-[5px]'>
+        <section className='AdminPanel flex flex-col h-dvh gap-20 p-[5px]'>
             <div className='flex flex-col gap-2 items-center sm:gap-0 sm:justify-between sm:flex-row'>
                 <BtnBack To='/' />
                 <h2 className='z-[2] font-bold text-4xl text-[var(--Font-Nav)]'>ADMINISTRADOR</h2>
             </div>
             <div className="Admin bg-[var(--Bacground-Admin)] flex items-center justify-center">
-                <section id="sideBarr" className="z-[2] h-fit gap-10 justify-center justify-self-center self-center flex flex-wrap">
+                <section id="sideBarr" className="z-[2] h-fit gap-10  justify-center justify-self-center self-center flex flex-wrap">
 
                     {/* Si es admin, mostrar todo */}
                     {tipoUsuario === 1 && (

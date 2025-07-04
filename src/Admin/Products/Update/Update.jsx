@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { InputLabel } from '../../../UI/Login_Register/InputLabel/InputLabel'
+import { Modal, Box, Fade, Backdrop } from '@mui/material'
 
 export const UpdateModal = ({ onClose, setRefrescar, productoCarta }) => {
   const [producto, setProducto] = useState(null)
@@ -313,159 +314,114 @@ export const UpdateModal = ({ onClose, setRefrescar, productoCarta }) => {
 
 
   return (
-    <div className="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-2xl p-6 shadow-lg w-[340px] flex flex-col gap-4 relative text-black">
-        <h2 className="text-xl font-bold text-center">Actualizar Producto</h2>
+    <Modal
+      open={true}
+      onClose={cancelarEdicion}
+      closeAfterTransition
+      slots={{ backdrop: Backdrop }}
+      slotProps={{ backdrop: { timeout: 300 } }}
+    >
+      <Fade in={true}>
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: 340,
+            bgcolor: 'background.paper',
+            borderRadius: 2,
+            boxShadow: 24,
+            padding: '20px 20px 20px 20px',
+            maxHeight: '90vh',
+            overflowY: 'auto',
+            outline:'none',
+          }}
+          className="text-black"
+        >
+          <section className="p-2">
 
-        {producto && (
-          <>
-            <InputLabel
-              type="1"
-              ForID="nuevo_nombre_producto"
-              placeholder="Nuevo nombre"
-              childLabel="Nombre"
-              value={producto.nuevoNombre || ''}
-              onChange={(e) => setProducto({ ...producto, nuevoNombre: e.target.value })}
-              className="w-full"
-              placeholderError={!!errores.nuevoNombre}
-            />
-            {errores.nuevoNombre && (
-              <p className="text-red-600 text-sm">{errores.nuevoNombre}</p>
-            )}
-            <InputLabel
-              type="5"
-              ForID="precio_producto"
-              placeholder="Precio"
-              childLabel="Precio"
-              value={producto.precio || ''}
-              onChange={(e) => setProducto({ ...producto, precio: e.target.value })}
-              className="w-full"
-              placeholderError={!!errores.precio}
-            />
-            {errores.precio && (
-              <p className="text-red-600 text-sm">{errores.precio}</p>
-            )}
-            <InputLabel
-              type="1"
-              ForID="descripcion_producto"
-              placeholder="Descripción"
-              childLabel="Descripción"
-              value={producto.descripcion || ''}
-              onChange={(e) => setProducto({ ...producto, descripcion: e.target.value })}
-              className="w-full"
-              placeholderError={!!errores.descripcion}
-            />
-            {errores.descripcion && (
-              <p className="text-red-600 text-sm">{errores.descripcion}</p>
-            )}
-            <InputLabel
-              type="5"
-              ForID="stock_producto"
-              placeholder="Stock"
-              childLabel="Stock"
-              value={producto.stock || ''}
-              onChange={(e) => setProducto({ ...producto, stock: e.target.value })}
-              className="w-full"
-              placeholderError={!!errores.stock}
-            />
-            {errores.stock && (
-              <p className="text-red-600 text-sm">{errores.stock}</p>
-            )}
-            <InputLabel
-              type="5"
-              ForID="descuento_producto"
-              placeholder="Descuento (%)"
-              childLabel="Descuento (%)"
-              value={producto.descuento || ''}
-              onChange={(e) => setProducto({ ...producto, descuento: e.target.value })}
-              className="w-full"
-              placeholderError={!!errores.descuento}
-            />
-            {errores.descuento && (
-              <p className="text-red-600 text-sm">{errores.descuento}</p>
-            )}
-            <InputLabel
-              type="7"
-              ForID="fecha_descuento"
-              placeholder="Fecha de descuento"
-              childLabel="Fecha de descuento"
-              value={producto.fechaDescuento || ''}
-              onChange={(e) => setProducto({ ...producto, fechaDescuento: e.target.value })}
-              className="w-full"
-              placeholderError={!!errores.fechaDescuento}
-            />
-            {errores.fechaDescuento && (
-              <p className="text-red-600 text-sm">{errores.fechaDescuento}</p>
-            )}
+            <h2 className="text-xl font-bold text-center mb-2">Actualizar Producto</h2>
 
-            {/* Select para categoría */}
-            <select
-              id="categoria"
-              value={producto.categoriaSeleccionada}
-              onChange={(e) => setProducto({ ...producto, categoriaSeleccionada: e.target.value })}
-              className="border rounded p-2 w-full transition-colors duration-300 bg-white cursor-pointer text-black"
-              disabled={false} // Nunca deshabilitado
-            >
-              <option value="">-- Seleccione una categoría --</option>
-              {categorias.map((cat) => (
-                <option key={cat.id_categoria} value={cat.id_categoria}>
-                  {cat.nombre_categoria}
-                </option>
-              ))}
-            </select>
-            {errores.categoriaSeleccionada && (
-              <p className="text-red-600 text-sm">{errores.categoriaSeleccionada}</p>
-            )}
+            {producto && (
+              <div>
+                <InputLabel type="1" ForID="nuevo_nombre_producto" placeholder="Nuevo nombre" childLabel="Nombre" value={producto.nuevoNombre || ''} onChange={(e) => setProducto({ ...producto, nuevoNombre: e.target.value })} className="w-full" placeholderError={!!errores.nuevoNombre} />
+                {errores.nuevoNombre && <p className="text-red-600 text-sm">{errores.nuevoNombre}</p>}
 
-            {imagenActual && (
-              <div className="mt-2 flex flex-col items-center">
-                <p>Imagen Actual:</p>
-                <img
-                  src={imagenActual}
-                  alt="Producto"
-                  className="w-[200px] h-[200px] object-cover rounded shadow mt-2"
+                <InputLabel type="5" ForID="precio_producto" placeholder="Precio" childLabel="Precio" value={producto.precio || ''} onChange={(e) => setProducto({ ...producto, precio: e.target.value })} className="w-full" placeholderError={!!errores.precio} />
+                {errores.precio && <p className="text-red-600 text-sm">{errores.precio}</p>}
+
+                <InputLabel type="1" ForID="descripcion_producto" placeholder="Descripción" childLabel="Descripción" value={producto.descripcion || ''} onChange={(e) => setProducto({ ...producto, descripcion: e.target.value })} className="w-full" placeholderError={!!errores.descripcion} />
+                {errores.descripcion && <p className="text-red-600 text-sm">{errores.descripcion}</p>}
+
+                <InputLabel type="5" ForID="stock_producto" placeholder="Stock" childLabel="Stock" value={producto.stock || ''} onChange={(e) => setProducto({ ...producto, stock: e.target.value })} className="w-full" placeholderError={!!errores.stock} />
+                {errores.stock && <p className="text-red-600 text-sm">{errores.stock}</p>}
+
+                <InputLabel type="5" ForID="descuento_producto" placeholder="Descuento (%)" childLabel="Descuento (%)" value={producto.descuento || ''} onChange={(e) => setProducto({ ...producto, descuento: e.target.value })} className="w-full" placeholderError={!!errores.descuento} />
+                {errores.descuento && <p className="text-red-600 text-sm">{errores.descuento}</p>}
+
+                <InputLabel type="7" ForID="fecha_descuento" placeholder="Fecha de descuento" childLabel="Fecha de descuento" value={producto.fechaDescuento || ''} onChange={(e) => setProducto({ ...producto, fechaDescuento: e.target.value })} className="w-full" placeholderError={!!errores.fechaDescuento} />
+                {errores.fechaDescuento && <p className="text-red-600 text-sm">{errores.fechaDescuento}</p>}
+
+                <select
+                  id="categoria"
+                  value={producto.categoriaSeleccionada}
+                  onChange={(e) => setProducto({ ...producto, categoriaSeleccionada: e.target.value })}
+                  className="border rounded p-2 w-full bg-white text-black"
+                >
+                  <option value="">-- Seleccione una categoría --</option>
+                  {categorias.map((cat) => (
+                    <option key={cat.id_categoria} value={cat.id_categoria}>
+                      {cat.nombre_categoria}
+                    </option>
+                  ))}
+                </select>
+                {errores.categoriaSeleccionada && (
+                  <p className="text-red-600 text-sm">{errores.categoriaSeleccionada}</p>
+                )}
+
+                {imagenActual && (
+                  <div className="mt-2 flex flex-col items-center">
+                    <p>Imagen Actual:</p>
+                    <img
+                      src={imagenActual}
+                      alt="Producto"
+                      className="w-[200px] h-[200px] object-cover rounded shadow mt-2"
+                    />
+                  </div>
+                )}
+
+                <label className="mt-2">Seleccionar Nueva Imagen:</label>
+                <InputLabel
+                  type="4"
+                  ForID="nueva_imagen"
+                  placeholder="Seleccionar Nueva Imagen"
+                  childLabel="Nueva Imagen"
+                  onChange={handleImageChange}
+                  className="w-full"
+                  placeholderError={!!errores.imagen}
                 />
+                {errores.imagen && <p className="text-red-600 text-sm">{errores.imagen}</p>}
+
+                <div className="flex justify-between gap-2 mt-4">
+                  <button onClick={cancelarEdicion} className="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded">
+                    Cancelar
+                  </button>
+                  <button onClick={handleActualizar} className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded">
+                    Actualizar
+                  </button>
+                </div>
               </div>
             )}
+          </section>
 
-            <label className="mt-2">Seleccionar Nueva Imagen:</label>
-            <InputLabel
-              type="4"
-              ForID="nueva_imagen"
-              placeholder="Seleccionar Nueva Imagen"
-              childLabel="Nueva Imagen"
-              onChange={handleImageChange}
-              className="w-full"
-              placeholderError={!!errores.imagen}
-            />
-            {errores.imagen && <p className="text-red-600 text-sm">{errores.imagen}</p>}
-
-            <div className="flex justify-between gap-2">
-              <button
-                onClick={cancelarEdicion}
-                className="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded"
-              >
-                Cancelar
-              </button>
-              <button
-                onClick={handleActualizar}
-                className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded"
-              >
-                Actualizar
-              </button>
-            </div>
-          </>
-        )}
-
-        {mensaje && (
-          <p
-            className={`text-center font-semibold ${mensaje.includes('exitosamente') ? 'text-green-600' : 'text-red-600'
-              }`}
-          >
-            {mensaje}
-          </p>
-        )}
-      </div>
-    </div>
+          {mensaje && (
+            <p className={`text-center font-semibold mt-2 ${mensaje.includes('exitosamente') ? 'text-green-600' : 'text-red-600'}`}>
+              {mensaje}
+            </p>
+          )}
+        </Box>
+      </Fade>
+    </Modal>
   )
 }

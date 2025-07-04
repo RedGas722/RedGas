@@ -359,7 +359,7 @@ export const Technica = () => {
         <h2 className="font-bold text-4xl text-[var(--Font-Nav)]">MI SERVICIO</h2>
       </div>
 
-      <section className="h-fit flex flex-col justify-center text-[var(--main-color)] z-[2] items-center gap-[20px] p-[0px_0px] MainPageContainer">
+      <section className="h-fit flex flex-col justify-center text-[var(--main-color)] z-[2] items-center gap-[50px] p-[0px_0px] MainPageContainer">
         <section className="flex flex-wrap items-center justify-center gap-[2rem] w-full h-fit p-[15px_0] sm:p-[15px_20px] NeoContainer_outset_TL">
           <div className="NeoContainer_outset_TL gap-2 flex flex-col sm:p-[20px_25px]">
             {/* Problem title */}
