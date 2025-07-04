@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import ButtonSide from './UI/ButtonSide'
 import { BtnBack } from "../UI/Login_Register/BtnBack"
 import { Buttons } from '../UI/Login_Register/Buttons'
 import './AdminStyles.css'
