@@ -27,7 +27,7 @@ import { AdminsBack } from './Admin/Admins/AdminsBack'
 import { Register } from './Pages/Register/Register'
 import { MainPage } from './Pages/MainPage/MainPage'
 import { Routes, Route } from 'react-router-dom'
-// import { Cursor } from './UI/Cursor/Cursor.jsx'
+import { Cursor } from './UI/Cursor/Cursor.jsx'
 import { Login } from './Pages/Login/Login'
 import { useEffect } from 'react'
 import { AdminApp } from './Admin/AdminApp'
@@ -53,7 +53,7 @@ export function AppContent() {
     return (
         <>
             <div>
-                {/* <Cursor /> */}
+                <Cursor />
                 <Routes>
                     <Route path="/" element={<MainPage />} />
                     <Route path="/CostumerMyService" element={<CostumerMyService />} />
@@ -90,11 +90,6 @@ export function AppContent() {
                     <Route path="/Admin/Employees" element={
                         <ProtectedRoute requiredTypes={[1]}>
                             <EmployeesBack />
-                        </ProtectedRoute>
-                    } />
-                    <Route path="/Admin/Factures" element={
-                        <ProtectedRoute requiredTypes={[1]}>
-                            <FacturesBack />
                         </ProtectedRoute>
                     } />
                     <Route path="/Admin/Categories" element={
@@ -139,6 +134,11 @@ export function AppContent() {
                     <Route path="/Admin/Sales" element={
                         <ProtectedRoute requiredTypes={[1, 3]}>
                             <SalesBack />
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/Admin/Factures" element={
+                        <ProtectedRoute requiredTypes={[1, 3]}>
+                            <FacturesBack />
                         </ProtectedRoute>
                     } />
 

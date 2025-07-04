@@ -87,37 +87,37 @@ export const CostumerMyService = () => {
 
   const handleChangeService = async () => {
     console.log('Cambiar servicio')
-    // const confirmed = await Swal.fire({
-    //   title: '¿Estás seguro?',
-    //   text: 'Esto eliminará tu servicio actual para que puedas crear uno nuevo.',
-    //   icon: 'question',
-    //   showCancelButton: true,
-    //   confirmButtonColor: '#19A9A4',
-    //   confirmButtonText: 'Sí, cambiar',
-    //   cancelButtonText: 'Cancelar',
-    // })
+    const confirmed = await Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'Esto eliminará tu servicio actual para que puedas crear uno nuevo.',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#19A9A4',
+      confirmButtonText: 'Sí, cambiar',
+      cancelButtonText: 'Cancelar',
+    })
 
-    // if (!confirmed.isConfirmed) return
+    if (!confirmed.isConfirmed) return
 
-    // alertSendForm('wait', 'Cambiando servicio...', 'Estamos procesando tu solicitud')
-    // try {
-    //   const response = await fetch(URL_DELETE, {
-    //     method: 'DELETE',
-    //     headers: { 'Content-Type': 'application/json' },
-    //     body: JSON.stringify({ userId: id }),
-    //   })
+    alertSendForm('wait', 'Cambiando servicio...', 'Estamos procesando tu solicitud')
+    try {
+      const response = await fetch(URL_DELETE, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: id }),
+      })
 
-    //   if (!response.ok) throw new Error('Error al cambiar el servicio')
+      if (!response.ok) throw new Error('Error al cambiar el servicio')
 
-    //   const data = await response.json()
-    //   if (data.status === 'Service info Deleted') {
-    //     alertSendForm('change', '', '')
-    //     setTimeout(() => navigate('/Services'), 0)
-    //   }
-    // } catch (error) {
-    //   console.error('Error al cambiar el servicio:', error)
-    //   alertSendForm(502, 'Error al cambiar el servicio', error.message)
-    // }
+      const data = await response.json()
+      if (data.status === 'Service info Deleted') {
+        alertSendForm('change', '', '')
+        setTimeout(() => navigate('/Services'), 0)
+      }
+    } catch (error) {
+      console.error('Error al cambiar el servicio:', error)
+      alertSendForm(502, 'Error al cambiar el servicio', error.message)
+    }
   }
 
   const handleDeleteService = async () => {
@@ -218,26 +218,26 @@ export const CostumerMyService = () => {
 
   return (
     <div>
-      <div className="flex p-[0_5px] items-center justify-between ">
+      <div className="flex z-[2] p-[0_5px] items-center justify-between ">
         <div className="btnDown">
           <BtnBack To='/' />
         </div>
         <div>
         <h2 className=" font-bold text-4xl text-[var(--Font-Nav)]">MI SERVICIO</h2>
         {info === false &&(
-          <div>
+          <div className="border-[2px] border-[var(--Font-Yellow)] rounded-lg p-2">
             <h3>tu servicio esta en proceso de aceptacion...</h3>
           </div>
         )}
         {info === true &&(
-          <div>
+          <div className="border-[2px] border-[var(--Font-Nav)] rounded-lg p-2">
             <h3>tu servicio ha sido aceptado</h3>
           </div>
         )}
         </div>
       </div>
-      <section className="h-fit flex flex-wrap justify-center text-[var(--main-color)] items-center gap-[20px] p-20">
-        <div className="flex flex-col flex-wrap justify-center max-w-[700px] min-w-0 NeoContainer_outset_TL p-5 gap-3">
+      <section className="h-fit z-[2] flex flex-wrap justify-center text-[var(--main-color)] items-center gap-[20px] p-20">
+        <div className="flex flex-col z-[2] flex-wrap justify-center max-w-[700px] min-w-0 NeoContainer_outset_TL p-5 gap-3">
 
           <div className="text-[var(--main-color-sub)] pl-2 gap-3 flex items-center font-bold w-fit">
             <FontAwesomeIcon icon={faUser} className="text-[var(--main-color)] text-5xl" />
@@ -248,12 +248,12 @@ export const CostumerMyService = () => {
             </div>
           </div>
 
-          <div>
+          <div className="z-[2]">
             <h4 className="text-xl font-bold text-[var(--main-color)]">Descripción de tu servicio</h4>
             <p className="whitespace-pre-line text-[var(--main-color)]">{description}</p>
           </div>
 
-          <div className="flex justify-center items-center gap-4">
+          <div className="z-[2] flex justify-center items-center gap-4">
             <Buttons
               type="submit"
               nameButton="Eliminar Servicio"

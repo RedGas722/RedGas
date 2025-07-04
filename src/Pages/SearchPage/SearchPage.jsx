@@ -1,7 +1,7 @@
 import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Header } from "../../Layouts/Header/Header";
-import CardsOffersGrid from "../../UI/Cards/CardsOffers/CardsOffersGrid";
+import { CardsOffersGrid } from "../../UI/Cards/CardsOffers/CardsOffersGrid";
 import CardsGrid from "../../UI/Cards/CardsGrid";
 import { BtnBack } from "../../UI/Login_Register/BtnBack"
 
@@ -84,12 +84,12 @@ export const SearchPage = () => {
     <>
       <Header />
       <div className='btnDown z-[2] '>
-        <BtnBack To='/'  />
+        <BtnBack To='/' />
       </div>
       <div className="min-h-screen text-[var(--main-color)] pt-14 px-4 sm:px-6 md:px-10 lg:px-14 xl:px-20">
         <h1 className="text-3xl font-bold mb-10">
-          {query 
-            ? <p className="z-[2]">Resultados para: <span className="z-[2] text-[var(--main-color)]">{query}</span></p> 
+          {query
+            ? <p className="z-[2]">Resultados para: <span className="z-[2] text-[var(--main-color)]">{query}</span></p>
             : <span className="z-[2] text-[var(--main-color)]">{category}</span>}
         </h1>
 
@@ -100,7 +100,7 @@ export const SearchPage = () => {
             {productosConDescuento.length > 0 && (
               <section className="z-[2] ">
                 <h2 className="text-2xl font-semibold text-[var(--main-color)] mb-8 mt-12">Ofertas:</h2>
-                <div className="mt-10">
+                <div className="">
                   <CardsOffersGrid productos={productosConDescuento} />
                 </div>
               </section>

@@ -35,15 +35,15 @@ const CardTechniciansBack = ({ tecnico, setRefrescar, onUpdateClick }) => {
   }
 
   return (
-    <div className="text-center items-center z-[2] NeoContainer_outset_TL w-[300px] p-4 h-fit flex flex-col justify-start gap-2">
+    <div className="text-center items-center z-[2] NeoContainer_outset_TL max-w-[320px] p-4 h-[450px] flex flex-col justify-start gap-2">
       <h2 className="text-xl font-bold text-[var(--Font-Nav)] truncate w-full">{tecnico.nombre_tecnico}</h2>
 
-      <div className="w-full flex justify-center">
+      <div className="max-w-[180px] flex justify-center">
         {imageUrl ? (
           <img
             src={imageUrl}
             alt={tecnico.nombre_tecnico}
-            className="w-[180px] h-[180px] object-cover rounded-[20px] border"
+            className="max-w-[180px] max-h-[180px] object-cover rounded-[20px] border"
           />
         ) : (
           <div className="w-[180px] h-[180px] flex justify-center items-center bg-gray-200 rounded-[20px] text-[var(--main-color-sub)] text-sm">

@@ -35,14 +35,14 @@ const CardsProductsBack = ({ producto, setRefrescar, onUpdateClick }) => {
   }
 
   return (
-    <div className="text-start z-[2] items-center NeoContainer_outset_TL p-4 max-w-[450px] h-fit flex flex-col justify-start gap-2">
+    <div className="text-start z-[2] items-center NeoContainer_outset_TL p-4 max-w-[320px] h-fit flex flex-col justify-start gap-2">
       <h2 className="text-[20px] font-semibold text-[var(--main-color)]">{producto.nombre_producto}</h2>
-      <div>
+      <div className='h-[340px] flex flex-col items-center justify-center gap-2'>
         {imageUrl ? (
           <img
             src={imageUrl}
             alt={producto.nombre_producto}
-            className="w-full object-contain rounded-[20px]"
+            className="max-w-[280px] max-h-[280px] object-contain rounded-[20px]"
           />
         ) : (
           <div className="w-full h-[180px] flex justify-center items-center bg-gray-200 rounded-md text-gray-500">
@@ -50,7 +50,7 @@ const CardsProductsBack = ({ producto, setRefrescar, onUpdateClick }) => {
           </div>
         )}
 
-        <div className="text-[var(--main-color)] flex flex-col text-sm">
+        <div className="text-[var(--main-color)] h-fit flex flex-col text-sm">
           <p className="font-medium flex flex-wrap gap-2">
             <span className="font-bold text-[15px]">Categoría:</span>
             <span className="break-words">{producto.categorias?.join(', ') || 'Sin categoría'}</span>
@@ -75,16 +75,16 @@ const CardsProductsBack = ({ producto, setRefrescar, onUpdateClick }) => {
               </>
             )}
           </p>
+          <p className="text-lg font-bold text-green-600">
+            {new Intl.NumberFormat('es-CO', {
+              style: 'currency',
+              currency: 'COP',
+            }).format(producto.precio_producto || 0)}
+          </p>
         </div>
-        <p className="text-lg font-bold text-green-600">
-          {new Intl.NumberFormat('es-CO', {
-            style: 'currency',
-            currency: 'COP',
-          }).format(producto.precio_producto || 0)}
-        </p>
       </div>
 
-      <div className="mt-4 flex flex-col gap-2">
+      <div className="flex flex-col gap-2">
         <Buttons onClick={handleDelete} nameButton='Eliminar' textColor='var(--Font-Nav2)' radius='12' borderWidth='1' borderColor='var(--Font-Nav2)' />
         <Buttons onClick={() => onUpdateClick(producto)} nameButton='Actualizar' textColor='var(--Font-Yellow)' radius='12' borderWidth='1' borderColor='var(--Font-Yellow)' />
       </div>

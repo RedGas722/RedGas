@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, NavLink } from 'react-router-dom'
 import { Link } from 'react-scroll'
 import Box from '@mui/material/Box'
 import Tabs from '@mui/material/Tabs'
@@ -7,7 +7,7 @@ import Tab from '@mui/material/Tab'
 import { tabsClasses } from '@mui/material/Tabs' 
 import useMediaQuery from '@mui/material/useMediaQuery'
 
-export const Navs = ({ className, ref1, ref2, ref3, ref4 }) => {
+export const  Navs = ({ className, ref1, ref2, ref3, ref4 }) => {
     const [tipoUsuario, setTipoUsuario] = useState(null)
     const [tabIndex, setTabIndex] = useState(0)
     const navigate = useNavigate()
@@ -50,13 +50,17 @@ export const Navs = ({ className, ref1, ref2, ref3, ref4 }) => {
             { label: 'Ofertas', action: () => document.getElementById('linkOffers')?.click() },
             { label: 'Productos', action: () => document.getElementById('linkMainPage')?.click() },
         ]
-
-        if (tipoUsuario === 4) {
-            baseTabs.push({ label: 'Servi', action: () => navigate('/CostumerServices') })
+        
+        if (tipoUsuario === 2) {
+            baseTabs.push({ label: 'Servicio', action: () => navigate('/CostumerMyService')?.click() });
         }
 
         if (tipoUsuario === 1 || tipoUsuario === 3) {
             baseTabs.push({ label: 'Admin', action: () => navigate('/Admin') })
+        }
+
+        if (tipoUsuario === 4) {
+            baseTabs.push({ label: 'Servi', action: () => navigate('/CostumerServices')?.click() });
         }
         return baseTabs
     }
@@ -133,6 +137,9 @@ export const Navs = ({ className, ref1, ref2, ref3, ref4 }) => {
                 </span>
                 <span ref={ref3}>
                     <Link id="linkMainPage" to="AllProduct" smooth={true} duration={500} offset={-130} />
+                </span>
+                <span ref={ref4}>
+                    <NavLink id="linkM" to="/Services" />
                 </span>
                 <span ref={ref4} />
             </div>

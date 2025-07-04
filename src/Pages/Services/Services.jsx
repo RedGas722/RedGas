@@ -9,8 +9,8 @@ import withReactContent from 'sweetalert2-react-content'
 import Swal from 'sweetalert2'
 import './Services.css'
 
-const URL_IA = 'http://localhost:10101/Diagnostic'
-const URL_REDIS = 'http://localhost:10101/ClienteServicesAdd'
+const URL_IA = 'https://redgas.onrender.com/Diagnostic'
+const URL_REDIS = 'https://redgas.onrender.com/ClienteServicesAdd'
 
 
 export const ServicesInfo = () => {
@@ -183,7 +183,7 @@ export const ServicesInfo = () => {
 
 
    return (
-      <section className="flex flex-col gap-8 p-[5px]">
+      <section id="Service" className="flex flex-col gap-8 p-[5px] ">
          <div className="flex flex-col z-[2] text-center gap-2 sm:gap-0 sm:flex-row sm:justify-between items-center w-full">
             <BtnBack To='/' />
             <h2 className="font-bold text-3xl sm:text-4xl text-[var(--Font-Nav)]">Formulario Servicio</h2>
@@ -194,59 +194,59 @@ export const ServicesInfo = () => {
                <h2 className="font-bold text-3xl text-[var(--main-color)]">Historial</h2>
                <div className="w-full flex p-[0_10px_25px_0] flex-col gap-2 ">
 
-                  <div className="NeoSubContainer_outset_TL w-full p-[10px]">
-                     <div className="flex items-center gap-2 text-[var(--Font-Nav)]">
-                        <FontAwesomeIcon icon={faPlug} className="text-[var(--Font-Nav)]" />
-                        <h3 className="text-[17px] font-bold">Instalación</h3>
-                     </div>
-                     <div className="pl-[3px]">
-                        <h3 className="text-[15px] font-bold">Descripción:</h3>
-                        <ShortText text='mi estufa no prende y huele a gasmi estufa no prende y huele a gasmi estufa no prende y huele a gasmi estufa no prende y huele a gasmi estufa no prende y huele a gasmi estufa no prende y huele a gasmi estufa no prende y huele a gasmi estufa no prende y huele a gasmi estufa no prende y huele a gas' />
-                     </div>
-                     <div>
-                        <h3 className="text-[15px] font-bold">Estado:</h3>
-                        <div className="flex items-center text-[var(--Font-Yellow)]">
-                           <FontAwesomeIcon icon={faRotate} className="" />
-                           <p className="text-[13px] pl-[5px] font-semibold">En proceso</p>
+                     <div className="NeoSubContainer_outset_TL w-full p-[10px]">
+                        <div className="flex items-center gap-2 text-[var(--Font-Nav)]">
+                           <FontAwesomeIcon icon={faPlug} className="text-[var(--Font-Nav)]" />
+                           <h3 className="text-[17px] font-bold">Instalación</h3>
+                        </div>
+                        <div className="pl-[3px]">
+                           <h3 className="text-[15px] font-bold">Descripción:</h3>
+                           <ShortText text='mi estufa no prende y huele a gasmi estufa no prende y huele a gasmi estufa no prende y huele a gasmi estufa no prende y huele a gasmi estufa no prende y huele a gasmi estufa no prende y huele a gasmi estufa no prende y huele a gasmi estufa no prende y huele a gasmi estufa no prende y huele a gas' />
+                        </div>
+                        <div>
+                           <h3 className="text-[15px] font-bold">Estado:</h3>
+                           <div className="flex items-center text-[var(--Font-Yellow)]">
+                              <FontAwesomeIcon icon={faRotate} className="" />
+                              <p className="text-[13px] pl-[5px] font-semibold">En proceso</p>
+                           </div>
                         </div>
                      </div>
-                  </div>
 
-                  <div className="NeoSubContainer_outset_TL w-full p-[10px]">
-                     <div className="flex items-center gap-2 text-[var(--Font-Nav)]">
-                        <FontAwesomeIcon icon={faGears} className="text-[var(--Font-Nav)]" />
-                        <h3 className="text-[17px] font-bold">Reparación</h3>
-                     </div>
-                     <div className="pl-[3px]">
-                        <h3 className="text-[15px] font-bold">Descripción:</h3>
-                        <ShortText text='mi estufa no prende y huele a gas' />
-                     </div>
-                     <div>
-                        <h3 className="text-[15px] font-bold">Estado:</h3>
-                        <div className="flex items-center text-[var(--Font-Nav)]">
-                           <FontAwesomeIcon icon={faCheck} className="" />
-                           <p className="text-[13px] pl-[5px] font-semibold">Finalizado</p>
+                     <div className="NeoSubContainer_outset_TL w-full p-[10px]">
+                        <div className="flex items-center gap-2 text-[var(--Font-Nav)]">
+                           <FontAwesomeIcon icon={faGears} className="text-[var(--Font-Nav)]" />
+                           <h3 className="text-[17px] font-bold">Reparación</h3>
+                        </div>
+                        <div className="pl-[3px]">
+                           <h3 className="text-[15px] font-bold">Descripción:</h3>
+                           <ShortText text='mi estufa no prende y huele a gas' />
+                        </div>
+                        <div>
+                           <h3 className="text-[15px] font-bold">Estado:</h3>
+                           <div className="flex items-center text-[var(--Font-Nav)]">
+                              <FontAwesomeIcon icon={faCheck} className="" />
+                              <p className="text-[13px] pl-[5px] font-semibold">Finalizado</p>
+                           </div>
                         </div>
                      </div>
-                  </div>
 
-                  <div className="NeoSubContainer_outset_TL w-full p-[10px]">
-                     <div className="flex items-center gap-2 text-[var(--Font-Nav)]">
-                        <FontAwesomeIcon icon={faTools} className="text-[var(--Font-Nav)]" />
-                        <h3 className="text-[17px] font-bold">Mantenimiento</h3>
-                     </div>
-                     <div className="pl-[3px]">
-                        <h3 className="text-[15px] font-bold">Descripción:</h3>
-                        <ShortText text='mi estufa no prende y huele a gas' />
-                     </div>
-                     <div>
-                        <h3 className="text-[15px] font-bold">Estado:</h3>
-                        <div className="flex items-center text-[var(--Font-Nav2)]">
-                           <FontAwesomeIcon icon={faX} className="" />
-                           <p className="text-[13px] pl-[5px] font-semibold">Cancelado</p>
+                     <div className="NeoSubContainer_outset_TL w-full p-[10px]">
+                        <div className="flex items-center gap-2 text-[var(--Font-Nav)]">
+                           <FontAwesomeIcon icon={faTools} className="text-[var(--Font-Nav)]" />
+                           <h3 className="text-[17px] font-bold">Mantenimiento</h3>
+                        </div>
+                        <div className="pl-[3px]">
+                           <h3 className="text-[15px] font-bold">Descripción:</h3>
+                           <ShortText text='mi estufa no prende y huele a gas' />
+                        </div>
+                        <div>
+                           <h3 className="text-[15px] font-bold">Estado:</h3>
+                           <div className="flex items-center text-[var(--Font-Nav2)]">
+                              <FontAwesomeIcon icon={faX} className="" />
+                              <p className="text-[13px] pl-[5px] font-semibold">Cancelado</p>
+                           </div>
                         </div>
                      </div>
-                  </div>
 
                </div>
             </div>
@@ -279,4 +279,4 @@ export const ServicesInfo = () => {
    )
 }
 
-export default ServicesInfo
+         export default ServicesInfo
