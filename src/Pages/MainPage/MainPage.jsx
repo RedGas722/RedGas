@@ -16,11 +16,15 @@ import './MainPage.css'
 export const MainPage = () => {
     const navigate = useNavigate();
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(false);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
         setIsLoggedIn(!!token);
+        const tipoUsuario = localStorage.getItem('tipo_usuario');
+        setIsAdmin(tipoUsuario === '1');
     }, []);
+
 
     return (
         <>
@@ -38,8 +42,8 @@ export const MainPage = () => {
                     </section>
                     <div></div>
                 </div>
-                {isLoggedIn && (
-                    <div onClick={() => navigate('/Shopping')} className="w-10 h-10 fixed bottom-2 rounded-[100px] p-[10px] right-5 bg-[var(--Font-Nav)] z-[5]"><FontAwesomeIcon icon={faCartShopping} className="text-[var(--main-color)]" /></div>
+                {isLoggedIn && !isAdmin && (
+                    <div onClick={() => navigate('/Shopping')} className="shopCart cursor-pointer w-10 h-10 fixed bottom-2 rounded-[100px] p-[10px] right-5 bg-[rgb(230_86_91)] z-[5]"><FontAwesomeIcon icon={faCartShopping} className="text-white" /></div>
                 )}
             </div>
             <Footer />
