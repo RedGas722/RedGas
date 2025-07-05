@@ -43,7 +43,7 @@ export const MainPage = () => {
                     <div></div>
                 </div>
                 {isLoggedIn && !isAdmin && (
-                    <div onClick={() => navigate('/Shopping')} className="shopCart cursor-pointer w-10 h-10 fixed bottom-2 rounded-[100px] p-[10px] right-5 bg-[rgb(230_86_91)] z-[5]"><FontAwesomeIcon icon={faCartShopping} className="text-white" /></div>
+                    <div onClick={() => navigate('/Shopping')} className="shopCart cursor-pointer w-10 h-10 fixed bottom-2 rounded-[100px] p-[10px] right-5 bg-[var(--Font-Nav)] z-[5]"><FontAwesomeIcon icon={faCartShopping} className="text-white" /></div>
                 )}
             </div>
             <Footer />

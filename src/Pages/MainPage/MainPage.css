@@ -4,9 +4,7 @@
     padding: 40px 80px 5px 80px;
     border-radius: 0 0 40px 40px;
 }
-.shopCart{
-    mix-blend-mode: difference;
-} 
+
 @media screen and (max-width: 768px) {
     .MainPageContainer {
         padding: 0 1% 20px 1%;
