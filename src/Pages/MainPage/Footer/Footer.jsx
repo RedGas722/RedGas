@@ -1,4 +1,4 @@
-import Logo from '../../../assets/Images/Redgas.png'
+import Logo from '../../../assets/Images/Redgas.webp'
 import { useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react"
 import { Link } from 'react-scroll'

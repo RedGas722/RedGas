@@ -1,5 +1,5 @@
 import './Hero.css'
-import Logo from '../../../assets/Images/Redgas.png'
+import Logo from '../../../assets/Images/Redgas.webp'
 import { useEffect, useRef } from 'react'
 import { gsap } from 'gsap'
 
