@@ -312,7 +312,6 @@ export const UpdateModal = ({ onClose, setRefrescar, productoCarta }) => {
     }
   }
 
-
   return (
     <Modal
       open={true}
