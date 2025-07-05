@@ -37,6 +37,9 @@ import ConfirmacionMercadoPago from './Pages/Shopping/ConfirmacionMP.jsx'
 // 👇 Importar ruta protegida
 import { ProtectedRoute } from './Pages/Login/ProtectedRoutes.jsx'
 import { SalesBack } from './Admin/Sales/SalesBack.jsx'
+import Profile, { ProfileClient } from './Pages/Profile/ProfileClient.jsx'
+import ProfileTechnician from './Pages/Profile/ProfileTechnician.jsx'
+import ProfileGeneral from './Pages/Profile/ProfileGeneral.jsx'
 
 export function AppContent() {
     const { isLoading } = useLoading();
@@ -73,11 +76,25 @@ export function AppContent() {
                     <Route path='/Login/ForgotPassword' element={<ForgotPassword />} />
                     <Route path='/Login/ForgotPassword/Recovery/:token' element={<RecoveryPassword />} />
 
-                    {/*Cliente (tipoUsuario === 2)*/}
-                    
+                    {/*Rutas cliente y tecnico*/}
+
                     <Route path="/Shopping" element={
                         <ProtectedRoute requiredTypes={[2,4]}>
                             <Shopping />
+                        </ProtectedRoute>
+                    } />
+
+                    <Route path="/ProfileGeneral" element={
+                        <ProtectedRoute requiredTypes={[2,4]}>
+                            <ProfileGeneral />
+                        </ProtectedRoute>
+                    } />
+
+                    {/*Cliente (tipoUsuario === 2)*/}
+
+                    <Route path="/ProfileClient" element={
+                        <ProtectedRoute requiredTypes={[2]}>
+                            <ProfileClient />
                         </ProtectedRoute>
                     } />
 
@@ -147,6 +164,12 @@ export function AppContent() {
                     <Route path="/CostumerServices" element={
                         <ProtectedRoute requiredTypes={[4]}>
                             <CostumerServices />
+                        </ProtectedRoute>
+                    } />
+
+                    <Route path="/ProfileTechnician" element={
+                        <ProtectedRoute requiredTypes={[2]}>
+                            <ProfileTechnician />
                         </ProtectedRoute>
                     } />
 

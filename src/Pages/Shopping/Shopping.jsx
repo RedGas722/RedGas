@@ -39,7 +39,7 @@ export const Shopping = () => {
 
       const productDetails = await Promise.all(
         cartData.map(async (item) => {
-          const res = await fetch(`https://redgas.onrender.com/ProductoGet?nombre_producto=${encodeURIComponent(item.productName)}`, {
+          const res = await fetch(`https://redgas.onrender.com/ProductoGetById?id_producto=${encodeURIComponent(item.productId)}`, {
             method: "GET",
             headers: {
               "Content-Type": "application/json"
@@ -51,13 +51,17 @@ export const Shopping = () => {
           const data = await res.json()
           const productData = data.data
 
+          const imagenBuffer = productData.imagen?.data;
+          const imagenBase64 = imagenBuffer ? `${btoa(String.fromCharCode(...imagenBuffer))}` : null;
+
           return {
             ...productData,
+            imagen: imagenBase64,
             cantidad: item.quantity
           }
         })
       )
-
+      console.log("Productos obtenidos:", productDetails)
       setProducts(productDetails)
     } catch (err) {
       setError(err.message || "Error desconocido")
