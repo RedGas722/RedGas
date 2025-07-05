@@ -12,7 +12,7 @@ const FacturasModal = ({ onClose }) => {
       const token = localStorage.getItem("token");
       if (!token) throw new Error("No estás autenticado");
 
-      const res = await fetch("http://localhost:10101/FacturaGetByClient", {
+      const res = await fetch("https://redgas.onrender.com/FacturaGetByClient", {
         headers: { Authorization: `Bearer ${token}` },
       });
 
