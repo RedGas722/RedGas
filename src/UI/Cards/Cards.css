@@ -49,7 +49,7 @@
 
 .embla__slide {
     flex: 0 0 auto;
-    padding: 0 5px;
+    min-width: 190px;
 }
 
 /* Breakpoints */

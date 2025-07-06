@@ -62,7 +62,7 @@ export const Footer = () => {
                                 textColor='var(--main-color)'
                             />
                         </Link>
-                        <p className="text-sm">Gracias por confiar en RedGas.</p>
+                        <p className="text-sm">Gracias por confiar en nosotros.</p>
                     </div>
                     {
                         Contact()

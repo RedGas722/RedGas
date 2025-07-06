@@ -4,6 +4,7 @@ import { gsap } from 'gsap';
 import { SearchBarr } from "../../UI/Header/SearchBarr/SearchBarr"
 import { Navs } from "../../UI/Header/Nav/Nav"
 import useMediaQuery from '@mui/material/useMediaQuery'
+import { getUserInitialsFromToken } from "../../UI/Utils/TokenUtils";
 import { jwtDecode } from "jwt-decode";
 import './Header.css'
 
@@ -40,21 +41,10 @@ export const Header = ({ classUser, classNavs }) => {
     // Verificar si el usuario está autenticado
     useEffect(() => {
         if (token) {
-            const decoded = jwtDecode(token);
-            const names = decoded.data.name.split(' ')
-            const firstLetter = names[0].toUpperCase()
-
-            if (firstLetter.length > 6) {
-                const secondLetter = names[1].toUpperCase().slice(0, 1)
-                setUserName(firstLetter.slice(0, 1) + secondLetter);
-            } else {
-                setUserName(firstLetter)
-            }
+            setUserName(getUserInitialsFromToken(token));
         } else {
-            setUserName('Iniciar')
+            setUserName("Iniciar");
         }
-
-
     }, [token]);
 
     // Cargar productos al iniciar

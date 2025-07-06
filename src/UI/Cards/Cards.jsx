@@ -44,7 +44,7 @@ export const Cards = ({ uniqueId, productos = [] }) => {
       320: { slidesToScroll: 1 },
       500: { slidesToScroll: 1 },
       852: { slidesToScroll: 1 },
-      1080: { slidesToScroll: 5 },
+      1080: { slidesToScroll: 1 },
       1390: { slidesToScroll: 1 },
     },
   });
