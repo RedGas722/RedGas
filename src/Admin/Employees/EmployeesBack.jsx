@@ -5,10 +5,12 @@ import { BtnBack } from "../../UI/Login_Register/BtnBack"
 import { InputLabel } from '../../UI/Login_Register/InputLabel/InputLabel'
 import CardEmployeesBack from './Get/CardEmployeesBack'
 import { buscarEmpleadoPorCorreo } from './Get/Get'
+import { Backdrop, CircularProgress } from '@mui/material';
 import { Paginator } from '../../UI/Paginator/Paginator'
 import { Buttons } from '../../UI/Login_Register/Buttons'
 
 export const EmployeesBack = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const [showRegisterModal, setShowRegisterModal] = useState(false)
   const [showUpdateModal, setShowUpdateModal] = useState(false)
   const [empleados, setEmpleados] = useState([])
@@ -24,6 +26,7 @@ export const EmployeesBack = () => {
   const contenedorRef = useRef(null)
 
   const fetchEmpleados = async (pagina = 1) => {
+    setIsLoading(true)
     try {
       const res = await fetch(`https://redgas.onrender.com/EmpleadoGetAllPaginated?page=${pagina}`)
       if (!res.ok) throw new Error('Error al obtener empleados')
@@ -35,6 +38,8 @@ export const EmployeesBack = () => {
       setTotalPaginas(resultado.totalPages)
     } catch (error) {
       console.error(error)
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -175,17 +180,16 @@ export const EmployeesBack = () => {
         </div>
 
         {/* Paginador */}
-        {!empleadoBuscado && (
           <Paginator
             currentPage={paginaActual}
             totalPages={totalPaginas}
             onPageChange={(nuevaPagina) => {
               if (nuevaPagina !== paginaActual) {
-                setPaginaActual(nuevaPagina)
+                setPaginaActual(nuevaPagina);
               }
             }}
+            disabled={isLoading}
           />
-        )}
 
         {/* Modales */}
         {showRegisterModal && (
@@ -203,6 +207,12 @@ export const EmployeesBack = () => {
           />
         )}
       </div>
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={isLoading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </section>
   )
 }

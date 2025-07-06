@@ -48,6 +48,8 @@ export const Footer = () => {
                 <div className='flex items-end justify-center flex-wrap gap-4 lg:gap-80'>
                     <div className='items-center z-[2] flex flex-col gap-3 sm:max-w-md text-center text-white'>
                         <img src={Logo} className="w-32 sm:mx-auto" />
+                        <h1 className='text-3xl sm:text-4xl text-center font-bold text-[var(--Font-Nav)]'>RedGas</h1>
+
                         <p className="text-lg font-bold">Bienvenido de nuevo!</p>
                         <Link id="linkHero" to="Hero" smooth={true} duration={500} offset={-900} >
                             <Buttons

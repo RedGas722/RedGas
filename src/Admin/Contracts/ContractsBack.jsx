@@ -6,9 +6,11 @@ import { InputLabel } from '../../UI/Login_Register/InputLabel/InputLabel'
 import CardContractsBack from './Get/CardContractsBack'
 import { buscarContratoPorEmpleado } from './Get/Get'
 import { Paginator } from '../../UI/Paginator/Paginator'
+import { Backdrop, CircularProgress } from '@mui/material';
 import { Buttons } from '../../UI/Login_Register/Buttons'
 
 export const ContractsBack = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const [showRegisterModal, setShowRegisterModal] = useState(false)
   const [showUpdateModal, setShowUpdateModal] = useState(false)
   const [contratos, setContratos] = useState([])
@@ -47,6 +49,7 @@ export const ContractsBack = () => {
   }
 
   const fetchContratos = async (pagina = 1) => {
+    setIsLoading(true)
     try {
       const res = await fetch(`https://redgas.onrender.com/ContratoGetAllPaginated?page=${pagina}`)
       if (!res.ok) throw new Error('Error al obtener contratos')
@@ -58,6 +61,8 @@ export const ContractsBack = () => {
       setTotalPaginas(resultado.totalPages)
     } catch (error) {
       console.error(error)
+    }finally {
+      setIsLoading(false);
     }
   }
 
@@ -100,14 +105,14 @@ export const ContractsBack = () => {
   }, [])
 
   useEffect(() => {
-      if (correoBusqueda.trim() === '') {
-        // Cuando el input esté vacío, limpiar la búsqueda y mostrar todos los contratos
-        setContratoBuscado(null)
-        setErrorBusqueda('')
-        fetchContratos(1)
-        setPaginaActual(1)
-      }
-    }, [correoBusqueda])
+    if (correoBusqueda.trim() === '') {
+      // Cuando el input esté vacío, limpiar la búsqueda y mostrar todos los contratos
+      setContratoBuscado(null)
+      setErrorBusqueda('')
+      fetchContratos(1)
+      setPaginaActual(1)
+    }
+  }, [correoBusqueda])
 
   const buscarContrato = async (correo) => {
     setErrorBusqueda('')
@@ -183,7 +188,7 @@ export const ContractsBack = () => {
 
         {errorBusqueda && <p className="text-red-600 text-sm">{errorBusqueda}</p>}
 
-        <div className="flex flex-wrap items-center gap-6">
+        <div className="flex flex-wrap items-start gap-6">
           {(contratoBuscado
             ? Array.isArray(contratoBuscado) ? contratoBuscado : [contratoBuscado]
             : contratos
@@ -199,17 +204,16 @@ export const ContractsBack = () => {
           ))}
         </div>
 
-        {!contratoBuscado && (
-          <Paginator
-            currentPage={paginaActual}
-            totalPages={totalPaginas}
-            onPageChange={nuevaPagina => {
-              if (nuevaPagina !== paginaActual) {
-                setPaginaActual(nuevaPagina)
-              }
-            }}
-          />
-        )}
+        <Paginator
+          currentPage={paginaActual}
+          totalPages={totalPaginas}
+          onPageChange={(nuevaPagina) => {
+            if (nuevaPagina !== paginaActual) {
+              setPaginaActual(nuevaPagina);
+            }
+          }}
+          disabled={isLoading}
+        />
 
         {showRegisterModal && (
           <RegisterModal
@@ -228,6 +232,12 @@ export const ContractsBack = () => {
           />
         )}
       </div>
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={isLoading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </section>
   )
 }

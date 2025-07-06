@@ -17,7 +17,7 @@ const CardEmployeesBack = ({ empleado, setRefrescar, onUpdateClick }) => {
   }
 
   return (
-    <div className="bg-white shadow-lg rounded-lg p-4 w-full min-h-[150px] flex flex-col justify-start overflow-hidden">
+    <div className="NeoContainer_outset_TL p-4 w-[400px] z-[2] gap-4 min-h-[150px] flex flex-col justify-start overflow-hidden">
       <h2 className="text-xl font-semibold text-gray-800 truncate">{empleado.nombre_empleado}</h2>
       <div className="text-[var(--main-color)] flex flex-col text-sm">
         <p className="font-medium flex flex-wrap gap-2">
@@ -37,17 +37,9 @@ const CardEmployeesBack = ({ empleado, setRefrescar, onUpdateClick }) => {
           <span className="break-words">{empleado.telefono_empleado}</span>
         </p>
         <p className="font-medium flex flex-wrap gap-2">
-          <span className="font-bold text-[15px]">Teléfono:</span>
+          <span className="font-bold text-[15px]">Dirección:</span>
           <span className="break-words">{empleado.direccion_empleado}</span>
         </p>
-      </div>
-
-      <div className="mt-2 space-y-1 text-sm">
-        <p><span className="font-semibold">ID:</span> {empleado.id_empleado}</p>
-        <p><span className="font-semibold">CC:</span> {empleado.cc_empleado}</p>
-        <p><span className="font-semibold">Correo:</span> {empleado.correo_empleado}</p>
-        <p><span className="font-semibold">Teléfono:</span> {empleado.telefono_empleado}</p>
-        <p><span className="font-semibold">Dirección:</span> {empleado.direccion_empleado}</p>
       </div>
 
       <div className="flex flex-col gap-2">

@@ -162,7 +162,8 @@ export const CardsOffers = ({ uniqueId, productos = [] }) => {
                 <div className="flex gap-1 items-end justify-center">
                   <div className="card-title">{producto.nombre_producto}</div>
                 </div>
-                <ExpandMore text={producto.descripcion_producto} />
+
+                <p className='card-subtitle short-description'>{producto.descripcion_producto}</p>
                 <div className="w-full h-[2px] bg-[var(--main-color-sub)] rounded-2xl"></div>
                 <div className="card-footer">
                   <div className="card-price">
@@ -218,15 +219,19 @@ export const CardsOffers = ({ uniqueId, productos = [] }) => {
       <Modal open={open} onClose={handleClose} disableScrollLock>
         <Box
           sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
             width: 350,
-            bgcolor: "background.paper",
-            zIndex: 1000,
-            border: "2px solid #19A9A4",
+            bgcolor: 'background.paper',
+            zIndex: '1000',
+            border: '2px solid #19A9A4',
             boxShadow: 24,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
             borderRadius: 4,
             p: 4,
           }}

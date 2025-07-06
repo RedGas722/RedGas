@@ -6,9 +6,11 @@ import CardServicesGetBack from './Get/CardServicesBack'
 import { buscarServicioPorNombre } from './Get/Get'
 import { InputLabel } from '../../UI/Login_Register/InputLabel/InputLabel'
 import { Buttons } from '../../UI/Login_Register/Buttons'
+import { Backdrop, CircularProgress } from '@mui/material';
 import { Paginator } from '../../UI/Paginator/Paginator'
 
 export const ServicesBack = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const [showRegisterModal, setShowRegisterModal] = useState(false)
   const [showUpdateModal, setShowUpdateModal] = useState(false)
   const [servicios, setServicios] = useState([])
@@ -23,6 +25,7 @@ export const ServicesBack = () => {
   const contenedorRef = useRef(null)
 
   const fetchServicios = async (pagina = 1) => {
+    setIsLoading(true)
     try {
       const res = await fetch(`https://redgas.onrender.com/ServicioGetAllPaginated?page=${pagina}`)
       if (!res.ok) throw new Error('Error al obtener servicios')
@@ -34,6 +37,8 @@ export const ServicesBack = () => {
       setTotalPaginas(resultado.totalPages)
     } catch (error) {
       console.error(error)
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -119,7 +124,7 @@ export const ServicesBack = () => {
 
       <div className="p-[var(--p-admin-sub)] h-full flex flex-col gap-4">
         <h1 className="font-bold z-[2] text-3xl text-[var(--main-color)]">Servicios</h1>
-        <div className="NeoContainer_outset_TL z-[50] flex gap-4 flex-wrap items-end w-fit p-[var(--p-admin-control)]">
+        <div className="NeoContainer_outset_TL z-[2] flex gap-4 flex-wrap items-end w-fit p-[var(--p-admin-control)]">
           <div className="relative" ref={contenedorRef}>
             <InputLabel
               radius="10"
@@ -163,14 +168,14 @@ export const ServicesBack = () => {
 
         {errorBusqueda && <p className="text-red-600 text-sm">{errorBusqueda}</p>}
 
-        <div className="flex flex-wrap items-center gap-6">
+        <div className="flex flex-wrap items-start gap-6">
           {(servicioBuscado ? [servicioBuscado] : servicios).map(servicio => (
             <CardServicesGetBack
               key={servicio.id_servicio}
               servicio={servicio}
               setRefrescar={setRefrescar}
               onUpdateClick={handleUpdateClick}
-              onDeleteClick={() => {}}
+              onDeleteClick={() => { }}
             />
           ))}
         </div>
@@ -178,12 +183,14 @@ export const ServicesBack = () => {
         <Paginator
           currentPage={paginaActual}
           totalPages={totalPaginas}
-          onPageChange={nuevaPagina => {
+          onPageChange={(nuevaPagina) => {
             if (nuevaPagina !== paginaActual) {
-              setPaginaActual(nuevaPagina)
+              setPaginaActual(nuevaPagina);
             }
           }}
+          disabled={isLoading}
         />
+
 
         {/* Modales */}
         {showRegisterModal && (
@@ -197,6 +204,12 @@ export const ServicesBack = () => {
           />
         )}
       </div>
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={isLoading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </section>
   )
 }

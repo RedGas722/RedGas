@@ -5,10 +5,12 @@ import { BtnBack } from "../../UI/Login_Register/BtnBack"
 import { InputLabel } from '../../UI/Login_Register/InputLabel/InputLabel'
 import CardCategoriesBack from './Get/CardCategoriesBack'
 import { buscarCategoriaPorNombre } from './Get/Get'
+import { Backdrop, CircularProgress } from '@mui/material';
 import { Paginator } from '../../UI/Paginator/Paginator'
 import { Buttons } from '../../UI/Login_Register/Buttons'
 
 export const CategoriesBack = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const [showRegisterModal, setShowRegisterModal] = useState(false)
   const [showUpdateModal, setShowUpdateModal] = useState(false) // Aquí guardaremos la categoría seleccionada (objeto) o false
   const [categorias, setCategorias] = useState([])
@@ -24,6 +26,7 @@ export const CategoriesBack = () => {
   const contenedorRef = useRef(null)
 
   const fetchCategorias = async (pagina = 1) => {
+    setIsLoading(true)
     try {
       const res = await fetch(`https://redgas.onrender.com/CategoriaGetAllPaginated?page=${pagina}`)
       if (!res.ok) throw new Error('Error al obtener categorías')
@@ -35,6 +38,8 @@ export const CategoriesBack = () => {
       setTotalPaginas(resultado.totalPages)
     } catch (error) {
       console.error(error)
+    }finally {
+      setIsLoading(false);
     }
   }
 
@@ -120,7 +125,7 @@ export const CategoriesBack = () => {
 
       <div className="p-[var(--p-admin-sub)] h-full flex flex-col gap-2">
         <h1 className="font-bold text-3xl z-[2] text-[var(--main-color)]">Categorías</h1>
-        <div className='NeoContainer_outset_TL z-[50] flex gap-4 flex-wrap items-end w-fit p-[var(--p-admin-control)]'>
+        <div className='NeoContainer_outset_TL z-[2] flex gap-4 flex-wrap items-end w-fit p-[var(--p-admin-control)]'>
           <div className="relative" ref={contenedorRef}>
             <InputLabel
               radius="10"
@@ -201,6 +206,12 @@ export const CategoriesBack = () => {
           />
         )}
       </div>
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={isLoading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </section>
   )
 }

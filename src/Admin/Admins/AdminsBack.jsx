@@ -5,10 +5,12 @@ import { BtnBack } from "../../UI/Login_Register/BtnBack"
 import { InputLabel } from '../../UI/Login_Register/InputLabel/InputLabel'
 import CardAdminsBack from './Get/CardAdminsBack'
 import { buscarAdminPorCorreo } from './Get/Get'
+import { Backdrop, CircularProgress } from '@mui/material';
 import { Paginator } from '../../UI/Paginator/Paginator'
 import { Buttons } from '../../UI/Login_Register/Buttons'
 
 export const AdminsBack = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const [showRegisterModal, setShowRegisterModal] = useState(false)
   const [showUpdateModal, setShowUpdateModal] = useState(false) // ahora puede ser false o un objeto admin seleccionado
   const [admins, setAdmins] = useState([])
@@ -24,6 +26,7 @@ export const AdminsBack = () => {
   const contenedorRef = useRef(null)
 
   const fetchAdmins = async (pagina = 1) => {
+    setIsLoading(true)
     try {
       const res = await fetch(`https://redgas.onrender.com/AdminGetAllPaginated?page=${pagina}`)
       if (!res.ok) throw new Error('Error al obtener administradores')
@@ -35,6 +38,8 @@ export const AdminsBack = () => {
       setTotalPaginas(resultado.totalPages)
     } catch (error) {
       console.error(error)
+    }finally {
+      setIsLoading(false);
     }
   }
 
@@ -121,7 +126,7 @@ export const AdminsBack = () => {
       <div className="p-[var(--p-admin-sub)] h-full flex flex-col gap-2">
         <h1 className="font-bold text-3xl z-[2] text-[var(--main-color)]">Administradores</h1>
 
-        <div className='NeoContainer_outset_TL z-[50] flex gap-4 flex-wrap items-end w-fit p-[var(--p-admin-control)]'>
+        <div className='NeoContainer_outset_TL z-[2] flex gap-4 flex-wrap items-end w-fit p-[var(--p-admin-control)]'>
           <div className="relative" ref={contenedorRef}>
             <InputLabel
               radius="10"
@@ -174,18 +179,15 @@ export const AdminsBack = () => {
           ))}
         </div>
 
-        {/* Paginador solo si no hay adminBuscado */}
-        {!adminBuscado && (
-          <Paginator
-            currentPage={paginaActual}
-            totalPages={totalPaginas}
-            onPageChange={(nuevaPagina) => {
-              if (nuevaPagina !== paginaActual) {
-                setPaginaActual(nuevaPagina)
-              }
-            }}
-          />
-        )}
+        <Paginator
+          currentPage={paginaActual}
+          totalPages={totalPaginas}
+          onPageChange={(nuevaPagina) => {
+            if (nuevaPagina !== paginaActual) {
+              setPaginaActual(nuevaPagina)
+            }
+          }}
+        />
 
         {/* Modales */}
         {showRegisterModal && (
@@ -203,6 +205,12 @@ export const AdminsBack = () => {
           />
         )}
       </div>
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={isLoading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </section>
   )
 }
