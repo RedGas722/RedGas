@@ -27,7 +27,7 @@ export const CostumerMyService = () => {
     if (token) {
       const decoded = jwtDecode(token)
       const userId = decoded.data.id
-      setId(userId)
+      handleInProcess(userId)
 
       const fetchData = async () => {
         alertSendForm('wait', 'Cargando...', 'Obteniendo datos del servicio...')
@@ -48,7 +48,6 @@ export const CostumerMyService = () => {
             alertSendForm('change', '', '')
             navigate('/Services')
           }
-          handleInProcess()
 
           const firstParse = JSON.parse(datainfo.get)
           const secondParse = JSON.parse(JSON.parse(firstParse.item))
@@ -66,9 +65,9 @@ export const CostumerMyService = () => {
     }
   }, [])
 
-  const handleInProcess = async () => {
-    try{
-      const respon = await fetch(URL_TECHNICIAN,{
+  const handleInProcess = async (id) => {
+    try {
+      const respon = await fetch(URL_TECHNICIAN, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
       })
@@ -78,7 +77,7 @@ export const CostumerMyService = () => {
         if (item.userid == id) {
           return setInfo(true)
         }
-      })      
+      })
     } catch (err) {
 
     }
@@ -223,17 +222,17 @@ export const CostumerMyService = () => {
           <BtnBack To='/' />
         </div>
         <div>
-        <h2 className=" font-bold text-4xl text-[var(--Font-Nav)]">MI SERVICIO</h2>
-        {info === false &&(
-          <div className="border-[2px] border-[var(--Font-Yellow)] rounded-lg p-2">
-            <h3>tu servicio esta en proceso de aceptacion...</h3>
-          </div>
-        )}
-        {info === true &&(
-          <div className="border-[2px] border-[var(--Font-Nav)] rounded-lg p-2">
-            <h3>tu servicio ha sido aceptado</h3>
-          </div>
-        )}
+          <h2 className=" font-bold text-4xl text-[var(--Font-Nav)]">MI SERVICIO</h2>
+          {info === false && (
+            <div className="border-[2px] border-[var(--Font-Yellow)] rounded-lg p-2">
+              <h3>tu servicio esta en proceso de aceptacion...</h3>
+            </div>
+          )}
+          {info === true && (
+            <div className="border-[2px] border-[var(--Font-Nav)] rounded-lg p-2">
+              <h3>tu servicio ha sido aceptado</h3>
+            </div>
+          )}
         </div>
       </div>
       <section className="h-fit z-[2] flex flex-wrap justify-center text-[var(--main-color)] items-center gap-[20px] p-20">
@@ -252,21 +251,22 @@ export const CostumerMyService = () => {
             <h4 className="text-xl font-bold text-[var(--main-color)]">Descripción de tu servicio</h4>
             <p className="whitespace-pre-line text-[var(--main-color)]">{description}</p>
           </div>
-
-          <div className="z-[2] flex justify-center items-center gap-4">
-            <Buttons
-              type="submit"
-              nameButton="Eliminar Servicio"
-              Onclick={handleDeleteService}
-              className="bg-[var(--Font-Nav2)] hover:bg-[var(--Font-Nav2-shadow)] text-white font-semibold py-2 px-4 rounded-xl shadow-md transition duration-300"
-            />
-            <Buttons
-              type="submit"
-              nameButton="Cambiar Servicio"
-              Onclick={handleChangeService}
-              className="bg-[var(--Font-Nav)] hover:bg-[var(--Font-Nav-shadow)] text-white font-semibold py-2 px-4 rounded-xl shadow-md transition duration-300"
-            />
-          </div>
+          {info === false && (
+            <div className="z-[2] flex justify-center items-center gap-4">
+              <Buttons
+                type="submit"
+                nameButton="Eliminar Servicio"
+                Onclick={handleDeleteService}
+                className="bg-[var(--Font-Nav2)] hover:bg-[var(--Font-Nav2-shadow)] text-white font-semibold py-2 px-4 rounded-xl shadow-md transition duration-300"
+              />
+              <Buttons
+                type="submit"
+                nameButton="Cambiar Servicio"
+                Onclick={handleChangeService}
+                className="bg-[var(--Font-Nav)] hover:bg-[var(--Font-Nav-shadow)] text-white font-semibold py-2 px-4 rounded-xl shadow-md transition duration-300"
+              />
+            </div>
+          )}
         </div>
       </section>
     </div>
