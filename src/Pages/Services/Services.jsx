@@ -1,10 +1,10 @@
-import { useState } from "react"
-import { Buttons } from "../../UI/Login_Register/Buttons"
-import { BtnBack } from "../../UI/Login_Register/BtnBack"
-import { ShortText } from "../../UI/ShortText/ShortText"
-import { useNavigate } from "react-router-dom"
 import { faTools, faCheck, faX, faPlug, faGears, faRotate } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { BtnBack } from "../../UI/Login_Register/BtnBack"
+import { Buttons } from "../../UI/Login_Register/Buttons"
+import { ShortText } from "../../UI/ShortText/ShortText"
+import { useNavigate } from "react-router-dom"
+import { useState } from "react"
 import withReactContent from 'sweetalert2-react-content'
 import Swal from 'sweetalert2'
 import './Services.css'

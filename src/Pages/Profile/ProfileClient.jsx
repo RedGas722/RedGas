@@ -2,10 +2,11 @@ import { faUser, faUserCircle, faPhone, faEnvelope, faLocationDot } from "@forta
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import BtnBack from "../../UI/Login_Register/BtnBack"
 import Buttons from "../../UI/Login_Register/Buttons"
+import ServicesModal from './ServicesModal'
+import FacturasModal from './FacturasModal'
 import UpdateClientModal from './UpdateClientModal'
 import { useNavigate } from "react-router-dom"
 import { useEffect, useState } from 'react'
-import FacturasModal from './FacturasModal'
 import { jwtDecode } from "jwt-decode"
 
 export const ProfileClient = () => {
@@ -17,6 +18,7 @@ export const ProfileClient = () => {
     direccion: ''
   })
   const [userName, setUserName] = useState('')
+  const [showHistorialServices, setShowHistorialServices] = useState(false)
   const [mostrarFacturas, setMostrarFacturas] = useState(false)
   const [mostrarModalActualizar, setMostrarModalActualizar] = useState(false)
   const navigate = useNavigate()
@@ -51,7 +53,7 @@ export const ProfileClient = () => {
   }, [])
 
   const handleServicios = () => {
-    console.log("Servicios completados")
+    setShowHistorialServices(true)
   }
 
   const handleCambiarDatos = () => {
@@ -64,6 +66,11 @@ export const ProfileClient = () => {
 
   return (
     <div className="p-[5px] ">
+      {/* Modales */}
+      {showHistorialServices && (
+        <ServicesModal onClose={() => setShowHistorialServices(false)} />
+      )}
+
       {/* Modales */}
       {mostrarFacturas && (
         <FacturasModal onClose={() => setMostrarFacturas(false)} />
