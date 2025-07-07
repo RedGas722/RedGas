@@ -189,10 +189,12 @@ export const ServicesInfo = () => {
             <h2 className="font-bold text-3xl sm:text-4xl text-[var(--Font-Nav)]">Formulario Servicio</h2>
          </div>
 
+         {/* <section className="AI_history z-[2] gap-4 flex flex-col-reverse items-center md:flex-row md:justify-evenly h-fit w-full"></section> */}
+         {/* <div className="w-[90%] md:w-[55%] lg:w-[40%] flex-col gap-4 flex items-center NeoContainer_outset_TL h-full overflow-y-auto p-[10px_8px]"></div> */}
          <section className="AI_history gap-4 flex flex-col-reverse items-center md:flex-row md:justify-evenly h-fit w-full">
-            <div className="w-[90%] md:w-[55%] lg:w-[40%] flex-col gap-4 flex items-center NeoContainer_outset_TL h-full overflow-y-auto p-[10px_8px]">
-               <h2 className="font-bold text-3xl text-[var(--main-color)]">Historial</h2>
-               <div className="w-full flex p-[0_10px_25px_0] flex-col gap-2 ">
+            {/* <div className="w-[90%] md:w-[55%] lg:w-[40%] flex-col gap-4 flex items-center z-[2] NeoContainer_outset_TL h-full overflow-y-auto p-[10px_8px]">
+                  <h2 className="font-bold text-3xl text-[var(--main-color)]">Historial</h2>
+                  <div className="w-full flex p-[0_10px_25px_0] flex-col gap-2 ">
 
                      <div className="NeoSubContainer_outset_TL w-full p-[10px]">
                         <div className="flex items-center gap-2 text-[var(--Font-Nav)]">
@@ -248,8 +250,8 @@ export const ServicesInfo = () => {
                         </div>
                      </div>
 
-               </div>
-            </div>
+                  </div>
+               </div> */}
             <form
                onSubmit={handleServices}
                className="w-full max-w-xl p-6 z-[2] flex flex-col gap-3 NeoContainer_outset_TL"
@@ -279,4 +281,4 @@ export const ServicesInfo = () => {
    )
 }
 
-         export default ServicesInfo
+export default ServicesInfo
