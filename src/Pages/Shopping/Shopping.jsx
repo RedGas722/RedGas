@@ -32,11 +32,10 @@ export const Shopping = () => {
           "Content-Type": "application/json"
         }
       })
-
       if (!resCart.ok) throw new Error("Error al obtener el carrito")
 
       const cartData = await resCart.json()
-
+      
       const productDetails = await Promise.all(
         cartData.map(async (item) => {
           const res = await fetch(`https://redgas.onrender.com/ProductoGetById?id_producto=${encodeURIComponent(item.productId)}`, {
@@ -51,12 +50,8 @@ export const Shopping = () => {
           const data = await res.json()
           const productData = data.data
 
-          const imagenBuffer = productData.imagen?.data;
-          const imagenBase64 = imagenBuffer ? `${btoa(String.fromCharCode(...imagenBuffer))}` : null;
-
           return {
             ...productData,
-            imagen: imagenBase64,
             cantidad: item.quantity
           }
         })

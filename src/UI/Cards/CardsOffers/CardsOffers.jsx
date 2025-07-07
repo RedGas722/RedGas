@@ -272,6 +272,10 @@ export const CardsOffers = ({ uniqueId, productos = [] }) => {
                 <div className="card-title">{selectedProduct.nombre_producto}</div>
               </div>
               <div className="card-subtitle">{selectedProduct.descripcion_producto || "Sin descripción disponible."}</div>
+              <div className="flex gap-1 text-[var(--main-color)] items-start justify-start">
+                <p>Stock:</p>
+                <span>{selectedProduct.stock}</span>
+              </div>
               <hr className="card-divider" />
               <div className="card-footer">
                 <div className="card-price">

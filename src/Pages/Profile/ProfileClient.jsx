@@ -85,7 +85,7 @@ export const ProfileClient = () => {
 
       {/* Contenido */}
       <section className="h-fit z-[2] flex flex-wrap justify-center text-[var(--main-color)] items-center gap-[20px] MainPageContainer">
-        <div className="flex flex-col z-[2] relative flex-wrap justify-center max-w-[700px] min-w-0 NeoContainer_outset_TL p-5 py-8 gap-6">
+        <div className="flex flex-col z-[2] relative flex-wrap h-fit justify-center max-w-[700px] min-w-0 NeoContainer_outset_TL p-5 py-8 gap-6">
 
           {/* Datos */}
           <div className="text-[var(--main-color-sub)] leading-[20px] sm:pl-2 gap-3 flex flex-wrap justify-center sm:justify-start items-center font-bold w-fit">
@@ -111,7 +111,7 @@ export const ProfileClient = () => {
           </div>
 
           {/* Botones */}
-          <div className="z-[2] grid grid-rows-4 w-full justify-center items-center gap-4">
+          <div className="z-[2] grid grid-rows-4 sm:grid-cols-2 sm:grid-rows-2 h-fit w-full justify-center gap-4">
             <Buttons
               type="button"
               nameButton="Servicios Completados"
