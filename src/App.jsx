@@ -16,7 +16,6 @@ import { SearchPage } from './Pages/SearchPage/SearchPage.jsx'
 import { LoginGeneral } from './Pages/Login/LoginGeneral.jsx'
 import { ProductsBack } from './Admin/Products/ProductsBack'
 import { FacturesBack } from './Admin/Factures/FacturesBack'
-import { ServicesBack } from './Admin/Services/ServicesBack'
 import { Backdrop, CircularProgress } from '@mui/material'
 import { Cancelado } from './Pages/Shopping/Cancelado.jsx'
 import { ClientsBack } from './Admin/Clients/ClientsBack'
@@ -140,11 +139,6 @@ export function AppContent() {
                     <Route path="/Admin/Products" element={
                         <ProtectedRoute requiredTypes={[1, 3]}>
                             <ProductsBack />
-                        </ProtectedRoute>
-                    } />
-                    <Route path="/Admin/Services" element={
-                        <ProtectedRoute requiredTypes={[1, 3]}>
-                            <ServicesBack />
                         </ProtectedRoute>
                     } />
 
