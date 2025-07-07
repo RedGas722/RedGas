@@ -87,37 +87,37 @@ export const CostumerMyService = () => {
 
   const handleChangeService = async () => {
     console.log('Cambiar servicio')
-    // const confirmed = await Swal.fire({
-    //   title: '¿Estás seguro?',
-    //   text: 'Esto eliminará tu servicio actual para que puedas crear uno nuevo.',
-    //   icon: 'question',
-    //   showCancelButton: true,
-    //   confirmButtonColor: '#19A9A4',
-    //   confirmButtonText: 'Sí, cambiar',
-    //   cancelButtonText: 'Cancelar',
-    // })
+    const confirmed = await Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'Esto eliminará tu servicio actual para que puedas crear uno nuevo.',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#19A9A4',
+      confirmButtonText: 'Sí, cambiar',
+      cancelButtonText: 'Cancelar',
+    })
 
-    // if (!confirmed.isConfirmed) return
+    if (!confirmed.isConfirmed) return
 
-    // alertSendForm('wait', 'Cambiando servicio...', 'Estamos procesando tu solicitud')
-    // try {
-    //   const response = await fetch(URL_DELETE, {
-    //     method: 'DELETE',
-    //     headers: { 'Content-Type': 'application/json' },
-    //     body: JSON.stringify({ userId: id }),
-    //   })
+    alertSendForm('wait', 'Cambiando servicio...', 'Estamos procesando tu solicitud')
+    try {
+      const response = await fetch(URL_DELETE, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: id }),
+      })
 
-    //   if (!response.ok) throw new Error('Error al cambiar el servicio')
+      if (!response.ok) throw new Error('Error al cambiar el servicio')
 
-    //   const data = await response.json()
-    //   if (data.status === 'Service info Deleted') {
-    //     alertSendForm('change', '', '')
-    //     setTimeout(() => navigate('/Services'), 0)
-    //   }
-    // } catch (error) {
-    //   console.error('Error al cambiar el servicio:', error)
-    //   alertSendForm(502, 'Error al cambiar el servicio', error.message)
-    // }
+      const data = await response.json()
+      if (data.status === 'Service info Deleted') {
+        alertSendForm('change', '', '')
+        setTimeout(() => navigate('/Services'), 0)
+      }
+    } catch (error) {
+      console.error('Error al cambiar el servicio:', error)
+      alertSendForm(502, 'Error al cambiar el servicio', error.message)
+    }
   }
 
   const handleDeleteService = async () => {
@@ -225,12 +225,12 @@ export const CostumerMyService = () => {
         <div>
         <h2 className=" font-bold text-4xl text-[var(--Font-Nav)]">MI SERVICIO</h2>
         {info === false &&(
-          <div>
+          <div className="border-[2px] border-[var(--Font-Yellow)] rounded-lg p-2">
             <h3>tu servicio esta en proceso de aceptacion...</h3>
           </div>
         )}
         {info === true &&(
-          <div>
+          <div className="border-[2px] border-[var(--Font-Nav)] rounded-lg p-2">
             <h3>tu servicio ha sido aceptado</h3>
           </div>
         )}

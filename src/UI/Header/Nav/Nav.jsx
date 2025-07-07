@@ -7,7 +7,7 @@ import Tab from '@mui/material/Tab'
 import { tabsClasses } from '@mui/material/Tabs' 
 import useMediaQuery from '@mui/material/useMediaQuery'
 
-export const Navs = ({ className, ref1, ref2, ref3, ref4 }) => {
+export const  Navs = ({ className, ref1, ref2, ref3, ref4 }) => {
     const [tipoUsuario, setTipoUsuario] = useState(null)
     const [tabIndex, setTabIndex] = useState(0)
     const navigate = useNavigate()

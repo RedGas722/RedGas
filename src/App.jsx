@@ -16,7 +16,6 @@ import { SearchPage } from './Pages/SearchPage/SearchPage.jsx'
 import { LoginGeneral } from './Pages/Login/LoginGeneral.jsx'
 import { ProductsBack } from './Admin/Products/ProductsBack'
 import { FacturesBack } from './Admin/Factures/FacturesBack'
-import { ServicesBack } from './Admin/Services/ServicesBack'
 import { Backdrop, CircularProgress } from '@mui/material'
 import { Cancelado } from './Pages/Shopping/Cancelado.jsx'
 import { ClientsBack } from './Admin/Clients/ClientsBack'
@@ -37,6 +36,9 @@ import ConfirmacionMercadoPago from './Pages/Shopping/ConfirmacionMP.jsx'
 // 👇 Importar ruta protegida
 import { ProtectedRoute } from './Pages/Login/ProtectedRoutes.jsx'
 import { SalesBack } from './Admin/Sales/SalesBack.jsx'
+import Profile, { ProfileClient } from './Pages/Profile/ProfileClient.jsx'
+import ProfileTechnician from './Pages/Profile/ProfileTechnician.jsx'
+import ProfileGeneral from './Pages/Profile/ProfileGeneral.jsx'
 
 export function AppContent() {
     const { isLoading } = useLoading();
@@ -73,11 +75,25 @@ export function AppContent() {
                     <Route path='/Login/ForgotPassword' element={<ForgotPassword />} />
                     <Route path='/Login/ForgotPassword/Recovery/:token' element={<RecoveryPassword />} />
 
-                    {/*Cliente (tipoUsuario === 2)*/}
-                    
+                    {/*Rutas cliente y tecnico*/}
+
                     <Route path="/Shopping" element={
                         <ProtectedRoute requiredTypes={[2,4]}>
                             <Shopping />
+                        </ProtectedRoute>
+                    } />
+
+                    <Route path="/ProfileGeneral" element={
+                        <ProtectedRoute requiredTypes={[2,4]}>
+                            <ProfileGeneral />
+                        </ProtectedRoute>
+                    } />
+
+                    {/*Cliente (tipoUsuario === 2)*/}
+
+                    <Route path="/ProfileClient" element={
+                        <ProtectedRoute requiredTypes={[2]}>
+                            <ProfileClient />
                         </ProtectedRoute>
                     } />
 
@@ -125,11 +141,6 @@ export function AppContent() {
                             <ProductsBack />
                         </ProtectedRoute>
                     } />
-                    <Route path="/Admin/Services" element={
-                        <ProtectedRoute requiredTypes={[1, 3]}>
-                            <ServicesBack />
-                        </ProtectedRoute>
-                    } />
 
                     <Route path="/Admin/Sales" element={
                         <ProtectedRoute requiredTypes={[1, 3]}>
@@ -147,6 +158,12 @@ export function AppContent() {
                     <Route path="/CostumerServices" element={
                         <ProtectedRoute requiredTypes={[4]}>
                             <CostumerServices />
+                        </ProtectedRoute>
+                    } />
+
+                    <Route path="/ProfileTechnician" element={
+                        <ProtectedRoute requiredTypes={[2]}>
+                            <ProfileTechnician />
                         </ProtectedRoute>
                     } />
 

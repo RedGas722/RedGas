@@ -5,7 +5,6 @@ import { SearchBarr } from "../../UI/Header/SearchBarr/SearchBarr"
 import { Navs } from "../../UI/Header/Nav/Nav"
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { jwtDecode } from "jwt-decode";
-// import { ProfilePhoto } from "../../UI/Header/ProfilePhoto/ProfilePhoto"
 import './Header.css'
 
 export const Header = ({ classUser, classNavs }) => {
@@ -135,6 +134,10 @@ export const Header = ({ classUser, classNavs }) => {
     const handSignOut = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('tipo_usuario');
+        localStorage.removeItem('recordarme');
+        localStorage.removeItem('lastActivity');
+        localStorage.removeItem('clave_usuario');
+        localStorage.removeItem('correo_usuario');
         window.location.href = '/';
     }
 
@@ -220,7 +223,7 @@ export const Header = ({ classUser, classNavs }) => {
 
                     {token && type == 2 && (
                         <>
-                            <div onClick={() => navigate('/Login')} className="menu-list">Perfil</div>
+                            <div onClick={() => navigate('/ProfileGeneral')} className="menu-list">Perfil</div>
                             <div onClick={() => navigate('/CostumerMyService')} className="menu-list">Mi Servicio</div>
                             <div onClick={() => navigate('/Login')} className="menu-list">Cambiar Cuenta</div>
                             <div onClick={() => handSignOut()} className="menu-list">Cerrar Sesion</div>
@@ -236,6 +239,7 @@ export const Header = ({ classUser, classNavs }) => {
 
                     {token && type == 4 && (
                         <>
+                            <div onClick={() => navigate('/ProfileGeneral')} className="menu-list">Perfil</div>
                             <div onClick={() => navigate('/Shopping')} className="menu-list">Carrito</div>
                             <div onClick={() => navigate('/Login')} className="menu-list">Cambiar Cuenta</div>
                             <div onClick={() => handSignOut()} className="menu-list">Cerrar Sesion</div>

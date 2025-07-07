@@ -189,12 +189,10 @@ export const ServicesInfo = () => {
             <h2 className="font-bold text-3xl sm:text-4xl text-[var(--Font-Nav)]">Formulario Servicio</h2>
          </div>
 
-         {/* <section className="AI_history z-[2] gap-4 flex flex-col-reverse items-center md:flex-row md:justify-evenly h-fit w-full"></section> */}
-            {/* <div className="w-[90%] md:w-[55%] lg:w-[40%] flex-col gap-4 flex items-center NeoContainer_outset_TL h-full overflow-y-auto p-[10px_8px]"></div> */}
-            <section className="AI_history gap-4 flex flex-col-reverse items-center md:flex-row md:justify-evenly h-fit w-full">
-               {/* <div className="w-[90%] md:w-[55%] lg:w-[40%] flex-col gap-4 flex items-center z-[2] NeoContainer_outset_TL h-full overflow-y-auto p-[10px_8px]">
-                  <h2 className="font-bold text-3xl text-[var(--main-color)]">Historial</h2>
-                  <div className="w-full flex p-[0_10px_25px_0] flex-col gap-2 ">
+         <section className="AI_history gap-4 flex flex-col-reverse items-center md:flex-row md:justify-evenly h-fit w-full">
+            <div className="w-[90%] md:w-[55%] lg:w-[40%] flex-col gap-4 flex items-center NeoContainer_outset_TL h-full overflow-y-auto p-[10px_8px]">
+               <h2 className="font-bold text-3xl text-[var(--main-color)]">Historial</h2>
+               <div className="w-full flex p-[0_10px_25px_0] flex-col gap-2 ">
 
                      <div className="NeoSubContainer_outset_TL w-full p-[10px]">
                         <div className="flex items-center gap-2 text-[var(--Font-Nav)]">
@@ -250,35 +248,35 @@ export const ServicesInfo = () => {
                         </div>
                      </div>
 
-                  </div>
-               </div> */}
-               <form
-                  onSubmit={handleServices}
-                  className="w-full max-w-xl p-6 z-[2] flex flex-col gap-3 NeoContainer_outset_TL"
-               >
-                  <div>
-                     <p className="text-[18px] font-medium text-[var(--main-color)]">
-                        Ingrese una descripción de su necesidad
-                     </p>
-                     <p className="text-sm text-[var(--main-color-sub)]">
-                        Hacemos instalaciones, reparaciones y mantenimientos.
-                     </p>
-                  </div>
+               </div>
+            </div>
+            <form
+               onSubmit={handleServices}
+               className="w-full max-w-xl p-6 z-[2] flex flex-col gap-3 NeoContainer_outset_TL"
+            >
+               <div>
+                  <p className="text-[18px] font-medium text-[var(--main-color)]">
+                     Ingrese una descripción de su necesidad
+                  </p>
+                  <p className="text-sm text-[var(--main-color-sub)]">
+                     Hacemos instalaciones, reparaciones y mantenimientos.
+                  </p>
+               </div>
 
-                  <textarea
-                     id="Description"
-                     placeholder="Ej: Mi estufa ya no enciende..."
-                     value={description}
-                     onChange={e => setDescription(e.target.value)}
-                     className="w-full h-32 p-4 overflow-auto !rounded-[10px] NeoSubContainer_outset_TL outline-none resize-none text-[var(--Font-Nav-shadow)]"
-                  />
-                  <div className="flex justify-center items-center">
-                     <Buttons type="submit" radius='10' nameButton="enviar" />
-                  </div>
-               </form>
-            </section>
+               <textarea
+                  id="Description"
+                  placeholder="Ej: Mi estufa ya no enciende..."
+                  value={description}
+                  onChange={e => setDescription(e.target.value)}
+                  className="w-full h-32 p-4 overflow-auto !rounded-[10px] NeoSubContainer_outset_TL outline-none resize-none text-[var(--Font-Nav-shadow)]"
+               />
+               <div className="flex justify-center items-center">
+                  <Buttons type="submit" radius='10' nameButton="enviar" />
+               </div>
+            </form>
          </section>
-         )
+      </section>
+   )
 }
 
          export default ServicesInfo
