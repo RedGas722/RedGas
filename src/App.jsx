@@ -39,6 +39,7 @@ import { SalesBack } from './Admin/Sales/SalesBack.jsx'
 import { ProfileClient } from './Pages/Profile/ProfileClient.jsx'
 import ProfileTechnician from './Pages/Profile/ProfileTechnician.jsx'
 import ProfileGeneral from './Pages/Profile/ProfileGeneral.jsx'
+import ServicesCompletedBack from './Admin/ServicesCompletes/ServicesCompleted.jsx'
 
 export function AppContent() {
     const { isLoading } = useLoading();
@@ -147,9 +148,16 @@ export function AppContent() {
                             <SalesBack />
                         </ProtectedRoute>
                     } />
+
                     <Route path="/Admin/Factures" element={
                         <ProtectedRoute requiredTypes={[1, 3]}>
                             <FacturesBack />
+                        </ProtectedRoute>
+                    } />
+
+                    <Route path="/Admin/ServicesCompleted" element={
+                        <ProtectedRoute requiredTypes={[1, 3]}>
+                            <ServicesCompletedBack />
                         </ProtectedRoute>
                     } />
 
