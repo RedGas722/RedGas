@@ -12,7 +12,6 @@ const ServicesModal = ({ onClose }) => {
   const fetchFacturasCliente = async () => {
     try {
       const token = localStorage.getItem("token");
-
       if (!token) throw new Error("No estás autenticado");
 
       const decoded = jwtDecode(token);
@@ -24,16 +23,20 @@ const ServicesModal = ({ onClose }) => {
         body: JSON.stringify({ id: userId }),
       });
 
-      if (!res.ok) throw new Error("Error al obtener facturas");
+      if (!res.ok) throw new Error("Error al obtener historial");
 
       const data = await res.json();
-      console.log("data.get =>", data.get);
+      console.log("📦 data.get:", data.get);
 
-      const parsed = JSON.parse(data.get);
-      setHistorial([parsed]); 
+      const parsed = JSON.parse(data.get); // ← viene como array
+      if (Array.isArray(parsed)) {
+        setHistorial(parsed);
+      } else {
+        setHistorial([]); // fallback si no es array
+      }
 
     } catch (error) {
-      console.error("Error cargando historial:", error);
+      console.error("❌ Error cargando historial:", error);
       setHistorial([]);
     }
   };
@@ -46,8 +49,8 @@ const ServicesModal = ({ onClose }) => {
     <div className="fixed inset-0 z-50 bg-black/30 backdrop-blur-sm flex justify-center items-center">
       <div className="w-[90%] md:w-[55%] lg:w-[40%] flex-col gap-4 flex items-center NeoContainer_outset_TL h-full overflow-y-auto p-[10px_8px]">
         <h2 className="font-bold text-3xl text-[var(--main-color)]">Historial</h2>
-        <div className="w-full flex p-[0_10px_25px_0] flex-col gap-2 ">
 
+        <div className="w-full flex p-[0_10px_25px_0] flex-col gap-2">
           {historial.length === 0 && (
             <p className="text-center text-gray-500">No hay servicios registrados.</p>
           )}
@@ -57,7 +60,7 @@ const ServicesModal = ({ onClose }) => {
             try {
               parsedItem = JSON.parse(item.item);
             } catch (e) {
-              console.error("Error al parsear item.item", item.item);
+              console.error("⚠️ Error al parsear item.item:", item.item);
             }
 
             return (
