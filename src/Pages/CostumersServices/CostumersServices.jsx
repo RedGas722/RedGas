@@ -23,7 +23,7 @@ const URL_COSTUMERS = 'https://redgas.onrender.com/ClienteServicesGetAll'
 const URL_TECHGET = 'https://redgas.onrender.com/TecnicoServicesGet'
 const URL_TECHNICIAN = 'https://redgas.onrender.com/TecnicoServicesGetAll'
 const URL_SERVICESTECHNICIAN = 'https://redgas.onrender.com/TecnicoServicesAdd'
-const URL_SAVESERVICES = 'https://redgas.onrender.com/TecnicoServicesAdd'
+
 
 const style = {
   position: 'absolute',
