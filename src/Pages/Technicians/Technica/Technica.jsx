@@ -22,6 +22,7 @@ const URL_DELETE_TECHNICIAN = 'https://redgas.onrender.com/TecnicoServicesDelete
 const URL_GET_COSTUMER = 'https://redgas.onrender.com/ClienteServicesGet'
 const URL_DELETE_COSTUMER = 'https://redgas.onrender.com/ClienteServicesDelete'
 const URL_REGISTER_SERVICES = 'https://redgas.onrender.com/PedidoServicioRegister'
+const URL_SAVESERVICES = 'http://localhost:10101/ClienteHistorialServicesAdd'
 
 const style = {
   position: 'relative',
@@ -45,7 +46,7 @@ export const Technica = () => {
   const [description, setDescription] = useState('')
   const [total, setTotal] = useState('')
   const [descriptionWork, setDescriptionWork] = useState('')
-  const [services, setServices] = useState({})
+  const [services, setServices] = useState('')
   const [isAccept, setIsAccept] = useState(false)
   const [isScrollable, setIsScrollable] = useState(false)
   const accordionRef = useRef(null)
@@ -83,7 +84,7 @@ export const Technica = () => {
 
         costumerGet(firstParse.userid)
       } catch (err) {
-        // alertSendForm(502, 'Error al obtener datos del técnico', err.message)
+        alertSendForm(502, 'Error al obtener datos del técnico', err.message)
       }
     }
 
@@ -110,7 +111,7 @@ export const Technica = () => {
       setAddress(firstParse.userAddress)
       setEmail(firstParse.userEmail)
       setDescription(secondParse.resultado.etiqueta)
-      setServices(secondParse.resultado)
+      setServices(secondParse.resultado.input)
     } catch (err) {
       alertSendForm(502, 'Error al obtener datos del cliente', err.message)
     }
@@ -136,6 +137,8 @@ export const Technica = () => {
         body: JSON.stringify({
           id_cliente: costumerId,
           id_tecnico: technicianId,
+          total: total,
+          descripcion: descriptionWork,
           estado_pedido: 'Completado'
         }),
       })
@@ -143,11 +146,42 @@ export const Technica = () => {
       if (!response.ok) throw new Error('Error registrando el servicio')
 
       const data = await response.json()
+      
       if (!data.get) {
+        handleSaveServices()
+      }
+
+    } catch (err) {
+      alertSendForm(502, 'Error al finalizar servicio', err.message)
+    }
+  }
+
+  const handleSaveServices = async () => {
+    const save = {
+      description,
+      services
+    }
+    alertSendForm('wait', 'Guardando servicio...', 'Estamos guardando la información del servicio')
+    try {
+      const resonseSave = await fetch(`${URL_SAVESERVICES}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: costumerId,
+          descriptionTech: descriptionWork, 
+          totalPrice: total, 
+          state: 'completado', 
+          itemInfo: save }),
+      })
+      if (!resonseSave.ok) throw new Error('Error al guardar el servicio')
+      
+      const dataSave = await resonseSave.json()
+      if (!dataSave.get) {
         handleDeleteServices()
       }
     } catch (err) {
-      alertSendForm(502, 'Error al finalizar servicio', err.message)
+      alertSendForm(502, 'Error al guardar servicio', err.message)
+      return
     }
   }
 

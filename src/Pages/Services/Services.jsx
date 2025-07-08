@@ -9,8 +9,8 @@ import withReactContent from 'sweetalert2-react-content'
 import Swal from 'sweetalert2'
 import './Services.css'
 
-const URL_IA = 'https://redgas.onrender.com/Diagnostic'
-const URL_REDIS = 'https://redgas.onrender.com/ClienteServicesAdd'
+const URL_IA = 'http://localhost:10101/Diagnostic'
+const URL_REDIS = 'http://localhost:10101/ClienteServicesAdd'
 
 
 export const ServicesInfo = () => {
@@ -34,6 +34,8 @@ export const ServicesInfo = () => {
             })
 
             const data = await res.json()
+            console.log(data);
+            
             const dataInfo = JSON.stringify(data)
             const token = localStorage.getItem('token')
 
