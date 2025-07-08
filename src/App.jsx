@@ -16,7 +16,6 @@ import { SearchPage } from './Pages/SearchPage/SearchPage.jsx'
 import { LoginGeneral } from './Pages/Login/LoginGeneral.jsx'
 import { ProductsBack } from './Admin/Products/ProductsBack'
 import { FacturesBack } from './Admin/Factures/FacturesBack'
-import { ServicesBack } from './Admin/Services/ServicesBack'
 import { Backdrop, CircularProgress } from '@mui/material'
 import { Cancelado } from './Pages/Shopping/Cancelado.jsx'
 import { ClientsBack } from './Admin/Clients/ClientsBack'
@@ -27,7 +26,7 @@ import { AdminsBack } from './Admin/Admins/AdminsBack'
 import { Register } from './Pages/Register/Register'
 import { MainPage } from './Pages/MainPage/MainPage'
 import { Routes, Route } from 'react-router-dom'
-import { Cursor } from './UI/Cursor/Cursor.jsx'
+// import { Cursor } from './UI/Cursor/Cursor.jsx'
 import { Login } from './Pages/Login/Login'
 import { useEffect } from 'react'
 import { AdminApp } from './Admin/AdminApp'
@@ -56,7 +55,7 @@ export function AppContent() {
     return (
         <>
             <div>
-                <Cursor />
+                {/* <Cursor /> */}
                 <Routes>
                     <Route path="/" element={<MainPage />} />
                     <Route path="/CostumerMyService" element={<CostumerMyService />} />
@@ -140,11 +139,6 @@ export function AppContent() {
                     <Route path="/Admin/Products" element={
                         <ProtectedRoute requiredTypes={[1, 3]}>
                             <ProductsBack />
-                        </ProtectedRoute>
-                    } />
-                    <Route path="/Admin/Services" element={
-                        <ProtectedRoute requiredTypes={[1, 3]}>
-                            <ServicesBack />
                         </ProtectedRoute>
                     } />
 

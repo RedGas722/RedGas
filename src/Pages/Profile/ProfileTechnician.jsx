@@ -3,9 +3,12 @@ import { jwtDecode } from "jwt-decode";
 import BtnBack from "../../UI/Login_Register/BtnBack";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserGear } from '@fortawesome/free-solid-svg-icons';
+import Buttons from "../../UI/Login_Register/Buttons";
+import { useNavigate } from "react-router-dom";
 
 const ProfileTechnician = () => {
   const [tecnico, setTecnico] = useState(null);
+  const navigate = useNavigate()
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -16,7 +19,6 @@ const ProfileTechnician = () => {
       fetch(`https://redgas.onrender.com/TecnicoGet?correo_tecnico=${encodeURIComponent(correo)}`)
         .then(res => res.json())
         .then(data => {
-            console.log("Datos del técnico:", data);
           if (data?.data) {
             const tecnicoInfo = data.data;
             if (tecnicoInfo.imagen && typeof tecnicoInfo.imagen === 'object') {
@@ -30,6 +32,10 @@ const ProfileTechnician = () => {
   }, []);
 
   if (!tecnico) return <p className="text-center mt-10">Cargando datos del técnico...</p>;
+
+  const handleCambiarContrasena = () => {
+    navigate('/Login/ForgotPassword')
+  }
 
   return (
     <div>
@@ -53,6 +59,12 @@ const ProfileTechnician = () => {
               <p className="text-[1rem]">📧 {tecnico.correo_tecnico}</p>
               <p className="text-[1rem]">📞 {tecnico.telefono_tecnico}</p>
             </div>
+            <Buttons
+              type="button"
+              nameButton="Cambiar Contraseña"
+              Onclick={handleCambiarContrasena}
+              className="bg-red-700 hover:bg-red-800 text-white font-semibold py-2 px-4 rounded-xl shadow-md transition duration-300"
+            />
           </div>
 
           {tecnico.imagen && (

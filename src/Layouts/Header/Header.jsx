@@ -155,7 +155,7 @@ export const Header = ({ classUser, classNavs }) => {
         >
             {((!isDesktop && hamburger) || (isDesktop && scrolled)) && (
                 <h2 className="justify-self-center flex font-bold text-4xl text-[var(--Font-Nav)]">
-                    Red Gas
+                    RedGas
                 </h2>
             )}
 

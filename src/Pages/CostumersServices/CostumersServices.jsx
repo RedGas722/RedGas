@@ -23,6 +23,7 @@ const URL_COSTUMERS = 'https://redgas.onrender.com/ClienteServicesGetAll'
 const URL_TECHGET = 'https://redgas.onrender.com/TecnicoServicesGet'
 const URL_TECHNICIAN = 'https://redgas.onrender.com/TecnicoServicesGetAll'
 const URL_SERVICESTECHNICIAN = 'https://redgas.onrender.com/TecnicoServicesAdd'
+const URL_SAVESERVICES = 'https://redgas.onrender.com/TecnicoServicesAdd'
 
 const style = {
   position: 'absolute',
@@ -356,7 +357,7 @@ export const CostumerServices = () => {
           .map((item, idx) => {
             const service = result[idx]
             return (
-              <div key={idx} className="userServiceTec flex flex-col items-start justify-center !rounded-[40px] max-w-[400px] min-w-0 NeoContainer_outset_TL p-5 gap-3">
+              <div key={idx} className="userServiceTec z-[2] flex flex-col items-start justify-center !rounded-[40px] max-w-[400px] min-w-0 NeoContainer_outset_TL p-5 gap-3">
                 <div className="text-[var(--Font-Nav)] flex items-center gap-4 cursor-pointer" onClick={() => handleOpen(idx)}>
                   <FontAwesomeIcon icon={getIconByLabel(service.etiqueta)} className="text-4xl" />
                   <p className="text-3xl font-bold">{service.etiqueta}</p>
