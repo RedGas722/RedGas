@@ -34,6 +34,8 @@ export const ServicesInfo = () => {
             })
 
             const data = await res.json()
+            console.log(data);
+            
             const dataInfo = JSON.stringify(data)
             const token = localStorage.getItem('token')
 
