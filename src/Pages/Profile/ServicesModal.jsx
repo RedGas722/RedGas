@@ -13,7 +13,7 @@ import {
 import { ShortText } from "../../UI/ShortText/ShortText";
 import { jwtDecode } from "jwt-decode";
 
-const URL_SAVESERVICESGET = "http://localhost:10101/ClienteHistorialServicesGet";
+const URL_SAVESERVICESGET = "https://redgas.onrender.com/ClienteHistorialServicesGet";
 
 const getServiceConfig = (type) => {
   switch (type?.toLowerCase()) {
