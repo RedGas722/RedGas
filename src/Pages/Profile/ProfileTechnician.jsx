@@ -5,6 +5,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserGear } from '@fortawesome/free-solid-svg-icons';
 import Buttons from "../../UI/Login_Register/Buttons";
 import { useNavigate } from "react-router-dom";
+import bcrypt from 'bcryptjs';
+import Swal from 'sweetalert2';
 
 const ProfileTechnician = () => {
   const [tecnico, setTecnico] = useState(null);
@@ -33,9 +35,75 @@ const ProfileTechnician = () => {
 
   if (!tecnico) return <p className="text-center mt-10">Cargando datos del técnico...</p>;
 
-  const handleCambiarContrasena = () => {
-    navigate('/Login/ForgotPassword')
-  }
+  const handleCambiarContrasena = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    const decoded = jwtDecode(token);
+    const { email } = decoded.data;
+
+    const { value: passwordInput } = await Swal.fire({
+      title: 'Verificación de identidad',
+      input: 'password',
+      inputLabel: 'Ingresa tu contraseña actual',
+      inputPlaceholder: '********',
+      inputAttributes: {
+        autocapitalize: 'off',
+        autocorrect: 'off'
+      },
+      showCancelButton: true,
+      confirmButtonText: 'Verificar',
+      cancelButtonText: 'Cancelar',
+      inputValidator: (value) => {
+        if (!value) return 'Debes escribir tu contraseña actual';
+      }
+    });
+
+    if (!passwordInput) return;
+
+    try {
+      // 1. Obtener la contraseña hasheada del técnico
+      const res = await fetch(`https://redgas.onrender.com/TecnicoGet?correo_tecnico=${encodeURIComponent(email)}`);
+      const data = await res.json();
+
+      if (!data?.data?.contraseña_tecnico) {
+        Swal.fire('Error', 'No se pudo obtener la contraseña del servidor.', 'error');
+        return;
+      }
+
+      const contraseñaOriginal = data.data.contraseña_tecnico;
+
+      // 2. Comparar con bcrypt
+      const isMatch = await bcrypt.compare(passwordInput, contraseñaOriginal);
+      if (!isMatch) {
+        Swal.fire('Error', 'La contraseña no coincide.', 'error');
+        return;
+      }
+
+      // 3. Generar token de recuperación
+      const resRecovery = await fetch('https://redgas.onrender.com/GenerateTokenRecovery', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          correo: email
+        })
+      });
+
+      const recoveryData = await resRecovery.json();
+      const tokenRecuperacion = recoveryData.token;
+
+      if (!tokenRecuperacion) {
+        Swal.fire('Error', 'No se pudo generar el token de recuperación.', 'error');
+        return;
+      }
+
+      // 4. Redirigir a la página de recuperación con tokens
+      navigate(`/Login/ForgotPassword/Recovery?tkc=${token}&tkr=${tokenRecuperacion}&tipo=Tecnico`);
+    } catch (error) {
+      console.error('Error:', error);
+      Swal.fire('Error', 'Algo salió mal, intenta de nuevo.', 'error');
+    }
+  };
 
   return (
     <div>

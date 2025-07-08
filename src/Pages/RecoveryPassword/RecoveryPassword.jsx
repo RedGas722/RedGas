@@ -6,15 +6,16 @@ import withReactContent from "sweetalert2-react-content";
 import Swal from "sweetalert2";
 import './RecoveryPassword.css';
 
-const URL = 'https://redgas.onrender.com/ClienteChangePassword';
-const URL_VALIDAR = 'https://redgas.onrender.com/ValidateTokenRecovery'; 
-
 export const RecoveryPassword = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [params] = useSearchParams();
     const [tokenValido, setTokenValido] = useState(false);
     const navigate = useNavigate();
+
+    const tipoUsuario = params.get('tipo');
+    const URL_CAMBIO = `https://redgas.onrender.com/${tipoUsuario}ChangePassword`;
+    const URL_VALIDAR = 'https://redgas.onrender.com/ValidateTokenRecovery';
 
     const tokenCliente = params.get('tkc');
     const tokenRecuperacion = params.get('tkr');
@@ -54,13 +55,17 @@ export const RecoveryPassword = () => {
         alertSendForm('wait', 'Cambiando contraseña...');
 
         try {
-            const res = await fetch(URL, {
+
+            const tipoNormalizado = tipoUsuario.toLowerCase();
+            const campoContraseña = `contraseña_${tipoNormalizado}`;
+
+            const res = await fetch(URL_CAMBIO, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${tokenCliente}`,
                 },
-                body: JSON.stringify({ contraseña_cliente: password })
+                body: JSON.stringify({ [campoContraseña]: password })
             });
 
             const data = await res.json();

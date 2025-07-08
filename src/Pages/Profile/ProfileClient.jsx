@@ -148,7 +148,7 @@ export const ProfileClient = () => {
       const resRecovery = await fetch('https://redgas.onrender.com/GenerateTokenRecovery', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ correo_cliente: email })
+        body: JSON.stringify({ correo: email })
       })
 
       const recoveryData = await resRecovery.json()
@@ -160,7 +160,7 @@ export const ProfileClient = () => {
       }
 
       // Redirigir a Recovery con ambos tokens
-      navigate(`/Login/ForgotPassword/Recovery?tkc=${token}&tkr=${tokenRecuperacion}`)
+      navigate(`/Login/ForgotPassword/Recovery?tkc=${token}&tkr=${tokenRecuperacion}&tipo=Cliente`)
 
     } catch (error) {
       console.error('Error:', error)
