@@ -86,10 +86,12 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
         setMensaje('Ya existe un producto con ese nombre.')
         return
       }
-
+      const precioConIVA = parseFloat(precio) * 1.19
+      const precioRedondeado = Math.round(precioConIVA / 50) * 50
+      
       const formData = new FormData()
       formData.append('nombre_producto', nombre)
-      formData.append('precio_producto', parseFloat(precio) + (parseFloat(precio) * 0.19)) // Incluye IVA
+      formData.append('precio_producto', precioRedondeado)
       formData.append('descripcion_producto', descripcion)
       formData.append('stock', parseInt(stock))
       formData.append('descuento', parseInt(descuento))
@@ -196,7 +198,7 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
 
           {precio && !isNaN(precio) && (
             <p className="text-sm text-blue-600">
-              Precio con IVA (19%): ${(parseFloat(precio) * 1.19).toFixed(2)}
+              Precio con IVA (19%) y redondeado: ${Math.round(parseFloat(precio) * 1.19 / 50) * 50}
             </p>
           )}
 
