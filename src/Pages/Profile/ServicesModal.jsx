@@ -18,9 +18,9 @@ const ServicesModal = ({ onClose }) => {
    const [loading, setLoading] = useState(true);
 
    const fetchFacturasCliente = async () => {
+      setLoading(true)
       try {
          const token = localStorage.getItem("token");
-
          if (!token) throw new Error("No estás autenticado");
 
          const decoded = jwtDecode(token);
@@ -32,19 +32,23 @@ const ServicesModal = ({ onClose }) => {
             body: JSON.stringify({ id: userId }),
          });
 
-         if (!res.ok) throw new Error("Error al obtener facturas");
+         if (!res.ok) throw new Error("Error al obtener historial");
 
          const data = await res.json();
-         console.log("data.get =>", data.get);
+         console.log("📦 data.get:", data.get);
 
-         const parsed = JSON.parse(data.get);
-         setHistorial([parsed]);
+         const parsed = JSON.parse(data.get); // ← viene como array
+         if (Array.isArray(parsed)) {
+            setHistorial(parsed);
+         } else {
+            setHistorial([]); // fallback si no es array
+         }
 
       } catch (error) {
-         console.error("Error cargando historial:", error);
+         console.error("❌ Error cargando historial:", error);
          setHistorial([]);
       } finally {
-         setLoading(false);
+         setLoading(false)
       }
    };
 
