@@ -39,11 +39,13 @@ const CardsProductsBack = ({ producto, setRefrescar, onUpdateClick }) => {
       <h2 className="text-[20px] font-semibold text-[var(--main-color)]">{producto.nombre_producto}</h2>
       <div className='h-[340px] flex flex-col items-center justify-center gap-2'>
         {imageUrl ? (
-          <img
-            src={imageUrl}
-            alt={producto.nombre_producto}
-            className="max-w-[280px] max-h-[280px] object-contain rounded-[20px]"
-          />
+          <div className="w-full h-[280px] flex items-center justify-center bg-white rounded-[20px] overflow-hidden">
+            <img
+              src={imageUrl || 'https://via.placeholder.com/150'}
+              alt={producto.nombre_producto || 'Producto'}
+              className="w-full h-full object-contain"
+            />
+          </div>
         ) : (
           <div className="w-full h-[180px] flex justify-center items-center bg-gray-200 rounded-md text-gray-500">
             Imagen no disponible
