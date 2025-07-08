@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Header } from "../../Layouts/Header/Header";
 import { CardsOffersGrid } from "../../UI/Cards/CardsOffers/CardsOffersGrid";
 import CardsGrid from "../../UI/Cards/CardsGrid";
-import { BtnBack } from "../../UI/Login_Register/BtnBack"
+import { BtnBack } from "../../UI/Login_Register/BtnBack";
 
 export const SearchPage = () => {
   const location = useLocation();
@@ -21,47 +21,23 @@ export const SearchPage = () => {
       try {
         if (!query && !category) return;
 
-        let coincidencias = [];
-
-        // Para búsqueda por nombre (query)
+        // 🔍 Búsqueda por nombre
         if (query) {
-          const res = await fetch("https://redgas.onrender.com/ProductoGetAllNames");
+          const res = await fetch(`https://redgas.onrender.com/ProductoGetPartialName?query=${encodeURIComponent(query)}`);
           const data = await res.json();
-
-          // Coincidencias de nombres
-          coincidencias = data.data.filter(p =>
-            p.nombre_producto.toLowerCase().includes(query.toLowerCase())
-          );
+          const productos = data?.data || [];
+          procesarProductos(productos);
+          return;
         }
 
-        // ⚠️ En caso de búsqueda por categoría todavía no tienes una ruta optimizada
-        // así que por ahora sigue usando ProductoGetAll solo para eso
+        // 📂 Búsqueda por categoría
         if (category) {
-          const res = await fetch("https://redgas.onrender.com/ProductoGetAll");
+          const res = await fetch(`https://redgas.onrender.com/ProductoGetAllCategoria?nombre_categoria=${encodeURIComponent(category)}`);
           const data = await res.json();
-          const productos = data.data.productos;
-
-          const filtrados = productos.filter((producto) =>
-            producto.categorias?.some(cat =>
-              (cat || "").toLowerCase().trim() === category.toLowerCase().trim()
-            )
-          );
-
-          procesarProductos(filtrados);
-          return; // salir antes para no ejecutar lo de `query`
+          const productos = data.data || []; // ya debe venir como array
+          procesarProductos(productos);
+          return;
         }
-
-        // Cargar datos completos de productos por nombre (1 fetch por producto)
-        const productosDetallados = await Promise.all(
-          coincidencias.map(async (producto) => {
-            const res = await fetch(`https://redgas.onrender.com/ProductoGet?nombre_producto=${encodeURIComponent(producto.nombre_producto)}`);
-            const data = await res.json();
-            return data?.data;
-          })
-        );
-
-        const filtrados = productosDetallados.filter(Boolean);
-        procesarProductos(filtrados);
 
       } catch (error) {
         console.error("Error al cargar productos:", error);
@@ -100,7 +76,7 @@ export const SearchPage = () => {
             {productosConDescuento.length > 0 && (
               <section className="z-[2] ">
                 <h2 className="text-2xl font-semibold text-[var(--main-color)] mb-8 mt-12">Ofertas:</h2>
-                <div className="">
+                <div>
                   <CardsOffersGrid productos={productosConDescuento} />
                 </div>
               </section>

@@ -124,10 +124,13 @@ export const UpdateModal = ({ onClose, setRefrescar, productoCarta }) => {
 
     try {
       if (hayImagen) {
+        const precioConIVA = parseFloat(producto.precio) * 1.19
+        const precioRedondeado = Math.round(precioConIVA / 50) * 50
+
         const formData = new FormData()
         formData.append('nombre_producto', nombreOriginal)
         formData.append('nuevo_nombre_producto', nombreFinal)
-        formData.append('precio_producto', parseFloat(producto.precio))
+        formData.append('precio_producto', precioRedondeado)
         formData.append('descripcion_producto', producto.descripcion)
         formData.append('stock', parseInt(producto.stock))
         formData.append('descuento', parseInt(producto.descuento))
@@ -149,10 +152,13 @@ export const UpdateModal = ({ onClose, setRefrescar, productoCarta }) => {
           throw new Error(data?.errors?.[0]?.msg || 'Error al actualizar con imagen')
         }
       } else {
+        const precioConIVA = parseFloat(producto.precio) * 1.19
+        const precioRedondeado = Math.round(precioConIVA / 50) * 50
+
         const jsonData = {
           nombre_producto: nombreOriginal,
           nuevo_nombre_producto: nombreFinal,
-          precio_producto: parseFloat(producto.precio),
+          precio_producto: precioRedondeado,
           descripcion_producto: producto.descripcion,
           stock: parseInt(producto.stock),
           descuento: parseInt(producto.descuento),
@@ -334,7 +340,7 @@ export const UpdateModal = ({ onClose, setRefrescar, productoCarta }) => {
             padding: '20px 20px 20px 20px',
             maxHeight: '90vh',
             overflowY: 'auto',
-            outline:'none',
+            outline: 'none',
           }}
           className="text-black"
         >
@@ -349,6 +355,10 @@ export const UpdateModal = ({ onClose, setRefrescar, productoCarta }) => {
 
                 <InputLabel type="5" ForID="precio_producto" placeholder="Precio" childLabel="Precio" value={producto.precio || ''} onChange={(e) => setProducto({ ...producto, precio: e.target.value })} className="w-full" placeholderError={!!errores.precio} />
                 {errores.precio && <p className="text-red-600 text-sm">{errores.precio}</p>}
+
+                <p className="text-sm text-blue-600">
+                  Precio con IVA (19%) y redondeado: ${Math.round(parseFloat(producto.precio) * 1.19 / 50) * 50}
+                </p>
 
                 <InputLabel type="1" ForID="descripcion_producto" placeholder="Descripción" childLabel="Descripción" value={producto.descripcion || ''} onChange={(e) => setProducto({ ...producto, descripcion: e.target.value })} className="w-full" placeholderError={!!errores.descripcion} />
                 {errores.descripcion && <p className="text-red-600 text-sm">{errores.descripcion}</p>}

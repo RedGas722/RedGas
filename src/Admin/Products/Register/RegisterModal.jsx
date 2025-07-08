@@ -86,10 +86,12 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
         setMensaje('Ya existe un producto con ese nombre.')
         return
       }
-
+      const precioConIVA = parseFloat(precio) * 1.19
+      const precioRedondeado = Math.round(precioConIVA / 50) * 50
+      
       const formData = new FormData()
       formData.append('nombre_producto', nombre)
-      formData.append('precio_producto', parseFloat(precio))
+      formData.append('precio_producto', precioRedondeado)
       formData.append('descripcion_producto', descripcion)
       formData.append('stock', parseInt(stock))
       formData.append('descuento', parseInt(descuento))
@@ -193,6 +195,12 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
 
           <InputLabel type="5" ForID="precio" placeholder="Precio del Producto" childLabel="Precio del Producto" value={precio} onChange={(e) => setPrecio(e.target.value)} required placeholderError={!!errores.precio} />
           {errores.precio && <p className="text-red-600 text-sm">{errores.precio}</p>}
+
+          {precio && !isNaN(precio) && (
+            <p className="text-sm text-blue-600">
+              Precio con IVA (19%) y redondeado: ${Math.round(parseFloat(precio) * 1.19 / 50) * 50}
+            </p>
+          )}
 
           <InputLabel type="1" ForID="descripcion" placeholder="Descripción" childLabel="Descripción" value={descripcion} onChange={(e) => setDescripcion(e.target.value)} required placeholderError={!!errores.descripcion} />
           {errores.descripcion && <p className="text-red-600 text-sm">{errores.descripcion}</p>}

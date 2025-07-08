@@ -10,73 +10,115 @@ import emailjs from '@emailjs/browser'
 import Swal from 'sweetalert2';
 import './ForgotPassword.css'
 
-const URL = 'https://redgas.onrender.com/ClienteEmail'
-
 export const ForgotPassword = () => {
     const [email, setEmail] = useState('')
     const navigate = useNavigate()
 
+    const verificarCorreoEnTablas = async (correo) => {
+        const rutas = [
+            { url: 'https://redgas.onrender.com/ClienteEmail', campo: 'correo_cliente', tipo: 'Cliente' },
+            { url: 'https://redgas.onrender.com/EmpleadoEmail', campo: 'correo_empleado', tipo: 'Empleado' },
+            { url: 'https://redgas.onrender.com/TecnicoEmail', campo: 'correo_tecnico', tipo: 'Tecnico' },
+            { url: 'https://redgas.onrender.com/AdminEmail', campo: 'correo_admin', tipo: 'Admin' },
+        ];
+
+        for (const ruta of rutas) {
+            try {
+                const res = await fetch(ruta.url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ [ruta.campo]: correo }),
+                });
+
+                const data = await res.json();
+                if (res.ok && data?.token) {
+                    return ruta; // Devuelve ruta, campo y tipo
+                }
+            } catch (error) {
+                // Ignorar errores por ruta específica
+            }
+        }
+
+        return null; // No se encontró en ninguna tabla
+    };
+
+
     const handleForgotPassword = async (e) => {
         e.preventDefault();
 
-        const serviceId = 'service_82gyxy6'
-        const templateId = 'template_fwkby0l'
-        const publicKey = 'SHHYhi-xHJeCovrBP'
+        const serviceId = 'service_82gyxy6';
+        const templateId = 'template_fwkby0l';
+        const publicKey = 'SHHYhi-xHJeCovrBP';
+
+        // Validar en qué tabla está el correo
+        const resultado = await verificarCorreoEnTablas(email);
+        if (!resultado) {
+            alertSendForm(401, 'Correo no encontrado');
+            return;
+        }
+
+        const { url, campo, tipo } = resultado;
 
         try {
-            const res = await fetch(URL, {
+            // 🔑 Obtener token principal (JWT)
+            const res = await fetch(url, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ correo_cliente: email }),
+                body: JSON.stringify({ [campo]: email }),
             });
 
-            const data = await res.json()
-            const token = data.token
+            const data = await res.json();
+            const tokenCliente = data.token;
 
-            if (token) {
-                const decoded = jwtDecode(token)
-                const user = decoded.data.name
-
-                const templateParams = {
-                    to_email: email,
-                    company: 'RED-GAS',
-                    user: user || 'Usuario',
-                    message: 'Hemos recibido su solicitud de cambio de contraseña, haga click en el siguiente enlace:',
-                    link: `https://redgas-one.vercel.app/Login/ForgotPassword/Recovery/${token}`,
-                }
-
-                alertSendForm('wait', 'Enviando correo de recuperación...')
-                emailjs.send(serviceId, templateId, templateParams, publicKey)
-                    .then(() => {
-                        alertSendForm(
-                            200,
-                            '¡Correo de recuperación enviado!',
-                            'Hemos enviado un enlace a tu correo electrónico para que puedas restablecer tu contraseña.'
-                        );
-                        setTimeout(() => {
-                            navigate('/Login');
-                        }, 4000);
-                    })
-                    .catch(() => {
-                        alertSendForm(
-                            402,
-                            'No se pudo enviar el correo',
-                            'Ocurrió un error al enviar el mensaje. Inténtalo nuevamente.'
-                        );
-                    });
-
-            } else {
-                alertSendForm(
-                    401,
-                    'Correo no encontrado',
-                    ''
-                );
+            if (!tokenCliente) {
+                alertSendForm(401, 'Correo no encontrado');
+                return;
             }
 
+            // 🛡️ Obtener token de recuperación
+            const res2 = await fetch('https://redgas.onrender.com/GenerateTokenRecovery', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ correo: email }),
+            });
+
+            const data2 = await res2.json();
+            const tokenRecuperacion = data2.token;
+
+            if (!tokenRecuperacion) {
+                alertSendForm(401, 'No se pudo generar token de recuperación');
+                return;
+            }
+
+            const decoded = jwtDecode(tokenCliente);
+            const user = decoded.data.name || 'Usuario';
+
+            const templateParams = {
+                to_email: email,
+                company: 'RED-GAS',
+                user: user,
+                message: 'Hemos recibido su solicitud de cambio de contraseña, haga click en el siguiente enlace:',
+                link: `https://redgas-one.vercel.app/Login/ForgotPassword/Recovery?tkc=${tokenCliente}&tkr=${tokenRecuperacion}&tipo=${tipo}`,
+            };
+
+            alertSendForm('wait', 'Enviando correo de recuperación...');
+            emailjs.send(serviceId, templateId, templateParams, publicKey)
+                .then(() => {
+                    alertSendForm(200, '¡Correo de recuperación enviado!', 'Revisa tu bandeja de entrada.');
+                    setTimeout(() => {
+                        navigate('/Login');
+                    }, 4000);
+                })
+                .catch(() => {
+                    alertSendForm(402, 'No se pudo enviar el correo', 'Ocurrió un error al enviar el mensaje.');
+                });
+
         } catch {
-            alertSendForm(400, 'El correo no esta registrador');
+            alertSendForm(502, 'Error al procesar solicitud');
         }
     };
+
+
 
     const alertSendForm = (status, title, message) => {
 

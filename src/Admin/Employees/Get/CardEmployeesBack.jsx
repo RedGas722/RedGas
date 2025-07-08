@@ -24,15 +24,15 @@ const CardEmployeesBack = ({ empleado, setRefrescar, onUpdateClick }) => {
           <span className="font-bold text-[15px]">ID:</span>
           <span className="break-words">{empleado.id_empleado}</span>
         </p>
-        <p className="font-medium flex flex-wrap gap-2">
+        <p className="font-medium flex items-center gap-1">
           <span className="font-bold text-[15px]">CC:</span>
           <span className="break-words">{empleado.cc_empleado}</span>
         </p>
-        <p className="font-medium flex flex-wrap gap-2">
+        <p className="font-medium flex items-center gap-1">
           <span className="font-bold text-[15px]">Correo:</span>
           <span className="break-words">{empleado.correo_empleado}</span>
         </p>
-        <p className="font-medium flex flex-wrap gap-2">
+        <p className="font-medium flex items-center gap-1">
           <span className="font-bold text-[15px]">Teléfono:</span>
           <span className="break-words">{empleado.telefono_empleado}</span>
         </p>

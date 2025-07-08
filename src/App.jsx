@@ -36,9 +36,10 @@ import ConfirmacionMercadoPago from './Pages/Shopping/ConfirmacionMP.jsx'
 // 👇 Importar ruta protegida
 import { ProtectedRoute } from './Pages/Login/ProtectedRoutes.jsx'
 import { SalesBack } from './Admin/Sales/SalesBack.jsx'
-import Profile, { ProfileClient } from './Pages/Profile/ProfileClient.jsx'
+import { ProfileClient } from './Pages/Profile/ProfileClient.jsx'
 import ProfileTechnician from './Pages/Profile/ProfileTechnician.jsx'
 import ProfileGeneral from './Pages/Profile/ProfileGeneral.jsx'
+import ServicesCompletedBack from './Admin/ServicesCompletes/ServicesCompleted.jsx'
 
 export function AppContent() {
     const { isLoading } = useLoading();
@@ -73,7 +74,7 @@ export function AppContent() {
                     <Route path='/ProductInfo' element={<ProductInfo />} />
                     {/* Rutas de recuperación de contraseña */}
                     <Route path='/Login/ForgotPassword' element={<ForgotPassword />} />
-                    <Route path='/Login/ForgotPassword/Recovery/:token' element={<RecoveryPassword />} />
+                    <Route path='/Login/ForgotPassword/Recovery' element={<RecoveryPassword />} />
 
                     {/*Rutas cliente y tecnico*/}
 
@@ -147,9 +148,16 @@ export function AppContent() {
                             <SalesBack />
                         </ProtectedRoute>
                     } />
+
                     <Route path="/Admin/Factures" element={
                         <ProtectedRoute requiredTypes={[1, 3]}>
                             <FacturesBack />
+                        </ProtectedRoute>
+                    } />
+
+                    <Route path="/Admin/ServicesCompleted" element={
+                        <ProtectedRoute requiredTypes={[1, 3]}>
+                            <ServicesCompletedBack />
                         </ProtectedRoute>
                     } />
 

@@ -9,6 +9,7 @@ import SpeedDialAction from '@mui/material/SpeedDialAction'
 import { SvgPayPal } from "../../UI/Svg/SvgPayPal"
 import SvgMercadoPago from "../../UI/Svg/SvgMP"
 import BtnBack from "../../UI/Login_Register/BtnBack"
+import { Buttons } from "../../UI/Login_Register/Buttons"
 
 export const Shopping = () => {
   const [open, setOpen] = useState(false)
@@ -16,6 +17,7 @@ export const Shopping = () => {
   const [totalPrice, setTotalPrice] = useState(0)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [inputQuantities, setInputQuantities] = useState({}) // Estado para manejar los valores de los inputs
   const token = localStorage.getItem("token")
 
   const fetchProducts = async () => {
@@ -35,7 +37,7 @@ export const Shopping = () => {
       if (!resCart.ok) throw new Error("Error al obtener el carrito")
 
       const cartData = await resCart.json()
-      
+
       const productDetails = await Promise.all(
         cartData.map(async (item) => {
           const res = await fetch(`https://redgas.onrender.com/ProductoGetById?id_producto=${encodeURIComponent(item.productId)}`, {
@@ -58,6 +60,14 @@ export const Shopping = () => {
       )
       console.log("Productos obtenidos:", productDetails)
       setProducts(productDetails)
+
+      // Inicializar los valores de los inputs con las cantidades actuales
+      const initialQuantities = {}
+      productDetails.forEach(product => {
+        initialQuantities[product.id_producto] = product.cantidad
+      })
+      setInputQuantities(initialQuantities)
+
     } catch (err) {
       setError(err.message || "Error desconocido")
     } finally {
@@ -108,6 +118,12 @@ export const Shopping = () => {
       if (!res.ok) throw new Error("No se pudo eliminar el producto del carrito")
 
       setProducts((prev) => prev.filter(p => p.id_producto !== productId))
+      // Limpiar el input quantity del producto eliminado
+      setInputQuantities(prev => {
+        const newQuantities = { ...prev }
+        delete newQuantities[productId]
+        return newQuantities
+      })
       fetchTotalPrice() // actualizar total
     } catch (err) {
       alert(err.message || "Error al eliminar el producto")
@@ -148,9 +164,40 @@ export const Shopping = () => {
           p.id_producto === productId ? { ...p, cantidad: newQuantity } : p
         )
       )
+
+      // Actualizar el valor del input
+      setInputQuantities(prev => ({
+        ...prev,
+        [productId]: newQuantity
+      }))
+
       fetchTotalPrice() // actualizar total
     } catch (err) {
       alert(err.message || "Error al actualizar la cantidad")
+    }
+  }
+
+  // Función para manejar el cambio en el input
+  const handleInputChange = (productId, value) => {
+    const numericValue = parseInt(value) || 0
+    setInputQuantities(prev => ({
+      ...prev,
+      [productId]: numericValue
+    }))
+  }
+
+  // Función para aplicar la cantidad del input
+  const handleApplyQuantity = (productId) => {
+    const newQuantity = inputQuantities[productId]
+    if (newQuantity && newQuantity > 0) {
+      handleUpdateQuantity(productId, newQuantity)
+    }
+  }
+
+  // Función para manejar Enter en el input
+  const handleInputKeyPress = (e, productId) => {
+    if (e.key === 'Enter') {
+      handleApplyQuantity(productId)
     }
   }
 
@@ -172,6 +219,7 @@ export const Shopping = () => {
       if (!res.ok) throw new Error("No se pudo limpiar el carrito")
 
       setProducts([])
+      setInputQuantities({})
       setTotalPrice(0)
     } catch (err) {
       alert(err.message || "Error al limpiar el carrito")
@@ -273,7 +321,7 @@ export const Shopping = () => {
       name: 'Limpiar carrito'
     },
     {
-      icon: <SvgMercadoPago onClick={() => handlePayWithMercadoPago ()} />,
+      icon: <SvgMercadoPago onClick={() => handlePayWithMercadoPago()} />,
       name: "Pagar con Mercado Pago"
     },
     {
@@ -282,11 +330,8 @@ export const Shopping = () => {
     },
   ]
 
-
-
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
-
 
   return (
     <section className='Distribution'>
@@ -305,7 +350,7 @@ export const Shopping = () => {
           return (
             <section key={index}>
               <section className='flex justify-center gap-[20px]'>
-                <section className='NeoContainer_outset_TL z-[50] flex gap-[20px] p-[20px_10px] w-[70%] h-fit relative'>
+                <section className='NeoContainer_outset_TL z-[50] flex gap-[20px] flex-wrap items-center justify-center p-[20px_10px] w-[70%] h-fit relative'>
                   <div>
                     <img
                       src={producto.imagen ? `data:image/jpeg;base64,${producto.imagen}` : "https://via.placeholder.com/150"}
@@ -330,44 +375,86 @@ export const Shopping = () => {
                     </div>
                     <p className='text-[var(--main-color-sub)] font-bold'>Descripción: <span className="font-normal"> {producto.descripcion_producto || "Sin descripción disponible."} </span> </p>
                     <p className='text-[var(--main-color-sub)]'>Cantidad: {producto.cantidad}</p>
-                    <section className="flex justify-between w-full">
-                      <div className="flex gap-2 items-center">
-                        <button className="rounded-full w-6 h-6  bg-red-700 relative z-[50]" onClick={() =>
-                          producto.cantidad > 1 &&
-                          handleUpdateQuantity(producto.id_producto, producto.cantidad - 1)
-                        }>
-                          <FontAwesomeIcon icon={faMinus} alt='Agregar' className="text-white" />
-                        </button>
-                        <span>{producto.cantidad}</span>
-                        <button className="rounded-full w-6 h-6  bg-green-700 relative z-[50]" onClick={() =>
-                          handleUpdateQuantity(producto.id_producto, producto.cantidad + 1)
-                        }>
-                          <FontAwesomeIcon icon={faPlus} alt='Quitar' className="text-white" />
-                        </button>
+
+                    {/* Sección mejorada para control de cantidad */}
+                    <section className="flex justify-between flex-wrap w-full">
+                      <div className="flex gap-3 items-center flex-wrap">
+                        {/* Botones de incremento/decremento */}
+                        <div className="flex gap-2 items-center flex-wrap">
+                          <button
+                            className="rounded-full w-8 h-8 bg-red-700 hover:bg-red-600 transition-colors relative z-[50]"
+                            onClick={() => producto.cantidad > 1 && handleUpdateQuantity(producto.id_producto, producto.cantidad - 1)}
+                          >
+                            <FontAwesomeIcon icon={faMinus} alt='Disminuir' className="text-white" />
+                          </button>
+
+                          {/* <div className="flex gap-2 items-center ml-4"> */}
+                          <input
+                            type="number"
+                            min="1"
+                            max={producto.stock}
+                            value={inputQuantities[producto.id_producto] || ''}
+                            onChange={(e) => handleInputChange(producto.id_producto, e.target.value)}
+                            onKeyPress={(e) => handleInputKeyPress(e, producto.id_producto)}
+                            className="w-16 h-8 border border-gray-300 rounded px-2 text-center text-[var(--main-color)] bg-white focus:outline-none focus:border-blue-500"
+                            placeholder={producto.cantidad.toString()}
+                          />
+                          <button
+                            className="rounded-full w-8 h-8 bg-green-700 hover:bg-green-600 transition-colors relative z-[50]"
+                            onClick={() => handleUpdateQuantity(producto.id_producto, producto.cantidad + 1)}
+                          >
+                            <FontAwesomeIcon icon={faPlus} alt='Aumentar' className="text-white" />
+                          </button>
+                          <Buttons
+                            nameButton='Aplicar'
+                            borderColor='var(--Font-Nav)'
+                            height='40px'
+                            borderWidth='1'
+                            onClick={() => handleApplyQuantity(producto.id_producto)}
+                            width='40px'
+                          />
+                        </div>
+
+
+
+                        {/* Mostrar stock disponible */}
+                        <span className="text-sm text-[var(--main-color-sub)] ml-2">
+                          (Stock: {producto.stock})
+                        </span>
                       </div>
-                      <div className="flex items-center gap-5">
-                        <button
-                          className='buttonTL2 NeoSubContainer_outset_TL p-[7px] relative z-[50]'
+
+                      <div className="flex items-center gap-5 flex-wrap">
+                        <Buttons
+                          nameButton='Pagar con PayPal'
+                          borderColor='var(--Font-Nav)'
+                          height='40px'
+                          borderWidth='1'
                           onClick={() => handlePayWithPaypal(subtotal, producto.id_producto)}
-                        >
-                          Pagar con PayPal
-                        </button>
-                        <button
-                          className='buttonTL2 NeoSubContainer_outset_TL p-[7px] relative z-[50]'
+                          width='fit-content'
+                          padding='10px'
+                        />
+                        <Buttons
+                          nameButton='Pagar con MP'
+                          borderColor='var(--Font-Nav)'
+                          height='40px'
+                          borderWidth='1'
                           onClick={() => handlePayWithMercadoPago(subtotal, producto.id_producto)}
-                        >
-                          Pagar con MP
-                        </button>
-                        <button
-                          className='buttonTL2 NeoSubContainer_outset_TL p-[7px] relative z-[50]'
+                          width='fit-content'
+                          padding='10px'
+                        />
+                        <Buttons
+                          nameButton='Eliminar'
+                          borderColor='var(--Font-Nav2)'
+                          textColor='var(--Font-Nav2)'
+                          height='40px'
+                          borderWidth='1'
                           onClick={() => handleRemoveProduct(producto.id_producto)}
-                        >
-                          Eliminar
-                        </button>
+                          width='fit-content'
+                          padding='10px'
+                        />
                       </div>
                     </section>
                   </div>
-
                 </section>
               </section>
             </section>
@@ -375,39 +462,15 @@ export const Shopping = () => {
         })}
 
         <footer className="flex flex-col items-center gap-4">
-          {/* <div className='flex justify-center items-center gap-[20px]'>
-            <button className='buttonTL2 active:text-[var(--main-color)] font-black NeoSubContainer_outset_TL p-[7px]'>Comprar todo</button>
-            <button
-              className='buttonTL2 text-white font-black NeoSubContainer_outset_TL p-[7px]'
-              onClick={() => handlePayWithPaypal()}
-            >
-              Pagar Total con PayPal
-            </button>
-            <button
-              className='buttonTL2 text-white font-black NeoSubContainer_outset_TL p-[7px]'
-              onClick={() => {
-                setPseAmount(totalPrice)
-                setShowPseForm(true)
-              }}
-            >
-              Pagar Total con PSE
-            </button>
-            <button
-              className='buttonTL2 text-white font-black NeoSubContainer_outset_TL p-[7px]'
-              onClick={handleClearCart}
-            >
-              Limpiar carrito
-            </button>
-          </div> */}
-
           {/* Total del carrito */}
           <p className="text-xl font-semibold text-[var(--main-color)]">
             Total: ${totalPrice.toLocaleString("es-CO")}
           </p>
         </footer>
       </div>
+
       {/* SpeedDial */}
-      <Box sx={{ height: 330, transform: 'translateZ(0px)', flexGrow: 1, position: 'sticky', bottom: 0, right: 0, zIndex:2 }}>
+      <Box sx={{ height: 330, transform: 'translateZ(0px)', flexGrow: 1, position: 'sticky', bottom: 0, right: 0, zIndex: 2 }}>
         <SpeedDial
           ariaLabel="SpeedDial tooltip example"
           sx={{ position: 'absolute', bottom: 16, right: 16 }}
