@@ -46,7 +46,6 @@ export const CostumerMyService = () => {
           }
 
           const datainfo = await response.json()
-          console.log(datainfo.get);
           
           if (!datainfo.get) {
             alertSendForm('change', '', '')
@@ -97,9 +96,7 @@ export const CostumerMyService = () => {
     
   }
   
-  const handleChangeService = async () => {
-    console.log(change);
-    
+  const handleChangeService = async () => {    
     if (change == false) {
       const confirmed = await Swal.fire({
         title: '¿Estás seguro?',
