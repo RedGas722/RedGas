@@ -21,12 +21,14 @@ export const CostumerMyService = () => {
   const [address, setAddress] = useState('')
   const [description, setDescription] = useState('')
   const [info, setInfo] = useState(false)
+  const [change, setChange] = useState(false)
 
   useEffect(() => {
     const token = localStorage.getItem('token')
     if (token) {
       const decoded = jwtDecode(token)
       const userId = decoded.data.id
+      setId(userId)
       handleInProcess(userId)
 
       const fetchData = async () => {
@@ -44,6 +46,8 @@ export const CostumerMyService = () => {
           }
 
           const datainfo = await response.json()
+          console.log(datainfo.get);
+          
           if (!datainfo.get) {
             alertSendForm('change', '', '')
             navigate('/Services')
@@ -51,27 +55,36 @@ export const CostumerMyService = () => {
 
           const firstParse = JSON.parse(datainfo.get)
           const secondParse = JSON.parse(JSON.parse(firstParse.item))
-
+          
+          if (secondParse.error) {
+            setChange(true) 
+            handleChangeService()
+            return
+          }
+          
+          console.log(secondParse.resultado.input);
+          
           setUser(firstParse.userName)
           setPhone(firstParse.userPhone)
           setAddress(firstParse.userAddress)
           setDescription(secondParse.resultado.input)
+          
           Swal.close()
         } catch (error) {
         }
       }
-
+      
       fetchData()
     }
   }, [])
-
+  
   const handleInProcess = async (id) => {
     try {
       const respon = await fetch(URL_TECHNICIAN, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
       })
-
+      
       const data = await respon.json()
       data.get.map(item => {
         if (item.userid == id) {
@@ -79,24 +92,27 @@ export const CostumerMyService = () => {
         }
       })
     } catch (err) {
-
+      
     }
-
+    
   }
-
+  
   const handleChangeService = async () => {
-    console.log('Cambiar servicio')
-    const confirmed = await Swal.fire({
-      title: '¿Estás seguro?',
-      text: 'Esto eliminará tu servicio actual para que puedas crear uno nuevo.',
-      icon: 'question',
-      showCancelButton: true,
-      confirmButtonColor: '#19A9A4',
-      confirmButtonText: 'Sí, cambiar',
-      cancelButtonText: 'Cancelar',
-    })
+    console.log(change);
+    
+    if (change == false) {
+      const confirmed = await Swal.fire({
+        title: '¿Estás seguro?',
+        text: 'Esto eliminará tu servicio actual para que puedas crear uno nuevo.',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#19A9A4',
+        confirmButtonText: 'Sí, cambiar',
+        cancelButtonText: 'Cancelar',
+      })
 
-    if (!confirmed.isConfirmed) return
+      if (!confirmed.isConfirmed) return
+    }
 
     alertSendForm('wait', 'Cambiando servicio...', 'Estamos procesando tu solicitud')
     try {

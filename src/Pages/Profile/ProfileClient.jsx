@@ -259,17 +259,23 @@ export const ProfileClient = () => {
               width='300px'
               nameButton="Servicios Completados"
               Onclick={handleServicios}
-            />
+              />
             <Buttons
+              width='300px'
+              radius='10'
               nameButton="Compras Realizadas"
               Onclick={() => setMostrarFacturas(true)}
-            />
+              />
             <Buttons
+              radius='10'
+              width='300px'
               type="button"
               nameButton="Cambiar Datos del Cliente"
               Onclick={handleCambiarDatos}
-            />
+              />
             <Buttons
+              radius='10'
+              width='300px'
               type="button"
               nameButton="Cambiar Contraseña"
               Onclick={handleCambiarContrasena}

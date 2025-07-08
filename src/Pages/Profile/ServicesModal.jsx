@@ -1,54 +1,48 @@
 import { useEffect, useState } from "react";
+import { ShortText } from "../../UI/ShortText/ShortText";
 import {
-   Dialog,
-   DialogTitle,
-   DialogContent,
-   DialogActions,
-   Button,
-   Card,
-   CardContent,
-   Typography,
-   Box,
-   Chip,
-   IconButton,
-   useTheme,
-   useMediaQuery
-} from "@mui/material";
-import {
-   Close as CloseIcon,
-   Build as BuildIcon,
-   Check as CheckIcon,
-   Clear as ClearIcon,
    Power as PowerIcon,
    Settings as SettingsIcon,
-   Refresh as RefreshIcon
+   Build as BuildIcon,
+   Refresh as RefreshIcon,
+   Check as CheckIcon,
+   Clear as ClearIcon,
+   Close as CloseIcon
 } from "@mui/icons-material";
-import { ProductsModal } from "../../Admin/Factures/Get/ProductsModal";
-import { ShortText } from "../../UI/ShortText/ShortText";
+import { jwtDecode } from "jwt-decode";
 
-const ServicesModal = ({ onClose, open = true }) => {
-   const [facturas, setFacturas] = useState([]);
-   const [productosFactura, setProductosFactura] = useState(null);
+const URL_SAVESERVICESGET = 'http://localhost:10101/ClienteHistorialServicesGet';
+
+const ServicesModal = ({ onClose }) => {
+   const [historial, setHistorial] = useState([]);
    const [loading, setLoading] = useState(true);
-   const theme = useTheme();
-   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 
    const fetchFacturasCliente = async () => {
       try {
          const token = localStorage.getItem("token");
+
          if (!token) throw new Error("No estás autenticado");
 
-         const res = await fetch("https://redgas.onrender.com/FacturaGetByClient", {
-            headers: { Authorization: `Bearer ${token}` },
+         const decoded = jwtDecode(token);
+         const userId = decoded.data.id;
+
+         const res = await fetch(URL_SAVESERVICESGET, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: userId }),
          });
 
          if (!res.ok) throw new Error("Error al obtener facturas");
-         const data = await res.json();
 
-         setFacturas(data.data || []);
+         const data = await res.json();
+         console.log("data.get =>", data.get);
+
+         const parsed = JSON.parse(data.get);
+         setHistorial([parsed]);
+
       } catch (error) {
-         console.error(error);
-         alert("Hubo un problema al cargar las facturas");
+         console.error("Error cargando historial:", error);
+         setHistorial([]);
       } finally {
          setLoading(false);
       }
@@ -59,180 +53,184 @@ const ServicesModal = ({ onClose, open = true }) => {
    }, []);
 
    const getStatusConfig = (status) => {
-      switch (status) {
+      switch (status?.toLowerCase()) {
          case "proceso":
+         case "en proceso":
             return {
-               icon: <RefreshIcon />,
+               icon: <RefreshIcon className="text-yellow-500" />,
                label: "En proceso",
-               color: "warning",
+               bgColor: "bg-yellow-100",
+               textColor: "text-yellow-800",
+               borderColor: "border-yellow-300"
             };
          case "finalizado":
+         case "completado":
             return {
-               icon: <CheckIcon />,
+               icon: <CheckIcon className="text-green-500" />,
                label: "Finalizado",
-               color: "success",
+               bgColor: "bg-green-100",
+               textColor: "text-green-800",
+               borderColor: "border-green-300"
             };
          case "cancelado":
             return {
-               icon: <ClearIcon />,
+               icon: <ClearIcon className="text-red-500" />,
                label: "Cancelado",
-               color: "error",
+               bgColor: "bg-red-100",
+               textColor: "text-red-800",
+               borderColor: "border-red-300"
             };
          default:
             return {
-               icon: <RefreshIcon />,
+               icon: <RefreshIcon className="text-yellow-500" />,
                label: "En proceso",
-               color: "warning",
+               bgColor: "bg-yellow-100",
+               textColor: "text-yellow-800",
+               borderColor: "border-yellow-300"
             };
       }
    };
 
    const getServiceConfig = (type) => {
-      switch (type) {
+      const serviceType = type?.toLowerCase();
+      switch (serviceType) {
          case "instalacion":
+         case "instalación":
             return {
-               icon: <PowerIcon />,
+               icon: <PowerIcon className="text-blue-600" />,
                title: "Instalación",
             };
          case "reparacion":
+         case "reparación":
             return {
-               icon: <SettingsIcon />,
+               icon: <SettingsIcon className="text-orange-600" />,
                title: "Reparación",
             };
          case "mantenimiento":
             return {
-               icon: <BuildIcon />,
+               icon: <BuildIcon className="text-green-600" />,
                title: "Mantenimiento",
             };
          default:
             return {
-               icon: <BuildIcon />,
+               icon: <BuildIcon className="text-gray-600" />,
                title: "Servicio",
             };
       }
    };
 
-   const services = [
-      {
-         type: "instalacion",
-         description: "mi estufa no prende y huele a gasmi estufa no prende y huele a gasmi estufa no prende y huele a gasmi estufa no prende y huele a gasmi estufa no prende y huele a gasmi estufa no prende y huele a gasmi estufa no prende y huele a gasmi estufa no prende y huele a gasmi estufa no prende y huele a gas",
-         status: "proceso",
-      },
-      {
-         type: "reparacion",
-         description: "mi estufa no prende y huele a gas",
-         status: "finalizado",
-      },
-      {
-         type: "mantenimiento",
-         description: "mi estufa no prende y huele a gas",
-         status: "cancelado",
-      },
-   ];
-
    return (
-      <>
-         <Dialog
-            open={open}
-            onClose={onClose}
-            fullScreen={fullScreen}
-            maxWidth="md"
-            fullWidth
-            PaperProps={{
-               sx: {
-                  borderRadius: fullScreen ? 0 : 3,
-                  minHeight: fullScreen ? '100vh' : 'auto',
-               }
-            }}
-         >
-            <DialogTitle sx={{
-               display: 'flex',
-               justifyContent: 'space-between',
-               alignItems: 'center',
-               pb: 1
-            }}>
-               <Typography variant="h4" component="h2" fontWeight="bold" sx={{
-                  color: 'var(--Font-Nav)',
-               }}>
-                  Historial
-               </Typography>
-               <IconButton onClick={onClose} size="small">
-                  <CloseIcon />
-               </IconButton>
-            </DialogTitle>
-
-            <DialogContent dividers sx={{ px: 3, py: 2 }}>
-               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                  {services.map((service, index) => {
-                     const serviceConfig = getServiceConfig(service.type);
-                     const statusConfig = getStatusConfig(service.status);
-
-                     return (
-                        <Card
-                           key={index}
-                           className="
-                           NeoContainer_outset_TL"
-                           sx={{
-                              borderRadius: 2,
-                              '&:hover': {
-                                 boxShadow: 2,
-                              }
-                           }}
-                        >
-                           <CardContent sx={{ p: 2 }}>
-                              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
-                                 {serviceConfig.icon}
-                                 <Typography variant="h6" fontWeight="bold">
-                                    {serviceConfig.title}
-                                 </Typography>
-                              </Box>
-
-                              <Box sx={{ pl: 0.5, mb: 1 }}>
-                                 <Typography variant="subtitle2" fontWeight="bold" gutterBottom>
-                                    Descripción:
-                                 </Typography>
-                                 <ShortText text={service.description} />
-                              </Box>
-
-                              <Box sx={{ pl: 0.5 }}>
-                                 <Typography variant="subtitle2" fontWeight="bold" gutterBottom>
-                                    Estado:
-                                 </Typography>
-                                 <Chip
-                                    icon={statusConfig.icon}
-                                    label={statusConfig.label}
-                                    color={statusConfig.color}
-                                    variant="outlined"
-                                    size="small"
-                                    sx={{ fontWeight: 600 }}
-                                 />
-                              </Box>
-                           </CardContent>
-                        </Card>
-                     );
-                  })}
-               </Box>
-            </DialogContent>
-
-            <DialogActions sx={{ p: 3, pt: 2 }}>
-               <Button
+      <div className="fixed inset-0 z-50 bg-black/30 backdrop-blur-sm flex justify-center items-center">
+         <div className="w-[90%] md:w-[60%] lg:w-[50%] max-h-[90vh] flex-col gap-4 flex items-center NeoContainer_outset_TL overflow-hidden">
+            {/* Header */}
+            <div className="w-full flex justify-between items-center p-4 border-b border-gray-200">
+               <h2 className="font-bold text-3xl text-[var(--main-color)]">Historial</h2>
+               <button
                   onClick={onClose}
-                  variant="contained"
-                  color="error"
-                  sx={{ px: 3, py: 1 }}
+                  className="p-2 hover:bg-gray-100 rounded-full transition-colors"
                >
-                  Cerrar
-               </Button>
-            </DialogActions>
-         </Dialog>
+                  <CloseIcon className="text-gray-600" />
+               </button>
+            </div>
 
-         {productosFactura && (
-            <ProductsModal
-               factura={productosFactura}
-               onClose={() => setProductosFactura(null)}
-            />
-         )}
-      </>
+            {/* Content */}
+            <div className="w-full flex-1 overflow-y-auto p-4">
+               {loading ? (
+                  <div className="text-center py-8">
+                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--main-color)] mx-auto"></div>
+                     <p className="mt-2 text-gray-600">Cargando historial...</p>
+                  </div>
+               ) : historial.length === 0 ? (
+                  <div className="text-center py-8">
+                     <BuildIcon className="text-gray-400 text-6xl mx-auto mb-4" />
+                     <p className="text-gray-500 text-lg">No hay servicios registrados.</p>
+                  </div>
+               ) : (
+                  <div className="space-y-4">
+                     {historial.map((item, index) => {
+                        let parsedItem = {};
+                        try {
+                           parsedItem = JSON.parse(item.item);
+                        } catch (e) {
+                           console.error("Error al parsear item.item", item.item);
+                        }
+
+                        const serviceConfig = getServiceConfig(parsedItem.type || item.type);
+                        const statusConfig = getStatusConfig(item.state);
+
+                        return (
+                           <div
+                              key={index}
+                              className="NeoSubContainer_outset_TL w-full p-4 hover:shadow-lg transition-shadow"
+                           >
+                              {/* Service Header */}
+                              <div className="flex items-center gap-3 mb-3">
+                                 {serviceConfig.icon}
+                                 <h3 className="text-lg font-bold text-[var(--Font-Nav)]">
+                                    {serviceConfig.title}
+                                 </h3>
+                              </div>
+
+                              {/* Service Details */}
+                              <div className="space-y-3">
+                                 {/* Description */}
+                                 <div>
+                                    <h4 className="text-sm font-bold text-gray-700 mb-1">Descripción:</h4>
+                                    <ShortText
+                                       text={parsedItem.description || parsedItem.services || "Sin descripción"}
+                                       maxLength={150}
+                                    />
+                                 </div>
+
+                                 {/* Tech Description */}
+                                 {item.descriptionTech && (
+                                    <div>
+                                       <h4 className="text-sm font-bold text-gray-700 mb-1">Descripción Técnico:</h4>
+                                       <ShortText text={item.descriptionTech} maxLength={150} />
+                                    </div>
+                                 )}
+
+                                 {/* Total Price */}
+                                 {item.totalPrice && (
+                                    <div>
+                                       <h4 className="text-sm font-bold text-gray-700 mb-1">Total:</h4>
+                                       <p className="text-lg font-semibold text-green-600">
+                                          ${item.totalPrice}
+                                       </p>
+                                    </div>
+                                 )}
+
+                                 {/* Status */}
+                                 <div>
+                                    <h4 className="text-sm font-bold text-gray-700 mb-1">Estado:</h4>
+                                    <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border ${statusConfig.bgColor} ${statusConfig.textColor} ${statusConfig.borderColor}`}>
+                                       {statusConfig.icon}
+                                       <span className="text-sm font-semibold">
+                                          {statusConfig.label}
+                                       </span>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        );
+                     })}
+                  </div>
+               )}
+            </div>
+
+            {/* Footer */}
+            <div className="w-full p-4 border-t border-gray-200">
+               <div className="flex justify-end">
+                  <button
+                     onClick={onClose}
+                     className="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg shadow transition-colors font-medium"
+                  >
+                     Cerrar
+                  </button>
+               </div>
+            </div>
+         </div>
+      </div>
    );
 };
 
