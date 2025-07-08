@@ -46,6 +46,8 @@ export const CostumerMyService = () => {
           }
 
           const datainfo = await response.json()
+          console.log(datainfo.get);
+          
           if (!datainfo.get) {
             alertSendForm('change', '', '')
             navigate('/Services')
@@ -54,11 +56,13 @@ export const CostumerMyService = () => {
           const firstParse = JSON.parse(datainfo.get)
           const secondParse = JSON.parse(JSON.parse(firstParse.item))
           
-          if (secondParse.error === 'La respuesta del modelo no fue un JSON válido.') {
+          if (secondParse.error) {
             setChange(true) 
             handleChangeService()
             return
           }
+          
+          console.log(secondParse.resultado.input);
           
           setUser(firstParse.userName)
           setPhone(firstParse.userPhone)
@@ -94,6 +98,8 @@ export const CostumerMyService = () => {
   }
   
   const handleChangeService = async () => {
+    console.log(change);
+    
     if (change == false) {
       const confirmed = await Swal.fire({
         title: '¿Estás seguro?',

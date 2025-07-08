@@ -46,7 +46,7 @@ export const Technica = () => {
   const [description, setDescription] = useState('')
   const [total, setTotal] = useState('')
   const [descriptionWork, setDescriptionWork] = useState('')
-  const [services, setServices] = useState({})
+  const [services, setServices] = useState('')
   const [isAccept, setIsAccept] = useState(false)
   const [isScrollable, setIsScrollable] = useState(false)
   const accordionRef = useRef(null)
@@ -111,7 +111,7 @@ export const Technica = () => {
       setAddress(firstParse.userAddress)
       setEmail(firstParse.userEmail)
       setDescription(secondParse.resultado.etiqueta)
-      setServices(secondParse.resultado)
+      setServices(secondParse.resultado.input)
     } catch (err) {
       alertSendForm(502, 'Error al obtener datos del cliente', err.message)
     }
@@ -137,6 +137,8 @@ export const Technica = () => {
         body: JSON.stringify({
           id_cliente: costumerId,
           id_tecnico: technicianId,
+          total: total,
+          descripcion: descriptionWork,
           estado_pedido: 'Completado'
         }),
       })
@@ -157,14 +159,19 @@ export const Technica = () => {
   const handleSaveServices = async () => {
     const save = {
       description,
-      services: JSON.stringify(services),
+      services
     }
     alertSendForm('wait', 'Guardando servicio...', 'Estamos guardando la información del servicio')
     try {
       const resonseSave = await fetch(`${URL_SAVESERVICES}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({id: costumerId, descriptionTech: descriptionWork, totoalPrice: total, state: 'completado', itemInfo: save  }),
+        body: JSON.stringify({
+          id: costumerId,
+          descriptionTech: descriptionWork, 
+          totalPrice: total, 
+          state: 'completado', 
+          itemInfo: save }),
       })
       if (!resonseSave.ok) throw new Error('Error al guardar el servicio')
       
