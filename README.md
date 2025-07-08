@@ -12,3 +12,4 @@ npm install @mui/material @emotion/react @emotion/styled @mui/icons-material
 npm install rollup
 npm install esbuild
 npm install lightningcss
+npm install bcryptjs

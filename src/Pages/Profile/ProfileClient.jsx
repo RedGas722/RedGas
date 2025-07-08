@@ -8,6 +8,8 @@ import ServicesModal from './ServicesModal'
 import FacturasModal from './FacturasModal'
 import UpdateClientModal from './UpdateClientModal'
 import { useNavigate } from "react-router-dom"
+import bcrypt from 'bcryptjs'
+import Swal from 'sweetalert2'
 
 export const ProfileClient = () => {
   const [cliente, setCliente] = useState({
@@ -20,6 +22,7 @@ export const ProfileClient = () => {
   const [showHistorialServices, setShowHistorialServices] = useState(false)
   const [mostrarFacturas, setMostrarFacturas] = useState(false)
   const [mostrarModalActualizar, setMostrarModalActualizar] = useState(false)
+  const [passwordVerificada, setPasswordVerificada] = useState("");
   const navigate = useNavigate()
 
   // Cargar token y decodificar datos al montar
@@ -44,12 +47,125 @@ export const ProfileClient = () => {
     setShowHistorialServices(true)
   }
 
-  const handleCambiarDatos = () => {
-    setMostrarModalActualizar(true)
-  }
+  const handleCambiarDatos = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
 
-  const handleCambiarContrasena = () => {
-    navigate('/Login/ForgotPassword')
+    const decoded = jwtDecode(token);
+    const { email } = decoded.data;
+
+    const { value: passwordInput } = await Swal.fire({
+      title: 'Verificación de identidad',
+      input: 'password',
+      inputLabel: 'Ingresa tu contraseña actual',
+      inputPlaceholder: '********',
+      inputAttributes: {
+        autocapitalize: 'off',
+        autocorrect: 'off'
+      },
+      showCancelButton: true,
+      confirmButtonText: 'Verificar',
+      cancelButtonText: 'Cancelar',
+      inputValidator: (value) => {
+        if (!value) return 'Debes escribir tu contraseña actual';
+      }
+    });
+
+    if (!passwordInput) return;
+
+    try {
+      const res = await fetch(`https://redgas.onrender.com/ClienteGet?correo_cliente=${email}`);
+      const data = await res.json();
+
+      if (!data || !data.data?.contraseña_cliente) {
+        Swal.fire('Error', 'No se pudo obtener la contraseña del servidor.', 'error');
+        return;
+      }
+
+      const contraseñaOriginal = data.data.contraseña_cliente;
+
+      const isMatch = await bcrypt.compare(passwordInput, contraseñaOriginal);
+      if (!isMatch) {
+        Swal.fire('Error', 'La contraseña no coincide.', 'error');
+        return;
+      }
+
+      // ✅ Si coincide, mostrar modal con contraseña validada
+      setPasswordVerificada(passwordInput);
+      setMostrarModalActualizar(true);
+    } catch (error) {
+      Swal.fire('Error', 'No se pudo verificar la contraseña.', 'error');
+    }
+  };
+
+  const handleCambiarContrasena = async () => {
+    const token = localStorage.getItem("token")
+    if (!token) return
+
+    const decoded = jwtDecode(token)
+    const { email } = decoded.data
+
+    // Mostrar SweetAlert para pedir contraseña actual
+    const { value: passwordInput } = await Swal.fire({
+      title: 'Verificación de identidad',
+      input: 'password',
+      inputLabel: 'Ingresa tu contraseña actual',
+      inputPlaceholder: '********',
+      inputAttributes: {
+        autocapitalize: 'off',
+        autocorrect: 'off'
+      },
+      showCancelButton: true,
+      confirmButtonText: 'Verificar',
+      cancelButtonText: 'Cancelar',
+      inputValidator: (value) => {
+        if (!value) return 'Debes escribir tu contraseña actual'
+      }
+    })
+
+    if (!passwordInput) return
+
+    try {
+      // Obtener datos del cliente (incluyendo contraseña)
+      const res = await fetch(`https://redgas.onrender.com/ClienteGet?correo_cliente=${email}`)
+      const data = await res.json()
+
+      if (!data || !data.data?.contraseña_cliente) {
+        Swal.fire('Error', 'No se pudo obtener la contraseña del servidor.', 'error')
+        return
+      }
+
+      const contraseñaOriginal = data.data.contraseña_cliente
+
+      // Comparar con bcrypt
+      const isMatch = await bcrypt.compare(passwordInput, contraseñaOriginal)
+      if (!isMatch) {
+        Swal.fire('Error', 'La contraseña no coincide.', 'error')
+        return
+      }
+
+      // Si coincide, generar token de recuperación
+      const resRecovery = await fetch('https://redgas.onrender.com/GenerateTokenRecovery', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ correo_cliente: email })
+      })
+
+      const recoveryData = await resRecovery.json()
+      const tokenRecuperacion = recoveryData.token
+
+      if (!tokenRecuperacion) {
+        Swal.fire('Error', 'No se pudo generar el token de recuperación.', 'error')
+        return
+      }
+
+      // Redirigir a Recovery con ambos tokens
+      navigate(`/Login/ForgotPassword/Recovery?tkc=${token}&tkr=${tokenRecuperacion}`)
+
+    } catch (error) {
+      console.error('Error:', error)
+      Swal.fire('Error', 'Algo salió mal, intenta de nuevo.', 'error')
+    }
   }
 
   return (
@@ -69,6 +185,7 @@ export const ProfileClient = () => {
           onClose={() => setMostrarModalActualizar(false)}
           clienteData={cliente}
           setClienteData={setCliente}
+          passwordVerificada={passwordVerificada}
         />
       )}
 
@@ -85,7 +202,7 @@ export const ProfileClient = () => {
       {/* Contenido */}
       <section className="h-fit z-[2] flex flex-wrap justify-center text-[var(--main-color)] items-center gap-[20px] p-20">
         <div className="flex flex-col z-[2] flex-wrap justify-center max-w-[700px] min-w-0 NeoContainer_outset_TL p-5 gap-6">
-          
+
           {/* Datos */}
           <div className="text-[var(--main-color-sub)] pl-2 gap-3 flex items-center font-bold w-fit">
             <FontAwesomeIcon icon={faUser} className="text-[var(--main-color)] text-5xl" />

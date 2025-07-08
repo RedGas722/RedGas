@@ -11,13 +11,14 @@ import Swal from 'sweetalert2';
 import './ForgotPassword.css'
 
 const URL = 'https://redgas.onrender.com/ClienteEmail'
+const URL2 = 'https://redgas.onrender.com/GenerateTokenRecovery' 
 
 export const ForgotPassword = () => {
     const [email, setEmail] = useState('')
     const navigate = useNavigate()
 
     const handleForgotPassword = async (e) => {
-        e.preventDefault();
+        e.preventDefault()
 
         const serviceId = 'service_82gyxy6'
         const templateId = 'template_fwkby0l'
@@ -28,13 +29,28 @@ export const ForgotPassword = () => {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ correo_cliente: email }),
-            });
+            })
 
             const data = await res.json()
-            const token = data.token
+            const tokenCliente = data.token
 
-            if (token) {
-                const decoded = jwtDecode(token)
+            if (tokenCliente) {
+                // Segundo fetch: obtener token de recuperación
+                const res2 = await fetch(URL2, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ correo_cliente: email }),
+                })
+
+                const data2 = await res2.json()
+                const tokenRecuperacion = data2.token
+
+                if (!tokenRecuperacion) {
+                    alertSendForm(401, 'No se pudo generar token de recuperación')
+                    return
+                }
+
+                const decoded = jwtDecode(tokenCliente)
                 const user = decoded.data.name
 
                 const templateParams = {
@@ -42,7 +58,7 @@ export const ForgotPassword = () => {
                     company: 'RED-GAS',
                     user: user || 'Usuario',
                     message: 'Hemos recibido su solicitud de cambio de contraseña, haga click en el siguiente enlace:',
-                    link: `https://redgas-one.vercel.app/Login/ForgotPassword/Recovery/${token}`,
+                    link: `https://redgas-one.vercel.app/Login/ForgotPassword/Recovery?tkc=${tokenCliente}&tkr=${tokenRecuperacion}`,
                 }
 
                 alertSendForm('wait', 'Enviando correo de recuperación...')
@@ -52,31 +68,31 @@ export const ForgotPassword = () => {
                             200,
                             '¡Correo de recuperación enviado!',
                             'Hemos enviado un enlace a tu correo electrónico para que puedas restablecer tu contraseña.'
-                        );
+                        )
                         setTimeout(() => {
-                            navigate('/Login');
-                        }, 4000);
+                            navigate('/Login')
+                        }, 4000)
                     })
                     .catch(() => {
                         alertSendForm(
                             402,
                             'No se pudo enviar el correo',
                             'Ocurrió un error al enviar el mensaje. Inténtalo nuevamente.'
-                        );
-                    });
-
+                        )
+                    })
             } else {
                 alertSendForm(
                     401,
                     'Correo no encontrado',
                     ''
-                );
+                )
             }
 
         } catch {
-            alertSendForm(400, 'El correo no esta registrador');
+            alertSendForm(400, 'El correo no está registrado')
         }
-    };
+    }
+
 
     const alertSendForm = (status, title, message) => {
 

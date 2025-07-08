@@ -36,7 +36,7 @@ import ConfirmacionMercadoPago from './Pages/Shopping/ConfirmacionMP.jsx'
 // 👇 Importar ruta protegida
 import { ProtectedRoute } from './Pages/Login/ProtectedRoutes.jsx'
 import { SalesBack } from './Admin/Sales/SalesBack.jsx'
-import Profile, { ProfileClient } from './Pages/Profile/ProfileClient.jsx'
+import { ProfileClient } from './Pages/Profile/ProfileClient.jsx'
 import ProfileTechnician from './Pages/Profile/ProfileTechnician.jsx'
 import ProfileGeneral from './Pages/Profile/ProfileGeneral.jsx'
 
@@ -73,7 +73,7 @@ export function AppContent() {
                     <Route path='/ProductInfo' element={<ProductInfo />} />
                     {/* Rutas de recuperación de contraseña */}
                     <Route path='/Login/ForgotPassword' element={<ForgotPassword />} />
-                    <Route path='/Login/ForgotPassword/Recovery/:token' element={<RecoveryPassword />} />
+                    <Route path='/Login/ForgotPassword/Recovery' element={<RecoveryPassword />} />
 
                     {/*Rutas cliente y tecnico*/}
 

@@ -2,132 +2,122 @@ import { useState, useEffect } from "react"
 import { InputLabel } from "../../UI/Login_Register/InputLabel/InputLabel"
 import { startTokenRefresher } from '../Login/TokenRefresher'
 
-export const UpdateClientModal = ({ onClose, clienteData, setClienteData }) => {
-    const [cliente, setCliente] = useState(null)
-    const [nuevoCorreo, setNuevoCorreo] = useState("")
-    const [mensaje, setMensaje] = useState("")
-    const [errores, setErrores] = useState({})
-    const [nombre, setNombre] = useState("")
-    const [apellido, setApellido] = useState("")
-    const [password, setPassword] = useState("")
+export const UpdateClientModal = ({ onClose, clienteData, setClienteData, passwordVerificada }) => {
+    const [cliente, setCliente] = useState(null);
+    const [nuevoCorreo, setNuevoCorreo] = useState("");
+    const [mensaje, setMensaje] = useState("");
+    const [errores, setErrores] = useState({});
+    const [nombre, setNombre] = useState("");
+    const [apellido, setApellido] = useState("");
 
     useEffect(() => {
         if (clienteData) {
-            setCliente(clienteData)
-            setNuevoCorreo(clienteData.email)
-
-            const partes = clienteData.name.trim().split(/\s+/)
-            const nombre = partes.slice(0, 2).join(" ")
-            const apellido = partes.slice(2).join(" ")
-
-            setNombre(nombre || "")
-            setApellido(apellido || "")
+            setCliente(clienteData);
+            setNuevoCorreo(clienteData.email);
+            const partes = clienteData.name.trim().split(/\s+/);
+            const nombre = partes.slice(0, 2).join(" ");
+            const apellido = partes.slice(2).join(" ");
+            setNombre(nombre || "");
+            setApellido(apellido || "");
         }
-    }, [clienteData])
+    }, [clienteData]);
 
     const validar = () => {
-        const errores = {}
-        const correoRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+        const errores = {};
+        const correoRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-        if (!nombre.trim()) errores.nombre = "El nombre es obligatorio"
-        if (!apellido.trim()) errores.apellido = "El apellido es obligatorio"
+        if (!nombre.trim()) errores.nombre = "El nombre es obligatorio";
+        if (!apellido.trim()) errores.apellido = "El apellido es obligatorio";
 
         if (!nuevoCorreo.trim()) {
-            errores.nuevoCorreo = "El correo es obligatorio."
+            errores.nuevoCorreo = "El correo es obligatorio.";
         } else if (!correoRegex.test(nuevoCorreo)) {
-            errores.nuevoCorreo = "Correo inválido."
+            errores.nuevoCorreo = "Correo inválido.";
         }
 
         if (!cliente?.telefono?.trim()) {
-            errores.telefono = "El teléfono es obligatorio."
-        } else if (
-            cliente.telefono.length !== 10 ||
-            !/^\d+$/.test(cliente.telefono)
-        ) {
-            errores.telefono = "Teléfono debe tener 10 dígitos numéricos."
+            errores.telefono = "El teléfono es obligatorio.";
+        } else if (cliente.telefono.length !== 10 || !/^\d+$/.test(cliente.telefono)) {
+            errores.telefono = "Teléfono debe tener 10 dígitos numéricos.";
         }
 
-        if (!password.trim()) {
-            errores.password = "La contraseña es obligatoria."
-        }
-
-        return errores
-    }
+        return errores;
+    };
 
     const actualizar = async () => {
-        const erroresValidados = validar()
+        const erroresValidados = validar();
         if (Object.keys(erroresValidados).length > 0) {
-            setErrores(erroresValidados)
-            return
+            setErrores(erroresValidados);
+            return;
         }
 
-        setErrores({})
-        setMensaje("")
+        setErrores({});
+        setMensaje("");
 
-        const direccionActualizada = cliente.direccion?.trim() === "" ? "sin direccion" : cliente.direccion
+        const direccionActualizada = cliente.direccion?.trim() === "" ? "sin direccion" : cliente.direccion;
 
         try {
-            // 🔐 Verificar contraseña con el correo anterior
+            // Verificar login con correo viejo y contraseña ya validada
             const loginRes = await fetch("https://redgas.onrender.com/ClienteLogin", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     correo_cliente: clienteData.email,
-                    contraseña_cliente: password,
+                    contraseña_cliente: passwordVerificada,
                 }),
-            })
+            });
 
             if (!loginRes.ok) {
-                setMensaje("Contraseña incorrecta. No se actualizaron los datos.")
-                return
+                setMensaje("Contraseña incorrecta. No se actualizaron los datos.");
+                return;
             }
 
-            // ✅ Actualizar datos
+            // Actualizar datos
             const updateBody = {
                 nombre_cliente: `${nombre.trim()} ${apellido.trim()}`,
                 nuevo_correo_cliente: nuevoCorreo,
                 telefono_cliente: cliente.telefono,
                 direccion_cliente: direccionActualizada,
                 correo_cliente: clienteData.email,
-            }
+            };
 
             const res = await fetch("https://redgas.onrender.com/ClienteDataUpdate", {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(updateBody),
-            })
+            });
 
             if (!res.ok) {
-                const data = await res.json()
-                setMensaje(data.errorInfo || "Error al actualizar cliente.")
-                return
+                const data = await res.json();
+                setMensaje(data.errorInfo || "Error al actualizar cliente.");
+                return;
             }
 
-            // ✅ Volver a hacer login pero con el NUEVO correo
+            // Relogin con nuevo correo
             const reloginRes = await fetch("https://redgas.onrender.com/ClienteLogin", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     correo_cliente: nuevoCorreo,
-                    contraseña_cliente: password,
+                    contraseña_cliente: passwordVerificada,
                 }),
-            })
+            });
 
             if (!reloginRes.ok) {
-                setMensaje("Datos actualizados, pero error al renovar token.")
-                return
+                setMensaje("Datos actualizados, pero error al renovar token.");
+                return;
             }
 
-            const data = await reloginRes.json()
-            localStorage.setItem("token", data.token)
-            
-            const recordarme = localStorage.getItem("recordarme") === 'true'
+            const data = await reloginRes.json();
+            localStorage.setItem("token", data.token);
+
+            const recordarme = localStorage.getItem("recordarme") === 'true';
             if (!recordarme) {
-            startTokenRefresher()
+                startTokenRefresher();
             }
 
-            const payload = JSON.parse(atob(data.token.split(".")[1]))
-            const actualizado = payload.data
+            const payload = JSON.parse(atob(data.token.split(".")[1]));
+            const actualizado = payload.data;
 
             setClienteData({
                 id: actualizado.id,
@@ -135,13 +125,13 @@ export const UpdateClientModal = ({ onClose, clienteData, setClienteData }) => {
                 email: actualizado.email,
                 telefono: actualizado.telefono,
                 direccion: actualizado.direccion,
-            })
+            });
 
-            setMensaje("Datos actualizados correctamente.")
+            setMensaje("Datos actualizados correctamente.");
         } catch {
-            setMensaje("Error de red al actualizar.")
+            setMensaje("Error de red al actualizar.");
         }
-    }
+    };
 
     const cancelar = () => {
         onClose()
@@ -149,7 +139,6 @@ export const UpdateClientModal = ({ onClose, clienteData, setClienteData }) => {
         setNuevoCorreo("")
         setNombre("")
         setApellido("")
-        setPassword("")
         setErrores({})
         setMensaje("")
     }
@@ -218,17 +207,6 @@ export const UpdateClientModal = ({ onClose, clienteData, setClienteData }) => {
                             onChange={(e) => setCliente({ ...cliente, direccion: e.target.value })}
                             className="w-full"
                         />
-                        <InputLabel type='3'
-                        ForID='Password'
-                        childLabel='Contraseña actual'
-                        placeholder='**********'
-                        autoComplete='off'
-                        value={password}
-                        onChange={e => setPassword(e.target.value)}
-                        className='w-full'
-                        placeholderError={!!errores.password}
-                        required />
-                        {errores.password && <p className="text-red-600 text-sm">{errores.password}</p>}
 
                         <div className="flex justify-between gap-2">
                             <button onClick={cancelar} className="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded">

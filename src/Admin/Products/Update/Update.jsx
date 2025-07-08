@@ -127,7 +127,7 @@ export const UpdateModal = ({ onClose, setRefrescar, productoCarta }) => {
         const formData = new FormData()
         formData.append('nombre_producto', nombreOriginal)
         formData.append('nuevo_nombre_producto', nombreFinal)
-        formData.append('precio_producto', parseFloat(producto.precio))
+        formData.append('precio_producto', parseFloat(producto.precio) + (parseFloat(producto.precio) * 0.19)) // Incluye IVA
         formData.append('descripcion_producto', producto.descripcion)
         formData.append('stock', parseInt(producto.stock))
         formData.append('descuento', parseInt(producto.descuento))
@@ -152,7 +152,7 @@ export const UpdateModal = ({ onClose, setRefrescar, productoCarta }) => {
         const jsonData = {
           nombre_producto: nombreOriginal,
           nuevo_nombre_producto: nombreFinal,
-          precio_producto: parseFloat(producto.precio),
+          precio_producto: parseFloat(producto.precio) + ((parseFloat(producto.precio) * 0.19)),
           descripcion_producto: producto.descripcion,
           stock: parseInt(producto.stock),
           descuento: parseInt(producto.descuento),
@@ -350,6 +350,12 @@ export const UpdateModal = ({ onClose, setRefrescar, productoCarta }) => {
 
                 <InputLabel type="5" ForID="precio_producto" placeholder="Precio" childLabel="Precio" value={producto.precio || ''} onChange={(e) => setProducto({ ...producto, precio: e.target.value })} className="w-full" placeholderError={!!errores.precio} />
                 {errores.precio && <p className="text-red-600 text-sm">{errores.precio}</p>}
+
+                {producto.precio && !isNaN(producto.precio) && (
+                  <p className="text-sm text-blue-600">
+                    Precio con IVA (19%): ${(parseFloat(producto.precio) * 1.19).toFixed(2)}
+                  </p>
+                )}
 
                 <InputLabel type="1" ForID="descripcion_producto" placeholder="Descripción" childLabel="Descripción" value={producto.descripcion || ''} onChange={(e) => setProducto({ ...producto, descripcion: e.target.value })} className="w-full" placeholderError={!!errores.descripcion} />
                 {errores.descripcion && <p className="text-red-600 text-sm">{errores.descripcion}</p>}
