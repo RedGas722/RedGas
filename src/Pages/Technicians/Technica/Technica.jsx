@@ -47,6 +47,7 @@ export const Technica = () => {
   const [total, setTotal] = useState('')
   const [descriptionWork, setDescriptionWork] = useState('')
   const [services, setServices] = useState('')
+  const [servicesInfo, setServicesInfo] = useState('')
   const [isAccept, setIsAccept] = useState(false)
   const [isScrollable, setIsScrollable] = useState(false)
   const accordionRef = useRef(null)
@@ -111,7 +112,8 @@ export const Technica = () => {
       setAddress(firstParse.userAddress)
       setEmail(firstParse.userEmail)
       setDescription(secondParse.resultado.etiqueta)
-      setServices(secondParse.resultado.input)
+      setServices(secondParse.resultado)
+      setServicesInfo(secondParse.resultado.input)
     } catch (err) {
       alertSendForm(502, 'Error al obtener datos del cliente', err.message)
     }
@@ -159,7 +161,7 @@ export const Technica = () => {
   const handleSaveServices = async () => {
     const save = {
       description,
-      services
+      servicesInfo
     }
     alertSendForm('wait', 'Guardando servicio...', 'Estamos guardando la información del servicio')
     try {
