@@ -192,66 +192,6 @@ export const ServicesInfo = () => {
          </div>
 
          <section className="AI_history gap-4 flex flex-col-reverse items-center md:flex-row md:justify-evenly h-fit w-full">
-            <div className="w-[90%] md:w-[55%] lg:w-[40%] flex-col gap-4 flex items-center NeoContainer_outset_TL h-full overflow-y-auto p-[10px_8px]">
-               <h2 className="font-bold text-3xl text-[var(--main-color)]">Historial</h2>
-               <div className="w-full flex p-[0_10px_25px_0] flex-col gap-2 ">
-
-                     <div className="NeoSubContainer_outset_TL w-full p-[10px]">
-                        <div className="flex items-center gap-2 text-[var(--Font-Nav)]">
-                           <FontAwesomeIcon icon={faPlug} className="text-[var(--Font-Nav)]" />
-                           <h3 className="text-[17px] font-bold">Instalación</h3>
-                        </div>
-                        <div className="pl-[3px]">
-                           <h3 className="text-[15px] font-bold">Descripción:</h3>
-                           <ShortText text='mi estufa no prende y huele a gasmi estufa no prende y huele a gasmi estufa no prende y huele a gasmi estufa no prende y huele a gasmi estufa no prende y huele a gasmi estufa no prende y huele a gasmi estufa no prende y huele a gasmi estufa no prende y huele a gasmi estufa no prende y huele a gas' />
-                        </div>
-                        <div>
-                           <h3 className="text-[15px] font-bold">Estado:</h3>
-                           <div className="flex items-center text-[var(--Font-Yellow)]">
-                              <FontAwesomeIcon icon={faRotate} className="" />
-                              <p className="text-[13px] pl-[5px] font-semibold">En proceso</p>
-                           </div>
-                        </div>
-                     </div>
-
-                     <div className="NeoSubContainer_outset_TL w-full p-[10px]">
-                        <div className="flex items-center gap-2 text-[var(--Font-Nav)]">
-                           <FontAwesomeIcon icon={faGears} className="text-[var(--Font-Nav)]" />
-                           <h3 className="text-[17px] font-bold">Reparación</h3>
-                        </div>
-                        <div className="pl-[3px]">
-                           <h3 className="text-[15px] font-bold">Descripción:</h3>
-                           <ShortText text='mi estufa no prende y huele a gas' />
-                        </div>
-                        <div>
-                           <h3 className="text-[15px] font-bold">Estado:</h3>
-                           <div className="flex items-center text-[var(--Font-Nav)]">
-                              <FontAwesomeIcon icon={faCheck} className="" />
-                              <p className="text-[13px] pl-[5px] font-semibold">Finalizado</p>
-                           </div>
-                        </div>
-                     </div>
-
-                     <div className="NeoSubContainer_outset_TL w-full p-[10px]">
-                        <div className="flex items-center gap-2 text-[var(--Font-Nav)]">
-                           <FontAwesomeIcon icon={faTools} className="text-[var(--Font-Nav)]" />
-                           <h3 className="text-[17px] font-bold">Mantenimiento</h3>
-                        </div>
-                        <div className="pl-[3px]">
-                           <h3 className="text-[15px] font-bold">Descripción:</h3>
-                           <ShortText text='mi estufa no prende y huele a gas' />
-                        </div>
-                        <div>
-                           <h3 className="text-[15px] font-bold">Estado:</h3>
-                           <div className="flex items-center text-[var(--Font-Nav2)]">
-                              <FontAwesomeIcon icon={faX} className="" />
-                              <p className="text-[13px] pl-[5px] font-semibold">Cancelado</p>
-                           </div>
-                        </div>
-                     </div>
-
-               </div>
-            </div>
             <form
                onSubmit={handleServices}
                className="w-full max-w-xl p-6 z-[2] flex flex-col gap-3 NeoContainer_outset_TL"

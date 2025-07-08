@@ -50,17 +50,13 @@ export const  Navs = ({ className, ref1, ref2, ref3, ref4 }) => {
             { label: 'Ofertas', action: () => document.getElementById('linkOffers')?.click() },
             { label: 'Productos', action: () => document.getElementById('linkMainPage')?.click() },
         ]
-        
-        if (tipoUsuario === 2) {
-            baseTabs.push({ label: 'Servicio', action: () => navigate('/CostumerMyService')?.click() });
-        }
 
         if (tipoUsuario === 1 || tipoUsuario === 3) {
             baseTabs.push({ label: 'Admin', action: () => navigate('/Admin') })
         }
 
         if (tipoUsuario === 4) {
-            baseTabs.push({ label: 'Servi', action: () => navigate('/CostumerServices')?.click() });
+            baseTabs.push({ label: 'Servicios', action: () => navigate('/CostumerServices')?.click() });
         }
         return baseTabs
     }
