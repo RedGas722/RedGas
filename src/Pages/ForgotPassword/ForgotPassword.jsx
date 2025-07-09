@@ -17,8 +17,6 @@ export const ForgotPassword = () => {
     const verificarCorreoEnTablas = async (correo) => {
         const rutas = [
             { url: 'https://redgas.onrender.com/ClienteEmail', campo: 'correo_cliente', tipo: 'Cliente' },
-            { url: 'https://redgas.onrender.com/EmpleadoEmail', campo: 'correo_empleado', tipo: 'Empleado' },
-            { url: 'https://redgas.onrender.com/TecnicoEmail', campo: 'correo_tecnico', tipo: 'Tecnico' },
             { url: 'https://redgas.onrender.com/AdminEmail', campo: 'correo_admin', tipo: 'Admin' },
         ];
 
@@ -159,29 +157,24 @@ export const ForgotPassword = () => {
 
             case 401:
                 MySwal.fire({
+                    icon: 'info',
+                    title: title || 'Correo no encontrado',
                     html: `
-                            <div style="display: flex; align-items: center;">
-                            <div style="font-size: 30px; color: #3498db; margin-right: 15px;">
-                                ℹ️
-                            </div>
-                            <div style="text-align: left;">
-                                <h3 style="margin: 0; font-size: 16px; font-weight: 600; color: #2c3e50;">
-                                ${title || 'Correo no encontrado'}
-                                </h3>
-                            </div>
-                            </div>
-                        `,
-                    showConfirmButton: false,
-                    position: 'top-end',
-                    width: '350px',
-                    timer: 2000,
-                    timerProgressBar: true,
+            <p style="font-size: 14px;">
+                No pudimos encontrar una cuenta asociada con este correo electrónico.<br/>
+                Por favor, asegúrate de que lo escribiste correctamente o intenta con otro.
+            </p>
+        `,
+                    showConfirmButton: true,
+                    confirmButtonText: 'Entendido',
                     background: '#ffffff',
+                    position: 'center',
                 });
 
-                emailinput.style.border = '2px solid #FF0000'
-                emailinput.value = ''
+                emailinput.style.border = '2px solid #FF0000';
+                emailinput.value = '';
                 break;
+
 
             case 402:
                 MySwal.fire({
