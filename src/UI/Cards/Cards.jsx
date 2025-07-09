@@ -39,14 +39,6 @@ export const Cards = ({ uniqueId, productos = [] }) => {
   const [emblaRef, embla] = useEmblaCarousel({
     align: 'start',
     loop: false,
-    slidesToScroll: 1,
-    breakpoints: {
-      320: { slidesToScroll: 1 },
-      500: { slidesToScroll: 1 },
-      852: { slidesToScroll: 1 },
-      1080: { slidesToScroll: 1 },
-      1390: { slidesToScroll: 1 },
-    },
   });
 
   useEffect(() => {
@@ -152,9 +144,9 @@ export const Cards = ({ uniqueId, productos = [] }) => {
   };
 
   return (
-    <section id={`CardSect-${uniqueId}`} className="flex flex-col items-center justify-center gap-[10px] h-fit w-[100%]">
+    <section id={`CardSect-${uniqueId}`} className="flex flex-col items-center justify-center gap-[0px] h-fit w-[100%]">
       <div className="embla p-[0_10px]" ref={emblaRef}>
-        <div className="embla__container flex " >
+        <div className="embla__container flex" >
           {productos.map((producto, index) => (
             <div className="embla__slide flex justify-center p-[25px_10px]" key={index}>
               <div className="card z-[2] NeoSubContainer_outset_TL">
@@ -188,20 +180,22 @@ export const Cards = ({ uniqueId, productos = [] }) => {
       </div>
 
       <div className="flex flex-col justify-center items-center self-center w-fit p-[10px] NeoSubContainer_outset_TL text-[var(--main-color)]">
-        <div className="flex justify-center items-center gap-[20px]">
-          <button
-            className="buttonTL arrow NeoSubContainer_outset_TL p-[7px]"
-            onClick={() => embla && embla.scrollPrev()}
-          >
-            <FontAwesomeIcon icon={faArrowLeft} className="faArrowLeft text-[30px]" />
-          </button>
-          <button
-            className="buttonTL arrow NeoSubContainer_outset_TL p-[7px]"
-            onClick={() => embla && embla.scrollNext()}
-          >
-            <FontAwesomeIcon icon={faArrowRight} className="faArrowRight text-[30px]" />
-          </button>
-        </div>
+        {showArrows && (
+          <div className="flex justify-center items-center gap-[20px]">
+            <button
+              className="buttonTL arrow NeoSubContainer_outset_TL p-[7px]"
+              onClick={() => embla && embla.scrollPrev()}
+            >
+              <FontAwesomeIcon icon={faArrowLeft} className="faArrowLeft text-[30px]" />
+            </button>
+            <button
+              className="buttonTL arrow NeoSubContainer_outset_TL p-[7px]"
+              onClick={() => embla && embla.scrollNext()}
+            >
+              <FontAwesomeIcon icon={faArrowRight} className="faArrowRight text-[30px]" />
+            </button>
+          </div>
+        )}
       </div>
 
       <Modal open={open} onClose={handleClose} disableScrollLock={true}>

@@ -13,3 +13,4 @@ npm install rollup
 npm install esbuild
 npm install lightningcss
 npm install bcryptjs
+npm install ogl react-ogl

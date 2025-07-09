@@ -77,13 +77,13 @@ export function AppContent() {
                     {/*Rutas cliente y tecnico*/}
 
                     <Route path="/Shopping" element={
-                        <ProtectedRoute requiredTypes={[2,4]}>
+                        <ProtectedRoute requiredTypes={[2, 4]}>
                             <Shopping />
                         </ProtectedRoute>
                     } />
 
                     <Route path="/ProfileGeneral" element={
-                        <ProtectedRoute requiredTypes={[2,4]}>
+                        <ProtectedRoute requiredTypes={[2, 4]}>
                             <ProfileGeneral />
                         </ProtectedRoute>
                     } />
@@ -197,19 +197,18 @@ export function App() {
         <LoadingProvider>
             <div style={{ position: 'relative', minHeight: '100vh' }}>
                 {/* Fondo de fuego */}
-                <BackgroundFire
-                    particleCount={50}
-                    intensity="high"
-                    style={{
-                        position: 'fixed',
-                        top: 0,
-                        left: 0,
-                        width: '100%',
-                        height: '100%',
-                        zIndex: 1
-                    }}
-                />
-
+                <div style={{ width: '100%', height: '600px', position: 'fixed' }}>
+                    <BackgroundFire
+                        particleColors={['#F77E3B', '#F7B733', '#FF6F61', '#D9BF77', '#FFFA6F', '#323232']}
+                        particleCount={200}
+                        particleSpread={10}
+                        speed={0.1}
+                        particleBaseSize={100}
+                        moveParticlesOnHover={true}
+                        alphaParticles={false}
+                        disableRotation={false}
+                    />
+                </div>
                 {/* Tu contenido normal */}
                 <AppContent />
             </div>

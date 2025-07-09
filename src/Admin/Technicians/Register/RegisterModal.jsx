@@ -192,7 +192,7 @@ export const RegisterModal = ({ open, onClose, setRefrescar }) => {
 
           <div className="flex justify-between mt-4 gap-2">
             <Buttons Onclick={cancelarRegistro} borderWidth='1' nameButton='Cancelar' width='150px' textColor='var(--Font-Yellow)' />
-            <Buttons Onclick={handleRegister} borderWidth='1' nameButton='Actualizar' width='150px' textColor='var(--Font-Nav)' />
+            <Buttons Onclick={handleRegister} borderWidth='1' nameButton='Registrar' width='150px' textColor='var(--Font-Nav)' />
           </div>
         </div>
       </Box>

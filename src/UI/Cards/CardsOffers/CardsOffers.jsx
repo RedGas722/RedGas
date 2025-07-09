@@ -3,7 +3,6 @@ import { useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight, faArrowLeft, faCartShopping, faTags } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
-import { ExpandMore } from "../ExpandMore/ExpandMore";
 import Swal from "sweetalert2";
 import { Buttons } from "../../Login_Register/Buttons";
 import Modal from "@mui/material/Modal";

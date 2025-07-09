@@ -42,7 +42,7 @@ const CardTechniciansBack = ({ tecnico, setRefrescar, onUpdateClick }) => {
 };
 
   return (
-    <div className="text-center items-center z-[2] NeoContainer_outset_TL max-w-[320px] p-4 h-[450px] flex flex-col justify-start gap-2">
+    <div className="text-center items-center z-[2] NeoContainer_outset_TL w-[320px] p-4 h-[450px] flex flex-col justify-start gap-2">
       <h2 className="text-xl font-bold text-[var(--Font-Nav)] truncate w-full">{tecnico.nombre_tecnico}</h2>
 
       <div className="max-w-[180px] flex justify-center">

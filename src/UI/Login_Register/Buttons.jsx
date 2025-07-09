@@ -1,9 +1,10 @@
 import Button from '@mui/material/Button';
+import Magnet from '../Magnet/Magnet';
 import './LR.css';
 
 export const Buttons = ({ shadow, shadowActive, padding, width, height, radius, borderWidth, borderColor, textColor, nameButton, subTextBTN, Onclick, Type, ...props }) => {
     return (
-        <div className="group flex flex-col items-center gap-[5px]">
+        <Magnet padding={20} disabled={false} magnetStrength={18} className="group flex flex-col items-center gap-[5px]">
             <Button
                 data-cursor-hover
                 onClick={Onclick}
@@ -17,6 +18,8 @@ export const Buttons = ({ shadow, shadowActive, padding, width, height, radius, 
                     boxShadow: `${shadow || 'var(--shadow-sub-outset)'}`,
                     color: textColor || 'var(--Font-Nav)',
                     whiteSpace: 'nowrap',
+                    display: 'flex',
+                    flexDirection: 'column',
                     textTransform: 'none',
                     padding: `${padding || '5px 70px'}`,
                     fontSize: '1rem',
@@ -51,11 +54,11 @@ export const Buttons = ({ shadow, shadowActive, padding, width, height, radius, 
                 <p className='textBtn'>
                     {nameButton}
                 </p>
+                <p className='subTextBTNClass text-[var(--main-color)] font-normal'>
+                    {subTextBTN}
+                </p>
             </Button>
-            <p className='subTextBTNClass text-[var(--main-color)] font-normal'>
-                {subTextBTN}
-            </p>
-        </div>
+        </Magnet>
     );
 };
 
