@@ -27,15 +27,29 @@ export const Shopping = () => {
         return;
       }
 
-      const resCart = await fetch("https://redgas.onrender.com/CartGet", {
-        headers: {
-          "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json"
-        }
-      });
-      if (!resCart.ok) throw new Error("Error al obtener el carrito");
+      const [resCart, resTotal] = await Promise.all([
+        fetch("https://redgas.onrender.com/CartGet", {
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json"
+          }
+        }),
+        fetch("https://redgas.onrender.com/CartTotal", {
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json"
+          }
+        })
+      ]);
 
-      const cartData = await resCart.json();
+      if (!resCart.ok || !resTotal.ok) throw new Error("Error al obtener carrito o total");
+
+      const [cartData, totalData] = await Promise.all([
+        resCart.json(),
+        resTotal.json()
+      ]);
+
+      const totalServidor = totalData.total;
 
       const productDetails = await Promise.all(
         cartData.map(async (item) => {
@@ -75,20 +89,6 @@ export const Shopping = () => {
         return acc + (precioConDescuento * producto.cantidad);
       }, 0);
 
-      // Obtener total del backend
-      const resTotal = await fetch("https://redgas.onrender.com/CartTotal", {
-        method: "GET",
-        headers: {
-          "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json"
-        }
-      });
-      if (!resTotal.ok) throw new Error("No se pudo obtener el total del carrito");
-
-      const dataTotal = await resTotal.json();
-      const totalServidor = dataTotal.total;
-
-      // Comparar totales
       if (totalCalculado !== totalServidor) {
         await Swal.fire({
           title: "Precios actualizados",
@@ -99,7 +99,7 @@ export const Shopping = () => {
         });
         await handleClearCart();
       } else {
-        setTotalPrice(totalServidor);
+        setTotalPrice(totalServidor); 
       }
 
     } catch (err) {
@@ -108,7 +108,6 @@ export const Shopping = () => {
       setLoading(false);
     }
   };
-
 
   const fetchTotalPrice = async () => {
     try {
@@ -123,6 +122,7 @@ export const Shopping = () => {
       if (!res.ok) throw new Error("No se pudo obtener el total del carrito")
 
       const data = await res.json()
+      console.log("Total del servidor:", data.total)
       setTotalPrice(data.total)
     } catch (err) {
       console.error("Error al obtener el total:", err)
@@ -131,7 +131,6 @@ export const Shopping = () => {
 
   useEffect(() => {
     fetchProducts()
-    fetchTotalPrice()
   }, [])
 
   const handleRemoveProduct = async (productId) => {
