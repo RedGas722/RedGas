@@ -1,14 +1,37 @@
 import { useState, useEffect } from "react"
+import {
+  Modal,
+  Box,
+  Typography,
+  Button,
+  IconButton
+} from "@mui/material"
+import CloseIcon from "@mui/icons-material/Close"
 import { InputLabel } from "../../../UI/Login_Register/InputLabel/InputLabel"
 
-export const UpdateModal = ({ onClose, setRefrescar, clienteCarta }) => {
+export const UpdateModal = ({ open, onClose, setRefrescar, clienteCarta }) => {
   const [cliente, setCliente] = useState(null)
   const [nuevoCorreo, setNuevoCorreo] = useState("")
-  const [correoParaBusqueda, setCorreoParaBusqueda] = useState("") // correo para buscar cliente en backend
+  const [correoParaBusqueda, setCorreoParaBusqueda] = useState("")
   const [mensaje, setMensaje] = useState("")
   const [errores, setErrores] = useState({})
   const [nombre, setNombre] = useState("")
   const [apellido, setApellido] = useState("")
+
+  useEffect(() => {
+    if (clienteCarta) {
+      setCliente(clienteCarta)
+      setNuevoCorreo(clienteCarta.correo_cliente)
+      setCorreoParaBusqueda(clienteCarta.correo_cliente)
+
+      const partes = (clienteCarta?.nombre_cliente || "").trim().split(/\s+/)
+      const nombre = partes.slice(0, 2).join(" ")
+      const apellido = partes.slice(2).join(" ")
+
+      setNombre(nombre || "")
+      setApellido(apellido || "")
+    }
+  }, [clienteCarta])
 
   const validarCampos = () => {
     const errores = {}
@@ -16,12 +39,8 @@ export const UpdateModal = ({ onClose, setRefrescar, clienteCarta }) => {
 
     if (!nombre.trim()) errores.nombre = "El nombre es obligatorio"
     if (!apellido.trim()) errores.apellido = "El apellido es obligatorio"
-
-    if (!nuevoCorreo.trim()) {
-      errores.nuevoCorreo = "El correo es obligatorio."
-    } else if (!correoRegex.test(nuevoCorreo)) {
-      errores.nuevoCorreo = "Correo inválido."
-    }
+    if (!nuevoCorreo.trim()) errores.nuevoCorreo = "El correo es obligatorio."
+    else if (!correoRegex.test(nuevoCorreo)) errores.nuevoCorreo = "Correo inválido."
 
     if (!cliente?.telefono_cliente?.trim()) {
       errores.telefono_cliente = "El teléfono es obligatorio."
@@ -35,22 +54,6 @@ export const UpdateModal = ({ onClose, setRefrescar, clienteCarta }) => {
     return errores
   }
 
-  useEffect(() => {
-    if (clienteCarta) {
-      setCliente(clienteCarta)
-      setNuevoCorreo(clienteCarta.correo_cliente)
-      setCorreoParaBusqueda(clienteCarta.correo_cliente) // Inicialmente, el correo para búsqueda es el actual
-
-      const partes = clienteCarta.nombre_cliente.trim().split(/\s+/) // Maneja múltiples espacios
-
-        const nombre = partes.slice(0, 2).join(" ") // Primeras dos palabras como nombre
-        const apellido = partes.slice(2).join(" ")  // El resto como apellido
-
-        setNombre(nombre || "")
-        setApellido(apellido || "")
-    }
-  }, [clienteCarta])
-
   const actualizarCliente = async () => {
     const erroresValidados = validarCampos()
     if (Object.keys(erroresValidados).length > 0) {
@@ -61,28 +64,28 @@ export const UpdateModal = ({ onClose, setRefrescar, clienteCarta }) => {
     setErrores({})
     setMensaje("")
 
-    const direccionActualizada = cliente.direccion_cliente?.trim() === "" ? "sin direccion" : cliente.direccion_cliente
+    const direccionActualizada =
+      cliente.direccion_cliente?.trim() === "" ? "sin direccion" : cliente.direccion_cliente
 
     const body = {
       nombre_cliente: `${nombre.trim()} ${apellido.trim()}`,
       nuevo_correo_cliente: nuevoCorreo,
       telefono_cliente: cliente.telefono_cliente,
       direccion_cliente: direccionActualizada,
-      correo_cliente: correoParaBusqueda, // Usamos correo para buscar cliente (puede ser diferente al nuevoCorreo)
+      correo_cliente: correoParaBusqueda
     }
 
     try {
       const res = await fetch("https://redgas.onrender.com/ClienteDataUpdate", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
+        body: JSON.stringify(body)
       })
 
       if (res.ok) {
         setMensaje("Cliente actualizado exitosamente.")
         setRefrescar(true)
 
-        // Actualizar correoParaBusqueda solo si el correo nuevo cambió respecto al usado para buscar
         if (correoParaBusqueda !== nuevoCorreo) {
           setCorreoParaBusqueda(nuevoCorreo)
         }
@@ -107,12 +110,26 @@ export const UpdateModal = ({ onClose, setRefrescar, clienteCarta }) => {
   }
 
   return (
-    <div className="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-2xl p-6 shadow-lg w-[340px] flex flex-col gap-4 relative text-black">
-        <h2 className="text-xl font-bold text-center">Actualizar Cliente</h2>
+    <Modal open={open} onClose={cancelarEdicion}>
+      <Box
+        className="bg-white w-[90%] md:w-[400px] max-h-[90vh] overflow-y-auto p-6 rounded-xl relative shadow-lg"
+        sx={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)"
+        }}
+      >
+        <IconButton onClick={cancelarEdicion} sx={{ position: "absolute", top: 10, right: 10 }}>
+          <CloseIcon />
+        </IconButton>
+
+        <Typography variant="h6" className="font-bold text-center text-[var(--main-color)] mb-4">
+          Actualizar Cliente
+        </Typography>
 
         {cliente && (
-          <>
+          <div className="flex flex-col gap-3 text-[var(--main-color)]">
             <InputLabel
               type="1"
               ForID="nombre_cliente"
@@ -120,12 +137,10 @@ export const UpdateModal = ({ onClose, setRefrescar, clienteCarta }) => {
               childLabel="Nombre"
               value={nombre}
               onChange={(e) => setNombre(e.target.value)}
-              className="w-full"
               placeholderError={!!errores.nombre}
             />
-            {errores.nombre && (
-              <p className="text-red-600 text-sm">{errores.nombre}</p>
-            )}
+            {errores.nombre && <p className="text-red-600 text-sm">{errores.nombre}</p>}
+
             <InputLabel
               type="1"
               ForID="apellido_cliente"
@@ -133,12 +148,10 @@ export const UpdateModal = ({ onClose, setRefrescar, clienteCarta }) => {
               childLabel="Apellido"
               value={apellido}
               onChange={(e) => setApellido(e.target.value)}
-              className="w-full"
               placeholderError={!!errores.apellido}
             />
-            {errores.apellido && (
-              <p className="text-red-600 text-sm">{errores.apellido}</p>
-            )}
+            {errores.apellido && <p className="text-red-600 text-sm">{errores.apellido}</p>}
+
             <InputLabel
               type="2"
               ForID="correo_cliente"
@@ -149,12 +162,10 @@ export const UpdateModal = ({ onClose, setRefrescar, clienteCarta }) => {
                 setNuevoCorreo(e.target.value)
                 setErrores((prev) => ({ ...prev, nuevoCorreo: null }))
               }}
-              className="w-full"
               placeholderError={!!errores.nuevoCorreo}
             />
-            {errores.nuevoCorreo && (
-              <p className="text-red-600 text-sm">{errores.nuevoCorreo}</p>
-            )}
+            {errores.nuevoCorreo && <p className="text-red-600 text-sm">{errores.nuevoCorreo}</p>}
+
             <InputLabel
               type="6"
               ForID="telefono_cliente"
@@ -164,12 +175,12 @@ export const UpdateModal = ({ onClose, setRefrescar, clienteCarta }) => {
               onChange={(e) =>
                 setCliente({ ...cliente, telefono_cliente: e.target.value })
               }
-              className="w-full"
               placeholderError={!!errores.telefono_cliente}
             />
             {errores.telefono_cliente && (
               <p className="text-red-600 text-sm">{errores.telefono_cliente}</p>
             )}
+
             <InputLabel
               type="1"
               ForID="direccion_cliente"
@@ -179,37 +190,30 @@ export const UpdateModal = ({ onClose, setRefrescar, clienteCarta }) => {
               onChange={(e) =>
                 setCliente({ ...cliente, direccion_cliente: e.target.value })
               }
-              className="w-full"
             />
 
-            <div className="flex justify-between gap-2">
-              <button
-                onClick={cancelarEdicion}
-                className="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded"
-              >
+            <div className="flex justify-between mt-4 gap-2">
+              <Button variant="outlined" onClick={cancelarEdicion} color="inherit" fullWidth>
                 Cancelar
-              </button>
-
-              <button
-                onClick={actualizarCliente}
-                className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded"
-              >
+              </Button>
+              <Button variant="contained" onClick={actualizarCliente} color="warning" fullWidth>
                 Actualizar
-              </button>
+              </Button>
             </div>
-          </>
+          </div>
         )}
 
         {mensaje && (
-          <p
-            className={`text-center font-semibold ${
-              mensaje.includes("exitosamente") ? "text-green-600" : "text-red-600"
-            }`}
+          <Typography
+            variant="body2"
+            className={`text-center font-semibold mt-3 ${mensaje.includes("exitosamente") ? "text-green-600" : "text-red-600"
+              }`}
           >
             {mensaje}
-          </p>
+          </Typography>
         )}
-      </div>
-    </div>
+      </Box>
+    </Modal>
   )
 }
+export default UpdateModal

@@ -191,20 +191,21 @@ export const ClientsBack = () => {
           ))}
         </div>
 
-          <Paginator
-            currentPage={paginaActual}
-            totalPages={totalPaginas}
-            onPageChange={(nuevaPagina) => {
-              if (nuevaPagina !== paginaActual) {
-                setPaginaActual(nuevaPagina);
-              }
-            }}
-            disabled={isLoading}
-          />
+        <Paginator
+          currentPage={paginaActual}
+          totalPages={totalPaginas}
+          onPageChange={(nuevaPagina) => {
+            if (nuevaPagina !== paginaActual) {
+              setPaginaActual(nuevaPagina);
+            }
+          }}
+          disabled={isLoading}
+        />
 
         {/* Modales */}
         {showRegisterModal && (
           <RegisterModal
+            open={showRegisterModal}
             onClose={() => setShowRegisterModal(false)}
             setRefrescar={setRefrescar}
           />
@@ -212,6 +213,7 @@ export const ClientsBack = () => {
 
         {showUpdateModal && clienteSeleccionado && (
           <UpdateModal
+            open={!!showUpdateModal}
             onClose={() => setShowUpdateModal(false)}
             setRefrescar={setRefrescar}
             clienteCarta={clienteSeleccionado}
