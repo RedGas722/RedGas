@@ -9,6 +9,7 @@ import SpeedDialAction from '@mui/material/SpeedDialAction'
 import { SvgPayPal } from "../../UI/Svg/SvgPayPal"
 import SvgMercadoPago from "../../UI/Svg/SvgMP"
 import BtnBack from "../../UI/Login_Register/BtnBack"
+import Swal from 'sweetalert2'
 import { Buttons } from "../../UI/Login_Register/Buttons"
 
 export const Shopping = () => {
@@ -23,9 +24,9 @@ export const Shopping = () => {
   const fetchProducts = async () => {
     try {
       if (!token) {
-        setError("Debes iniciar sesión para ver el carrito")
-        setLoading(false)
-        return
+        setError("Debes iniciar sesión para ver el carrito");
+        setLoading(false);
+        return;
       }
 
       const resCart = await fetch("https://redgas.onrender.com/CartGet", {
@@ -33,33 +34,76 @@ export const Shopping = () => {
           "Authorization": `Bearer ${token}`,
           "Content-Type": "application/json"
         }
-      })
-      if (!resCart.ok) throw new Error("Error al obtener el carrito")
+      });
+      if (!resCart.ok) throw new Error("Error al obtener el carrito");
 
       const cartData = await resCart.json()
 
       const productDetails = await Promise.all(
         cartData.map(async (item) => {
-          const res = await fetch(`https://redgas.onrender.com/ProductoGetById?id_producto=${encodeURIComponent(item.productId)}`, {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json"
-            }
-          })
+          try {
+            const res = await fetch(`https://redgas.onrender.com/ProductoGetById?id_producto=${encodeURIComponent(item.productId)}`, {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json"
+              }
+            });
 
-          if (!res.ok) throw new Error(`Error al obtener el producto: ${item.productName}`)
+            if (!res.ok) throw new Error("Producto no encontrado");
 
-          const data = await res.json()
-          const productData = data.data
+            const data = await res.json();
+            const productData = data.data;
 
-          return {
-            ...productData,
-            cantidad: item.quantity
+            return {
+              ...productData,
+              cantidad: item.quantity
+            };
+          } catch (err) {
+            console.warn(`Producto con id ${item.productId} no encontrado. Eliminando del carrito...`);
+            await handleRemoveProduct(item.productId);
+            return null;
           }
         })
-      )
-      console.log("Productos obtenidos:", productDetails)
-      setProducts(productDetails)
+      );
+
+      const filteredProducts = productDetails.filter(p => p !== null);
+      setProducts(filteredProducts);
+
+      // Calcular total local
+      const totalCalculado = filteredProducts.reduce((acc, producto) => {
+        const descuento = Number(producto.descuento) || 0;
+        const precioUnidad = Number(producto.precio_producto) || 0;
+        const precioConDescuento = Math.round((precioUnidad * (1 - descuento / 100)) / 50) * 50;
+        return acc + (precioConDescuento * producto.cantidad);
+      }, 0);
+
+      // Obtener total del backend
+      const resTotal = await fetch("https://redgas.onrender.com/CartTotal", {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json"
+        }
+      });
+      if (!resTotal.ok) throw new Error("No se pudo obtener el total del carrito");
+
+      const dataTotal = await resTotal.json();
+      const totalServidor = dataTotal.total;
+
+      // Comparar totales
+      if (totalCalculado !== totalServidor) {
+        await Swal.fire({
+          title: "Precios actualizados",
+          text: "Uno o más productos cambiaron de precio. El carrito se vaciará para evitar inconsistencias.",
+          icon: "warning",
+          confirmButtonText: "Entendido",
+          confirmButtonColor: "#d33"
+        });
+        await handleClearCart();
+      } else {
+        setTotalPrice(totalServidor);
+      }
+
 
       // Inicializar los valores de los inputs con las cantidades actuales
       const initialQuantities = {}
@@ -69,11 +113,12 @@ export const Shopping = () => {
       setInputQuantities(initialQuantities)
 
     } catch (err) {
-      setError(err.message || "Error desconocido")
+      setError(err.message || "Error desconocido");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
+
 
   const fetchTotalPrice = async () => {
     try {
@@ -297,13 +342,6 @@ export const Shopping = () => {
 
       if (!data.init_point) throw new Error("No se recibió el enlace de pago de Mercado Pago");
 
-      // Guardar producto si es pago individual
-      if (productId) {
-        localStorage.setItem("mp_productId", productId);
-      } else {
-        localStorage.removeItem("mp_productId");
-      }
-
       window.location.href = data.init_point;
 
     } catch (error) {
@@ -333,6 +371,10 @@ export const Shopping = () => {
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
 
+  const redondearAMultiploDe50 = (valor) => {
+    return Math.round(valor / 50) * 50;
+  };
+
   return (
     <section className='Distribution'>
       {/* <Header /> */}
@@ -344,7 +386,7 @@ export const Shopping = () => {
         {products.map((producto, index) => {
           const descuento = Number(producto.descuento) || 0
           const precioUnidad = Number(producto.precio_producto) || 0
-          const precioConDescuento = precioUnidad * (1 - descuento / 100)
+          const precioConDescuento = redondearAMultiploDe50(precioUnidad * (1 - descuento / 100))
           const subtotal = precioConDescuento * producto.cantidad
 
           return (
@@ -375,52 +417,22 @@ export const Shopping = () => {
                     </div>
                     <p className='text-[var(--main-color-sub)] font-bold'>Descripción: <span className="font-normal"> {producto.descripcion_producto || "Sin descripción disponible."} </span> </p>
                     <p className='text-[var(--main-color-sub)]'>Cantidad: {producto.cantidad}</p>
-
-                    {/* Sección mejorada para control de cantidad */}
-                    <section className="flex justify-between flex-wrap w-full">
-                      <div className="flex gap-3 items-center flex-wrap">
-                        {/* Botones de incremento/decremento */}
-                        <div className="flex gap-2 items-center flex-wrap">
-                          <button
-                            className="rounded-full w-8 h-8 bg-red-700 hover:bg-red-600 transition-colors relative z-[50]"
-                            onClick={() => producto.cantidad > 1 && handleUpdateQuantity(producto.id_producto, producto.cantidad - 1)}
-                          >
-                            <FontAwesomeIcon icon={faMinus} alt='Disminuir' className="text-white" />
-                          </button>
-
-                          {/* <div className="flex gap-2 items-center ml-4"> */}
-                          <input
-                            type="number"
-                            min="1"
-                            max={producto.stock}
-                            value={inputQuantities[producto.id_producto] || ''}
-                            onChange={(e) => handleInputChange(producto.id_producto, e.target.value)}
-                            onKeyPress={(e) => handleInputKeyPress(e, producto.id_producto)}
-                            className="w-16 h-8 border border-gray-300 rounded px-2 text-center text-[var(--main-color)] bg-white focus:outline-none focus:border-blue-500"
-                            placeholder={producto.cantidad.toString()}
-                          />
-                          <button
-                            className="rounded-full w-8 h-8 bg-green-700 hover:bg-green-600 transition-colors relative z-[50]"
-                            onClick={() => handleUpdateQuantity(producto.id_producto, producto.cantidad + 1)}
-                          >
-                            <FontAwesomeIcon icon={faPlus} alt='Aumentar' className="text-white" />
-                          </button>
-                          <Buttons
-                            nameButton='Aplicar'
-                            borderColor='var(--Font-Nav)'
-                            height='40px'
-                            borderWidth='1'
-                            onClick={() => handleApplyQuantity(producto.id_producto)}
-                            width='40px'
-                          />
-                        </div>
-
-
-
-                        {/* Mostrar stock disponible */}
-                        <span className="text-sm text-[var(--main-color-sub)] ml-2">
-                          (Stock: {producto.stock})
-                        </span>
+                    <section className="flex justify-between w-full">
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="number"
+                          min={1}
+                          max={producto.stock}
+                          value={producto.cantidad}
+                          onChange={(e) => {
+                            const newQuantity = parseInt(e.target.value, 10);
+                            if (!isNaN(newQuantity)) {
+                              handleUpdateQuantity(producto.id_producto, newQuantity);
+                            }
+                          }}
+                          className="w-[60px] text-center rounded border border-gray-300 p-1 text-black"
+                        />
+                        <span className="text-sm text-gray-500">/ {producto.stock} disponibles</span>
                       </div>
 
                       <div className="flex items-center gap-5 flex-wrap">
@@ -470,7 +482,7 @@ export const Shopping = () => {
       </div>
 
       {/* SpeedDial */}
-      <Box sx={{ height: 330, transform: 'translateZ(0px)', flexGrow: 1, position: 'fixed', bottom: 0, right: 0, zIndex: 2 }}>
+      <Box sx={{ height: 330, transform: 'translateZ(0px)', flexGrow: 1, position: 'sticky', bottom: 0, right: 0, zIndex:2 }}>
         <SpeedDial
           ariaLabel="SpeedDial tooltip example"
           sx={{ position: 'absolute', bottom: 16, right: 16 }}

@@ -31,7 +31,6 @@ export const ConfirmacionMercadoPago = () => {
         if (!consulta.ok) throw new Error(pago.errorInfo || "Error al consultar pago");
 
         setResultado(pago.data);
-        localStorage.setItem(`mp_pago_${payment_id}`, 'true');
       } catch (err) {
         setError(err.message || "Error desconocido al confirmar el pago");
       } finally {

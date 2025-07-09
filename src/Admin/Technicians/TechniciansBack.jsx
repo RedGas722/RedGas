@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { RegisterModal } from './Register/RegisterModal'
 import { UpdateModal } from './Update/Update'
-import { ButtonBack } from '../UI/ButtonBack/ButtonBack'
 import { BtnBack } from "../../UI/Login_Register/BtnBack"
 import CardTechniciansBack from './Get/CardTechniciansBack'
 import { buscarTecnicoPorCorreo } from './Get/Get'

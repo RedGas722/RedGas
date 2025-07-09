@@ -180,7 +180,7 @@ export const ClientsBack = () => {
         )}
 
         {/* Tarjetas de clientes */}
-        <div className="flex flex-wrap items-start gap-6">
+        <div className="flex flex-wrap items-center justify-center gap-6">
           {(clienteBuscado ? [clienteBuscado] : clientes).map((cliente) => (
             <CardClientsBack
               key={cliente.id_cliente}

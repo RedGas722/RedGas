@@ -1,4 +1,5 @@
 import { DeleteTechnician } from '../Delete/Delete'
+import { confirmDelete } from '../../../UI/Alert/Alert'
 import { Buttons } from '../../../UI/Login_Register/Buttons'
 
 const convertirBase64AUrl = (imagen) => {
@@ -21,18 +22,24 @@ const CardTechniciansBack = ({ tecnico, setRefrescar, onUpdateClick }) => {
   const imageUrl = convertirBase64AUrl(tecnico.imagen)
 
   const handleDelete = async () => {
-    const confirmar = window.confirm(`¿Seguro que quieres eliminar al técnico ${tecnico.nombre_tecnico}?`)
-    if (!confirmar) return
+  const confirmado = await confirmDelete(
+    `¿Seguro que quieres eliminar al técnico ${tecnico.nombre_tecnico}?`,
+    `Técnico ${tecnico.nombre_tecnico} eliminado correctamente`
+  );
+  if (!confirmado) return;
 
-    const { success, message } = await DeleteTechnician(tecnico.correo_tecnico)
+  const { success, message } = await DeleteTechnician(tecnico.correo_tecnico);
 
-    if (success) {
-      alert(message)
-      setRefrescar && setRefrescar(true)
-    } else {
-      alert(`Error: ${message}`)
-    }
+  if (success) {
+    setRefrescar && setRefrescar(true);
+  } else {
+    Swal.fire({
+      icon: 'error',
+      title: 'Error al eliminar',
+      text: message || 'Ocurrió un error inesperado',
+    });
   }
+};
 
   return (
     <div className="text-center items-center z-[2] NeoContainer_outset_TL max-w-[320px] p-4 h-[450px] flex flex-col justify-start gap-2">

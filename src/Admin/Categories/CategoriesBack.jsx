@@ -168,7 +168,7 @@ export const CategoriesBack = () => {
 
         {errorBusqueda && <p className="text-red-600 text-sm">{errorBusqueda}</p>}
 
-        <div className="flex flex-wrap items-center gap-6">
+        <div className="flex flex-wrap items-center justify-center gap-6">
           {(categoriaBuscada ? [categoriaBuscada] : categorias).map((categoria) => (
             <CardCategoriesBack
               key={categoria.id_categoria}

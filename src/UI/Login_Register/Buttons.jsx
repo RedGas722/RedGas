@@ -48,11 +48,11 @@ export const Buttons = ({ shadow, shadowActive, padding, width, height, radius, 
                     },
                 }}
             >
-                <p className='textBtn font-bold'>
+                <p className='textBtn'>
                     {nameButton}
                 </p>
             </Button>
-            <p className='subTextBTN text-[var(--main-color)] font-semibold'>
+            <p className='subTextBTNClass text-[var(--main-color)] font-normal'>
                 {subTextBTN}
             </p>
         </div>

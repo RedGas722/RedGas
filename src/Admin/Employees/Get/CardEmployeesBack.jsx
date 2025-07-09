@@ -1,21 +1,27 @@
 import { DeleteEmployee } from '../Delete/Delete'
+import { confirmDelete } from '../../../UI/Alert/Alert'
 import { Buttons } from '../../../UI/Login_Register/Buttons'
 
 const CardEmployeesBack = ({ empleado, setRefrescar, onUpdateClick }) => {
   const handleDelete = async () => {
-    const confirmar = window.confirm(`¿Seguro que quieres eliminar a ${empleado.nombre_empleado}?`)
-    if (!confirmar) return
+    const confirmado = await confirmDelete(
+      `¿Seguro que quieres eliminar al empleado ${empleado.nombre_empleado}?`,
+      `Empleado ${empleado.nombre_empleado} eliminado correctamente`
+    );
+    if (!confirmado) return;
 
-    const { success, message } = await DeleteEmployee(empleado.correo_empleado)
+    const { success, message } = await DeleteEmployee(empleado.correo_empleado);
 
     if (success) {
-      alert(message)
-      setRefrescar(true)
+      setRefrescar(true);
     } else {
-      alert(`Error: ${message}`)
+      Swal.fire({
+        icon: 'error',
+        title: 'Error al eliminar',
+        text: message || 'Ocurrió un error inesperado',
+      });
     }
-  }
-
+  };
   return (
     <div className="NeoContainer_outset_TL p-4 w-[400px] z-[2] gap-4 min-h-[150px] flex flex-col justify-start overflow-hidden">
       <h2 className="text-xl font-semibold text-gray-800 truncate">{empleado.nombre_empleado}</h2>

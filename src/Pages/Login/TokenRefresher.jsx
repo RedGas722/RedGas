@@ -25,9 +25,6 @@ export function startTokenRefresher() {
         const token = localStorage.getItem('token');
         if (!token) {
             console.warn('No hay token, deteniendo el refresco');
-            if (interval) clearInterval(interval);
-            localStorage.removeItem('tipo_usuario');
-            return;
         }
 
         // Solo para NO recordarme: validar inactividad
@@ -77,7 +74,6 @@ export function startTokenRefresher() {
     const handleSessionExpired = (message) => {
         if (interval) clearInterval(interval);
         localStorage.removeItem('token');
-        localStorage.removeItem('tipo_usuario');
         localStorage.removeItem('lastActivity');
 
         Swal.fire({

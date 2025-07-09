@@ -168,7 +168,7 @@ export const AdminsBack = () => {
         </div>
 
         {/* Lista de admins */}
-        <div className="flex flex-wrap items-center gap-6">
+        <div className="flex flex-wrap items-center justify-center gap-6">
           {(adminBuscado ? [adminBuscado] : admins).map((admin) => (
             <CardAdminsBack
               key={admin.id_admin}

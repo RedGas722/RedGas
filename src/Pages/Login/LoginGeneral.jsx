@@ -29,7 +29,6 @@ export const LoginGeneral = () => {
 
                 alertSendForm(200, 'Inicio de sesión exitoso', `Bienvenido de nuevo ${user || 'Usuario'}`);
                 localStorage.setItem('token', userInfo.token);
-                localStorage.setItem('tipo_usuario', userInfo.tipo_usuario);
                 localStorage.setItem('recordarme', recordarme ? 'true' : 'false');
                 startTokenRefresher();
                 setTimeout(() => {

@@ -2,16 +2,8 @@
     text-shadow: 0px 0px 0px rgba(0, 0, 0, 0.7);
 }
 
-
 .SectionSIde {
     overflow-y: scroll;
-}
-
-#sideBarr {
-    display: flex;
-    flex-wrap: wrap;
-    min-width: 120px;
-    max-width: calc((6.5rem * 5) + (2.5rem * (5 - 1)));
 }
 
 .BTN {

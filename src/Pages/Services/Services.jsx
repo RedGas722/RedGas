@@ -32,9 +32,7 @@ export const ServicesInfo = () => {
                body: JSON.stringify({ descripcion: description }),
             })
 
-            const data = await res.json()
-            console.log(data);
-
+            const data = await res.json()            
             const dataInfo = JSON.stringify(data)
             const token = localStorage.getItem('token')
 

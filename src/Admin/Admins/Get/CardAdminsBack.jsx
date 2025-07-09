@@ -1,20 +1,29 @@
 import { DeleteAdmin } from '../Delete/Delete'
+import { confirmDelete } from '../../../UI/Alert/Alert'
 import { Buttons } from '../../../UI/Login_Register/Buttons'
 
 const CardAdminsBack = ({ admin, setRefrescar, onUpdateClick }) => {
   const handleDelete = async () => {
-    const confirmar = window.confirm(`¿Seguro que quieres eliminar a ${admin.nombre_admin}?`)
-    if (!confirmar) return
+    const confirmado = await confirmDelete(
+      `¿Seguro que quieres eliminar al administrador "${admin.nombre_admin}"?`,
+      `Administrador "${admin.nombre_admin}" eliminado correctamente.`
+    );
 
-    const { success, message } = await DeleteAdmin(admin.correo_admin)
+    if (!confirmado) return;
+
+    const { success, message } = await DeleteAdmin(admin.correo_admin);
 
     if (success) {
-      alert(message)
-      setRefrescar(true)
+      setRefrescar(true);
     } else {
-      alert(`Error: ${message}`)
+      Swal.fire({
+        icon: 'error',
+        title: 'Error al eliminar',
+        text: message || 'Ocurrió un error inesperado',
+      });
     }
-  }
+  };
+
 
   return (
     <div className="text-center z-[2] items-center NeoContainer_outset_TL w-[300px] p-4 h-fit flex flex-col justify-start gap-2">
@@ -29,7 +38,7 @@ const CardAdminsBack = ({ admin, setRefrescar, onUpdateClick }) => {
         </p>
         <p className="font-medium flex items-center gap-1">
           <span className="font-bold text-[15px]">Correo:</span>
-          <span className="break-words">{admin.correo_admin}</span>
+          <span className="truncate max-w-[210px]">{admin.correo_admin}</span>
         </p>
         <p className="font-medium flex items-center gap-1">
           <span className="font-bold text-[15px]">Teléfono:</span>

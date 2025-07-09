@@ -188,7 +188,7 @@ export const ContractsBack = () => {
 
         {errorBusqueda && <p className="text-red-600 text-sm">{errorBusqueda}</p>}
 
-        <div className="flex flex-wrap items-start gap-6">
+        <div className="flex flex-wrap justify-center items-center gap-6">
           {(contratoBuscado
             ? Array.isArray(contratoBuscado) ? contratoBuscado : [contratoBuscado]
             : contratos

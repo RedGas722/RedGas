@@ -6,6 +6,7 @@ import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import { tabsClasses } from '@mui/material/Tabs' 
 import useMediaQuery from '@mui/material/useMediaQuery'
+import { jwtDecode } from 'jwt-decode'
 
 export const  Navs = ({ className, ref1, ref2, ref3, ref4 }) => {
     const [tipoUsuario, setTipoUsuario] = useState(null)
@@ -16,8 +17,12 @@ export const  Navs = ({ className, ref1, ref2, ref3, ref4 }) => {
     const isMdUp = useMediaQuery('(min-width: 768px)')
 
     useEffect(() => {
-        const tipo = localStorage.getItem('tipo_usuario')
-        setTipoUsuario(tipo ? parseInt(tipo) : null)
+        const token = localStorage.getItem('token')
+        if (token){
+            const decoded = jwtDecode(token)
+            const tipo = decoded?.data?.tipo_usuario
+            setTipoUsuario(tipo ? parseInt(tipo) : null)
+        }
     }, [])
 
     useEffect(() => {
