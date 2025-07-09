@@ -1,4 +1,14 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
+import {
+  Modal,
+  Box,
+  Typography,
+  TextField,
+  Button,
+  Autocomplete
+} from '@mui/material'
+import CloseIcon from '@mui/icons-material/Close'
+import IconButton from '@mui/material/IconButton'
 import { InputLabel } from '../../../UI/Login_Register/InputLabel/InputLabel'
 
 export const RegisterModal = ({ onClose, setRefrescar, clientes, empleados }) => {
@@ -10,8 +20,6 @@ export const RegisterModal = ({ onClose, setRefrescar, clientes, empleados }) =>
   const [totalFactura, setTotalFactura] = useState('')
   const [mensaje, setMensaje] = useState('')
   const [errores, setErrores] = useState({})
-  const [sugerenciasCliente, setSugerenciasCliente] = useState([])
-  const [sugerenciasEmpleado, setSugerenciasEmpleado] = useState([])
 
   const URL = 'https://redgas.onrender.com/FacturaRegister'
 
@@ -67,123 +75,112 @@ export const RegisterModal = ({ onClose, setRefrescar, clientes, empleados }) =>
     setTotalFactura('')
     setMensaje('')
     setErrores({})
-    setSugerenciasCliente([])
-    setSugerenciasEmpleado([])
     onClose()
   }
 
-  const buscarCliente = (texto) => {
-    setClienteCorreo(texto)
-    const sugerencias = clientes.filter(c => c.correo_cliente.toLowerCase().includes(texto.toLowerCase()))
-    setSugerenciasCliente(sugerencias)
-  }
-
-  const buscarEmpleado = (texto) => {
-    setEmpleadoCorreo(texto)
-    const sugerencias = empleados.filter(e => e.correo_empleado.toLowerCase().includes(texto.toLowerCase()))
-    setSugerenciasEmpleado(sugerencias)
-  }
-
   return (
-    <div className="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-2xl p-6 shadow-lg w-[350px] flex flex-col gap-4 relative text-black">
-        <h2 className="text-xl font-bold text-center">Registrar Factura</h2>
+    <Modal open onClose={cancelarRegistro}>
+      <Box
+        sx={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          bgcolor: 'background.paper',
+          boxShadow: 24,
+          p: 4,
+          borderRadius: 3,
+          width: 350,
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 2,
+        }}
+      >
+        <IconButton
+          onClick={cancelarRegistro}
+          sx={{ position: 'absolute', top: 10, right: 10 }}
+        >
+          <CloseIcon />
+        </IconButton>
+        <Typography variant="h6" fontWeight="bold" textAlign="center">
+          Registrar Factura
+        </Typography>
 
-        {/* Autocompletar Cliente */}
-        <InputLabel
-          type="2"
-          ForID="clienteCorreo"
-          placeholder="Correo del cliente"
-          childLabel="Correo del cliente"
-          value={clienteCorreo}
-          onChange={(e) => buscarCliente(e.target.value)}
-          required
-          placeholderError={!!errores.IDcliente}
+        <Autocomplete
+          options={clientes}
+          getOptionLabel={(c) => c.correo_cliente || ''}
+          value={clientes.find(c => c.id_cliente === IDcliente) || null}
+          onChange={(e, value) => {
+            setClienteCorreo(value?.correo_cliente || '')
+            setIDcliente(value?.id_cliente || '')
+          }}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label="Correo del cliente"
+              error={!!errores.IDcliente}
+              helperText={errores.IDcliente}
+            />
+          )}
         />
-        {errores.IDcliente && <p className="text-red-600 text-sm">{errores.IDcliente}</p>}
-        {sugerenciasCliente.length > 0 && (
-          <div className="border p-2 bg-white shadow rounded">
-            {sugerenciasCliente.map(cliente => (
-              <div
-                key={cliente.id_cliente}
-                onClick={() => {
-                  setClienteCorreo(cliente.correo_cliente)
-                  setIDcliente(cliente.id_cliente)
-                  setSugerenciasCliente([])
-                }}
-                className="cursor-pointer hover:bg-gray-100 p-1"
-              >
-                {cliente.correo_cliente}
-              </div>
-            ))}
-          </div>
-        )}
 
-        {/* Autocompletar Empleado */}
-        <InputLabel
-          type="2"
-          ForID="empleadoCorreo"
-          placeholder="Correo del empleado"
-          childLabel="Correo del empleado"
-          value={empleadoCorreo}
-          onChange={(e) => buscarEmpleado(e.target.value)}
-          required
-          placeholderError={!!errores.IDempleado}
+        <Autocomplete
+          options={empleados}
+          getOptionLabel={(e) => e.correo_empleado || ''}
+          value={empleados.find(e => e.id_empleado === IDempleado) || null}
+          onChange={(e, value) => {
+            setEmpleadoCorreo(value?.correo_empleado || '')
+            setIDempleado(value?.id_empleado || '')
+          }}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label="Correo del empleado"
+              error={!!errores.IDempleado}
+              helperText={errores.IDempleado}
+            />
+          )}
         />
-        {errores.IDempleado && <p className="text-red-600 text-sm">{errores.IDempleado}</p>}
-        {sugerenciasEmpleado.length > 0 && (
-          <div className="border p-2 bg-white shadow rounded">
-            {sugerenciasEmpleado.map(empleado => (
-              <div
-                key={empleado.id_empleado}
-                onClick={() => {
-                  setEmpleadoCorreo(empleado.correo_empleado)
-                  setIDempleado(empleado.id_empleado)
-                  setSugerenciasEmpleado([])
-                }}
-                className="cursor-pointer hover:bg-gray-100 p-1"
-              >
-                {empleado.correo_empleado}
-              </div>
-            ))}
-          </div>
-        )}
 
-        <InputLabel
-          type="7"
-          ForID="fecha"
-          placeholder="Fecha de la factura"
-          childLabel="Fecha de la factura"
+        <TextField
+          type="date"
+          label="Fecha de la factura"
+          InputLabelProps={{ shrink: true }}
           value={fecha}
           onChange={(e) => setFecha(e.target.value)}
-          required
-          placeholderError={!!errores.fecha}
+          error={!!errores.fecha}
+          helperText={errores.fecha}
         />
-        {errores.fecha && <p className="text-red-600 text-sm">{errores.fecha}</p>}
 
-        <InputLabel
-          type="5"
-          ForID="totalFactura"
-          placeholder="Total de la factura"
-          childLabel="Total de la factura"
+        <TextField
+          type="number"
+          label="Total de la factura"
           value={totalFactura}
           onChange={(e) => setTotalFactura(e.target.value)}
-          required
-          placeholderError={!!errores.total}
+          error={!!errores.total}
+          helperText={errores.total}
         />
-        {errores.total && <p className="text-red-600 text-sm">{errores.total}</p>}
 
-        <div className="flex justify-between gap-2">
-          <button onClick={cancelarRegistro} className="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded">Cancelar</button>
-          <button onClick={handleRegister} className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">Registrar</button>
-        </div>
+        <Box display="flex" justifyContent="space-between" mt={1}>
+          <Button onClick={cancelarRegistro} variant="contained" color="inherit">
+            Cancelar
+          </Button>
+          <Button onClick={handleRegister} variant="contained" color="success">
+            Registrar
+          </Button>
+        </Box>
 
         {mensaje && (
-          <p className={`text-center font-semibold ${mensaje.includes('exitosamente') ? 'text-green-600' : 'text-red-600'}`}>
+          <Typography
+            textAlign="center"
+            fontWeight="bold"
+            color={mensaje.includes('exitosamente') ? 'green' : 'error'}
+          >
             {mensaje}
-          </p>
+          </Typography>
         )}
-      </div>
-    </div>
+      </Box>
+    </Modal>
   )
 }
+export default RegisterModal
