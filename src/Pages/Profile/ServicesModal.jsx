@@ -1,127 +1,103 @@
 import { useEffect, useState } from "react";
-import { ShortText } from "../../UI/ShortText/ShortText";
+import CloseIcon from "@mui/icons-material/Close";
+import BuildIcon from "@mui/icons-material/Build";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-   Power as PowerIcon,
-   Settings as SettingsIcon,
-   Build as BuildIcon,
-   Refresh as RefreshIcon,
-   Check as CheckIcon,
-   Clear as ClearIcon,
-   Close as CloseIcon
-} from "@mui/icons-material";
-import { jwtDecode } from "jwt-decode";
+   faPlug,
+   faGears,
+   faTools,
+   faCheck,
+   faX,
+   faRotate,
+} from "@fortawesome/free-solid-svg-icons";
+import { ShortText } from "../../UI/ShortText/ShortText";
 
-const URL_SAVESERVICESGET = 'http://localhost:10101/ClienteHistorialServicesGet';
+const getServiceConfig = (type) => {
+   switch (type?.toLowerCase()) {
+      case "instalación":
+         return {
+            title: "Instalación",
+            icon: <FontAwesomeIcon icon={faPlug} className="text-[var(--Font-Nav)]" />,
+            description: "Instalación de equipos de gas y accesorios según necesidad del cliente.",
+         };
+      case "reparación":
+         return {
+            title: "Reparación",
+            icon: <FontAwesomeIcon icon={faGears} className="text-[var(--Font-Nav)]" />,
+            description: "Corrección de fallas en sistemas de gas o electrodomésticos.",
+         };
+      case "mantenimiento":
+         return {
+            title: "Mantenimiento",
+            icon: <FontAwesomeIcon icon={faTools} className="text-[var(--Font-Nav)]" />,
+            description: "Revisión y limpieza preventiva para asegurar el buen funcionamiento.",
+         };
+      default:
+         return {
+            title: "Servicio",
+            icon: <BuildIcon className="text-[var(--Font-Nav)]" />,
+            description: "Tipo de servicio no especificado.",
+         };
+   }
+};
+
+const getStatusConfig = (state) => {
+   const normalized = state?.toLowerCase();
+   switch (normalized) {
+      case "finalizado":
+         return {
+            label: "Finalizado",
+            icon: <FontAwesomeIcon icon={faCheck} />,
+            bgColor: "bg-green-100",
+            textColor: "text-green-700",
+            borderColor: "border-green-400",
+         };
+      case "cancelado":
+         return {
+            label: "Cancelado",
+            icon: <FontAwesomeIcon icon={faX} />,
+            bgColor: "bg-red-100",
+            textColor: "text-red-700",
+            borderColor: "border-red-400",
+         };
+      default:
+         return {
+            label: "En proceso",
+            icon: <FontAwesomeIcon icon={faRotate} />,
+            bgColor: "bg-yellow-100",
+            textColor: "text-yellow-700",
+            borderColor: "border-yellow-400",
+         };
+   }
+};
 
 const ServicesModal = ({ onClose }) => {
    const [historial, setHistorial] = useState([]);
    const [loading, setLoading] = useState(true);
 
-   const fetchFacturasCliente = async () => {
-      setLoading(true)
+   const fetchHistorial = async () => {
       try {
          const token = localStorage.getItem("token");
          if (!token) throw new Error("No estás autenticado");
 
-         const decoded = jwtDecode(token);
-         const userId = decoded.data.id;
-
-         const res = await fetch(URL_SAVESERVICESGET, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ id: userId }),
+         const res = await fetch("https://redgas.onrender.com/FacturaGetByClient", {
+            headers: { Authorization: `Bearer ${token}` },
          });
 
          if (!res.ok) throw new Error("Error al obtener historial");
-
          const data = await res.json();
-         console.log("📦 data.get:", data.get);
-
-         const parsed = JSON.parse(data.get); // ← viene como array
-         if (Array.isArray(parsed)) {
-            setHistorial(parsed);
-         } else {
-            setHistorial([]); // fallback si no es array
-         }
-
+         setHistorial(data.data || []);
       } catch (error) {
-         console.error("❌ Error cargando historial:", error);
-         setHistorial([]);
+         console.error(error);
+         alert("Error al cargar historial");
       } finally {
-         setLoading(false)
+         setLoading(false);
       }
    };
 
    useEffect(() => {
-      fetchFacturasCliente();
+      fetchHistorial();
    }, []);
-
-   const getStatusConfig = (status) => {
-      switch (status?.toLowerCase()) {
-         case "proceso":
-         case "en proceso":
-            return {
-               icon: <RefreshIcon className="text-yellow-500" />,
-               label: "En proceso",
-               bgColor: "bg-yellow-100",
-               textColor: "text-yellow-800",
-               borderColor: "border-yellow-300"
-            };
-         case "finalizado":
-         case "completado":
-            return {
-               icon: <CheckIcon className="text-green-500" />,
-               label: "Finalizado",
-               bgColor: "bg-green-100",
-               textColor: "text-green-800",
-               borderColor: "border-green-300"
-            };
-         case "cancelado":
-            return {
-               icon: <ClearIcon className="text-red-500" />,
-               label: "Cancelado",
-               bgColor: "bg-red-100",
-               textColor: "text-red-800",
-               borderColor: "border-red-300"
-            };
-         default:
-            return {
-               icon: <RefreshIcon className="text-yellow-500" />,
-               label: "En proceso",
-               bgColor: "bg-yellow-100",
-               textColor: "text-yellow-800",
-               borderColor: "border-yellow-300"
-            };
-      }
-   };
-
-   const getServiceConfig = (type) => {
-      const serviceType = type?.toLowerCase();
-      switch (serviceType) {
-         case "instalacion":
-         case "instalación":
-            return {
-               icon: <PowerIcon className="text-blue-600" />,
-               title: "Instalación",
-            };
-         case "reparacion":
-         case "reparación":
-            return {
-               icon: <SettingsIcon className="text-orange-600" />,
-               title: "Reparación",
-            };
-         case "mantenimiento":
-            return {
-               icon: <BuildIcon className="text-green-600" />,
-               title: "Mantenimiento",
-            };
-         default:
-            return {
-               icon: <BuildIcon className="text-gray-600" />,
-               title: "Servicio",
-            };
-      }
-   };
 
    return (
       <div className="fixed inset-0 z-50 bg-black/30 backdrop-blur-sm flex justify-center items-center">
@@ -156,7 +132,7 @@ const ServicesModal = ({ onClose }) => {
                         try {
                            parsedItem = JSON.parse(item.item);
                         } catch (e) {
-                           console.error("Error al parsear item.item", item.item);
+                           console.error("Error al parsear item.item:", item.item);
                         }
 
                         const serviceConfig = getServiceConfig(parsedItem.type || item.type);
@@ -167,17 +143,19 @@ const ServicesModal = ({ onClose }) => {
                               key={index}
                               className="NeoSubContainer_outset_TL w-full p-4 hover:shadow-lg transition-shadow"
                            >
-                              {/* Service Header */}
-                              <div className="flex items-center gap-3 mb-3">
+                              {/* Header */}
+                              <div className="flex items-center gap-3 mb-2">
                                  {serviceConfig.icon}
                                  <h3 className="text-lg font-bold text-[var(--Font-Nav)]">
                                     {serviceConfig.title}
                                  </h3>
                               </div>
 
-                              {/* Service Details */}
+                              {/* Tipo de servicio */}
+                              <p className="text-sm italic text-gray-600 mb-3">{serviceConfig.description}</p>
+
                               <div className="space-y-3">
-                                 {/* Description */}
+                                 {/* Descripción del cliente */}
                                  <div>
                                     <h4 className="text-sm font-bold text-gray-700 mb-1">Descripción:</h4>
                                     <ShortText
@@ -186,7 +164,7 @@ const ServicesModal = ({ onClose }) => {
                                     />
                                  </div>
 
-                                 {/* Tech Description */}
+                                 {/* Descripción del técnico */}
                                  {item.descriptionTech && (
                                     <div>
                                        <h4 className="text-sm font-bold text-gray-700 mb-1">Descripción Técnico:</h4>
@@ -194,7 +172,7 @@ const ServicesModal = ({ onClose }) => {
                                     </div>
                                  )}
 
-                                 {/* Total Price */}
+                                 {/* Precio total */}
                                  {item.totalPrice && (
                                     <div>
                                        <h4 className="text-sm font-bold text-gray-700 mb-1">Total:</h4>
@@ -204,14 +182,14 @@ const ServicesModal = ({ onClose }) => {
                                     </div>
                                  )}
 
-                                 {/* Status */}
+                                 {/* Estado */}
                                  <div>
                                     <h4 className="text-sm font-bold text-gray-700 mb-1">Estado:</h4>
-                                    <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border ${statusConfig.bgColor} ${statusConfig.textColor} ${statusConfig.borderColor}`}>
+                                    <div
+                                       className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border ${statusConfig.bgColor} ${statusConfig.textColor} ${statusConfig.borderColor}`}
+                                    >
                                        {statusConfig.icon}
-                                       <span className="text-sm font-semibold">
-                                          {statusConfig.label}
-                                       </span>
+                                       <span className="text-sm font-semibold">{statusConfig.label}</span>
                                     </div>
                                  </div>
                               </div>
