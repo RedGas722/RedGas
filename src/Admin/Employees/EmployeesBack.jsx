@@ -168,7 +168,7 @@ export const EmployeesBack = () => {
         </div>
 
         {/* Lista de empleados */}
-        <div className="flex flex-wrap items-center gap-6">
+        <div className="flex flex-wrap justify-center items-center gap-6">
           {(empleadoBuscado ? [empleadoBuscado] : empleados).map((empleado) => (
             <CardEmployeesBack
               key={empleado.id_empleado}

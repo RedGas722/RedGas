@@ -2,7 +2,6 @@ import { faTools, faCheck, faX, faPlug, faGears, faRotate } from "@fortawesome/f
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { BtnBack } from "../../UI/Login_Register/BtnBack"
 import { Buttons } from "../../UI/Login_Register/Buttons"
-import { ShortText } from "../../UI/ShortText/ShortText"
 import { useNavigate } from "react-router-dom"
 import { useState } from "react"
 import withReactContent from 'sweetalert2-react-content'

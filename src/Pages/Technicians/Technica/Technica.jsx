@@ -22,7 +22,7 @@ const URL_DELETE_TECHNICIAN = 'https://redgas.onrender.com/TecnicoServicesDelete
 const URL_GET_COSTUMER = 'https://redgas.onrender.com/ClienteServicesGet'
 const URL_DELETE_COSTUMER = 'https://redgas.onrender.com/ClienteServicesDelete'
 const URL_REGISTER_SERVICES = 'https://redgas.onrender.com/PedidoServicioRegister'
-const URL_SAVESERVICES = 'http://localhost:10101/ClienteHistorialServicesAdd'
+const URL_SAVESERVICES = 'https://redgas.onrender.com/ClienteHistorialServicesAdd'
 
 const style = {
   position: 'relative',

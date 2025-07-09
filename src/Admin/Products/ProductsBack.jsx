@@ -133,7 +133,7 @@ export const ProductsBack = () => {
       <BtnBack To='/Admin' />
       <div className="p-[var(--p-admin-sub)] h-full flex flex-col gap-2">
         <h1 className="font-bold z-[2] text-3xl text-[var(--main-color)]">Productos</h1>
-        <div className='NeoContainer_outset_TL z-[50] flex gap-4 flex-wrap items-end w-fit p-[var(--p-admin-control)]'>
+        <div className='NeoContainer_outset_TL z-[2] flex gap-4 flex-wrap items-end w-fit p-[var(--p-admin-control)]'>
 
           <div className='relative flex' ref={contenedorRef}>
             <InputLabel
@@ -180,7 +180,7 @@ export const ProductsBack = () => {
           </div>
         )}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="flex flex-wrap justify-center items-center gap-6">
           {productoBuscado ? (
             <CardsProductsBack
               key={productoBuscado.id_producto}

@@ -39,11 +39,11 @@ const CardsProductsBack = ({ producto, setRefrescar, onUpdateClick }) => {
       <h2 className="text-[20px] font-semibold text-[var(--main-color)]">{producto.nombre_producto}</h2>
       <div className='h-[340px] flex flex-col items-center justify-center gap-2'>
         {imageUrl ? (
-          <div className="w-full h-[280px] flex items-center justify-center bg-white rounded-[20px] overflow-hidden">
+          <div className="w-[300px] h-[280px] flex items-center justify-center bg-white rounded-[20px] overflow-hidden">
             <img
               src={imageUrl || 'https://via.placeholder.com/150'}
               alt={producto.nombre_producto || 'Producto'}
-              className="w-full h-full object-contain"
+              className="max-w-[200px] max-h-[200px] object-contain"
             />
           </div>
         ) : (

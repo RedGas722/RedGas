@@ -128,7 +128,7 @@ export const TechniciansBack = () => {
 
         <div className="p-[var(--p-admin-sub)] h-full flex flex-col gap-2">
           <h1 className="z-[2] font-bold text-3xl text-[var(--main-color)]">Técnicos</h1>
-          <div className='NeoContainer_outset_TL z-[50] flex gap-4 flex-wrap items-end w-fit p-[var(--p-admin-control)]'>
+          <div className='NeoContainer_outset_TL z-[2] flex gap-4 flex-wrap items-end w-fit p-[var(--p-admin-control)]'>
             <div className='relative' ref={contenedorRef}>
               <InputLabel
                 radius='10'
@@ -164,7 +164,7 @@ export const TechniciansBack = () => {
             </div>
           </div>
           {/* Sección de técnicos */}
-          <div className="flex flex-wrap items-center gap-6">
+          <div className="flex flex-wrap justify-center items-center gap-6">
             {(tecnicoBuscado ? [tecnicoBuscado] : tecnicos).map(tecnico => (
               <CardTechniciansBack
                 key={tecnico.id_tecnico || tecnico.correo_tecnico}
