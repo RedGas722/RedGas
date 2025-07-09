@@ -3,14 +3,16 @@ import { useEffect, useState } from 'react'
 import { BtnBack } from "../UI/Login_Register/BtnBack"
 import { Buttons } from '../UI/Login_Register/Buttons'
 import './AdminStyles.css'
+import { jwtDecode } from 'jwt-decode'
 
 export const AdminApp = () => {
     const [tipoUsuario, setTipoUsuario] = useState(null)
     const navigate = useNavigate();
 
     useEffect(() => {
-        const tipo = localStorage.getItem('tipo_usuario')
-        setTipoUsuario(tipo ? parseInt(tipo) : null)
+        const token = localStorage.getItem('token')
+        const tipo_usuario = jwtDecode(token)?.data?.tipo_usuario
+        setTipoUsuario(tipo_usuario ? parseInt(tipo_usuario) : null)
     }, [])
 
     return (

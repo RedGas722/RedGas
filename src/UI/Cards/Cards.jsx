@@ -151,7 +151,6 @@ export const Cards = ({ uniqueId, productos = [] }) => {
     }
   };
 
-
   return (
     <section id={`CardSect-${uniqueId}`} className="flex flex-col items-center justify-center gap-[10px] h-fit w-[100%]">
       <div className="embla p-[0_10px]" ref={emblaRef}>

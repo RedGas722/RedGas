@@ -2,18 +2,15 @@ export const ValidateUserLogin = async (correo, contrasena) => {
   const loginAttempts = [
     {
       url: 'https://redgas.onrender.com/AdminLogin',
-      body: { correo_admin: correo, contraseña_admin: contrasena },
-      tipo: 1
+      body: { correo_admin: correo, contraseña_admin: contrasena }
     },
     {
       url: 'https://redgas.onrender.com/ClienteLogin',
-      body: { correo_cliente: correo, contraseña_cliente: contrasena },
-      tipo: 2
+      body: { correo_cliente: correo, contraseña_cliente: contrasena }
     },
     {
       url: 'https://redgas.onrender.com/EmpleadoLogin',
-      body: { correo_empleado: correo, contraseña_empleado: contrasena },
-      tipo: 3
+      body: { correo_empleado: correo, contraseña_empleado: contrasena }
     }
   ];
 
@@ -30,7 +27,6 @@ export const ValidateUserLogin = async (correo, contrasena) => {
       if (res.ok && data?.token) {
         return {
           token: data.token,
-          tipo_usuario: attempt.tipo
         };
       }
 

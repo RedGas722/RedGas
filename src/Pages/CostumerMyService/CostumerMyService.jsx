@@ -60,9 +60,7 @@ export const CostumerMyService = () => {
             handleChangeService()
             return
           }
-          
-          console.log(secondParse.resultado.input);
-          
+                  
           setUser(firstParse.userName)
           setPhone(firstParse.userPhone)
           setAddress(firstParse.userAddress)

@@ -12,6 +12,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useEffect, useState } from "react";
 import { Footer } from "./Footer/Footer"
 import './MainPage.css'
+import { jwtDecode } from "jwt-decode"
 
 export const MainPage = () => {
     const navigate = useNavigate();
@@ -20,9 +21,22 @@ export const MainPage = () => {
 
     useEffect(() => {
         const token = localStorage.getItem('token');
-        setIsLoggedIn(!!token);
-        const tipoUsuario = localStorage.getItem('tipo_usuario');
-        setIsAdmin(tipoUsuario === '1');
+        if (token) {
+            try {
+                const decoded = jwtDecode(token);
+                const tipoUsuario = decoded?.data?.tipo_usuario;
+                setIsLoggedIn(true);
+                setIsAdmin(tipoUsuario === 1 || tipoUsuario === 3);
+            } catch (error) {
+                console.error("Error al decodificar el token:", error);
+                localStorage.removeItem('token');
+                setIsLoggedIn(false);
+                setIsAdmin(false);
+            }
+        } else {
+            setIsLoggedIn(false);
+            setIsAdmin(false);
+        }
     }, []);
 
 

@@ -118,9 +118,10 @@ export const CardsOffers = ({ uniqueId, productos = [] }) => {
         productId: producto.id_producto,
         productName: producto.nombre_producto,
         quantity: 1,
-        price: producto.precio_producto,
+        price: redondearAMultiploDe50(producto.precio_producto),
         discount: producto.descuento || 0
       };
+      console.log("Item a agregar al carrito:", item);
 
       await agregarAlCarrito(item);
       Swal.fire({
@@ -137,6 +138,10 @@ export const CardsOffers = ({ uniqueId, productos = [] }) => {
         text: "Ocurrió un error al agregar al carrito",
       });
     }
+  };
+
+  const redondearAMultiploDe50 = (valor) => {
+    return Math.round(valor / 50) * 50;
   };
 
   return (
@@ -168,7 +173,7 @@ export const CardsOffers = ({ uniqueId, productos = [] }) => {
                   <div className="card-price">
                     <p className="text-[var(--Font-Nav2)]">
                       <span className="text-[var(--Font-Nav2-shadow)]">$</span>{" "}
-                      {(parseFloat(producto.precio_producto) * (1 - producto.descuento / 100)).toLocaleString()}{" "}
+                      {redondearAMultiploDe50(parseFloat(producto.precio_producto) * (1 - producto.descuento / 100)).toLocaleString()}{" "}
                       <span className="text-[var(--main-color)] text-[12px]">Cop</span>
                     </p>
                     <p className="text-[14px] text-[var(--Font-Nav-shadow)] line-through">
@@ -276,7 +281,7 @@ export const CardsOffers = ({ uniqueId, productos = [] }) => {
                 <div className="card-price">
                   <p>
                     <span className="text-[var(--Font-Nav-shadow)]">$</span>{" "}
-                    {(parseFloat(selectedProduct.precio_producto) * (1 - selectedProduct.descuento / 100)).toLocaleString()}{" "}
+                    {redondearAMultiploDe50(parseFloat(selectedProduct.precio_producto) * (1 - selectedProduct.descuento / 100)).toLocaleString()}{" "}
                     <span className="text-[var(--main-color-sub)] text-[12px]">Cop</span>
                   </p>
                 </div>

@@ -79,7 +79,7 @@ export const CardsOffersGrid = ({ productos = [] }) => {
         productId: producto.id_producto,
         productName: producto.nombre_producto,
         quantity: 1,
-        price: producto.precio_producto,
+        price: redondearAMultiploDe50(producto.precio_producto),
         discount: producto.descuento || 0
       };
 
@@ -99,6 +99,10 @@ export const CardsOffersGrid = ({ productos = [] }) => {
         text: "Ocurrió un error al agregar al carrito"
       });
     }
+  };
+
+  const redondearAMultiploDe50 = (valor) => {
+    return Math.round(valor / 50) * 50;
   };
 
   return (
@@ -126,13 +130,13 @@ export const CardsOffersGrid = ({ productos = [] }) => {
               <div className="card-price">
                 <p className="text-[var(--Font-Nav2)]">
                   <span className="text-[var(--Font-Nav2-shadow)]">$</span>
-                  {(parseFloat(producto.precio_producto) - (parseFloat(producto.precio_producto) * (producto.descuento / 100))).toLocaleString()}
+                  {redondearAMultiploDe50(parseFloat(producto.precio_producto) - (parseFloat(producto.precio_producto) * (producto.descuento / 100))).toLocaleString()}
                   <span className="text-[var(--main-color-sub)] text-[12px]"> Cop</span>
                 </p>
                 <div className="text-[15px] text-[var(--Font-Nav)]">
                   <p className="text-[var(--Font-Nav-shadow)]">
                     $ <span className="line-through decoration-[1.5px] decoration-[var(--Font-Nav2)]">
-                      {(parseFloat(producto.precio_producto)).toLocaleString()}
+                      {redondearAMultiploDe50(parseFloat(producto.precio_producto)).toLocaleString()}
                     </span>
                   </p>
                 </div>

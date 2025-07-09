@@ -24,10 +24,10 @@ export const ProfileClient = () => {
   const [mostrarModalActualizar, setMostrarModalActualizar] = useState(false)
   const [passwordVerificada, setPasswordVerificada] = useState("");
   const navigate = useNavigate()
+  const token = localStorage.getItem("token")
 
   // Cargar token y decodificar datos al montar
   const cargarClienteDesdeToken = () => {
-    const token = localStorage.getItem("token")
     if (token) {
       try {
         const decoded = jwtDecode(token)
@@ -48,7 +48,6 @@ export const ProfileClient = () => {
   }
 
   const handleCambiarDatos = async () => {
-    const token = localStorage.getItem("token");
     if (!token) return;
 
     const decoded = jwtDecode(token);
@@ -99,7 +98,6 @@ export const ProfileClient = () => {
   };
 
   const handleCambiarContrasena = async () => {
-    const token = localStorage.getItem("token")
     if (!token) return
 
     const decoded = jwtDecode(token)
@@ -134,7 +132,6 @@ export const ProfileClient = () => {
         Swal.fire('Error', 'No se pudo obtener la contraseña del servidor.', 'error')
         return
       }
-
       const contraseñaOriginal = data.data.contraseña_cliente
 
       // Comparar con bcrypt

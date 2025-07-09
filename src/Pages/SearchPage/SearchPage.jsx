@@ -4,12 +4,15 @@ import { Header } from "../../Layouts/Header/Header";
 import { CardsOffersGrid } from "../../UI/Cards/CardsOffers/CardsOffersGrid";
 import CardsGrid from "../../UI/Cards/CardsGrid";
 import { BtnBack } from "../../UI/Login_Register/BtnBack";
+import Paginator from "../../UI/Paginator/Paginator";
 
 export const SearchPage = () => {
   const location = useLocation();
   const [productosConDescuento, setProductosConDescuento] = useState([]);
   const [productosSinDescuento, setProductosSinDescuento] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   const queryParams = new URLSearchParams(location.search);
   const query = queryParams.get("q") || "";
@@ -27,14 +30,16 @@ export const SearchPage = () => {
           const data = await res.json();
           const productos = data?.data || [];
           procesarProductos(productos);
+          setTotalPages(1); // sin paginación
           return;
         }
 
-        // 📂 Búsqueda por categoría
+        // 📂 Búsqueda por categoría con paginación
         if (category) {
-          const res = await fetch(`https://redgas.onrender.com/ProductoGetAllCategoria?nombre_categoria=${encodeURIComponent(category)}`);
+          const res = await fetch(`https://redgas.onrender.com/ProductoGetAllCategoria?nombre_categoria=${encodeURIComponent(category)}&page=${currentPage}&limit=10`);
           const data = await res.json();
-          const productos = data.data || []; // ya debe venir como array
+          const productos = data?.data?.data || [];
+          setTotalPages(data?.data?.totalPages || 1);
           procesarProductos(productos);
           return;
         }
@@ -54,7 +59,12 @@ export const SearchPage = () => {
     };
 
     fetchProductosFiltrados();
-  }, [query, category]);
+  }, [query, category, currentPage]); 
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
 
   return (
     <>
@@ -95,6 +105,14 @@ export const SearchPage = () => {
               <p className="text-lg text-center">No se encontraron productos.</p>
             )}
           </>
+        )}
+        {category && totalPages > 1 && (
+          <Paginator
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+            disabled={loading}
+          />
         )}
       </div>
     </>

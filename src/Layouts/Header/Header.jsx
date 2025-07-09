@@ -10,51 +10,47 @@ import './Header.css'
 export const Header = ({ classUser, classNavs }) => {
     const navigate = useNavigate();
     const [menuCount, setMenuCount] = useState(0);
-    const type = localStorage.getItem('tipo_usuario')
+    const [userName, setUserName] = useState('');
+    const [productos, setProductos] = useState([]);
+    const [scrolled, setScrolled] = useState(false);
+    const [hamburger, setHamburger] = useState(false);
+    const [isChecked, setIsChecked] = useState(true);
+    const isDesktop = useMediaQuery('(min-width: 768px)');
     const rawToken = localStorage.getItem('token');
     let token = null;
+    let type = null;
 
-    if (rawToken) {
+    if (rawToken && typeof rawToken === 'string') {
         try {
             const decoded = jwtDecode(rawToken);
             const now = Date.now() / 1000;
             if (decoded.exp > now) {
                 token = rawToken;
+                type = decoded.data?.tipo_usuario ?? null;
             } else {
                 localStorage.removeItem('token');
-                localStorage.removeItem('tipo_usuario');
             }
         } catch (e) {
+            console.error("Token inválido:", e);
             localStorage.removeItem('token');
-            localStorage.removeItem('tipo_usuario');
         }
     }
-    const [userName, setUserName] = useState('');
-    const [productos, setProductos] = useState([]);
-    const [scrolled, setScrolled] = useState(false)
-    const [hamburger, setHamburger] = useState(false)
-    const [isChecked, setIsChecked] = useState(true);
-
-    const isDesktop = useMediaQuery('(min-width: 768px)');
-
     // Verificar si el usuario está autenticado
     useEffect(() => {
         if (token) {
             const decoded = jwtDecode(token);
-            const names = decoded.data.name.split(' ')
-            const firstLetter = names[0].toUpperCase()
+            const names = decoded.data.name.split(' ');
+            const firstLetter = names[0].toUpperCase();
 
             if (firstLetter.length > 6) {
-                const secondLetter = names[1].toUpperCase().slice(0, 1)
+                const secondLetter = names[1]?.toUpperCase().slice(0, 1) || '';
                 setUserName(firstLetter.slice(0, 1) + secondLetter);
             } else {
-                setUserName(firstLetter)
+                setUserName(firstLetter);
             }
         } else {
-            setUserName('Iniciar')
+            setUserName('Iniciar');
         }
-
-
     }, [token]);
 
     // Cargar productos al iniciar
@@ -133,11 +129,8 @@ export const Header = ({ classUser, classNavs }) => {
 
     const handSignOut = () => {
         localStorage.removeItem('token');
-        localStorage.removeItem('tipo_usuario');
         localStorage.removeItem('recordarme');
         localStorage.removeItem('lastActivity');
-        localStorage.removeItem('clave_usuario');
-        localStorage.removeItem('correo_usuario');
         window.location.href = '/';
     }
 

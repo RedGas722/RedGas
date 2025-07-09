@@ -30,10 +30,6 @@ export const ConfirmacionPayPal = () => {
         if (!res.ok) throw new Error(data.errorInfo || "Error al capturar el pago");
 
         setResultado(data);
-
-        // Limpiar localStorage si fue pago individual
-        localStorage.removeItem("paypal_productId");
-
       } catch (err) {
         setError(err.message || "Error desconocido al confirmar el pago");
       } finally {
@@ -43,7 +39,6 @@ export const ConfirmacionPayPal = () => {
 
     capturarPago();
   }, [searchParams]);
-
   return (
     <section className="Distribution">
       <Header />
