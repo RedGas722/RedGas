@@ -188,12 +188,14 @@ export const TechniciansBack = () => {
           {/* Modales */}
           {showRegisterModal && (
             <RegisterModal
+              open={showRegisterModal}
               onClose={() => setShowRegisterModal(false)}
               setRefrescar={setRefrescar}
             />
           )}
           {typeof showUpdateModal === 'object' && showUpdateModal && (
             <UpdateModal
+              open={Boolean(showUpdateModal)}
               onClose={() => setShowUpdateModal(false)}
               setRefrescar={setRefrescar}
               tecnicoCarta={showUpdateModal}
