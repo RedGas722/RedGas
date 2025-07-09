@@ -461,16 +461,16 @@ export const Shopping = () => {
           )
         })}
 
-        <footer className="flex flex-col items-center gap-4">
+        <div className="flex flex-col items-center gap-4">
           {/* Total del carrito */}
           <p className="text-xl font-semibold text-[var(--main-color)]">
             Total: ${totalPrice.toLocaleString("es-CO")}
           </p>
-        </footer>
+        </div>
       </div>
 
       {/* SpeedDial */}
-      <Box sx={{ height: 330, transform: 'translateZ(0px)', flexGrow: 1, position: 'sticky', bottom: 0, right: 0, zIndex: 2 }}>
+      <Box sx={{ height: 330, transform: 'translateZ(0px)', flexGrow: 1, position: 'fixed', bottom: 0, right: 0, zIndex: 2 }}>
         <SpeedDial
           ariaLabel="SpeedDial tooltip example"
           sx={{ position: 'absolute', bottom: 16, right: 16 }}
