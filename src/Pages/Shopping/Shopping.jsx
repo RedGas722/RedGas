@@ -378,8 +378,11 @@ export const Shopping = () => {
   return (
     <section className='Distribution'>
       {/* <Header /> */}
-      <div className="flex flex-col gap-[80px] text-[var(--main-color)] MainPageContainer">
+      <div className="z-[2] p-[5px] flex flex-col text-center gap-2 sm:gap-0 sm:flex-row sm:justify-between items-center w-full">
         <BtnBack To='/' />
+        <h2 className="font-bold text-3xl sm:text-4xl text-[var(--Font-Nav)]">Carrito</h2>
+      </div>
+      <div className="flex flex-col gap-[80px] text-[var(--main-color)] MainPageContainer">
 
         {products.length === 0 && <p>No hay productos para mostrar.</p>}
 
@@ -482,7 +485,7 @@ export const Shopping = () => {
       </div>
 
       {/* SpeedDial */}
-      <Box sx={{ height: 330, transform: 'translateZ(0px)', flexGrow: 1, position: 'sticky', bottom: 0, right: 0, zIndex:2 }}>
+      <Box sx={{ height: 330, transform: 'translateZ(0px)', flexGrow: 1, position: 'fixed', bottom: 0, right: 0, zIndex: 2 }}>
         <SpeedDial
           ariaLabel="SpeedDial tooltip example"
           sx={{ position: 'absolute', bottom: 16, right: 16 }}

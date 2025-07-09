@@ -24,11 +24,11 @@ export const AdminApp = () => {
                 <h2 className='z-[2] font-bold text-4xl text-[var(--Font-Nav)]'>Panel de control</h2>
             </div>
             <div className="Admin flex items-center justify-center">
-                <section id="sideBarr" className="z-[2] h-fit gap-10 justify-center justify-self-center self-center flex flex-wrap">
+                <section id="sideBarr" className="z-[2] h-fit justify-center justify-self-center self-center flex flex-wrap">
 
                     {/* Si es admin, mostrar todo */}
                     {tipoUsuario === 1 && (
-                        <div className='BTNS flex flex-wrap w-[50%] gap-10 justify-center'>
+                        <div className='BTNS flex flex-wrap w-[50%] gap-8 justify-center'>
                             {/* <div className='flex flex-wrap w-fit gap-10 justify-center NeoContainer_outset_TL p-[10px_10px] sm:p-[20px_20px]'> */}
                             <Buttons subTextBTN='Técnicos' onClick={() => navigate('/Admin/Technicians')} radius='10' width='144px' height='144px' padding='0' nameButton={<img src='/Assets/Icons/Tecnic.webp' className='p-[5px_5px] w-24 no-drag brightness-80' />} />
                             <Buttons subTextBTN='Clientes' onClick={() => navigate('/Admin/Clients')} radius='10' width='144px' height='144px' padding='0' nameButton={<img src='/Assets/Icons/Client.webp' className='p-[5px_5px] w-24 no-drag brightness-80' />} />

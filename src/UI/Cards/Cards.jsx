@@ -162,7 +162,7 @@ export const Cards = ({ uniqueId, productos = [] }) => {
                 <div className="flex gap-1 items-end justify-center">
                   <div className="card-title">{producto.nombre_producto}</div>
                 </div>
-                <ExpandMore text={producto.descripcion_producto} />
+                <p className='card-subtitle short-description'>{producto.descripcion_producto}</p>
                 <div className="w-full h-[2px] bg-[var(--main-color-sub)] rounded-2xl"></div>
                 <div className="card-footer">
                   <div className="card-price">

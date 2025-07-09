@@ -60,7 +60,7 @@ export const  Navs = ({ className, ref1, ref2, ref3, ref4 }) => {
             baseTabs.push({ label: 'Admin', action: () => navigate('/Admin') })
         }
 
-        if (tipoUsuario === 4) {
+        if (tipoUsuario === 2) {
             baseTabs.push({ label: 'Servicios', action: () => navigate('/CostumerServices')?.click() });
         }
         return baseTabs

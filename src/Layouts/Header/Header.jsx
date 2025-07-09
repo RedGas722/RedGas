@@ -218,7 +218,6 @@ export const Header = ({ classUser, classNavs }) => {
                     {token && type == 2 && (
                         <>
                             <div onClick={() => navigate('/ProfileGeneral')} className="menu-list">Perfil</div>
-                            <div onClick={() => navigate('/CostumerMyService')} className="menu-list">Mi Servicio</div>
                             <div onClick={() => navigate('/Login')} className="menu-list">Cambiar Cuenta</div>
                             <div onClick={() => handSignOut()} className="menu-list">Cerrar Sesion</div>
                         </>
