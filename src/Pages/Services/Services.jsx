@@ -2,15 +2,14 @@ import { faTools, faCheck, faX, faPlug, faGears, faRotate } from "@fortawesome/f
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { BtnBack } from "../../UI/Login_Register/BtnBack"
 import { Buttons } from "../../UI/Login_Register/Buttons"
-import { ShortText } from "../../UI/ShortText/ShortText"
 import { useNavigate } from "react-router-dom"
 import { useState } from "react"
 import withReactContent from 'sweetalert2-react-content'
 import Swal from 'sweetalert2'
 import './Services.css'
 
-const URL_IA = 'http://localhost:10101/Diagnostic'
-const URL_REDIS = 'http://localhost:10101/ClienteServicesAdd'
+const URL_IA = 'https://redgas.onrender.com/Diagnostic'
+const URL_REDIS = 'https://redgas.onrender.com/ClienteServicesAdd'
 
 
 export const ServicesInfo = () => {
@@ -33,9 +32,7 @@ export const ServicesInfo = () => {
                body: JSON.stringify({ descripcion: description }),
             })
 
-            const data = await res.json()
-            console.log(data);
-
+            const data = await res.json()            
             const dataInfo = JSON.stringify(data)
             const token = localStorage.getItem('token')
 

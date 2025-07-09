@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react'
+import { Buttons } from '../../../UI/Login_Register/Buttons'
+import { Modal, Box, Typography, Button, TextField, IconButton, Avatar } from '@mui/material'
+import CloseIcon from '@mui/icons-material/Close'
 import { InputLabel } from '../../../UI/Login_Register/InputLabel/InputLabel'
 
-export const UpdateModal = ({ onClose, setRefrescar, tecnicoCarta }) => {
+export const UpdateModal = ({ open, onClose, setRefrescar, tecnicoCarta }) => {
   const [tecnico, setTecnico] = useState(null)
   const [nuevoCorreo, setNuevoCorreo] = useState('')
   const [correoParaBusqueda, setCorreoParaBusqueda] = useState('')
@@ -9,7 +12,7 @@ export const UpdateModal = ({ onClose, setRefrescar, tecnicoCarta }) => {
   const [errores, setErrores] = useState({})
   const [nombre, setNombre] = useState('')
   const [apellido, setApellido] = useState('')
-  const [imagenFile, setImagenFile] = useState(null) // 📸 Nuevo estado
+  const [imagenFile, setImagenFile] = useState(null)
   const [imagenPreview, setImagenPreview] = useState(null)
 
   const validarCampos = () => {
@@ -39,17 +42,12 @@ export const UpdateModal = ({ onClose, setRefrescar, tecnicoCarta }) => {
 
   const convertirBase64AUrl = (imagen) => {
     if (!imagen) return null
-
-    if (typeof imagen === 'string') {
-      return `data:image/png;base64,${imagen}`
-    }
-
+    if (typeof imagen === 'string') return `data:image/png;base64,${imagen}`
     if (imagen.type === 'Buffer' && Array.isArray(imagen.data)) {
       const binary = imagen.data.reduce((acc, byte) => acc + String.fromCharCode(byte), '')
       const base64 = btoa(binary)
       return `data:image/png;base64,${base64}`
     }
-
     return null
   }
 
@@ -63,7 +61,6 @@ export const UpdateModal = ({ onClose, setRefrescar, tecnicoCarta }) => {
       const apellido = partes.slice(2).join(' ')
       setNombre(nombre || '')
       setApellido(apellido || '')
-
       const urlImagen = convertirBase64AUrl(tecnicoCarta.imagen)
       setImagenPreview(urlImagen)
     }
@@ -82,7 +79,6 @@ export const UpdateModal = ({ onClose, setRefrescar, tecnicoCarta }) => {
     try {
       let res
       if (imagenFile) {
-        // 📸 Si se seleccionó una nueva imagen
         const formData = new FormData()
         formData.append('cc_tecnico', tecnico.cc_tecnico)
         formData.append('nombre_tecnico', `${nombre.trim()} ${apellido.trim()}`)
@@ -96,7 +92,6 @@ export const UpdateModal = ({ onClose, setRefrescar, tecnicoCarta }) => {
           body: formData,
         })
       } else {
-        // 📝 Sin imagen
         const body = {
           cc_tecnico: tecnico.cc_tecnico,
           nombre_tecnico: `${nombre.trim()} ${apellido.trim()}`,
@@ -104,7 +99,6 @@ export const UpdateModal = ({ onClose, setRefrescar, tecnicoCarta }) => {
           telefono_tecnico: tecnico.telefono_tecnico,
           correo_tecnico: correoParaBusqueda,
         }
-
         res = await fetch('https://redgas.onrender.com/TecnicoDataUpdateNI', {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
@@ -114,9 +108,7 @@ export const UpdateModal = ({ onClose, setRefrescar, tecnicoCarta }) => {
       if (res.ok) {
         setMensaje('Técnico actualizado exitosamente.')
         setRefrescar && setRefrescar(true)
-        if (correoParaBusqueda !== nuevoCorreo) {
-          setCorreoParaBusqueda(nuevoCorreo)
-        }
+        if (correoParaBusqueda !== nuevoCorreo) setCorreoParaBusqueda(nuevoCorreo)
       } else {
         const data = await res.json()
         setMensaje(data.errorInfo || 'Error al actualizar técnico.')
@@ -139,11 +131,21 @@ export const UpdateModal = ({ onClose, setRefrescar, tecnicoCarta }) => {
   }
 
   return (
-    <div className="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-2xl p-6 shadow-lg w-[340px] flex flex-col gap-4 relative text-black">
-        <h2 className="text-xl font-bold text-center">Actualizar Técnico</h2>
+    <Modal open={open} onClose={cancelarEdicion} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <Box className="bg-white p-6 rounded-xl w-[90%] md:w-[400px] max-h-[90vh] overflow-y-auto relative">
+        <IconButton onClick={cancelarEdicion} sx={{ position: 'absolute', top: 10, right: 10 }}>
+          <CloseIcon />
+        </IconButton>
+
+        <Typography variant="h6" className="text-center font-bold mb-4">Actualizar Técnico</Typography>
+
         {tecnico && (
           <>
+            {imagenPreview && (
+              <div className="flex justify-center my-2">
+                <Avatar src={imagenPreview} sx={{ width: 110, height: 110, borderRadius:2 }} />
+              </div>
+            )}
             <InputLabel
               type="5"
               ForID="cc"
@@ -152,11 +154,9 @@ export const UpdateModal = ({ onClose, setRefrescar, tecnicoCarta }) => {
               value={tecnico?.cc_tecnico || 0}
               onChange={(e) => setTecnico({ ...tecnico, cc_tecnico: e.target.value })}
               className="w-full"
-              placeholderError={!!errores.cc}
+              placeholderError={!!errores.cc_tecnico}
             />
-            {errores.cc_tecnico && (
-              <p className="text-red-600 text-sm">{errores.cc_tecnico}</p>
-            )}
+            {errores.cc_tecnico && <p className="text-red-600 text-sm">{errores.cc_tecnico}</p>}
 
             <InputLabel
               type="1"
@@ -168,9 +168,7 @@ export const UpdateModal = ({ onClose, setRefrescar, tecnicoCarta }) => {
               className="w-full"
               placeholderError={!!errores.nombre}
             />
-            {errores.nombre && (
-              <p className="text-red-600 text-sm">{errores.nombre}</p>
-            )}
+            {errores.nombre && <p className="text-red-600 text-sm">{errores.nombre}</p>}
 
             <InputLabel
               type="1"
@@ -182,9 +180,7 @@ export const UpdateModal = ({ onClose, setRefrescar, tecnicoCarta }) => {
               className="w-full"
               placeholderError={!!errores.apellido}
             />
-            {errores.apellido && (
-              <p className="text-red-600 text-sm">{errores.apellido}</p>
-            )}
+            {errores.apellido && <p className="text-red-600 text-sm">{errores.apellido}</p>}
 
             <InputLabel
               type="2"
@@ -196,9 +192,7 @@ export const UpdateModal = ({ onClose, setRefrescar, tecnicoCarta }) => {
               className="w-full"
               placeholderError={!!errores.nuevoCorreo}
             />
-            {errores.nuevoCorreo && (
-              <p className="text-red-600 text-sm">{errores.nuevoCorreo}</p>
-            )}
+            {errores.nuevoCorreo && <p className="text-red-600 text-sm">{errores.nuevoCorreo}</p>}
 
             <InputLabel
               type="6"
@@ -210,21 +204,10 @@ export const UpdateModal = ({ onClose, setRefrescar, tecnicoCarta }) => {
               className="w-full"
               placeholderError={!!errores.telefono_tecnico}
             />
-            {errores.telefono_tecnico && (
-              <p className="text-red-600 text-sm">{errores.telefono_tecnico}</p>
-            )}
+            {errores.telefono_tecnico && <p className="text-red-600 text-sm">{errores.telefono_tecnico}</p>}
 
-            {imagenPreview && (
-              <div className="flex justify-center">
-                <img
-                  src={imagenPreview}
-                  alt="Vista previa"
-                  className="max-w-[150px] max-h-[150px] rounded-lg shadow-md object-cover"
-                />
-              </div>
-            )}
 
-            {/* 📸 Input de imagen */}
+
             <InputLabel
               type="4"
               ForID="imagen_tecnico"
@@ -234,38 +217,26 @@ export const UpdateModal = ({ onClose, setRefrescar, tecnicoCarta }) => {
                 const file = e.target.files[0]
                 if (file) {
                   setImagenFile(file)
-                  setImagenPreview(URL.createObjectURL(file)) // Vista previa temporal
+                  setImagenPreview(URL.createObjectURL(file))
                 }
               }}
               className="w-full"
             />
 
-            <div className="flex justify-between gap-2">
-              <button
-                onClick={cancelarEdicion}
-                className="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded"
-              >
-                Cancelar
-              </button>
-              <button
-                onClick={actualizarTecnico}
-                className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded"
-              >
-                Actualizar
-              </button>
-            </div>
+            <Box display="flex" justifyContent="space-between" mt={2}>
+              <Buttons Onclick={cancelarEdicion} borderWidth='1' nameButton='Cancelar' width='150px' textColor='var(--Font-Yellow)' />
+              <Buttons Onclick={actualizarTecnico} borderWidth='1' nameButton='Actualizar' width='150px' textColor='var(--Font-Nav)' />
+            </Box>
           </>
         )}
+
         {mensaje && (
-          <p
-            className={`text-center font-semibold ${
-              mensaje.includes('exitosamente') ? 'text-green-600' : 'text-red-600'
-            }`}
-          >
+          <Typography className={`text-center font-semibold mt-2 ${mensaje.includes('exitosamente') ? 'text-green-600' : 'text-red-600'}`}>
             {mensaje}
-          </p>
+          </Typography>
         )}
-      </div>
-    </div>
+      </Box>
+    </Modal>
   )
 }
+export default UpdateModal

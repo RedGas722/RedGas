@@ -168,7 +168,7 @@ export const EmployeesBack = () => {
         </div>
 
         {/* Lista de empleados */}
-        <div className="flex flex-wrap items-center gap-6">
+        <div className="flex flex-wrap justify-center items-center gap-6">
           {(empleadoBuscado ? [empleadoBuscado] : empleados).map((empleado) => (
             <CardEmployeesBack
               key={empleado.id_empleado}
@@ -180,20 +180,21 @@ export const EmployeesBack = () => {
         </div>
 
         {/* Paginador */}
-          <Paginator
-            currentPage={paginaActual}
-            totalPages={totalPaginas}
-            onPageChange={(nuevaPagina) => {
-              if (nuevaPagina !== paginaActual) {
-                setPaginaActual(nuevaPagina);
-              }
-            }}
-            disabled={isLoading}
-          />
+        <Paginator
+          currentPage={paginaActual}
+          totalPages={totalPaginas}
+          onPageChange={(nuevaPagina) => {
+            if (nuevaPagina !== paginaActual) {
+              setPaginaActual(nuevaPagina);
+            }
+          }}
+          disabled={isLoading}
+        />
 
         {/* Modales */}
         {showRegisterModal && (
           <RegisterModal
+            open={showRegisterModal}
             onClose={() => setShowRegisterModal(false)}
             setRefrescar={setRefrescar}
           />
@@ -201,6 +202,7 @@ export const EmployeesBack = () => {
 
         {typeof showUpdateModal === 'object' && showUpdateModal && (
           <UpdateModal
+            open={!!showUpdateModal}
             onClose={() => setShowUpdateModal(false)}
             setRefrescar={setRefrescar}
             empleadoCarta={showUpdateModal}

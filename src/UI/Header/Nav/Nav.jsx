@@ -6,6 +6,7 @@ import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import { tabsClasses } from '@mui/material/Tabs' 
 import useMediaQuery from '@mui/material/useMediaQuery'
+import { jwtDecode } from 'jwt-decode'
 
 export const  Navs = ({ className, ref1, ref2, ref3, ref4 }) => {
     const [tipoUsuario, setTipoUsuario] = useState(null)
@@ -16,8 +17,12 @@ export const  Navs = ({ className, ref1, ref2, ref3, ref4 }) => {
     const isMdUp = useMediaQuery('(min-width: 768px)')
 
     useEffect(() => {
-        const tipo = localStorage.getItem('tipo_usuario')
-        setTipoUsuario(tipo ? parseInt(tipo) : null)
+        const token = localStorage.getItem('token')
+        if (token){
+            const decoded = jwtDecode(token)
+            const tipo = decoded?.data?.tipo_usuario
+            setTipoUsuario(tipo ? parseInt(tipo) : null)
+        }
     }, [])
 
     useEffect(() => {
@@ -50,17 +55,13 @@ export const  Navs = ({ className, ref1, ref2, ref3, ref4 }) => {
             { label: 'Ofertas', action: () => document.getElementById('linkOffers')?.click() },
             { label: 'Productos', action: () => document.getElementById('linkMainPage')?.click() },
         ]
-        
-        if (tipoUsuario === 2) {
-            baseTabs.push({ label: 'Servicio', action: () => navigate('/CostumerMyService')?.click() });
-        }
 
         if (tipoUsuario === 1 || tipoUsuario === 3) {
             baseTabs.push({ label: 'Admin', action: () => navigate('/Admin') })
         }
 
         if (tipoUsuario === 4) {
-            baseTabs.push({ label: 'Servi', action: () => navigate('/CostumerServices')?.click() });
+            baseTabs.push({ label: 'Servicios', action: () => navigate('/CostumerServices')?.click() });
         }
         return baseTabs
     }

@@ -88,11 +88,8 @@ export const RecoveryPassword = () => {
 
     const handSignOut = () => {
         localStorage.removeItem('token');
-        localStorage.removeItem('tipo_usuario');
         localStorage.removeItem('recordarme');
         localStorage.removeItem('lastActivity');
-        localStorage.removeItem('clave_usuario');
-        localStorage.removeItem('correo_usuario');
     };
 
     const alertSendForm = (status, title, message) => {

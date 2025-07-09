@@ -11,9 +11,9 @@ import Swal from 'sweetalert2';
 const ProfileTechnician = () => {
   const [tecnico, setTecnico] = useState(null);
   const navigate = useNavigate()
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
     if (token) {
       const decoded = jwtDecode(token);
       const correo = decoded.data.email;
@@ -36,7 +36,6 @@ const ProfileTechnician = () => {
   if (!tecnico) return <p className="text-center mt-10">Cargando datos del técnico...</p>;
 
   const handleCambiarContrasena = async () => {
-    const token = localStorage.getItem("token");
     if (!token) return;
 
     const decoded = jwtDecode(token);

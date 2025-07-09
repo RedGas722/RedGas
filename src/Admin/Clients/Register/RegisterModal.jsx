@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
+import { Modal, Box, Typography, Button, IconButton } from '@mui/material'
+import CloseIcon from '@mui/icons-material/Close'
 import { InputLabel } from '../../../UI/Login_Register/InputLabel/InputLabel'
 
-export const RegisterModal = ({ onClose, setRefrescar }) => {
+export const RegisterModal = ({ open, onClose, setRefrescar }) => {
   const [nombre, setNombre] = useState('')
   const [apellido, setApellido] = useState('')
   const [correo, setCorreo] = useState('')
@@ -27,8 +29,7 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
     return errores
   }
 
-  const handleRegister = async (e) => {
-    e.preventDefault()
+  const handleRegister = async () => {
     const erroresValidados = validarCampos()
 
     if (Object.keys(erroresValidados).length > 0) {
@@ -88,90 +89,115 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
   }
 
   return (
-    <div className="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-2xl p-6 shadow-lg w-[320px] flex flex-col gap-4 relative text-black">
-        <h2 className="text-xl font-bold text-center">Registrar Cliente</h2>
+    <Modal open={open} onClose={cancelarRegistro}>
+      <Box
+        className="bg-white w-[90%] md:w-[400px] max-h-[90vh] overflow-y-auto p-6 rounded-xl relative shadow-lg"
+        sx={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+        }}
+      >
+        <IconButton onClick={cancelarRegistro} sx={{ position: 'absolute', top: 10, right: 10 }}>
+          <CloseIcon />
+        </IconButton>
 
-        <InputLabel
-          type="1"
-          ForID="nombre"
-          placeholder="Nombre del Cliente"
-          childLabel="Nombre"
-          value={nombre}
-          onChange={(e) => setNombre(e.target.value)}
-          required
-          placeholderError={!!errores.nombre}
-        />
-        {errores.nombre && <p className="text-red-600 text-sm">{errores.nombre}</p>}
+        <Typography variant="h6" className="font-bold text-center text-[var(--main-color)] mb-4">
+          Registrar Cliente
+        </Typography>
 
-        <InputLabel
-          type="1"
-          ForID="apellido"
-          placeholder="Apellido del Cliente"
-          childLabel="Apellido"
-          value={apellido}
-          onChange={(e) => setApellido(e.target.value)}
-          required
-          placeholderError={!!errores.apellido}
-        />
-        {errores.apellido && <p className="text-red-600 text-sm">{errores.apellido}</p>}
+        <div className="flex flex-col gap-3 text-[var(--main-color)]">
+          <InputLabel
+            type="1"
+            ForID="nombre"
+            placeholder="Nombre del Cliente"
+            childLabel="Nombre"
+            value={nombre}
+            onChange={(e) => setNombre(e.target.value)}
+            required
+            placeholderError={!!errores.nombre}
+          />
+          {errores.nombre && <p className="text-red-600 text-sm">{errores.nombre}</p>}
 
-        <InputLabel
-          type="2"
-          ForID="correo"
-          placeholder="Correo del Cliente"
-          childLabel="Correo"
-          value={correo}
-          onChange={(e) => setCorreo(e.target.value)}
-          required
-          placeholderError={!!errores.correo}
-        />
-        {errores.correo && <p className="text-red-600 text-sm">{errores.correo}</p>}
+          <InputLabel
+            type="1"
+            ForID="apellido"
+            placeholder="Apellido del Cliente"
+            childLabel="Apellido"
+            value={apellido}
+            onChange={(e) => setApellido(e.target.value)}
+            required
+            placeholderError={!!errores.apellido}
+          />
+          {errores.apellido && <p className="text-red-600 text-sm">{errores.apellido}</p>}
 
-        <InputLabel
-          type="6"
-          ForID="telefono"
-          placeholder="Teléfono del Cliente"
-          childLabel="Teléfono"
-          value={telefono}
-          onChange={(e) => setTelefono(e.target.value)}
-          required
-          placeholderError={!!errores.telefono}
-        />
-        {errores.telefono && <p className="text-red-600 text-sm">{errores.telefono}</p>}
+          <InputLabel
+            type="2"
+            ForID="correo"
+            placeholder="Correo del Cliente"
+            childLabel="Correo"
+            value={correo}
+            onChange={(e) => setCorreo(e.target.value)}
+            required
+            placeholderError={!!errores.correo}
+          />
+          {errores.correo && <p className="text-red-600 text-sm">{errores.correo}</p>}
 
-        <InputLabel
-          type="1"
-          ForID="direccion"
-          placeholder="Dirección del Cliente"
-          childLabel="Dirección"
-          value={direccion}
-          onChange={(e) => setDireccion(e.target.value)}
-        />
+          <InputLabel
+            type="6"
+            ForID="telefono"
+            placeholder="Teléfono del Cliente"
+            childLabel="Teléfono"
+            value={telefono}
+            onChange={(e) => setTelefono(e.target.value)}
+            required
+            placeholderError={!!errores.telefono}
+          />
+          {errores.telefono && <p className="text-red-600 text-sm">{errores.telefono}</p>}
 
-        <InputLabel
-          type="3"
-          ForID="password"
-          placeholder="Contraseña del Cliente"
-          childLabel="Contraseña"
-          value={contrasena}
-          onChange={(e) => setContrasena(e.target.value)}
-          required
-          placeholderError={!!errores.contrasena}
-        />
-        {errores.contrasena && <p className="text-red-600 text-sm">{errores.contrasena}</p>}
+          <InputLabel
+            type="1"
+            ForID="direccion"
+            placeholder="Dirección del Cliente"
+            childLabel="Dirección"
+            value={direccion}
+            onChange={(e) => setDireccion(e.target.value)}
+          />
 
-        <div className="flex justify-between gap-2">
-          <button onClick={cancelarRegistro} className="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded">Cancelar</button>
-          <button onClick={handleRegister} className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">Registrar</button>
+          <InputLabel
+            type="3"
+            ForID="password"
+            placeholder="Contraseña del Cliente"
+            childLabel="Contraseña"
+            value={contrasena}
+            onChange={(e) => setContrasena(e.target.value)}
+            required
+            placeholderError={!!errores.contrasena}
+          />
+          {errores.contrasena && <p className="text-red-600 text-sm">{errores.contrasena}</p>}
+
+          <div className="flex justify-between mt-4 gap-2">
+            <Button variant="outlined" onClick={cancelarRegistro} color="inherit" fullWidth>
+              Cancelar
+            </Button>
+            <Button variant="contained" onClick={handleRegister} color="primary" fullWidth>
+              Registrar
+            </Button>
+          </div>
+
+          {mensaje && (
+            <Typography
+              variant="body2"
+              className={`text-center font-semibold ${mensaje.includes('exitosamente') ? 'text-green-600' : 'text-red-600'
+                }`}
+            >
+              {mensaje}
+            </Typography>
+          )}
         </div>
-
-        {mensaje && (
-          <p className={`text-center font-semibold ${mensaje.includes('exitosamente') ? 'text-green-600' : 'text-red-600'}`}>
-            {mensaje}
-          </p>
-        )}
-      </div>
-    </div>
+      </Box>
+    </Modal>
   )
 }
+export default RegisterModal

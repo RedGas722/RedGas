@@ -3,6 +3,7 @@ import { BtnBack } from '../../UI/Login_Register/BtnBack'
 import { InputLabel } from '../../UI/Login_Register/InputLabel/InputLabel'
 import { useBuscarServices } from './Get/Get'
 import { Paginator } from '../../UI/Paginator/Paginator'
+import { Backdrop, CircularProgress } from '@mui/material';
 import CardServicesBack from './Get/CardsServicesBack'
 import { Buttons } from '../../UI/Login_Register/Buttons'
 // import { RegisterModal } from './Register/RegisterModal'
@@ -10,6 +11,7 @@ import { Buttons } from '../../UI/Login_Register/Buttons'
 export const ServicesCompletedBack = () => {
   // const [showRegisterModal, setShowRegisterModal] = useState(false)
   const [servicios, setServicios] = useState([])
+  const [isLoading, setIsLoading] = useState(false);
   const [serviciosOriginal, setServiciosOriginal] = useState([])
   const [clientes, setClientes] = useState([])
   const [refrescar, setRefrescar] = useState(false)
@@ -23,6 +25,7 @@ export const ServicesCompletedBack = () => {
   } = useBuscarServices(clientes, serviciosOriginal, setServicios)
 
   const fetchServicios = async (pagina = 1) => {
+    setIsLoading(true)
     try {
       const res = await fetch(`https://redgas.onrender.com/PedidoServicioGetAll?page=${pagina}`)
       if (!res.ok) throw new Error('Error al obtener servicios')
@@ -34,6 +37,8 @@ export const ServicesCompletedBack = () => {
       setTotalPaginas(resultado.totalPages)
     } catch (error) {
       console.error(error)
+    }finally {
+      setIsLoading(false);
     }
   }
 
@@ -75,7 +80,7 @@ export const ServicesCompletedBack = () => {
       <div className="p-[var(--p-admin-sub)] h-full flex flex-col gap-2">
         <h1 className="font-bold text-3xl z-[2] text-[var(--main-color)]">Servicios Completados</h1>
 
-        <div className='NeoContainer_outset_TL z-[50] flex gap-4 flex-wrap items-end w-fit p-[var(--p-admin-control)]'>
+        <div className='NeoContainer_outset_TL z-[2] flex gap-4 flex-wrap items-end w-fit p-[var(--p-admin-control)]'>
           <div className="relative" ref={contenedorRefCliente}>
             <InputLabel
               radius="10"
@@ -116,7 +121,7 @@ export const ServicesCompletedBack = () => {
         </div>
 
         {/* Lista de servicios */}
-        <div className="flex flex-wrap items-center gap-6">
+        <div className="flex flex-wrap justify-center items-center gap-6">
           {servicios.map((servicio) => (
             <CardServicesBack
               key={servicio.id_pedidoServicio}
@@ -131,9 +136,10 @@ export const ServicesCompletedBack = () => {
           totalPages={totalPaginas}
           onPageChange={(nuevaPagina) => {
             if (nuevaPagina !== paginaActual) {
-              setPaginaActual(nuevaPagina)
+              setPaginaActual(nuevaPagina);
             }
           }}
+          disabled={isLoading}
         />
 
         {/* Modal de registro */}
@@ -144,6 +150,12 @@ export const ServicesCompletedBack = () => {
           />
         )} */}
       </div>
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={isLoading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </section>
   )
 }

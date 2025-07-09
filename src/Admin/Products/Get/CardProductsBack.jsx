@@ -1,5 +1,6 @@
 import { Buttons } from '../../../UI/Login_Register/Buttons'
-import { DeleteProduct } from '../Delete/Delete' // Asegúrate de que esta función esté implementada
+import { confirmDelete } from '../../../UI/Alert/Alert'
+import { DeleteProduct } from '../Delete/Delete'
 
 const convertirFecha = (fechaConvertir) => {
   return fechaConvertir ? fechaConvertir.slice(0, 10) : ''
@@ -21,29 +22,35 @@ const CardsProductsBack = ({ producto, setRefrescar, onUpdateClick }) => {
   const imageUrl = convertirBase64AUrl(producto.imagen)
 
   const handleDelete = async () => {
-    const confirmar = window.confirm(`¿Seguro que quieres eliminar el producto "${producto.nombre_producto}"?`)
-    if (!confirmar) return
+    const confirmado = await confirmDelete(
+      `¿Seguro que quieres eliminar el producto "${producto.nombre_producto}"?`,
+      `Producto "${producto.nombre_producto}" eliminado correctamente`
+    );
+    if (!confirmado) return;
 
-    const { success, message } = await DeleteProduct(producto.nombre_producto)
+    const { success, message } = await DeleteProduct(producto.nombre_producto);
 
     if (success) {
-      alert(message)
-      setRefrescar(true)
+      setRefrescar(true);
     } else {
-      alert(`Error: ${message}`)
+      Swal.fire({
+        icon: 'error',
+        title: 'Error al eliminar',
+        text: message || 'Ocurrió un error inesperado',
+      });
     }
-  }
+  };
 
   return (
     <div className="text-start z-[2] items-center NeoContainer_outset_TL p-4 max-w-[320px] h-fit flex flex-col justify-start gap-2">
       <h2 className="text-[20px] font-semibold text-[var(--main-color)]">{producto.nombre_producto}</h2>
       <div className='h-[340px] flex flex-col items-center justify-center gap-2'>
         {imageUrl ? (
-          <div className="w-full h-[280px] flex items-center justify-center bg-white rounded-[20px] overflow-hidden">
+          <div className="w-[300px] h-[280px] flex items-center justify-center bg-white rounded-[20px] overflow-hidden">
             <img
               src={imageUrl || 'https://via.placeholder.com/150'}
               alt={producto.nombre_producto || 'Producto'}
-              className="w-full h-full object-contain"
+              className="max-w-[200px] max-h-[200px] object-contain"
             />
           </div>
         ) : (

@@ -1,20 +1,27 @@
 import { DeleteCategory } from '../Delete/Delete'
+import { confirmDelete } from '../../../UI/Alert/Alert'
 import { Buttons } from '../../../UI/Login_Register/Buttons'
 
 const CardCategoriesBack = ({ categoria, setRefrescar, onUpdateClick }) => {
   const handleDelete = async () => {
-    const confirmar = window.confirm(`¿Seguro que quieres eliminar a ${categoria.nombre_categoria}?`)
-    if (!confirmar) return
+    const confirmado = await confirmDelete(
+      `¿Seguro que quieres eliminar la categoría "${categoria.nombre_categoria}"?`,
+      `Categoría "${categoria.nombre_categoria}" eliminada correctamente.`
+    );
+    if (!confirmado) return;
 
-    const { success, message } = await DeleteCategory(categoria.nombre_categoria)
+    const { success, message } = await DeleteCategory(categoria.nombre_categoria);
 
     if (success) {
-      alert(message)
-      setRefrescar(true)
+      setRefrescar(true);
     } else {
-      alert(`Error: ${message}`)
+      Swal.fire({
+        icon: 'error',
+        title: 'Error al eliminar',
+        text: message || 'Ocurrió un error inesperado',
+      });
     }
-  }
+  };
 
   return (
     <div className="text-center z-[2] items-center NeoContainer_outset_TL w-[300px] p-4 h-fit flex flex-col justify-start gap-2">

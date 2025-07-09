@@ -47,7 +47,7 @@ export const Hero = () => {
             <div className='text-[20px] flex flex-col gap-[50px]'>
                 <div ref={paragraph1Ref} className='flex flex-col items-center justify-center text-center'>
                     <p className='text-[15px] sm:text-[18px] max-w-[810px]'>   
-                    <span className='font-bold text-[var(--Font-Nav)]'>Compromiso, calidad y confianza en cada servicio. </span>Somos un equipo de expertos en equipos a gas, comprometidos con la excelencia, la seguridad y la satisfacción de nuestros clientes. Nuestra integridad y profesionalismo nos permiten ofrecer soluciones eficientes y confiables, brindando la tranquilidad que mereces en tu hogar o negocio.
+                    <span className='text-[var(--Font-Nav)]'>Compromiso, calidad y confianza en cada servicio. </span>Somos un equipo de expertos en equipos a gas, comprometidos con la excelencia, la seguridad y la satisfacción de nuestros clientes. Nuestra integridad y profesionalismo nos permiten ofrecer soluciones eficientes y confiables, brindando la tranquilidad que mereces en tu hogar o negocio.
                     </p>
                 </div>
             </div>

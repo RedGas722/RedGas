@@ -202,7 +202,7 @@ export const FacturesBack = () => {
         </div>
 
         {/* Lista de facturas */}
-        <div className="flex flex-wrap items-center gap-6">
+        <div className="flex flex-wrap justify-center items-start gap-6">
           {facturas.map(factura => (
             <CardsFacturesBack
               key={factura.id_factura}

@@ -180,7 +180,7 @@ export const ClientsBack = () => {
         )}
 
         {/* Tarjetas de clientes */}
-        <div className="flex flex-wrap items-start gap-6">
+        <div className="flex flex-wrap items-center justify-center gap-6">
           {(clienteBuscado ? [clienteBuscado] : clientes).map((cliente) => (
             <CardClientsBack
               key={cliente.id_cliente}
@@ -191,20 +191,21 @@ export const ClientsBack = () => {
           ))}
         </div>
 
-          <Paginator
-            currentPage={paginaActual}
-            totalPages={totalPaginas}
-            onPageChange={(nuevaPagina) => {
-              if (nuevaPagina !== paginaActual) {
-                setPaginaActual(nuevaPagina);
-              }
-            }}
-            disabled={isLoading}
-          />
+        <Paginator
+          currentPage={paginaActual}
+          totalPages={totalPaginas}
+          onPageChange={(nuevaPagina) => {
+            if (nuevaPagina !== paginaActual) {
+              setPaginaActual(nuevaPagina);
+            }
+          }}
+          disabled={isLoading}
+        />
 
         {/* Modales */}
         {showRegisterModal && (
           <RegisterModal
+            open={showRegisterModal}
             onClose={() => setShowRegisterModal(false)}
             setRefrescar={setRefrescar}
           />
@@ -212,6 +213,7 @@ export const ClientsBack = () => {
 
         {showUpdateModal && clienteSeleccionado && (
           <UpdateModal
+            open={!!showUpdateModal}
             onClose={() => setShowUpdateModal(false)}
             setRefrescar={setRefrescar}
             clienteCarta={clienteSeleccionado}

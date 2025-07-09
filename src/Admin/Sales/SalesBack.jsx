@@ -121,7 +121,7 @@ export const SalesBack = () => {
         </div>
 
         {/* Lista de ventas */}
-        <div className="flex flex-wrap items-center gap-6">
+        <div className="flex flex-wrap justify-center items-center gap-6">
           {ventas.map((venta) => (
             <CardSalesBack
               key={venta.id_pedidoProducto}

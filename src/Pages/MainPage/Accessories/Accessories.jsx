@@ -12,7 +12,7 @@ export const AccessoriesSect = () => {
                 const res = await fetch('https://redgas.onrender.com/ProductoGetAllCategoria?nombre_categoria=Accesorios');
                 if (!res.ok) throw new Error('Error al obtener productos');
                 const data = await res.json();
-                seAccessories(data.data || []);
+                seAccessories(data.data.data || []);
             } catch (error) {
                 console.error(error);
             }
