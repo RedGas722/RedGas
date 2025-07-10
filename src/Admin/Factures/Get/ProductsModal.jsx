@@ -75,7 +75,7 @@ export const ProductsModal = ({ factura, onClose }) => {
 
               const precioOriginal = producto.precio_producto;
               const precioRedondeado = Math.round(precioOriginal / 50) * 50;
-              const precioConDescuento = precioRedondeado * (1 - descuento / 100);
+              const precioConDescuento = Math.round((precioRedondeado * (1 - descuento / 100)) / 50) * 50;
 
               return (
                 <div key={index} className="border p-4 rounded-lg shadow-md">
