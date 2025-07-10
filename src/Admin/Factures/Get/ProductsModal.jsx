@@ -69,8 +69,13 @@ export const ProductsModal = ({ factura, onClose }) => {
             {productos.map((producto, index) => {
               const imageUrl = convertirBase64AUrl(producto.imagen);
 
-              const precioConDescuento = producto.precio_producto * (1 - (producto.descuento || 0) / 100);
-              const precioRedondeado = Math.round(precioConDescuento / 50) * 50;
+              // 🟡 Extraer descuento desde el estado_pedido
+              const [descuentoStr] = producto.estado_pedido.split('//');
+              const descuento = parseFloat(descuentoStr) || 0;
+
+              const precioOriginal = producto.precio_producto;
+              const precioRedondeado = Math.round(precioOriginal / 50) * 50;
+              const precioConDescuento = precioRedondeado * (1 - descuento / 100);
 
               return (
                 <div key={index} className="border p-4 rounded-lg shadow-md">
@@ -84,13 +89,26 @@ export const ProductsModal = ({ factura, onClose }) => {
                     </div>
                   )}
 
-                  <p className="text-sm"><strong>Descripción:</strong> {producto.descripcion_producto}</p>
+                  <p className="text-sm"><strong>Estado:</strong> {producto.estado_pedido.split("//")[0]}</p>
                   <p className="text-sm"><strong>Cantidad:</strong> {producto.cantidad_producto}</p>
-                  <p className="text-sm">
-                    <strong>Precio Unitario:</strong> {
-                      new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(precioRedondeado)
-                    }
-                  </p>
+
+                  {/* Si tiene descuento, muestra el precio original tachado y el nuevo */}
+                  {descuento > 0 ? (
+                    <p className="text-sm">
+                      <strong>Precio Unitario:</strong>{" "}
+                      <span className="line-through text-red-500 mr-2">
+                        {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(precioRedondeado)}
+                      </span>
+                      <span className="text-green-600 font-semibold">
+                        {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(precioConDescuento)}
+                      </span>
+                    </p>
+                  ) : (
+                    <p className="text-sm">
+                      <strong>Precio Unitario:</strong>{" "}
+                      {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(precioRedondeado)}
+                    </p>
+                  )}
                 </div>
               );
             })}
