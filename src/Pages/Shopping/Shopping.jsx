@@ -244,7 +244,7 @@ export const Shopping = () => {
         });
         return;
       }
-      
+
       const body = {
         cantidad: monto.toFixed(0),
         referencia: `ORD-${Date.now()}`,
@@ -335,11 +335,11 @@ export const Shopping = () => {
       name: 'Limpiar carrito'
     },
     {
-      icon: <SvgMercadoPago onClick={() => handlePayWithMercadoPago()} />,
+      icon: <SvgMercadoPago onClick={() => handlePayWithMercadoPago(null)} />,
       name: "Pagar con Mercado Pago"
     },
     {
-      icon: <SvgPayPal onClick={() => handlePayWithPaypal()} />,
+      icon: <SvgPayPal onClick={() => handlePayWithPaypal(null)} />,
       name: 'Pagar con PayPal'
     },
   ]
