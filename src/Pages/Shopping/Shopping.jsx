@@ -410,8 +410,8 @@ export const Shopping = () => {
                     </div>
                     <p className='text-[var(--main-color-sub)] font-bold'>Descripción: <span className="font-normal"> {producto.descripcion_producto || "Sin descripción disponible."} </span> </p>
                     <p className='text-[var(--main-color-sub)]'>Cantidad: {producto.cantidad}</p>
-                    <section className="flex justify-between w-full">
-                      <div className="flex items-center gap-2">
+                    <section className="flex flex-wrap gap-4 justify-between w-full">
+                      <div className="flex items-center flex-wrap gap-2">
                         <input
                           type="number"
                           min={1}
@@ -466,9 +466,9 @@ export const Shopping = () => {
           )
         })}
 
-        <div className="flex flex-col items-center gap-4">
+        <div className="flex flex-col fixed bottom-0 left-2 gap-4">
           {/* Total del carrito */}
-          <p className="text-xl font-semibold text-[var(--main-color)]">
+          <p className="text-2xl font-semibold text-[var(--main-color)]">
             Total: ${totalPrice.toLocaleString("es-CO")}
           </p>
         </div>
