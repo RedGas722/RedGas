@@ -260,7 +260,7 @@ export const CostumerMyService = () => {
 
           <div className="z-[2]">
             <h4 className="text-xl font-bold text-[var(--main-color)]">Descripción de tu servicio</h4>
-            <p className="whitespace-pre-line text-[var(--main-color)]">{description}</p>
+            <p className="text-[var(--main-color)] short-description">{description}</p>
           </div>
           {info === false && (
             <div className="z-[2] flex justify-center items-center gap-4">

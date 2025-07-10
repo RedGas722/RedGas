@@ -30,14 +30,14 @@ export const ForgotPassword = () => {
 
                 const data = await res.json();
                 if (res.ok && data?.token) {
-                    return ruta; // Devuelve ruta, campo y tipo
+                    return ruta;
                 }
             } catch (error) {
-                // Ignorar errores por ruta específica
+
             }
         }
 
-        return null; // No se encontró en ninguna tabla
+        return null;
     };
 
 
@@ -48,7 +48,6 @@ export const ForgotPassword = () => {
         const templateId = 'template_fwkby0l';
         const publicKey = 'SHHYhi-xHJeCovrBP';
 
-        // Validar en qué tabla está el correo
         const resultado = await verificarCorreoEnTablas(email);
         if (!resultado) {
             alertSendForm(401, 'Correo no encontrado');
@@ -58,7 +57,6 @@ export const ForgotPassword = () => {
         const { url, campo, tipo } = resultado;
 
         try {
-            // 🔑 Obtener token principal (JWT)
             const res = await fetch(url, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -73,7 +71,6 @@ export const ForgotPassword = () => {
                 return;
             }
 
-            // 🛡️ Obtener token de recuperación
             const res2 = await fetch('https://redgas.onrender.com/GenerateTokenRecovery', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -127,16 +124,13 @@ export const ForgotPassword = () => {
         switch (status) {
             case 'wait':
                 Swal.fire({
-                    title: 'Procesando...',
+                    title: title || 'Procesando...',
                     text: message || 'Estamos procesando tu solicitud.',
                     allowOutsideClick: false,
                     allowEscapeKey: false,
                     showConfirmButton: false,
-                    timer: 6000,
                     timerProgressBar: true,
-                    didOpen: () => {
-                        Swal.showLoading();
-                    },
+                    didOpen: () => Swal.showLoading(),
                 });
                 break;
 

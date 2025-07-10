@@ -89,7 +89,6 @@ export const ProfileClient = () => {
         return;
       }
 
-      // ✅ Si coincide, mostrar modal con contraseña validada
       setPasswordVerificada(passwordInput);
       setMostrarModalActualizar(true);
     } catch (error) {

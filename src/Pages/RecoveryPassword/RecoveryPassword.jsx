@@ -100,16 +100,13 @@ export const RecoveryPassword = () => {
         switch (status) {
             case 'wait':
                 Swal.fire({
-                    title: 'Procesando...',
+                    title: title || 'Procesando...',
                     text: message || 'Estamos procesando tu solicitud.',
                     allowOutsideClick: false,
                     allowEscapeKey: false,
                     showConfirmButton: false,
-                    timer: 6000,
                     timerProgressBar: true,
-                    didOpen: () => {
-                        Swal.showLoading();
-                    },
+                    didOpen: () => Swal.showLoading(),
                 });
                 break;
 
