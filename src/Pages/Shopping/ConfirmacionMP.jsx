@@ -67,7 +67,7 @@ export const ConfirmacionMercadoPago = () => {
             <p><strong>Estado:</strong> {resultado.status}</p>
             <p><strong>Monto total:</strong> {resultado.transaction_amount} {resultado.currency_id}</p>
             <p><strong>Pagado por:</strong> {resultado.payer?.email}</p>
-            <div className="mt-10 relative z-[50]">
+            <div className="mt-15 relative z-[50]">
               <button
                 className="buttonTL2 NeoSubContainer_outset_TL p-3 text-white font-bold relative z-[50]"
                 onClick={() => navigate('/')}

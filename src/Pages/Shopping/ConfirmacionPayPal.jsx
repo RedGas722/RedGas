@@ -58,7 +58,7 @@ export const ConfirmacionPayPal = () => {
               {resultado.data.purchase_units[0].payments.captures[0].amount.currency_code}
             </p>
 
-            <div className="mt-10 relative z-[50]">
+            <div className="mt-15 relative z-[50]">
               <button
                 className="buttonTL2 NeoSubContainer_outset_TL p-3 text-white font-bold relative z-[50]"
                 onClick={() => navigate('/')}

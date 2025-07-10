@@ -10,7 +10,6 @@ import { SvgPayPal } from "../../UI/Svg/SvgPayPal"
 import SvgMercadoPago from "../../UI/Svg/SvgMP"
 import BtnBack from "../../UI/Login_Register/BtnBack"
 import Swal from 'sweetalert2'
-import { jwtDecode } from "jwt-decode"
 
 export const Shopping = () => {
   const [open, setOpen] = useState(false)
@@ -102,7 +101,7 @@ export const Shopping = () => {
       } else {
         setTotalPrice(totalServidor);
       }
-
+      
     } catch (err) {
       setError(err.message || "Error desconocido");
     } finally {
@@ -123,7 +122,6 @@ export const Shopping = () => {
       if (!res.ok) throw new Error("No se pudo obtener el total del carrito")
 
       const data = await res.json()
-      console.log("Total del servidor:", data.total)
       setTotalPrice(data.total)
     } catch (err) {
       console.error("Error al obtener el total:", err)
@@ -331,7 +329,7 @@ export const Shopping = () => {
 
   const actions = [
     {
-      icon: <FontAwesomeIcon icon={faTrash} alt='Agregar' onClick={handleClearCart} className="text-[var(--Font-Nav2)] text-2xl" />,
+      icon: <FontAwesomeIcon icon={faTrash} alt='Agregar' onClick={() => handleClearCart()} className="text-[var(--Font-Nav2)] text-2xl" />,
       name: 'Limpiar carrito'
     },
     {
