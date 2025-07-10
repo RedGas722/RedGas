@@ -103,27 +103,27 @@ export const SearchPage = () => {
             : <span className="z-[2] text-[var(--main-color)]">{category}</span>}
         </h1>
 
-        {loading ? ( 
+        {loading ? (
           <p className="text-xl text-center font-semibold">Cargando productos...</p>
         ) : (
           <>
+            {/* Barra de búsqueda funcional, solo una vez */}
+            <SearchBarr productos={productos} className='z-[3] mt-4' />
+
             {productosConDescuento.length > 0 && (
-              <section className="z-[2] ">
+              <section className="z-[2]">
                 <h2 className="text-xl text-[var(--main-color)] mb-8 mt-12">Ofertas:</h2>
-                <div>
-                  <SearchBarr productos={productos} className='z-[3]' />
-                  <CardsOffersGrid productos={productosConDescuento} />
-                </div>
+                <CardsOffersGrid productos={productosConDescuento} />
               </section>
             )}
 
             {productosSinDescuento.length > 0 && (
-              <section className="z-[2] ">
+              <section className="z-[2]">
                 <h2 className="text-xl text-[var(--Font-Nav)] mb-8 mt-12">Productos:</h2>
-                <SearchBarr productos={productos} className='z-[3]' />
                 <CardsGrid productos={productosSinDescuento} />
               </section>
             )}
+
 
             {productosConDescuento.length === 0 && productosSinDescuento.length === 0 && (
               <p className="text-lg text-center">No se encontraron productos.</p>
