@@ -39,6 +39,7 @@ export const ProductsModal = ({ factura, onClose }) => {
             nombre_producto: productoData.data.nombre_producto,
             precio_producto: productoData.data.precio_producto,
             descripcion_producto: productoData.data.descripcion_producto,
+            descuento: productoData.data.descuento,
             imagen: productoData.data.imagen
           }
         }))

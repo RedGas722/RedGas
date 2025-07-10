@@ -335,11 +335,11 @@ export const Shopping = () => {
       name: 'Limpiar carrito'
     },
     {
-      icon: <SvgMercadoPago onClick={() => handlePayWithMercadoPago(null)} />,
+      icon: <SvgMercadoPago onClick={() => handlePayWithMercadoPago()} />,
       name: "Pagar con Mercado Pago"
     },
     {
-      icon: <SvgPayPal onClick={() => handlePayWithPaypal(null)} />,
+      icon: <SvgPayPal onClick={() => handlePayWithPaypal()} />,
       name: 'Pagar con PayPal'
     },
   ]
