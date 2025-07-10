@@ -10,6 +10,7 @@ import { SvgPayPal } from "../../UI/Svg/SvgPayPal"
 import SvgMercadoPago from "../../UI/Svg/SvgMP"
 import BtnBack from "../../UI/Login_Register/BtnBack"
 import Swal from 'sweetalert2'
+import { jwtDecode } from "jwt-decode"
 
 export const Shopping = () => {
   const [open, setOpen] = useState(false)
@@ -99,7 +100,7 @@ export const Shopping = () => {
         });
         await handleClearCart();
       } else {
-        setTotalPrice(totalServidor); 
+        setTotalPrice(totalServidor);
       }
 
     } catch (err) {
@@ -167,12 +168,22 @@ export const Shopping = () => {
       }
 
       if (newQuantity > producto.stock && newQuantity > producto.cantidad) {
-        alert(`No puedes agregar más de ${producto.stock} unidades. Stock máximo alcanzado.`);
-        return;
+        await Swal.fire({
+          icon: 'warning',
+          title: 'Stock insuficiente',
+          text: `No puedes agregar más de ${producto.stock} unidades disponibles.`,
+          confirmButtonColor: '#d33'
+        });
+        return
       }
 
       if (newQuantity < 1) {
-        alert("La cantidad mínima es 1.")
+        await Swal.fire({
+          icon: 'warning',
+          title: 'Cantidad minima',
+          text: `La cantidad mínima es 1`,
+          confirmButtonColor: '#d33'
+        });
         return
       }
 
@@ -225,13 +236,19 @@ export const Shopping = () => {
   const handlePayWithPaypal = async (monto = totalPrice, productId = null) => {
     try {
       if (!token) {
-        alert("Debes iniciar sesión para pagar con PayPal")
-        return
+        await Swal.fire({
+          icon: 'warning',
+          title: 'Sesión no iniciada',
+          text: 'Debes iniciar sesión para pagar con Mercado Pago',
+          confirmButtonColor: '#d33'
+        });
+        return;
       }
-
+      
       const body = {
         cantidad: monto.toFixed(0),
-        referencia: `ORD-${Date.now()}`
+        referencia: `ORD-${Date.now()}`,
+        id_producto: productId 
       }
 
       const res = await fetch("https://redgas.onrender.com/PagoPaypal", {
@@ -251,32 +268,35 @@ export const Shopping = () => {
 
       if (!approvalLink) throw new Error("No se encontró el link de aprobación de PayPal")
 
-      // Aquí es donde guardamos el id del producto (si es un pago individual)
-      if (productId) {
-        localStorage.setItem("paypal_productId", productId)
-      } else {
-        localStorage.removeItem("paypal_productId") // limpiar si es pago total
-      }
-
       window.location.href = approvalLink.href
 
     } catch (error) {
       console.error("Error al pagar con PayPal:", error)
-      alert("Ocurrió un error al iniciar el pago con PayPal")
+      await Swal.fire({
+        icon: 'error',
+        title: 'Error al pagar',
+        text: error.message || "Ocurrió un error al iniciar el pago con PayPal",
+        confirmButtonColor: '#d33'
+      });
     }
   }
 
   const handlePayWithMercadoPago = async (monto = totalPrice, productId = null) => {
     try {
       if (!token) {
-        alert("Debes iniciar sesión para pagar con Mercado Pago");
+        await Swal.fire({
+          icon: 'warning',
+          title: 'Sesión no iniciada',
+          text: 'Debes iniciar sesión para pagar con Mercado Pago',
+          confirmButtonColor: '#d33'
+        });
         return;
       }
-
       const body = {
         cantidad: monto.toFixed(0),
-        referencia: `ORD-MP-${Date.now()}`
-      };
+        referencia: `ORD-${Date.now()}`,
+        id_producto: productId 
+      }
 
       const res = await fetch("https://redgas.onrender.com/PagoMP", {
         method: "POST",
@@ -297,7 +317,12 @@ export const Shopping = () => {
 
     } catch (error) {
       console.error("Error al pagar con Mercado Pago:", error);
-      alert("Ocurrió un error al iniciar el pago con Mercado Pago");
+      await Swal.fire({
+        icon: 'error',
+        title: 'Error al pagar',
+        text: error.message || "Ocurrió un error al iniciar el pago con Mercado Pago",
+        confirmButtonColor: '#d33'
+      });
     }
   };
 
