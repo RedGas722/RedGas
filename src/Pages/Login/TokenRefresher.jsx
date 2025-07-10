@@ -6,9 +6,8 @@ export function startTokenRefresher() {
 
     const recordarme = localStorage.getItem('recordarme') === 'true';
 
-    let interval; // Declarar variable aquí para manejarla según el caso
+    let interval; 
 
-    // Registrar actividad solo si NO marcó "recordarme"
     if (!recordarme) {
         const updateLastActivity = () => {
             localStorage.setItem('lastActivity', Date.now().toString());
@@ -27,7 +26,6 @@ export function startTokenRefresher() {
             console.warn('No hay token, deteniendo el refresco');
         }
 
-        // Solo para NO recordarme: validar inactividad
         if (!recordarme) {
             const lastActivity = parseInt(localStorage.getItem('lastActivity'), 10) || 0;
             const now = Date.now();
@@ -40,7 +38,6 @@ export function startTokenRefresher() {
             }
         }
 
-        // Intentar renovar token
         fetch('https://redgas.onrender.com/renewToken', {
             method: 'POST',
             headers: {
@@ -64,10 +61,8 @@ export function startTokenRefresher() {
     };
 
     if (recordarme) {
-        // Refrescar token solo una vez al inicio
         renovarToken();
     } else {
-        // Refrescar token cada 14 minutos + controlar inactividad
         interval = setInterval(renovarToken, intervalTime);
     }
 
@@ -84,7 +79,7 @@ export function startTokenRefresher() {
             confirmButtonColor: '#d33',
             backdrop: true
         }).then(() => {
-            window.location.href = "/";
+            window.location.href = "/login";
         });
     };
 

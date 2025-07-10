@@ -32,7 +32,15 @@ export const ServicesInfo = () => {
                body: JSON.stringify({ descripcion: description }),
             })
 
-            const data = await res.json()            
+            if (!res.ok) {
+               throw new Error('Error al enviar a Redis')
+            }
+
+            const data = await res.json()
+            if (!data.get) {
+               alertSendForm(502, 'Error al enviar la información', 'Ocurrió un error al enviar la información. Por favor, intenta nuevamente más tarde.')
+               return
+            }
             const dataInfo = JSON.stringify(data)
             const token = localStorage.getItem('token')
 
@@ -77,16 +85,13 @@ export const ServicesInfo = () => {
       switch (status) {
          case 'wait':
             Swal.fire({
-               title: 'Procesando...',
+               title: title || 'Procesando...',
                text: message || 'Estamos procesando tu solicitud.',
                allowOutsideClick: false,
                allowEscapeKey: false,
                showConfirmButton: false,
-               timer: 6000,
                timerProgressBar: true,
-               didOpen: () => {
-                  Swal.showLoading();
-               },
+               didOpen: () => Swal.showLoading(),
             });
             break;
 
@@ -147,13 +152,11 @@ export const ServicesInfo = () => {
                allowEnterKey: false,
                showConfirmButton: true,
                confirmButtonText: 'Cerrar',
-               timer: 9000
             })
                .then((result) => {
                   if (result.isConfirmed) {
                      navigate('/')
-                     passwordInput.value = ''
-                     confirmPasswordInput.value = ''
+                     descriptionInput.value = '';
                   }
                })
             break;
