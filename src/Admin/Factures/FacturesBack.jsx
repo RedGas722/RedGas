@@ -6,10 +6,12 @@ import { BtnBack } from "../../UI/Login_Register/BtnBack"
 import { InputLabel } from '../../UI/Login_Register/InputLabel/InputLabel'
 import { Paginator } from '../../UI/Paginator/Paginator'
 import { Buttons } from '../../UI/Login_Register/Buttons'
+import { Backdrop, CircularProgress } from '@mui/material';
 import CardsFacturesBack from './Get/CardFacturesBack'
 import { useBuscarFacturas } from './Get/Get'
 
 export const FacturesBack = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const [showRegisterModal, setShowRegisterModal] = useState(false)
   const [showUpdateModal, setShowUpdateModal] = useState(null)
   const [showProductsModal, setShowProductsModal] = useState(false)
@@ -35,6 +37,7 @@ export const FacturesBack = () => {
   } = useBuscarFacturas(clientes, empleados, facturasOriginal, setFacturas, fetchFacturas)
 
   async function fetchFacturas(pagina = 1) {
+    setIsLoading(true)
     try {
       const res = await fetch(`https://redgas.onrender.com/FacturaGetAllPaginated?page=${pagina}`)
       if (!res.ok) throw new Error('Error al obtener facturas')
@@ -47,6 +50,8 @@ export const FacturesBack = () => {
       setTotalPaginas(resultado.totalPages)
     } catch (error) {
       console.error(error)
+    }finally {
+      setIsLoading(false);
     }
   }
 
@@ -105,7 +110,7 @@ export const FacturesBack = () => {
     document.addEventListener('mousedown', manejarClickFuera)
     return () => document.removeEventListener('mousedown', manejarClickFuera)
   }, [])
-  
+
 
   const abrirModalActualizar = (factura) => setShowUpdateModal(factura)
   const cerrarModalActualizar = () => setShowUpdateModal(null)
@@ -126,9 +131,9 @@ export const FacturesBack = () => {
 
       <div className="p-[var(--p-admin-sub)] h-full flex flex-col gap-2">
         <h1 className="font-bold z-[2] text-3xl text-[var(--main-color)]">Facturas</h1>
-        <div className="NeoContainer_outset_TL z-[50] flex gap-4 flex-wrap items-end w-fit p-[var(--p-admin-control)]">
+        <div className="NeoContainer_outset_TL z-[2] flex gap-4 flex-wrap items-end w-fit p-[var(--p-admin-control)]">
           {/* Cliente */}
-          <div className="relative" ref={contenedorRefCliente}>
+          <div ref={contenedorRefCliente}>
             <InputLabel
               radius="10"
               type="1"
@@ -137,8 +142,9 @@ export const FacturesBack = () => {
               childLabel="Buscar por cliente"
               value={clienteCorreoBusqueda}
               onChange={(e) => {
-              handleClienteInput(e.target.value)   
-              setMostrarSugerenciasCliente(true)}}
+                handleClienteInput(e.target.value)
+                setMostrarSugerenciasCliente(true)
+              }}
             />
             {mostrarSugerenciasCliente && clienteSugerencias.length > 0 && (
               <div className="absolute z-[10] bg-white border border-gray-300 rounded mt-1 shadow w-full">
@@ -168,8 +174,8 @@ export const FacturesBack = () => {
               childLabel="Buscar por empleado"
               value={empleadoBusqueda}
               onChange={(e) => {
-              handleEmpleadoInput(e.target.value)
-              setMostrarSugerenciasEmpleado(true)
+                handleEmpleadoInput(e.target.value)
+                setMostrarSugerenciasEmpleado(true)
               }}
             />
             {mostrarSugerenciasEmpleado && empleadoSugerencias.length > 0 && (
@@ -196,7 +202,7 @@ export const FacturesBack = () => {
         </div>
 
         {/* Lista de facturas */}
-        <div className="flex flex-wrap items-center gap-6">
+        <div className="flex flex-wrap justify-center items-start gap-6">
           {facturas.map(factura => (
             <CardsFacturesBack
               key={factura.id_factura}
@@ -210,15 +216,16 @@ export const FacturesBack = () => {
         </div>
 
         {/* Paginador */}
-        {!clienteCorreoBusqueda && !empleadoBusqueda && (
-          <Paginator
-            currentPage={paginaActual}
-            totalPages={totalPaginas}
-            onPageChange={(nuevaPagina) => {
-              if (nuevaPagina !== paginaActual) setPaginaActual(nuevaPagina)
-            }}
-          />
-        )}
+        <Paginator
+          currentPage={paginaActual}
+          totalPages={totalPaginas}
+          onPageChange={(nuevaPagina) => {
+            if (nuevaPagina !== paginaActual) {
+              setPaginaActual(nuevaPagina);
+            }
+          }}
+          disabled={isLoading}
+        />
 
         {/* Modales */}
         {showRegisterModal && (
@@ -240,6 +247,12 @@ export const FacturesBack = () => {
           <ProductsModal factura={facturaParaProductos} onClose={cerrarModalProductos} />
         )}
       </div>
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={isLoading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </section>
   )
 }

@@ -8,22 +8,26 @@ import SpeedDialIcon from '@mui/material/SpeedDialIcon'
 import SpeedDialAction from '@mui/material/SpeedDialAction'
 import { SvgPayPal } from "../../UI/Svg/SvgPayPal"
 import SvgMercadoPago from "../../UI/Svg/SvgMP"
+import { Backdrop, CircularProgress } from '@mui/material';
 import BtnBack from "../../UI/Login_Register/BtnBack"
 import Swal from 'sweetalert2'
+import { Buttons } from "../../UI/Login_Register/Buttons"
 
 export const Shopping = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const [open, setOpen] = useState(false)
   const [products, setProducts] = useState([])
   const [totalPrice, setTotalPrice] = useState(0)
-  const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [inputQuantities, setInputQuantities] = useState({}) // Estado para manejar los valores de los inputs
   const token = localStorage.getItem("token")
 
   const fetchProducts = async () => {
+    setIsLoading(true)
     try {
       if (!token) {
         setError("Debes iniciar sesión para ver el carrito");
-        setLoading(false);
+        setIsLoading(false);
         return;
       }
 
@@ -101,11 +105,10 @@ export const Shopping = () => {
       } else {
         setTotalPrice(totalServidor);
       }
-      
     } catch (err) {
       setError(err.message || "Error desconocido");
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
@@ -151,6 +154,12 @@ export const Shopping = () => {
       if (!res.ok) throw new Error("No se pudo eliminar el producto del carrito")
 
       setProducts((prev) => prev.filter(p => p.id_producto !== productId))
+      // Limpiar el input quantity del producto eliminado
+      setInputQuantities(prev => {
+        const newQuantities = { ...prev }
+        delete newQuantities[productId]
+        return newQuantities
+      })
       fetchTotalPrice() // actualizar total
     } catch (err) {
       alert(err.message || "Error al eliminar el producto")
@@ -201,6 +210,13 @@ export const Shopping = () => {
           p.id_producto === productId ? { ...p, cantidad: newQuantity } : p
         )
       )
+
+      // Actualizar el valor del input
+      setInputQuantities(prev => ({
+        ...prev,
+        [productId]: newQuantity
+      }))
+
       fetchTotalPrice() // actualizar total
     } catch (err) {
       alert(err.message || "Error al actualizar la cantidad")
@@ -225,6 +241,7 @@ export const Shopping = () => {
       if (!res.ok) throw new Error("No se pudo limpiar el carrito")
 
       setProducts([])
+      setInputQuantities({})
       setTotalPrice(0)
     } catch (err) {
       alert(err.message || "Error al limpiar el carrito")
@@ -246,7 +263,7 @@ export const Shopping = () => {
       const body = {
         cantidad: monto.toFixed(0),
         referencia: `ORD-${Date.now()}`,
-        id_producto: productId 
+        id_producto: productId
       }
 
       const res = await fetch("https://redgas.onrender.com/PagoPaypal", {
@@ -293,7 +310,7 @@ export const Shopping = () => {
       const body = {
         cantidad: monto.toFixed(0),
         referencia: `ORD-${Date.now()}`,
-        id_producto: productId 
+        id_producto: productId
       }
 
       const res = await fetch("https://redgas.onrender.com/PagoMP", {
@@ -324,7 +341,6 @@ export const Shopping = () => {
     }
   };
 
-  if (loading) return <p>Cargando productos...</p>
   if (error) return <p>Error: {error}</p>
 
   const actions = [
@@ -352,8 +368,11 @@ export const Shopping = () => {
   return (
     <section className='Distribution'>
       {/* <Header /> */}
-      <div className="flex flex-col gap-[80px] text-[var(--main-color)] MainPageContainer">
+      <div className="z-[2] p-[5px] flex flex-col text-center gap-2 sm:gap-0 sm:flex-row sm:justify-between items-center w-full">
         <BtnBack To='/' />
+        <h2 className="font-bold text-3xl sm:text-4xl text-[var(--Font-Nav)]">Carrito</h2>
+      </div>
+      <div className="flex flex-col gap-[80px] text-[var(--main-color)] MainPageContainer">
 
         {products.length === 0 && <p>No hay productos para mostrar.</p>}
 
@@ -366,7 +385,7 @@ export const Shopping = () => {
           return (
             <section key={index}>
               <section className='flex justify-center gap-[20px]'>
-                <section className='NeoContainer_outset_TL z-[50] flex gap-[20px] p-[20px_10px] w-[70%] h-fit relative'>
+                <section className='NeoContainer_outset_TL z-[50] flex gap-[20px] flex-wrap items-center justify-center p-[20px_10px] w-[70%] h-fit relative'>
                   <div>
                     <img
                       src={producto.imagen ? `data:image/jpeg;base64,${producto.imagen}` : "https://via.placeholder.com/150"}
@@ -408,69 +427,55 @@ export const Shopping = () => {
                         />
                         <span className="text-sm text-gray-500">/ {producto.stock} disponibles</span>
                       </div>
-                      <div className="flex items-center gap-5">
-                        <button
-                          className='buttonTL2 NeoSubContainer_outset_TL p-[7px] relative z-[50]'
+
+                      <div className="flex items-center gap-5 flex-wrap">
+                        <Buttons
+                          nameButton='Pagar con PayPal'
+                          borderColor='var(--Font-Nav)'
+                          height='40px'
+                          borderWidth='1'
                           onClick={() => handlePayWithPaypal(subtotal, producto.id_producto)}
-                        >
-                          Pagar con PayPal
-                        </button>
-                        <button
-                          className='buttonTL2 NeoSubContainer_outset_TL p-[7px] relative z-[50]'
+                          width='fit-content'
+                          padding='10px'
+                        />
+                        <Buttons
+                          nameButton='Pagar con MP'
+                          borderColor='var(--Font-Nav)'
+                          height='40px'
+                          borderWidth='1'
                           onClick={() => handlePayWithMercadoPago(subtotal, producto.id_producto)}
-                        >
-                          Pagar con MP
-                        </button>
-                        <button
-                          className='buttonTL2 NeoSubContainer_outset_TL p-[7px] relative z-[50]'
+                          width='fit-content'
+                          padding='10px'
+                        />
+                        <Buttons
+                          nameButton='Eliminar'
+                          borderColor='var(--Font-Nav2)'
+                          textColor='var(--Font-Nav2)'
+                          height='40px'
+                          borderWidth='1'
                           onClick={() => handleRemoveProduct(producto.id_producto)}
-                        >
-                          Eliminar
-                        </button>
+                          width='fit-content'
+                          padding='10px'
+                        />
                       </div>
                     </section>
                   </div>
-
                 </section>
               </section>
             </section>
           )
         })}
 
-        <footer className="flex flex-col items-center gap-4">
-          {/* <div className='flex justify-center items-center gap-[20px]'>
-            <button className='buttonTL2 active:text-[var(--main-color)] font-black NeoSubContainer_outset_TL p-[7px]'>Comprar todo</button>
-            <button
-              className='buttonTL2 text-white font-black NeoSubContainer_outset_TL p-[7px]'
-              onClick={() => handlePayWithPaypal()}
-            >
-              Pagar Total con PayPal
-            </button>
-            <button
-              className='buttonTL2 text-white font-black NeoSubContainer_outset_TL p-[7px]'
-              onClick={() => {
-                setPseAmount(totalPrice)
-                setShowPseForm(true)
-              }}
-            >
-              Pagar Total con PSE
-            </button>
-            <button
-              className='buttonTL2 text-white font-black NeoSubContainer_outset_TL p-[7px]'
-              onClick={handleClearCart}
-            >
-              Limpiar carrito
-            </button>
-          </div> */}
-
+        <div className="flex flex-col items-center gap-4">
           {/* Total del carrito */}
           <p className="text-xl font-semibold text-[var(--main-color)]">
             Total: ${totalPrice.toLocaleString("es-CO")}
           </p>
-        </footer>
+        </div>
       </div>
+
       {/* SpeedDial */}
-      <Box sx={{ height: 330, transform: 'translateZ(0px)', flexGrow: 1, position: 'sticky', bottom: 0, right: 0, zIndex: 2 }}>
+      <Box sx={{ height: 330, transform: 'translateZ(0px)', flexGrow: 1, position: 'fixed', bottom: 0, right: 0, zIndex: 2 }}>
         <SpeedDial
           ariaLabel="SpeedDial tooltip example"
           sx={{ position: 'absolute', bottom: 16, right: 16 }}
@@ -499,6 +504,12 @@ export const Shopping = () => {
           ))}
         </SpeedDial>
       </Box>
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={isLoading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </section>
   )
 }

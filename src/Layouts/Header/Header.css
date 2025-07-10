@@ -32,7 +32,7 @@
 
 .dropdown {
     font-weight: 800;
-    color: white;
+    color: var(--background-color);
     background-color: var(--main-color);
     padding: 3px 15px;
     border-radius: 15px;

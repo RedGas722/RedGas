@@ -1,23 +1,30 @@
 import { Buttons } from '../../../UI/Login_Register/Buttons'
+import { confirmDelete } from '../../../UI/Alert/Alert'
 import { DeleteClient } from '../Delete/Delete'
 
 const CardClientsBack = ({ cliente, setRefrescar, onUpdateClick }) => {
   const handleDelete = async () => {
-    const confirmar = window.confirm(`¿Seguro que quieres eliminar a ${cliente.nombre_cliente}?`)
-    if (!confirmar) return
+    const confirmado = await confirmDelete(
+      `¿Seguro que quieres eliminar al cliente ${cliente.nombre_cliente}?`,
+      `Cliente ${cliente.nombre_cliente} eliminado correctamente`
+    );
+    if (!confirmado) return;
 
-    const { success, message } = await DeleteClient(cliente.correo_cliente)
+    const { success, message } = await DeleteClient(cliente.correo_cliente);
 
     if (success) {
-      alert(message)
-      setRefrescar(true)
+      setRefrescar(true);
     } else {
-      alert(`Error: ${message}`)
+      Swal.fire({
+        icon: 'error',
+        title: 'Error al eliminar',
+        text: message || 'Ocurrió un error inesperado',
+      });
     }
-  }
+  };
   return (
-    <div className="text-center z-[2] items-center NeoContainer_outset_TL w-[300px] p-4 h-fit flex flex-col justify-start gap-2">
-      <h2 className="text-xl font-bold text-[var(--Font-Nav)] truncate w-full">{cliente.nombre_cliente}</h2>
+    <div className="text-center z-[2] items-center NeoContainer_outset_TL w-[350px] p-4 h-fit flex flex-col justify-start gap-2">
+      <h2 className="text-xl text-[var(--Font-Nav)] truncate w-full">{cliente.nombre_cliente}</h2>
 
       <div className="flex flex-col text-sm text-[var(--main-color)]">
         <p className="font-medium flex items-center gap-1">
@@ -26,7 +33,7 @@ const CardClientsBack = ({ cliente, setRefrescar, onUpdateClick }) => {
         </p>
         <p className="font-medium flex items-center gap-1">
           <span className="font-bold text-[15px]">Correo:</span>
-          <span className="break-words">{cliente.correo_cliente} </span>
+          <span className="truncate max-w-[270px]">{cliente.correo_cliente} </span>
         </p>
         <p className="font-medium flex items-center gap-1">
           <span className="font-bold text-[15px]">Teléfono:</span>

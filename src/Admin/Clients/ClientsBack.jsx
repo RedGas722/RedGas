@@ -3,6 +3,7 @@ import { RegisterModal } from './Register/RegisterModal'
 import { UpdateModal } from './Update/Update'
 import CardClientsBack from './Get/CardClientsBack'
 import { buscarClientePorCorreo } from './Get/Get'
+import { Backdrop, CircularProgress } from '@mui/material';
 import { BtnBack } from "../../UI/Login_Register/BtnBack"
 import { InputLabel } from '../../UI/Login_Register/InputLabel/InputLabel'
 import { Buttons } from '../../UI/Login_Register/Buttons'
@@ -10,6 +11,7 @@ import { Paginator } from '../../UI/Paginator/Paginator'
 
 export const ClientsBack = () => {
   const [showRegisterModal, setShowRegisterModal] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false)
   const [clientes, setClientes] = useState([])
   const [clientesEmails, setClientesEmails] = useState([])
@@ -24,6 +26,7 @@ export const ClientsBack = () => {
   const contenedorRef = useRef(null)
 
   const fetchClientes = async (pagina = 1) => {
+    setIsLoading(true)
     try {
       const res = await fetch(`https://redgas.onrender.com/ClienteGetAllPaginated?page=${pagina}`)
       if (!res.ok) throw new Error('Error al obtener clientes')
@@ -35,6 +38,8 @@ export const ClientsBack = () => {
       setTotalPaginas(resultado.totalPages)
     } catch (error) {
       console.error(error)
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -128,7 +133,7 @@ export const ClientsBack = () => {
         <h1 className="font-bold text-3xl z-[2] text-[var(--main-color)]">Clientes</h1>
 
         {/* Buscador y botón */}
-        <div className="NeoContainer_outset_TL z-[50] flex gap-4 flex-wrap items-end w-fit p-[var(--p-admin-control)]">
+        <div className="NeoContainer_outset_TL z-[2] flex gap-4 flex-wrap items-end w-fit p-[var(--p-admin-control)]">
           <div className="relative" ref={contenedorRef}>
             <InputLabel
               radius="10"
@@ -175,7 +180,7 @@ export const ClientsBack = () => {
         )}
 
         {/* Tarjetas de clientes */}
-        <div className="flex flex-wrap items-center gap-6">
+        <div className="flex flex-wrap items-center justify-center gap-6">
           {(clienteBuscado ? [clienteBuscado] : clientes).map((cliente) => (
             <CardClientsBack
               key={cliente.id_cliente}
@@ -191,14 +196,16 @@ export const ClientsBack = () => {
           totalPages={totalPaginas}
           onPageChange={(nuevaPagina) => {
             if (nuevaPagina !== paginaActual) {
-              setPaginaActual(nuevaPagina)
+              setPaginaActual(nuevaPagina);
             }
           }}
+          disabled={isLoading}
         />
 
         {/* Modales */}
         {showRegisterModal && (
           <RegisterModal
+            open={showRegisterModal}
             onClose={() => setShowRegisterModal(false)}
             setRefrescar={setRefrescar}
           />
@@ -206,12 +213,19 @@ export const ClientsBack = () => {
 
         {showUpdateModal && clienteSeleccionado && (
           <UpdateModal
+            open={!!showUpdateModal}
             onClose={() => setShowUpdateModal(false)}
             setRefrescar={setRefrescar}
             clienteCarta={clienteSeleccionado}
           />
         )}
       </div>
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={isLoading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </section>
   )
 }

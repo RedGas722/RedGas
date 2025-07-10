@@ -1,7 +1,10 @@
 import { useState, useRef } from 'react'
 import { InputLabel } from '../../../UI/Login_Register/InputLabel/InputLabel'
+import { Modal, Box, Typography, IconButton, Button } from '@mui/material'
+import CloseIcon from '@mui/icons-material/Close'
+import { Buttons } from '../../../UI/Login_Register/Buttons'
 
-export const RegisterModal = ({ onClose, setRefrescar }) => {
+export const RegisterModal = ({ open, onClose, setRefrescar }) => {
   const [cc_tecnico, setCc] = useState('')
   const [nombre, setNombre] = useState('')
   const [apellido, setApellido] = useState('')
@@ -29,14 +32,11 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
     return errores
   }
 
-  const handleRegister = async (e) => {
-    e.preventDefault()
+  const handleRegister = async () => {
     const erroresValidados = validarCampos()
     if (Object.keys(erroresValidados).length > 0) {
       setErrores(erroresValidados)
-      setMensaje('')
       setErroresActivos(erroresValidados)
-      // Limpiar errores después de 2 segundos
       Object.keys(erroresValidados).forEach((key) => {
         if (errorTimeouts.current[key]) clearTimeout(errorTimeouts.current[key])
         errorTimeouts.current[key] = setTimeout(() => {
@@ -45,11 +45,8 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
       })
       return
     }
-    setErrores({})
-    setErroresActivos({})
-    setMensaje('')
+
     try {
-      // Verificar si ya existe un técnico con ese correo
       const resCheck = await fetch(`${URL_GET}?correo_tecnico=${encodeURIComponent(correo)}`)
       if (resCheck.ok) {
         const dataCheck = await resCheck.json()
@@ -58,6 +55,7 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
           return
         }
       }
+
       const formData = new FormData()
       formData.append('cc_tecnico', cc_tecnico)
       formData.append('nombre_tecnico', nombre + ' ' + apellido)
@@ -65,14 +63,14 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
       formData.append('telefono_tecnico', telefono)
       formData.append('contrasena_tecnico', contrasena)
       formData.append('imagen', imagen)
-      const res = await fetch(URL_REGISTER, {
-        method: 'POST',
-        body: formData,
-      })
+
+      const res = await fetch(URL_REGISTER, { method: 'POST', body: formData })
+
       if (!res.ok) {
         setMensaje('Error al registrar: Datos inválidos.')
         return
       }
+
       setMensaje('Técnico registrado exitosamente.')
       if (setRefrescar) setRefrescar(true)
     } catch (err) {
@@ -80,8 +78,13 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
     }
   }
 
+  const handleImageChange = (e) => {
+    const file = e.target.files[0]
+    setImagen(file || null)
+  }
+
   const cancelarRegistro = () => {
-    setCc(0)
+    setCc('')
     setNombre('')
     setApellido('')
     setCorreo('')
@@ -93,108 +96,107 @@ export const RegisterModal = ({ onClose, setRefrescar }) => {
     onClose()
   }
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0]
-    setImagen(file || null)
-  }
-
   return (
-    <div className="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50">
-      <div className="NeoContainer_Admin_outset_TL p-6 w-[320px] flex flex-col gap-4 relative text-[var(--main-color)]">
-        <h2 className="text-xl font-bold text-center">Registrar Técnico</h2>
-        <InputLabel
-          type='5'
-          placeholder={erroresActivos.cc_tecnico || 'CC'}
-          value={cc_tecnico}
-          onChange={(e) => setCc(e.target.value)}
-          placeholderError={!!erroresActivos.cc_tecnico}
-        />
-        {errores.cc_tecnico && (
-          <p className="text-red-600 text-sm">{errores.cc_tecnico}</p>
-        )}
+    <Modal open={open} onClose={cancelarRegistro}>
+      <Box
+        className="bg-white w-[90%] md:w-[400px] max-h-[90vh] overflow-y-auto px-6 py-4 rounded-xl relative shadow-lg"
+        sx={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+        }}
+      >
+        <IconButton
+          onClick={cancelarRegistro}
+          sx={{ position: 'absolute', top: 10, right: 10 }}
+        >
+          <CloseIcon />
+        </IconButton>
 
-        <InputLabel
-          type='1'
-          placeholder={erroresActivos.nombre || 'Nombre del Técnico'}
-          value={nombre}
-          onChange={(e) => setNombre(e.target.value)}
-          placeholderError={!!erroresActivos.nombre}
-        />
-        {errores.nombre && (
-          <p className="text-red-600 text-sm">{errores.nombre}</p>
-        )}
+        <Typography variant="h6" className="font-bold text-center text-[var(--main-color)] mb-4">
+          Registrar Técnico
+        </Typography>
 
-        <InputLabel
-          type='1'
-          placeholder={erroresActivos.apellido || 'Apellido del Técnico'}
-          value={apellido}
-          onChange={(e) => setApellido(e.target.value)}
-          placeholderError={!!erroresActivos.apellido}
-        />
-        {errores.apellido && (
-          <p className="text-red-600 text-sm">{errores.apellido}</p>
-        )}
+        <div className="flex flex-col gap-2 text-[var(--main-color)]">
+          <InputLabel
+            type='5'
+            ForID="cc"
+            childLabel="CC"
+            placeholder={erroresActivos.cc_tecnico || 'CC'}
+            value={cc_tecnico}
+            onChange={(e) => setCc(e.target.value)}
+            placeholderError={!!erroresActivos.cc_tecnico}
+          />
+          <InputLabel
+            type='1'
+            ForID="nombre_tecnico"
+            childLabel="Nombre"
+            placeholder={erroresActivos.nombre || 'Nombre'}
+            value={nombre}
+            onChange={(e) => setNombre(e.target.value)}
+            placeholderError={!!erroresActivos.nombre}
+          />
+          <InputLabel
+            type='1'
+            ForID="apellido_tecnico"
+            childLabel="Apellido"
+            placeholder={erroresActivos.apellido || 'Apellido'}
+            value={apellido}
+            onChange={(e) => setApellido(e.target.value)}
+            placeholderError={!!erroresActivos.apellido}
+          />
+          <InputLabel
+            type='2'
+            ForID="correo_tecnico"
+            childLabel="Correo"
+            placeholder={erroresActivos.correo || 'example@gmail.com'}
+            autoComplete='email'
+            value={correo}
+            onChange={(e) => setCorreo(e.target.value)}
+            placeholderError={!!erroresActivos.correo}
+          />
+          <InputLabel
+            type='5'
+            ForID="telefono_tecnico"
+            childLabel="Teléfono"
+            placeholder={erroresActivos.telefono || 'Teléfono'}
+            autoComplete='off'
+            value={telefono}
+            onChange={(e) => setTelefono(e.target.value)}
+            placeholderError={!!erroresActivos.telefono}
+          />
+          <InputLabel
+            type='3'
+            ForID="contrasena_tecnico"
+            childLabel="Contraseña"
+            placeholder={erroresActivos.contrasena || 'Contraseña'}
+            value={contrasena}
+            onChange={(e) => setContrasena(e.target.value)}
+            placeholderError={!!erroresActivos.contrasena}
+          />
+          <InputLabel
+            type='4'
+            ForID="imagen_tecnico"
+            childLabel="Imagen"
+            placeholder={erroresActivos.imagen || 'Imagen del Técnico'}
+            onChange={handleImageChange}
+            placeholderError={!!erroresActivos.imagen}
+          />
 
-        <InputLabel
-          type='2'
-          placeholder={erroresActivos.correo || 'Correo del Técnico'}
-          value={correo}
-          onChange={(e) => setCorreo(e.target.value)}
-          placeholderError={!!erroresActivos.correo}
-        />
-        {errores.correo && (
-          <p className="text-red-600 text-sm">{errores.correo}</p>
-        )}
+          {mensaje && (
+            <p className={`text-center font-semibold ${mensaje.includes('exitosamente') ? 'text-green-600' : 'text-red-600'}`}>
+              {mensaje}
+            </p>
+          )}
 
-        <InputLabel
-          type='6'
-          placeholder={erroresActivos.telefono || 'Teléfono del Técnico'}
-          value={telefono}
-          onChange={(e) => setTelefono(e.target.value)}
-          placeholderError={!!erroresActivos.telefono}
-        />
-        {errores.telefono && (
-          <p className="text-red-600 text-sm">{errores.telefono}</p>
-        )}
-
-        <InputLabel
-          type='3'
-          placeholder={erroresActivos.contrasena || 'Contraseña del Técnico'}
-          value={contrasena}
-          onChange={(e) => setContrasena(e.target.value)}
-          placeholderError={!!erroresActivos.contrasena}
-        />
-        {errores.contrasena && (
-          <p className="text-red-600 text-sm">{errores.contrasena}</p>
-        )}
-
-        <InputLabel
-          type='4'
-          placeholder={erroresActivos.imagen || 'Imagen del Técnico'}
-          value={imagen}
-          onChange={handleImageChange}
-          placeholderError={!!erroresActivos.imagen}
-        />
-        {errores.imagen && (
-          <p className="text-red-600 text-sm">{errores.imagen}</p>
-        )}
-
-        <div className="flex justify-between gap-2">
-          <button
-            onClick={cancelarRegistro}
-            className="NeoContainer_Admin_outset_TL bg-[var(--Font-Nav)] hover:bg-[var(--main-color)] BTN text-[var(--main-color)]"
-          >Cancelar</button>
-          <button
-            onClick={handleRegister}
-            className="NeoContainer_Admin_outset_TL bg-[var(--Font-Nav)] hover:bg-[var(--main-color)] BTN text-[var(--main-color)]"
-          >Registrar</button>
+          <div className="flex justify-between mt-4 gap-2">
+            <Buttons Onclick={cancelarRegistro} borderWidth='1' nameButton='Cancelar' width='150px' textColor='var(--Font-Yellow)' />
+            <Buttons Onclick={handleRegister} borderWidth='1' nameButton='Registrar' width='150px' textColor='var(--Font-Nav)' />
+          </div>
         </div>
-        {mensaje && (
-          <p className={`text-center font-semibold ${mensaje.includes('exitosamente') ? 'text-green-600' : 'text-red-600'}`}>
-            {mensaje}
-          </p>
-        )}
-      </div>
-    </div>
+      </Box>
+    </Modal>
   )
 }
+export default RegisterModal

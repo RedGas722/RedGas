@@ -2,7 +2,6 @@ import { faTools, faCheck, faX, faPlug, faGears, faRotate } from "@fortawesome/f
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { BtnBack } from "../../UI/Login_Register/BtnBack"
 import { Buttons } from "../../UI/Login_Register/Buttons"
-import { ShortText } from "../../UI/ShortText/ShortText"
 import { useNavigate } from "react-router-dom"
 import { useState } from "react"
 import withReactContent from 'sweetalert2-react-content'
@@ -190,6 +189,44 @@ export const ServicesInfo = () => {
          </div>
 
          <section className="AI_history gap-4 flex flex-col-reverse items-center md:flex-row md:justify-evenly h-fit w-full">
+            <div className="w-[300px] md:w-[400px] lg:w-[400px] flex-col gap-4 flex items-center NeoContainer_outset_TL h-full overflow-y-auto p-[10px_8px]">
+               <h2 className="font-bold text-3xl text-[var(--main-color)]">Servicios</h2>
+               <div className="w-[350px] flex p-[0_10px_25px_0] items-center flex-col gap-2 ">
+
+                  <div className="NeoSubContainer_outset_TL w-[250px] lg:w-[350px] p-[10px]">
+                     <div className="flex items-center gap-2 text-[var(--Font-Nav)]">
+                        <FontAwesomeIcon icon={faPlug} className="text-[var(--Font-Nav)]" />
+                        <h3 className="text-[17px] font-bold">Instalación</h3>
+                     </div>
+                     <p className="text-[13px] pl-2 text-[var(--main-color)]">
+                        Servicio que implica la conexión inicial de equipos o sistemas, como estufas o calentadores, asegurando su correcto funcionamiento.
+                     </p>
+                     <div className="pl-[3px] mt-2">
+                     </div>
+                  </div>
+
+                  <div className="NeoSubContainer_outset_TL w-[250px] lg:w-[350px] p-[10px]">
+                     <div className="flex items-center gap-2 text-[var(--Font-Nav)]">
+                        <FontAwesomeIcon icon={faGears} className="text-[var(--Font-Nav)]" />
+                        <h3 className="text-[17px] font-bold">Reparación</h3>
+                     </div>
+                     <p className="text-[13px] text-[var(--main-color)] pl-2">
+                        Servicio destinado a corregir fallas o daños en equipos ya instalados para devolverlos a su estado funcional.
+                     </p>
+                  </div>
+
+                  <div className="NeoSubContainer_outset_TL w-[250px] lg:w-[350px] p-[10px]">
+                     <div className="flex items-center gap-2 text-[var(--Font-Nav)]">
+                        <FontAwesomeIcon icon={faTools} className="text-[var(--Font-Nav)]" />
+                        <h3 className="text-[17px] font-bold">Mantenimiento</h3>
+                     </div>
+                     <p className="text-[13px] text-[var(--main-color)] pl-2">
+                        Servicio preventivo que busca conservar el buen estado de los equipos mediante revisiones periódicas.
+                     </p>
+                  </div>
+
+               </div>
+            </div>
             <form
                onSubmit={handleServices}
                className="w-full max-w-xl p-6 z-[2] flex flex-col gap-3 NeoContainer_outset_TL"
@@ -219,4 +256,4 @@ export const ServicesInfo = () => {
    )
 }
 
-         export default ServicesInfo
+export default ServicesInfo

@@ -1,27 +1,32 @@
 import { DeleteEmployee } from '../Delete/Delete'
+import { confirmDelete } from '../../../UI/Alert/Alert'
 import { Buttons } from '../../../UI/Login_Register/Buttons'
 
 const CardEmployeesBack = ({ empleado, setRefrescar, onUpdateClick }) => {
   const handleDelete = async () => {
-    const confirmar = window.confirm(`¿Seguro que quieres eliminar a ${empleado.nombre_empleado}?`)
-    if (!confirmar) return
+    const confirmado = await confirmDelete(
+      `¿Seguro que quieres eliminar al empleado ${empleado.nombre_empleado}?`,
+      `Empleado ${empleado.nombre_empleado} eliminado correctamente`
+    );
+    if (!confirmado) return;
 
-    const { success, message } = await DeleteEmployee(empleado.correo_empleado)
+    const { success, message } = await DeleteEmployee(empleado.correo_empleado);
 
     if (success) {
-      alert(message)
-      setRefrescar(true)
+      setRefrescar(true);
     } else {
-      alert(`Error: ${message}`)
+      Swal.fire({
+        icon: 'error',
+        title: 'Error al eliminar',
+        text: message || 'Ocurrió un error inesperado',
+      });
     }
-  }
-
+  };
   return (
-    <div className="text-center z-[2] items-center NeoContainer_outset_TL w-[300px] p-4 h-fit flex flex-col justify-start gap-2">
-      <h2 className="text-xl font-bold text-[var(--Font-Nav)] truncate w-full">{empleado.nombre_empleado}</h2>
-
-      <div className="flex flex-col text-sm text-[var(--main-color)]">
-        <p className="font-medium flex items-center gap-1">
+    <div className="NeoContainer_outset_TL p-4 w-[400px] z-[2] gap-4 min-h-[150px] flex flex-col justify-start overflow-hidden">
+      <h2 className="text-xl font-semibold text-gray-800 truncate">{empleado.nombre_empleado}</h2>
+      <div className="text-[var(--main-color)] flex flex-col text-sm">
+        <p className="font-medium flex flex-wrap gap-2">
           <span className="font-bold text-[15px]">ID:</span>
           <span className="break-words">{empleado.id_empleado}</span>
         </p>
@@ -37,8 +42,8 @@ const CardEmployeesBack = ({ empleado, setRefrescar, onUpdateClick }) => {
           <span className="font-bold text-[15px]">Teléfono:</span>
           <span className="break-words">{empleado.telefono_empleado}</span>
         </p>
-        <p className="font-medium flex items-start text-start gap-1 min-w-0">
-          <span className="font-bold text-[15px] whitespace-nowrap">Dirección:</span>
+        <p className="font-medium flex flex-wrap gap-2">
+          <span className="font-bold text-[15px]">Dirección:</span>
           <span className="break-words">{empleado.direccion_empleado}</span>
         </p>
       </div>

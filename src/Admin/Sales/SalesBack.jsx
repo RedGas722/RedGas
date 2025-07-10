@@ -5,9 +5,11 @@ import { InputLabel } from '../../UI/Login_Register/InputLabel/InputLabel'
 import { useBuscarSales } from './Get/Get'
 import { Paginator } from '../../UI/Paginator/Paginator'
 import { Buttons } from '../../UI/Login_Register/Buttons'
+import { Backdrop, CircularProgress } from '@mui/material';
 import CardSalesBack from './Get/CardSalesBack'
 
 export const SalesBack = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const [showRegisterModal, setShowRegisterModal] = useState(false)
   const [ventas, setVentas] = useState([])
   const [ventasOriginal, setVentasOriginal] = useState([])
@@ -23,6 +25,7 @@ export const SalesBack = () => {
   } = useBuscarSales(productos, ventasOriginal, setVentas)
 
   const fetchVentas = async (pagina = 1) => {
+    setIsLoading(true)
     try {
       const res = await fetch(`https://redgas.onrender.com/PedidoProductoGetAllPaginated?page=${pagina}`)
       if (!res.ok) throw new Error('Error al obtener ventas')
@@ -35,6 +38,8 @@ export const SalesBack = () => {
       setTotalPaginas(resultado.totalPages)
     } catch (error) {
       console.error(error)
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -76,7 +81,7 @@ export const SalesBack = () => {
 
       <div className="p-[var(--p-admin-sub)] h-full flex flex-col gap-2">
         <h1 className="font-bold text-3xl z-[2] text-[var(--main-color)]">Ventas</h1>
-        <div className='NeoContainer_outset_TL z-[50] flex gap-4 flex-wrap items-end w-fit p-[var(--p-admin-control)]'>
+        <div className='NeoContainer_outset_TL z-[2] flex gap-4 flex-wrap items-end w-fit p-[var(--p-admin-control)]'>
           <div className="relative" ref={contenedorRefProducto}>
             <InputLabel
               radius="10"
@@ -116,7 +121,7 @@ export const SalesBack = () => {
         </div>
 
         {/* Lista de ventas */}
-        <div className="flex flex-wrap items-center gap-6">
+        <div className="flex flex-wrap justify-center items-center gap-6">
           {ventas.map((venta) => (
             <CardSalesBack
               key={venta.id_pedidoProducto}
@@ -131,9 +136,10 @@ export const SalesBack = () => {
           totalPages={totalPaginas}
           onPageChange={(nuevaPagina) => {
             if (nuevaPagina !== paginaActual) {
-              setPaginaActual(nuevaPagina)
+              setPaginaActual(nuevaPagina);
             }
           }}
+          disabled={isLoading}
         />
 
         {/* Modal de registro */}
@@ -144,6 +150,12 @@ export const SalesBack = () => {
           />
         )}
       </div>
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={isLoading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </section>
   )
 }

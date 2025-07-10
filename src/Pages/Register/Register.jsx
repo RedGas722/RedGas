@@ -209,7 +209,7 @@ export const Register = () => {
     }
 
     return (
-        <div className="z-[2] w-full p-[5px] h-dvh gap-4 lg:gap-2 flex flex-col text-[var(--main-color)]">
+        <div className="z-[2] w-full p-[5px] h-dvh gap-4 lg:gap-40 flex flex-col text-[var(--main-color)]">
             <div className="z-[2] flex flex-col text-center gap-2 sm:gap-0 sm:flex-row sm:justify-between items-center w-full">
                 <BtnBack To='/' />
                 <h2 className="font-bold text-3xl sm:text-4xl text-[var(--Font-Nav)]">Registro</h2>

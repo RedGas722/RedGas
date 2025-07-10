@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { RegisterModal } from './Register/RegisterModal'
 import { UpdateModal } from './Update/Update'
-import { ButtonBack } from '../UI/ButtonBack/ButtonBack'
 import { BtnBack } from "../../UI/Login_Register/BtnBack"
 import CardTechniciansBack from './Get/CardTechniciansBack'
 import { buscarTecnicoPorCorreo } from './Get/Get'
@@ -26,6 +25,7 @@ export const TechniciansBack = () => {
   const contenedorRef = useRef(null)
 
   const fetchTecnicos = async (pagina = 1) => {
+    setIsLoading(true);
     try {
       const res = await fetch(`https://redgas.onrender.com/TecnicoGetAllPaginated?page=${pagina}`)
       if (!res.ok) throw new Error('Error al obtener técnicos')
@@ -37,6 +37,8 @@ export const TechniciansBack = () => {
       setTotalPaginas(resultado.totalPages)
     } catch (error) {
       console.error(error)
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -125,7 +127,7 @@ export const TechniciansBack = () => {
 
         <div className="p-[var(--p-admin-sub)] h-full flex flex-col gap-2">
           <h1 className="z-[2] font-bold text-3xl text-[var(--main-color)]">Técnicos</h1>
-          <div className='NeoContainer_outset_TL z-[50] flex gap-4 flex-wrap items-end w-fit p-[var(--p-admin-control)]'>
+          <div className='NeoContainer_outset_TL z-[2] flex gap-4 flex-wrap items-end w-fit p-[var(--p-admin-control)]'>
             <div className='relative' ref={contenedorRef}>
               <InputLabel
                 radius='10'
@@ -161,7 +163,7 @@ export const TechniciansBack = () => {
             </div>
           </div>
           {/* Sección de técnicos */}
-          <div className="flex flex-wrap items-center gap-6">
+          <div className="flex flex-wrap justify-center items-center gap-6">
             {(tecnicoBuscado ? [tecnicoBuscado] : tecnicos).map(tecnico => (
               <CardTechniciansBack
                 key={tecnico.id_tecnico || tecnico.correo_tecnico}
@@ -172,25 +174,28 @@ export const TechniciansBack = () => {
             ))}
           </div>
 
-            <Paginator
-              currentPage={paginaActual}
-              totalPages={totalPaginas}
-              onPageChange={(nuevaPagina) => {
-                if (nuevaPagina !== paginaActual) {
-                  setPaginaActual(nuevaPagina)
-                }
-              }}
-            />
+          <Paginator
+            currentPage={paginaActual}
+            totalPages={totalPaginas}
+            onPageChange={(nuevaPagina) => {
+              if (nuevaPagina !== paginaActual) {
+                setPaginaActual(nuevaPagina);
+              }
+            }}
+            disabled={isLoading}
+          />
 
           {/* Modales */}
           {showRegisterModal && (
             <RegisterModal
+              open={showRegisterModal}
               onClose={() => setShowRegisterModal(false)}
               setRefrescar={setRefrescar}
             />
           )}
           {typeof showUpdateModal === 'object' && showUpdateModal && (
             <UpdateModal
+              open={Boolean(showUpdateModal)}
               onClose={() => setShowUpdateModal(false)}
               setRefrescar={setRefrescar}
               tecnicoCarta={showUpdateModal}
@@ -198,6 +203,12 @@ export const TechniciansBack = () => {
           )}
         </div>
       </section>
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={isLoading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </>
   )
 }

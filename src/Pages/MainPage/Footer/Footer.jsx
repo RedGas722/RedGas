@@ -1,12 +1,41 @@
-import Logo from '../../../assets/Images/Redgas.png'
+import Logo from '../../../assets/Images/Redgas.webp'
 import { useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react"
 import { Link } from 'react-scroll'
+import { faEnvelope, faPhone, faLocationDot } from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { Buttons } from '../../../UI/Login_Register/Buttons'
 
 export const Footer = () => {
     const navigate = useNavigate();
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    const Contact = () => {
+        return (
+            <div className='text-white flex flex-col gap-4 z-[2]'>
+                <h3 className='text-2xl font-bold'>Contáctanos</h3>
+                <div className='pl-[8px]'>
+                    <div>
+                        <p className='flex gap-2'><span><FontAwesomeIcon icon={faEnvelope} className='text-[var(--Font-Nav)]' /></span> john@doe.com </p>
+                    </div>
+                    <div>
+                        <p className='flex gap-2'><span><FontAwesomeIcon icon={faPhone} className='text-[var(--Font-Nav)]' /></span> 3101234567 </p>
+                    </div>
+                    <div>
+                        <p className='flex gap-2'><span><FontAwesomeIcon icon={faLocationDot} className='text-[var(--Font-Nav)]' /></span> 1823 Cra. 21, Armenia, Quindío </p>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
+    const Reserved = () => {
+        return (
+            <div className="p-[20px_0] border-t z-[2] w-[98%] self-center border-[var(--main-color-sub)] text-white items-center justify-center sm:flex">
+                <p>© 2025 RedGas.</p>
+            </div>
+        )
+    }
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -15,10 +44,12 @@ export const Footer = () => {
 
     if (isLoggedIn) {
         return (
-            <footer className="footer py-20 bg-[var(--main-color)] text-white">
-                <div className='flex flex-col items-center justify-center'>
+            <footer className="footer pt-20 px-1.5 flex flex-col gap-20 h-350px bg-[var(--main-color)]">
+                <div className='flex items-end justify-center flex-wrap gap-4 lg:gap-80'>
                     <div className='items-center z-[2] flex flex-col gap-3 sm:max-w-md text-center text-white'>
                         <img src={Logo} className="w-32 sm:mx-auto" />
+                        <h1 className='text-3xl sm:text-4xl text-center font-bold text-[var(--Font-Nav)]'>RedGas</h1>
+
                         <p className="text-lg font-bold">Bienvenido de nuevo!</p>
                         <Link id="linkHero" to="Hero" smooth={true} duration={500} offset={-900} >
                             <Buttons
@@ -31,16 +62,22 @@ export const Footer = () => {
                                 textColor='var(--main-color)'
                             />
                         </Link>
-                        <p className="text-sm">Gracias por confiar en RedGas.</p>
+                        <p className="text-sm">Gracias por confiar en nosotros.</p>
                     </div>
+                    {
+                        Contact()
+                    }
                 </div>
+                {
+                    Reserved()
+                }
             </footer>
         );
     }
 
     return (
-        <footer className="footer py-20 px-1.5 h-350px bg-[var(--main-color)]">
-            <div className="flex flex-col items-center justify-center">
+        <footer className="footer pt-20 px-1.5 flex flex-col gap-20 h-350px bg-[var(--main-color)]">
+            <div className="flex items-end justify-center flex-wrap gap-4 lg:gap-80">
                 <div className="items-center z-[2] flex flex-col gap-3 sm:max-w-md text-center text-white">
                     <img src={Logo} className="w-32 sm:mx-auto" />
                     <p>
@@ -64,7 +101,13 @@ export const Footer = () => {
                         </button>
                     </div>
                 </div>
+                {
+                    Contact()
+                }
             </div>
+            {
+                Reserved()
+            }
         </footer>
     );
 }

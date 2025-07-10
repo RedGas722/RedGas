@@ -8,7 +8,7 @@ const convertirBase64AUrl = (imagen) => {
   if (typeof imagen === 'string') {
     return `data:image/png;base64,${imagen}`
   }
-  if (typeof imagen === 'object' && imagen.type === 'Buffer' && Array.isArray(imagen.data)) {
+  if (typeof imagen === 'object' && imagen.type === 'Buffer' && Array.isArray(imagen.data)) {z
     const byteArray = new Uint8Array(imagen.data)
     const binaryString = byteArray.reduce((acc, byte) => acc + String.fromCharCode(byte), '')
     const base64String = btoa(binaryString)

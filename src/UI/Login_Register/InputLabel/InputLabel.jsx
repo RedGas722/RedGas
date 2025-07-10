@@ -76,7 +76,7 @@ export const InputLabel = ({
                         <input
                             onPaste={type === "3" ? (e => e.preventDefault()) : undefined}
                             type={inputType}
-                            className={`NeoSubContainer_inset_TOTAL inputs relative text-[var(--main-color)] w-full border-0 outline-0 ${showCurrency && type === "5" ? "pl-8" : "p-[10px_10px_10px_15px]"
+                            className={`NeoSubContainer_inset_TOTAL inputs relative text-[var(--main-color)] !w-full border-0 outline-0 ${showCurrency && type === "5" ? "pl-8 w-full" : "p-[10px_10px_10px_15px]"
                                 } ${placeholderError ? 'placeholder:text-red-500' : 'placeholder:text-[var(--main-color-sub)]'} ${type === "5" && showCurrency
                                     ? "pl-8 pr-4 py-[10px]" // más padding izq si hay símbolo
                                     : "p-[10px_10px_10px_15px]"

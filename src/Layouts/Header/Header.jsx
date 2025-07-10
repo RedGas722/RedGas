@@ -4,6 +4,7 @@ import { gsap } from 'gsap';
 import { SearchBarr } from "../../UI/Header/SearchBarr/SearchBarr"
 import { Navs } from "../../UI/Header/Nav/Nav"
 import useMediaQuery from '@mui/material/useMediaQuery'
+import { getUserInitialsFromToken } from "../../UI/Utils/TokenUtils";
 import { jwtDecode } from "jwt-decode";
 import './Header.css'
 
@@ -158,7 +159,7 @@ export const Header = ({ classUser, classNavs }) => {
         >
             {((!isDesktop && hamburger) || (isDesktop && scrolled)) && (
                 <h2 className="justify-self-center flex font-bold text-4xl text-[var(--Font-Nav)]">
-                    Red Gas
+                    RedGas
                 </h2>
             )}
 
@@ -217,7 +218,6 @@ export const Header = ({ classUser, classNavs }) => {
                     {token && type == 2 && (
                         <>
                             <div onClick={() => navigate('/ProfileGeneral')} className="menu-list">Perfil</div>
-                            <div onClick={() => navigate('/CostumerMyService')} className="menu-list">Mi Servicio</div>
                             <div onClick={() => navigate('/Login')} className="menu-list">Cambiar Cuenta</div>
                             <div onClick={() => handSignOut()} className="menu-list">Cerrar Sesion</div>
                         </>

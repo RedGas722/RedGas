@@ -78,7 +78,7 @@ const ServicesModal = ({ onClose }) => {
   const [historial, setHistorial] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchFacturasCliente = async () => {
+  const fetchHistorial = async () => {
     try {
       const token = localStorage.getItem("token");
       if (!token) throw new Error("No estás autenticado");
@@ -104,10 +104,6 @@ const ServicesModal = ({ onClose }) => {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    fetchFacturasCliente();
-  }, []);
 
   return (
     <div className="fixed inset-0 z-50 bg-black/30 backdrop-blur-sm flex justify-center items-center">

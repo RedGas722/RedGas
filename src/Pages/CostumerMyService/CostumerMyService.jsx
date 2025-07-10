@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faUser } from "@fortawesome/free-solid-svg-icons"
+import { faEnvelope, faLocationDot, faPhone, faUser, faUserCircle } from "@fortawesome/free-solid-svg-icons"
 import { BtnBack } from "../../UI/Login_Register/BtnBack"
 import { Buttons } from "../../UI/Login_Register/Buttons"
 import { useNavigate } from "react-router-dom"
@@ -46,7 +46,7 @@ export const CostumerMyService = () => {
           }
 
           const datainfo = await response.json()
-          
+
           if (!datainfo.get) {
             alertSendForm('change', '', '')
             navigate('/Services')
@@ -54,34 +54,35 @@ export const CostumerMyService = () => {
 
           const firstParse = JSON.parse(datainfo.get)
           const secondParse = JSON.parse(JSON.parse(firstParse.item))
-          
+
           if (secondParse.error) {
-            setChange(true) 
+            setChange(true)
             handleChangeService()
             return
           }
                   
+
           setUser(firstParse.userName)
           setPhone(firstParse.userPhone)
           setAddress(firstParse.userAddress)
           setDescription(secondParse.resultado.input)
-          
+
           Swal.close()
         } catch (error) {
         }
       }
-      
+
       fetchData()
     }
   }, [])
-  
+
   const handleInProcess = async (id) => {
     try {
       const respon = await fetch(URL_TECHNICIAN, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
       })
-      
+
       const data = await respon.json()
       data.get.map(item => {
         if (item.userid == id) {
@@ -89,12 +90,12 @@ export const CostumerMyService = () => {
         }
       })
     } catch (err) {
-      
+
     }
-    
+
   }
-  
-  const handleChangeService = async () => {    
+
+  const handleChangeService = async () => {
     if (change == false) {
       const confirmed = await Swal.fire({
         title: '¿Estás seguro?',
@@ -228,33 +229,45 @@ export const CostumerMyService = () => {
 
   return (
     <div>
-      <div className="flex z-[2] p-[0_5px] items-center justify-between ">
-        <div className="btnDown">
+      <div className="flex z-[2] p-[5px] items-center justify-between ">
+        <div className="z-[2] flex flex-col text-center gap-2 sm:gap-0 sm:flex-row sm:justify-between items-center w-full">
           <BtnBack To='/' />
+          <div>
+            <h2 className="font-bold text-3xl sm:text-4xl text-[var(--Font-Nav)]">Mi servicio</h2>
+            {info === false && (
+              <div className="border-[2px] border-[var(--Font-Yellow)] rounded-lg p-2">
+                <h3>tu servicio esta en proceso de aceptacion...</h3>
+              </div>
+            )}
+            {info === true && (
+              <div className="border-[2px] border-[var(--Font-Nav)] rounded-lg p-2">
+                <h3>tu servicio ha sido aceptado</h3>
+              </div>
+            )}
+          </div>
         </div>
         <div>
-          <h2 className=" font-bold text-4xl text-[var(--Font-Nav)]">MI SERVICIO</h2>
-          {info === false && (
-            <div className="border-[2px] border-[var(--Font-Yellow)] rounded-lg p-2">
-              <h3>tu servicio esta en proceso de aceptacion...</h3>
-            </div>
-          )}
-          {info === true && (
-            <div className="border-[2px] border-[var(--Font-Nav)] rounded-lg p-2">
-              <h3>tu servicio ha sido aceptado</h3>
-            </div>
-          )}
+
         </div>
       </div>
       <section className="h-fit z-[2] flex flex-wrap justify-center text-[var(--main-color)] items-center gap-[20px] p-20">
         <div className="flex flex-col z-[2] flex-wrap justify-center max-w-[700px] min-w-0 NeoContainer_outset_TL p-5 gap-3">
 
-          <div className="text-[var(--main-color-sub)] pl-2 gap-3 flex items-center font-bold w-fit">
+          <div className="text-[var(--main-color-sub)] leading-[20px] pl-2 gap-3 flex flex-wrap justify-start items-center font-bold w-fit">
             <FontAwesomeIcon icon={faUser} className="text-[var(--main-color)] text-5xl" />
-            <div className="flex flex-col justify-center font-light leading-[20px] gap-[2px]">
-              <p className="text-xl font-bold text-[var(--main-color)]">{user}</p>
-              <p className="text-[1rem]">{phone}</p>
-              <p className="text-[1rem]">{address}</p>
+            <div className="flex flex-col justify-center font-normal gap-[8px] text-[var(--main-color)]">
+              <div className="flex items-center gap-1">
+                <FontAwesomeIcon icon={faUserCircle} className="relative top-1 text-2xl text-[var(--Font-Nav)]" />
+                <p className="text-xl font-bold text-[var(--main-color)]">{user}</p>
+              </div>
+              <div className="flex items-center gap-1">
+                <FontAwesomeIcon icon={faPhone} className="text-1xl w-[15px] text-[var(--Font-Nav-shadow)]" />
+                <p className="text-[1rem]">{phone}</p>
+              </div>
+              <div className="flex items-center gap-1">
+                <FontAwesomeIcon icon={faLocationDot} className="text-1xl w-[15px] text-[var(--Font-Nav-shadow)]" />
+                <p className="text-[1rem]">{address}</p>
+              </div>
             </div>
           </div>
 
@@ -263,17 +276,17 @@ export const CostumerMyService = () => {
             <p className="whitespace-pre-line text-[var(--main-color)]">{description}</p>
           </div>
           {info === false && (
-            <div className="z-[2] flex justify-center items-center gap-4">
+            <div className="z-[2] grid grid-cols-1 grid-rows-2 sm:grid-cols-2 sm:grid-rows-1 justify-center items-center gap-4">
               <Buttons
                 type="submit"
                 nameButton="Eliminar Servicio"
-                Onclick={handleDeleteService}
+                Onclick={() => handleDeleteService()}
                 className="bg-[var(--Font-Nav2)] hover:bg-[var(--Font-Nav2-shadow)] text-white font-semibold py-2 px-4 rounded-xl shadow-md transition duration-300"
               />
               <Buttons
                 type="submit"
                 nameButton="Cambiar Servicio"
-                Onclick={handleChangeService}
+                Onclick={() => handleChangeService()}
                 className="bg-[var(--Font-Nav)] hover:bg-[var(--Font-Nav-shadow)] text-white font-semibold py-2 px-4 rounded-xl shadow-md transition duration-300"
               />
             </div>

@@ -1,4 +1,4 @@
-import React from 'react'
+import { confirmDelete } from '../../../UI/Alert/Alert'
 import { DeleteContract } from '../Delete/Delete'
 import { Buttons } from '../../../UI/Login_Register/Buttons'
 
@@ -11,20 +11,27 @@ const CardContractsBack = ({ contrato, setRefrescar, onUpdateClick, empleados, a
       </div>
     )
   }
-
+  
   const handleDelete = async () => {
-    const confirmar = window.confirm(`¿Seguro que quieres eliminar el(los) contrato(s) del empleado #${contrato.id_empleado}?`)
-    if (!confirmar) return
+    const confirmado = await confirmDelete(
+      `¿Seguro que quieres eliminar el(los) contrato(s) del empleado #${contrato.id_empleado}?`,
+      `Contrato eliminado correctamente.`
+    );
 
-    const { success, message } = await DeleteContract(contrato.id_empleado)
+    if (!confirmado) return;
+
+    const { success, message } = await DeleteContract(contrato.id_empleado);
 
     if (success) {
-      alert(message)
-      if (setRefrescar) setRefrescar(true)
+      if (setRefrescar) setRefrescar(true);
     } else {
-      alert(`Error: ${message}`)
+      Swal.fire({
+        icon: 'error',
+        title: 'Error al eliminar',
+        text: message || 'Ocurrió un error inesperado',
+      });
     }
-  }
+  };
 
   // Buscar empleado y admin por ID
   const empleado = empleados.find(e => e.id_empleado === contrato.id_empleado)
@@ -36,7 +43,7 @@ const CardContractsBack = ({ contrato, setRefrescar, onUpdateClick, empleados, a
         Contrato #{contrato.id_contrato}
       </h2>
 
-      <div className="flex flex-col text-sm text-[var(--main-color)] text-left w-full">
+      <div className="flex flex-col text-sm gap-1 text-[var(--main-color)] text-left w-full">
         <p className="font-medium flex items-center gap-1">
           <span className="font-bold text-[15px]">Fecha:</span>
           <span>{contrato.fecha_contrato.slice(0, 10)}</span>
@@ -53,13 +60,19 @@ const CardContractsBack = ({ contrato, setRefrescar, onUpdateClick, empleados, a
           <span className="font-bold text-[15px]">Salario:</span>
           <span>{contrato.salario}</span>
         </p>
-        <p className="font-medium flex items-center gap-1">
-          <span className="font-bold text-[15px]">Admin:</span>
-          <span>{admin ? `${admin.nombre_admin} (${admin.correo_admin})` : contrato.id_admin}</span>
+        <p className="font-medium flex items-start gap-1">
+          <span className="font-bold text-[15px]">Empleador:</span>
+          <div className='flex flex-col'>
+            <span className='truncate max-w-[200px]'>{admin.nombre_admin}</span>
+            <span className='truncate max-w-[200px]'>{admin ? `(${admin.correo_admin})` : contrato.id_admin}</span>
+          </div>
         </p>
-        <p className="font-medium flex items-center gap-1">
+        <p className="font-medium flex items-start gap-1">
           <span className="font-bold text-[15px]">Empleado:</span>
-          <span>{empleado ? `${empleado.nombre_empleado} (${empleado.correo_empleado})` : contrato.id_empleado}</span>
+          <div className='flex flex-col'>
+            <span className='truncate max-w-[200px]'>{empleado.nombre_empleado}</span>
+            <span className='truncate max-w-[200px]'>{empleado ? `(${empleado.correo_empleado})` : contrato.id_empleado}</span>
+          </div>
         </p>
       </div>
 

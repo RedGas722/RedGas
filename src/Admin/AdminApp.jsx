@@ -1,4 +1,6 @@
 import { useNavigate } from 'react-router-dom'
+import { faChessKing, faChessQueen } from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useEffect, useState } from 'react'
 import { BtnBack } from "../UI/Login_Register/BtnBack"
 import { Buttons } from '../UI/Login_Register/Buttons'
@@ -16,41 +18,58 @@ export const AdminApp = () => {
     }, [])
 
     return (
-        <section className='AdminPanel flex flex-col h-dvh gap-20 p-[5px]'>
+        <section className='AdminPanel bg-linear-[130deg] from-[#c7c7c7] via-[#f2f2f2] to-[#c7c7c7] sm:gap-30 flex flex-col h-dvh gap-10 p-[5px]'>
             <div className='flex flex-col gap-2 items-center sm:gap-0 sm:justify-between sm:flex-row'>
                 <BtnBack To='/' />
-                <h2 className='z-[2] font-bold text-4xl text-[var(--Font-Nav)]'>ADMINISTRADOR</h2>
+                <h2 className='z-[2] font-bold text-4xl text-[var(--Font-Nav)]'>Panel de control</h2>
             </div>
-            <div className="Admin bg-[var(--Bacground-Admin)] flex items-center justify-center">
-                <section id="sideBarr" className="z-[2] h-fit gap-10  justify-center justify-self-center self-center flex flex-wrap">
+            <div className="Admin flex items-center justify-center">
+                <section id="sideBarr" className="z-[2] h-fit justify-center justify-self-center self-center flex flex-wrap">
 
                     {/* Si es admin, mostrar todo */}
                     {tipoUsuario === 1 && (
-                        <>
-                            <Buttons subTextBTN='Técnicos' onClick={() => navigate('/Admin/Technicians')} width='104px' height='104px' padding='0' nameButton={<img src='/Assets/Icons/Tecnic.png' className='w-20 no-drag brightness-80' />} />
-                            <Buttons subTextBTN='Clientes' onClick={() => navigate('/Admin/Clients')} width='104px' height='104px' padding='0' nameButton={<img src='/Assets/Icons/Client.png' className='w-20 no-drag brightness-80' />} />
-                            <Buttons subTextBTN='Empleados' onClick={() => navigate('/Admin/Employees')} width='104px' height='104px' padding='0' nameButton={<img src='/Assets/Icons/Employer.png' className='w-20 no-drag brightness-80' />} />
-                            <Buttons subTextBTN='Productos' onClick={() => navigate('/Admin/Products')} width='104px' height='104px' padding='0' nameButton={<img src='/Assets/Icons/Product.png' className='w-20 no-drag brightness-80' />} />
-                            <Buttons subTextBTN='Facturas' onClick={() => navigate('/Admin/Factures')} width='104px' height='104px' padding='0' nameButton={<img src='/Assets/Icons/Facture.png' className='w-20 no-drag brightness-80' />} />
-                            <Buttons subTextBTN='Categorias' onClick={() => navigate('/Admin/Categories')} width='104px' height='104px' padding='0' nameButton={<img src='/Assets/Icons/Categories.png' className='w-20 no-drag brightness-80' />} />
-                            <Buttons subTextBTN='Admin' onClick={() => navigate('/Admin/Admins')} width='104px' height='104px' padding='0' nameButton={<img src='/Assets/Icons/Admin.png' className='w-20 no-drag brightness-80' />} />
-                            <Buttons subTextBTN='Contratos' onClick={() => navigate('/Admin/Contracts')} width='104px' height='104px' padding='0' nameButton={<img src='/Assets/Icons/Contract.png' className='w-20 no-drag brightness-80' />} />
-                            <Buttons subTextBTN='Ventas' onClick={() => navigate('/Admin/Sales')} width='104px' height='104px' padding='0' nameButton={<img src='/Assets/Icons/Sales.png' className='w-20 no-drag brightness-80' />} />
-                            <Buttons subTextBTN='Servicios' onClick={() => navigate('/Admin/ServicesCompleted')} width='104px' height='104px' padding='0' nameButton={<img src='/Assets/Icons/Services.png' className='w-20 no-drag brightness-80' />} />
-                        </>
+                        <div className='BTNS flex flex-wrap w-[50%] gap-8 justify-center'>
+                            {/* <div className='flex flex-wrap w-fit gap-10 justify-center NeoContainer_outset_TL p-[10px_10px] sm:p-[20px_20px]'> */}
+                            <Buttons subTextBTN='Técnicos' onClick={() => navigate('/Admin/Technicians')} radius='10' width='144px' height='144px' padding='0' nameButton={<img src='/Assets/Icons/Tecnic.webp' className='p-[5px_5px] w-24 no-drag brightness-80' />} />
+                            <Buttons subTextBTN='Clientes' onClick={() => navigate('/Admin/Clients')} radius='10' width='144px' height='144px' padding='0' nameButton={<img src='/Assets/Icons/Client.webp' className='p-[5px_5px] w-24 no-drag brightness-80' />} />
+                            <Buttons subTextBTN='Empleados' onClick={() => navigate('/Admin/Employees')} radius='10' width='144px' height='144px' padding='0' nameButton={<img src='/Assets/Icons/Employer.webp' className='p-[5px_5px] w-24 no-drag brightness-80' />} />
+                            <Buttons subTextBTN='Productos' onClick={() => navigate('/Admin/Products')} radius='10' width='144px' height='144px' padding='0' nameButton={<img src='/Assets/Icons/Product.webp' className='p-[5px_5px] w-24 no-drag brightness-80' />} />
+                            <Buttons subTextBTN='Facturas' onClick={() => navigate('/Admin/Factures')} radius='10' width='144px' height='144px' padding='0' nameButton={<img src='/Assets/Icons/Facture.webp' className='p-[5px_5px] w-24 no-drag brightness-80' />} />
+                            {/* </div> */}
+                            {/* <div className='flex flex-wrap w-fit gap-10 justify-center NeoContainer_outset_TL p-[20px_20px]'> */}
+                            <Buttons subTextBTN='Categorias' onClick={() => navigate('/Admin/Categories')} radius='10' width='144px' height='144px' padding='0' nameButton={<img src='/Assets/Icons/Categories.webp' className='p-[5px_5px] w-24 no-drag brightness-80' />} />
+                            <Buttons subTextBTN='Admin' onClick={() => navigate('/Admin/Admins')} radius='10' width='144px' height='144px' padding='0' nameButton={<img src='/Assets/Icons/Admin.webp' className='p-[5px_5px] w-24 no-drag brightness-80' />} />
+                            <Buttons subTextBTN='Contratos' onClick={() => navigate('/Admin/Contracts')} radius='10' width='144px' height='144px' padding='0' nameButton={<img src='/Assets/Icons/Contract.webp' className='p-[5px_5px] w-24 no-drag brightness-80' />} />
+                            <Buttons subTextBTN='Ventas' onClick={() => navigate('/Admin/Sales')} radius='10' width='144px' height='144px' padding='0' nameButton={<img src='/Assets/Icons/Sales.webp' className='p-[5px_5px] w-24 no-drag brightness-80' />} />
+                            <Buttons subTextBTN='Servicios' onClick={() => navigate('/Admin/ServicesCompleted')} radius='10' width='144px' height='144px' padding='0' nameButton={<img src='/Assets/Icons/Services.webp' className='p-[5px_5px] w-24 no-drag brightness-80' />} />
+                            {/* </div> */}
+                        </div>
                     )}
 
                     {/* Si es empleado, mostrar solo Productos y Servicios */}
                     {tipoUsuario === 3 && (
                         <>
-                            <Buttons subTextBTN='Productos' onClick={() => navigate('/Admin/Products')} width='104px' height='104px' padding='0' nameButton={<img src='/Assets/Icons/Product.png' className='w-20 no-drag brightness-80' />} />
-                            <Buttons subTextBTN='Ventas' onClick={() => navigate('/Admin/Sales')} width='104px' height='104px' padding='0' nameButton={<img src='/Assets/Icons/Sales.png' className='w-20 no-drag brightness-80' />} />
-                            <Buttons subTextBTN='Facturas' onClick={() => navigate('/Admin/Factures')} width='104px' height='104px' padding='0' nameButton={<img src='/Assets/Icons/Facture.png' className='w-20 no-drag brightness-80' />} />
-                            <Buttons subTextBTN='Servicios' onClick={() => navigate('/Admin/ServicesCompleted')} width='104px' height='104px' padding='0' nameButton={<img src='/Assets/Icons/Services.png' className='w-20 no-drag brightness-80' />} />
+                            <Buttons subTextBTN='Productos' onClick={() => navigate('/Admin/Products')} width='144px' height='144px' padding='0' nameButton={<img src='/Assets/Icons/Product.webp' className='p-[5px_5px] w-24 no-drag brightness-80' />} />
+                            <Buttons subTextBTN='Ventas' onClick={() => navigate('/Admin/Sales')} width='144px' height='144px' padding='0' nameButton={<img src='/Assets/Icons/Sales.webp' className='p-[5px_5px] w-24 no-drag brightness-80' />} />
+                            <Buttons subTextBTN='Facturas' onClick={() => navigate('/Admin/Factures')} width='144px' height='144px' padding='0' nameButton={<img src='/Assets/Icons/Facture.webp' className='p-[5px_5px] w-24 no-drag brightness-80' />} />
+                            <Buttons subTextBTN='Servicios' onClick={() => navigate('/Admin/ServicesCompleted')} width='144px' height='144px' padding='0' nameButton={<img src='/Assets/Icons/Services.webp' className='p-[5px_5px] w-24 no-drag brightness-80' />} />
+                            <Buttons subTextBTN='Productos' onClick={() => navigate('/Admin/Products')} width='144px' height='144px' padding='0' nameButton={<img src='/Assets/Icons/Product.webp' className='p-[5px_5px] w-24 no-drag brightness-80' />} />
+                            <Buttons subTextBTN='Ventas' onClick={() => navigate('/Admin/Sales')} width='144px' height='144px' padding='0' nameButton={<img src='/Assets/Icons/Sales.webp' className='p-[5px_5px] w-24 no-drag brightness-80' />} />
+                            <Buttons subTextBTN='Facturas' onClick={() => navigate('/Admin/Factures')} width='144px' height='144px' padding='0' nameButton={<img src='/Assets/Icons/Facture.webp' className='p-[5px_5px] w-24 no-drag brightness-80' />} />
                         </>
                     )}
 
                 </section>
+            </div>
+            <div className='w-full bg-[var(--Bacground-Admin)] h-fit flex flex-col items-center justify-center'>
+                {
+                    tipoUsuario === 1 ? <FontAwesomeIcon icon={faChessKing} className="text-[var(--Font-Nav)] text-4xl" /> :
+                        tipoUsuario === 3 ? <FontAwesomeIcon icon={faChessQueen} className="text-[var(--Font-Nav)] text-4xl" /> :
+                            <FontAwesomeIcon icon={faChessKing} className="text-[var(--Font-Nav)] text-3xl" />
+                }
+                <p className='font-bold text-3xl text-[var(--Font-Nav)]'>{
+                    tipoUsuario === 1 ? 'Administrador' : tipoUsuario === 3 ? 'Empleado' : 'Usuario Desconocido'
+                }</p>
             </div>
         </section>
     )
