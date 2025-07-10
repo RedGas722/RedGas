@@ -167,6 +167,7 @@ export const Cards = ({ uniqueId, productos = [] }) => {
                 <div className="card-footer">
                   <div className="card-price">
                     <p><span className="text-[var(--Font-Nav-shadow)]">$</span> {(parseFloat(producto.precio_producto) || 0).toLocaleString()} <span className="text-[var(--main-color-sub)] text-[12px]">Cop</span></p>
+                    <p className="text-[10px] text-[var(--Font-Nav2)]">IVA incluido</p>
                   </div>
                   <button className="card-btn" onClick={() => handleAddToCart(producto)}>
                     <FontAwesomeIcon icon={faCartShopping} />
@@ -226,7 +227,7 @@ export const Cards = ({ uniqueId, productos = [] }) => {
             &times;
           </button>
           {selectedProduct && (
-            <div className="card relative !rounded-[25px] flex flex-col items-center justify-center">
+            <div className="card relative !rounded-[25px]">
               <div className="card-img">
                 <div className="img h-full">
                   <img
@@ -239,7 +240,7 @@ export const Cards = ({ uniqueId, productos = [] }) => {
               <div className="flex gap-1 items-end justify-center">
                 <div className="card-title">{selectedProduct.nombre_producto}</div>
               </div>
-              <div className="card-subtitle">{selectedProduct.descripcion_producto}</div>
+              <div className="card-subtitle">{selectedProduct.descripcion_producto || "Sin descripción disponible."}</div>
               <div className="flex gap-1 text-[var(--main-color)] items-start justify-start">
                 <p>Stock:</p>
                 <span>{selectedProduct.stock}</span>

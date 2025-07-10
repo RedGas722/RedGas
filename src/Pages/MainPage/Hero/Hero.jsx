@@ -14,8 +14,8 @@ export const Hero = () => {
 
         tl.fromTo(
             sectionRef.current,
-            { scale: 0.92 },
-            { scale: 1 }
+            { scale: 0.92, reversed: true, opacity: 0 },
+            { scale: 1, opacity: 1 }
         )
             .fromTo(
                 logoRef.current,

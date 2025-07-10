@@ -78,13 +78,13 @@ const ServicesModal = ({ onClose }) => {
   const [historial, setHistorial] = useState([]);
   const [loading, setLoading] = useState(true);
 
-   const fetchHistorial = async () => {
-      try {
-         const token = localStorage.getItem("token");
-         if (!token) throw new Error("No estás autenticado");
+  const fetchHistorial = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) throw new Error("No estás autenticado");
 
-         const decoded = jwtDecode(token);
-         const userId = decoded.data.id;
+      const decoded = jwtDecode(token);
+      const userId = decoded.data.id;
 
       const res = await fetch(URL_SAVESERVICESGET, {
         method: "POST",
@@ -92,7 +92,7 @@ const ServicesModal = ({ onClose }) => {
         body: JSON.stringify({ id: userId }),
       });
 
-         if (!res.ok) throw new Error("Error al obtener historial");
+      if (!res.ok) throw new Error("Error al obtener historial");
 
       const data = await res.json();
       const parsed = JSON.parse(data.get);

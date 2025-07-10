@@ -179,6 +179,7 @@ export const CardsOffers = ({ uniqueId, productos = [] }) => {
                     <p className="text-[14px] text-[var(--Font-Nav-shadow)] line-through">
                       $ {(parseFloat(producto.precio_producto) || 0).toLocaleString()}
                     </p>
+                    <p className="text-[10px] text-[var(--Font-Nav2)]">IVA incluido</p>
                   </div>
                   <button className="card-btn_Offer" onClick={() => handleAddToCart(producto)}>
                     <FontAwesomeIcon icon={faCartShopping} />
