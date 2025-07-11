@@ -120,8 +120,6 @@ export const CardsOffers = ({ uniqueId, productos = [] }) => {
         price: redondearAMultiploDe50(producto.precio_producto),
         discount: producto.descuento || 0
       };
-      console.log("Item a agregar al carrito:", item);
-
       await agregarAlCarrito(item);
       Swal.fire({
         icon: "success",

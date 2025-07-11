@@ -39,6 +39,7 @@ export const ProductsModal = ({ factura, onClose }) => {
             nombre_producto: productoData.data.nombre_producto,
             precio_producto: productoData.data.precio_producto,
             descripcion_producto: productoData.data.descripcion_producto,
+            descuento: productoData.data.descuento,
             imagen: productoData.data.imagen
           }
         }))
@@ -66,11 +67,15 @@ export const ProductsModal = ({ factura, onClose }) => {
         ) : productos.length > 0 ? (
           <div className="grid grid-cols-2 gap-4">
             {productos.map((producto, index) => {
-              const imageUrl = convertirBase64AUrl(producto.imagen)
+              const imageUrl = convertirBase64AUrl(producto.imagen);
+
+              const precioConDescuento = producto.precio_producto * (1 - (producto.descuento || 0) / 100);
+              const precioRedondeado = Math.round(precioConDescuento / 50) * 50;
+
               return (
                 <div key={index} className="border p-4 rounded-lg shadow-md">
                   <p className="font-semibold text-lg text-gray-800 mb-2">{producto.nombre_producto}</p>
-                  
+
                   {imageUrl ? (
                     <img src={imageUrl} alt={producto.nombre_producto} className="w-full h-[200px] object-contain rounded mb-3" />
                   ) : (
@@ -81,11 +86,13 @@ export const ProductsModal = ({ factura, onClose }) => {
 
                   <p className="text-sm"><strong>Descripción:</strong> {producto.descripcion_producto}</p>
                   <p className="text-sm"><strong>Cantidad:</strong> {producto.cantidad_producto}</p>
-                  <p className="text-sm"><strong>Precio Unitario:</strong> {
-                    new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(producto.precio_producto || 0)
-                  }</p>
+                  <p className="text-sm">
+                    <strong>Precio Unitario:</strong> {
+                      new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(precioRedondeado)
+                    }
+                  </p>
                 </div>
-              )
+              );
             })}
           </div>
         ) : (

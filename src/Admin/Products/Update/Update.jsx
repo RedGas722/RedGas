@@ -66,11 +66,13 @@ export const UpdateModal = ({ onClose, setRefrescar, productoCarta }) => {
       const fechaOriginal = convertirFecha(productoCarta.fecha_descuento)
       const hoy = new Date().toISOString().slice(0, 10)
       const fechaFinal = fechaOriginal && fechaOriginal < hoy ? hoy : fechaOriginal
+      const precioSinIVA = parseFloat(productoCarta.precio_producto) / 1.19
+      const precioRedondeado = Math.round(precioSinIVA / 50) * 50
 
       setProducto({
         nuevoNombre: nombreInicial,
         nombreProducto: nombreInicial,
-        precio: productoCarta.precio_producto || '',
+        precio: precioRedondeado || '',
         descripcion: productoCarta.descripcion_producto || '',
         stock: productoCarta.stock || '',
         descuento: productoCarta.descuento || 0,

@@ -169,13 +169,6 @@ export const LoginTechnician = () => {
                             </label>
                             <div><p>Recordarme</p></div>
                         </label>
-                        <div className="text-[var(--Font-Nav)] text-[14px]">
-                            <Link to="/Login/ForgotPassword">
-                                <button type="button" className="cursor-pointer hover:text-[var(--Font-Nav-shadow)]">
-                                    <p>¿Olvidaste tu contraseña?</p>
-                                </button>
-                            </Link>
-                        </div>
                     </section>
                     <div className="flex flex-col gap-2.5 items-center justify-center">
                         <Buttons type="submit" nameButton="Iniciar" />

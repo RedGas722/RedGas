@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react'
 import { jwtDecode } from "jwt-decode"
 import bcrypt from 'bcryptjs'
 import Swal from 'sweetalert2'
+import { getUserInitialsFromToken } from "../../UI/Utils/TokenUtils";
 
 export const ProfileClient = () => {
   const [userInitials, setUserInitials] = useState("");

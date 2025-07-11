@@ -88,7 +88,7 @@ const CardsProductsBack = ({ producto, setRefrescar, onUpdateClick }) => {
             {new Intl.NumberFormat('es-CO', {
               style: 'currency',
               currency: 'COP',
-            }).format(producto.precio_producto || 0)}
+            }).format(Math.round(producto.precio_producto - (producto.precio_producto * (producto.descuento / 100))) || 0)}
           </p>
         </div>
       </div>
