@@ -48,7 +48,7 @@ export const AdminApp = () => {
 
                     {/* Si es empleado, mostrar solo Productos y Servicios */}
                     {tipoUsuario === 3 && (
-                        <>
+                        <div className='BTNS h-full flex flex-wrap w-[80%] 2xl:w-[50%] gap-8 justify-center'>
                             <Buttons subTextBTN='Productos' onClick={() => navigate('/Admin/Products')} width='144px' height='144px' padding='0' nameButton={<img src='/Assets/Icons/Product.webp' className='p-[5px_5px] w-24 no-drag brightness-80' />} />
                             <Buttons subTextBTN='Ventas' onClick={() => navigate('/Admin/Sales')} width='144px' height='144px' padding='0' nameButton={<img src='/Assets/Icons/Sales.webp' className='p-[5px_5px] w-24 no-drag brightness-80' />} />
                             <Buttons subTextBTN='Facturas' onClick={() => navigate('/Admin/Factures')} width='144px' height='144px' padding='0' nameButton={<img src='/Assets/Icons/Facture.webp' className='p-[5px_5px] w-24 no-drag brightness-80' />} />
@@ -56,7 +56,7 @@ export const AdminApp = () => {
                             <Buttons subTextBTN='Productos' onClick={() => navigate('/Admin/Products')} width='144px' height='144px' padding='0' nameButton={<img src='/Assets/Icons/Product.webp' className='p-[5px_5px] w-24 no-drag brightness-80' />} />
                             <Buttons subTextBTN='Ventas' onClick={() => navigate('/Admin/Sales')} width='144px' height='144px' padding='0' nameButton={<img src='/Assets/Icons/Sales.webp' className='p-[5px_5px] w-24 no-drag brightness-80' />} />
                             <Buttons subTextBTN='Facturas' onClick={() => navigate('/Admin/Factures')} width='144px' height='144px' padding='0' nameButton={<img src='/Assets/Icons/Facture.webp' className='p-[5px_5px] w-24 no-drag brightness-80' />} />
-                        </>
+                        </div>
                     )}
 
                 </section>
