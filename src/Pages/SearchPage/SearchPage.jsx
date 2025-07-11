@@ -34,7 +34,7 @@ export const SearchPage = () => {
         const decoded = jwtDecode(token);
         const tipoUsuario = decoded?.data?.tipo_usuario;
         setIsLoggedIn(true);
-        setIsAdmin(tipoUsuario === 1 || tipoUsuario === 3); // admin o empleado
+        setIsAdmin(tipoUsuario === 1 || tipoUsuario === 3 || tipoUsuario === 4); 
       } catch (error) {
         console.error("Error al decodificar el token:", error);
         localStorage.removeItem('token');
