@@ -10,6 +10,8 @@
   --Font-Nav2: #cc3b23;
   --Font-Nav2-shadow: #851f0f;
   --Font-Yellow: #B8860B;
+  --MP: #2ABCFF;
+  --PayPal: #27346A;
   --background-color: #ffff;
   --shadow-1: #CACACA;
   --shadow-2: #F2F2F2;
@@ -86,7 +88,7 @@ input[type="password"]::-webkit-reveal {
 
   .NeoContainer_outset_TL {
     background: var(--background-color);
-    border-radius: var(--radius-main);  
+    border-radius: var(--radius-main);
     box-shadow: var(--shadow-main);
   }
 

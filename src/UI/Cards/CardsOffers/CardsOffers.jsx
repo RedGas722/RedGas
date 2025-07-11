@@ -8,6 +8,7 @@ import { Buttons } from "../../Login_Register/Buttons";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import useEmblaCarousel from "embla-carousel-react";
+import { useSnackbar } from '../../Snackbar/SnackbarProvider';
 
 async function agregarAlCarrito(item) {
   const token = localStorage.getItem("token");
@@ -43,6 +44,7 @@ export const CardsOffers = ({ uniqueId, productos = [] }) => {
       1390: { slidesToScroll: 1 },
     },
   });
+  const { showSnackbar } = useSnackbar();
 
   useEffect(() => {
     if (!embla) return;
@@ -121,19 +123,11 @@ export const CardsOffers = ({ uniqueId, productos = [] }) => {
         discount: producto.descuento || 0
       };
       await agregarAlCarrito(item);
-      Swal.fire({
-        icon: "success",
-        title: "Producto agregado",
-        text: `"${producto.nombre_producto}" fue agregado al carrito`,
-      });
-
+      showSnackbar(`"${producto.nombre_producto}" fue agregado al carrito`, 4000, 'var(--Font-Nav-shadow)', 'white');
+      
     } catch (error) {
       console.error("Error al agregar al carrito", error);
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Ocurrió un error al agregar al carrito",
-      });
+      showSnackbar(`Ocurrió un error al agregar al carrito`, 4000, 'var(--Font-Nav2-shadow)', 'white');
     }
   };
 

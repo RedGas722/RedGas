@@ -67,7 +67,7 @@ export const SearchBarr = ({ className, productos }) => {
       </form>
 
       {sugerencias.length > 0 && (
-        <ul className="absolute top-[45px] z-[3] left-0 w-full bg-white text-black rounded-[10px] shadow-md z-50">
+        <ul className="absolute top-[45px] z-[3] left-0 w-full bg-white text-black rounded-[10px] shadow-md">
           {sugerencias.map((producto) => (
             <li
               key={producto.id_producto}

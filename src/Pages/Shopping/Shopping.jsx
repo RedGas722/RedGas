@@ -8,9 +8,10 @@ import SpeedDialIcon from '@mui/material/SpeedDialIcon'
 import SpeedDialAction from '@mui/material/SpeedDialAction'
 import { SvgPayPal } from "../../UI/Svg/SvgPayPal"
 import SvgMercadoPago from "../../UI/Svg/SvgMP"
-import { Backdrop, CircularProgress } from '@mui/material';
+import { Backdrop, CircularProgress, Drawer } from '@mui/material';
 import BtnBack from "../../UI/Login_Register/BtnBack"
 import Swal from 'sweetalert2'
+import NotFound from "../NotFound/NotFound"
 import { jwtDecode } from "jwt-decode"
 import { Buttons } from "../../UI/Login_Register/Buttons"
 
@@ -21,6 +22,7 @@ export const Shopping = () => {
   const [totalPrice, setTotalPrice] = useState(0)
   const [error, setError] = useState(null)
   const [inputQuantities, setInputQuantities] = useState({}) // Estado para manejar los valores de los inputs
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const token = localStorage.getItem("token")
 
   const fetchProducts = async () => {
@@ -342,7 +344,7 @@ export const Shopping = () => {
     }
   };
 
-  if (error) return <p>Error: {error}</p>
+  if (error) return <NotFound />
 
   const actions = [
     {
@@ -361,6 +363,9 @@ export const Shopping = () => {
 
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
+
+  const handleDrawerOpen = () => setDrawerOpen(true);
+  const handleDrawerClose = () => setDrawerOpen(false);
 
   const redondearAMultiploDe50 = (valor) => {
     return Math.round(valor / 50) * 50;
@@ -432,7 +437,8 @@ export const Shopping = () => {
                       <div className="flex items-center gap-5 flex-wrap">
                         <Buttons
                           nameButton='Pagar con PayPal'
-                          borderColor='var(--Font-Nav)'
+                          borderColor={'var(--PayPal)'}
+                          textColor={'var(--PayPal)'}
                           height='40px'
                           borderWidth='1'
                           onClick={() => handlePayWithPaypal(subtotal, producto.id_producto)}
@@ -441,7 +447,8 @@ export const Shopping = () => {
                         />
                         <Buttons
                           nameButton='Pagar con MP'
-                          borderColor='var(--Font-Nav)'
+                          borderColor={'var(--MP)'}
+                          textColor={'var(--MP)'}
                           height='40px'
                           borderWidth='1'
                           onClick={() => handlePayWithMercadoPago(subtotal, producto.id_producto)}
@@ -467,44 +474,73 @@ export const Shopping = () => {
           )
         })}
 
-        <div className="flex flex-col fixed bottom-0 left-2 gap-4">
+        <div className="flex flex-col items-center fixed bottom-2 left-2 gap-2">
           {/* Total del carrito */}
           <p className="text-2xl font-semibold text-[var(--main-color)]">
             Total: ${totalPrice.toLocaleString("es-CO")}
           </p>
+          <Buttons
+            nameButton={'Opciones de pago'}
+            textColor='var(--main-color)'
+            borderColor='var(--main-color)'
+            height='40px'
+            borderWidth='1'
+            width={'200px'}
+            onClick={handleDrawerOpen}
+          >
+            Opciones de pago
+          </Buttons>
         </div>
-      </div>
 
-      {/* SpeedDial */}
-      <Box sx={{ height: 330, transform: 'translateZ(0px)', flexGrow: 1, position: 'fixed', bottom: 0, right: 0, zIndex: 2 }}>
-        <SpeedDial
-          ariaLabel="SpeedDial tooltip example"
-          sx={{ position: 'absolute', bottom: 16, right: 16 }}
-          icon={<SpeedDialIcon />}
-          onClose={handleClose}
-          onOpen={handleOpen}
-          open={open}
-          FabProps={{
+        <Drawer
+          anchor="bottom"
+          open={drawerOpen}
+          onClose={handleDrawerClose}
+          PaperProps={{
             sx: {
-              bgcolor: 'var(--main-color)',
-              color: 'white',
-              '&:hover': {
-                bgcolor: 'var(--main-color-sub)',
-              },
+              borderRadius: '20px 20px 0 0',
+              padding: 3,
+              minHeight: 180,
+              background: 'var(--background-color)',
+              boxShadow: 24,
             },
           }}
         >
-          {actions.map((action) => (
-            <SpeedDialAction
-              key={action.name}
-              icon={action.icon}
-              tooltipTitle={<span style={{ whiteSpace: 'nowrap' }}>{action.name}</span>}
-              tooltipOpen
-              onClick={handleClose}
-            />
-          ))}
-        </SpeedDial>
-      </Box>
+          <div className="flex flex-col items-center gap-6">
+            <h3 className="font-bold text-2xl text-[var(--main-color)] mb-2">Opciones de pago</h3>
+            <div className="flex flex-wrap gap-6 justify-center items-center">
+              <Buttons
+                nameButton={<FontAwesomeIcon icon={faTrash} className="text-[var(--Font-Nav2)] text-3xl brightness-[.8]" />}
+                subTextBTN={"Limpiar"}
+                width={"0.2rem"}
+                borderWidth={1}
+                borderColor={'var(--Font-Nav2)'}
+                textColor={'var(--Font-Nav2)'}
+                onClick={() => { handleClearCart(); handleDrawerClose(); }}
+              />
+              <Buttons
+                nameButton={<SvgMercadoPago />}
+                subTextBTN={"Mercado Pago"}
+                width={"0.2rem"}
+                borderWidth={1}
+                borderColor={'var(--MP)'}
+                textColor={'var(--MP)'}
+                onClick={() => { handlePayWithMercadoPago(); handleDrawerClose(); }}
+              />
+              <Buttons
+                nameButton={<SvgPayPal />}
+                subTextBTN={"PayPal"}
+                width={"0.2rem"}
+                borderWidth={1}
+                borderColor={'var(--PayPal)'}
+                textColor={'var(--PayPal)'}
+                onClick={() => { handlePayWithPaypal(); handleDrawerClose(); }}
+              />
+            </div>
+          </div>
+        </Drawer>
+      </div>
+
       <Backdrop
         sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={isLoading}

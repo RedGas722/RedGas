@@ -18,17 +18,17 @@ export const AdminApp = () => {
     }, [])
 
     return (
-        <section className='AdminPanel bg-linear-[130deg] from-[#c7c7c7] via-[#f2f2f2] to-[#c7c7c7] sm:gap-30 flex flex-col h-dvh gap-10 p-[5px]'>
+        <section className='AdminPanel bg-linear-[130deg] from-[#c7c7c7] via-[#f2f2f2] to-[#c7c7c7] sm:gap-30 flex flex-col h-fit lg:h-dvh gap-10 p-[5px] '>
             <div className='flex flex-col gap-2 items-center sm:gap-0 sm:justify-between sm:flex-row'>
                 <BtnBack To='/' />
                 <h2 className='z-[2] font-bold text-4xl text-[var(--Font-Nav)]'>Panel de control</h2>
             </div>
-            <div className="Admin flex items-center justify-center">
+            <div className="Admin flex pb-[20px] items-center justify-center">
                 <section id="sideBarr" className="z-[2] h-fit justify-center justify-self-center self-center flex flex-wrap">
 
                     {/* Si es admin, mostrar todo */}
                     {tipoUsuario === 1 && (
-                        <div className='BTNS flex flex-wrap w-[50%] gap-8 justify-center'>
+                        <div className='BTNS h-full flex flex-wrap w-[80%] 2xl:w-[50%] gap-8 justify-center'>
                             {/* <div className='flex flex-wrap w-fit gap-10 justify-center NeoContainer_outset_TL p-[10px_10px] sm:p-[20px_20px]'> */}
                             <Buttons subTextBTN='Técnicos' onClick={() => navigate('/Admin/Technicians')} radius='10' width='144px' height='144px' padding='0' nameButton={<img src='/Assets/Icons/Tecnic.webp' className='p-[5px_5px] w-24 no-drag brightness-80' />} />
                             <Buttons subTextBTN='Clientes' onClick={() => navigate('/Admin/Clients')} radius='10' width='144px' height='144px' padding='0' nameButton={<img src='/Assets/Icons/Client.webp' className='p-[5px_5px] w-24 no-drag brightness-80' />} />
@@ -61,11 +61,11 @@ export const AdminApp = () => {
 
                 </section>
             </div>
-            <div className='w-full bg-[var(--Bacground-Admin)] h-fit flex flex-col items-center justify-center'>
+            <div className='w-fit fixed hidden md:bottom-0 sm:left-0 bg-[var(--Bacground-Admin)] h-fit md:flex flex-col'>
                 {
-                    tipoUsuario === 1 ? <FontAwesomeIcon icon={faChessKing} className="text-[var(--Font-Nav)] text-4xl" /> :
-                        tipoUsuario === 3 ? <FontAwesomeIcon icon={faChessQueen} className="text-[var(--Font-Nav)] text-4xl" /> :
-                            <FontAwesomeIcon icon={faChessKing} className="text-[var(--Font-Nav)] text-3xl" />
+                    tipoUsuario === 1 ? <FontAwesomeIcon icon={faChessKing} className="text-[var(--Font-Nav)] hidden sm:block text-4xl" /> :
+                        tipoUsuario === 3 ? <FontAwesomeIcon icon={faChessQueen} className="hidden sm:block text-[var(--Font-Nav)] text-4xl" /> :
+                            <FontAwesomeIcon icon={faChessKing} className="hidden sm:block text-[var(--Font-Nav)] text-3xl" />
                 }
                 <p className='font-bold text-3xl text-[var(--Font-Nav)]'>{
                     tipoUsuario === 1 ? 'Administrador' : tipoUsuario === 3 ? 'Empleado' : 'Usuario Desconocido'

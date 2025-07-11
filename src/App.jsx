@@ -31,6 +31,7 @@ import { useEffect } from 'react'
 import { AdminApp } from './Admin/AdminApp'
 import ConfirmacionPayPal from './Pages/Shopping/ConfirmacionPayPal.jsx'
 import ConfirmacionMercadoPago from './Pages/Shopping/ConfirmacionMP.jsx'
+import { SnackbarProvider } from './UI/Snackbar/SnackbarProvider.jsx'
 
 // 👇 Importar ruta protegida
 import { ProtectedRoute } from './Pages/Login/ProtectedRoutes.jsx'
@@ -195,24 +196,26 @@ export function AppContent() {
 export function App() {
     return (
         <LoadingProvider>
-            <div style={{ position: 'relative', minHeight: '100vh' }}>
-                {/* Fondo de fuego */}
-                <div style={{ width: '100%', height: '600px', position: 'fixed' }}>
-                    <BackgroundFire
-                        particleColors={['#F77E3B', '#F7B733', '#FF6F61', '#D9BF77', '#FFFA6F', '#323232']}
-                        particleCount={200}
-                        particleSpread={10}
-                        speed={0.1}
-                        particleBaseSize={100}
-                        sizeRandomness={1}
-                        moveParticlesOnHover={false}
-                        alphaParticles={false}
-                        disableRotation={false}
-                    />
+            <SnackbarProvider>
+                <div style={{ position: 'relative', minHeight: '100vh' }}>
+                    {/* Fondo de fuego */}
+                    <div style={{ width: '100%', height: '600px', position: 'fixed' }}>
+                        <BackgroundFire
+                            particleColors={['#F77E3B', '#F7B733', '#FF6F61', '#D9BF77', '#FFFA6F', '#323232']}
+                            particleCount={200}
+                            particleSpread={10}
+                            speed={0.1}
+                            particleBaseSize={100}
+                            sizeRandomness={1}
+                            moveParticlesOnHover={false}
+                            alphaParticles={false}
+                            disableRotation={false}
+                        />
+                    </div>
+                    {/* Tu contenido normal */}
+                    <AppContent />
                 </div>
-                {/* Tu contenido normal */}
-                <AppContent />
-            </div>
+            </SnackbarProvider>
         </LoadingProvider>
     )
 }

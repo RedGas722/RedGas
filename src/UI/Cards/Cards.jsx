@@ -4,12 +4,12 @@ import { useLoading } from "../Loading/Loading"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowRight, faArrowLeft, faCartShopping } from '@fortawesome/free-solid-svg-icons'
 import { useNavigate } from "react-router-dom"
-import { ExpandMore } from "./ExpandMore/ExpandMore"
 import Swal from 'sweetalert2'
 import { Buttons } from "../Login_Register/Buttons"
 import Modal from '@mui/material/Modal'
 import Box from '@mui/material/Box'
 import useEmblaCarousel from 'embla-carousel-react'
+import { useSnackbar } from '../Snackbar/SnackbarProvider';
 
 async function agregarAlCarrito(item) {
   const token = localStorage.getItem("token");
@@ -40,6 +40,7 @@ export const Cards = ({ uniqueId, productos = [] }) => {
     align: 'start',
     loop: false,
   });
+  const { showSnackbar } = useSnackbar();
 
   useEffect(() => {
     if (productos.length === 0) {
@@ -127,19 +128,10 @@ export const Cards = ({ uniqueId, productos = [] }) => {
       };
 
       await agregarAlCarrito(item);
-      Swal.fire({
-        icon: 'success',
-        title: 'Producto agregado',
-        text: `"${producto.nombre_producto}" fue agregado al carrito`
-      });
-
+      showSnackbar(`"${producto.nombre_producto}" fue agregado al carrito`, 4000, 'var(--Font-Nav-shadow)', 'white');
     } catch (error) {
       console.error("Error al agregar al carrito", error);
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: "Ocurrió un error al agregar al carrito"
-      });
+      showSnackbar(`Ocurrió un error al agregar al carrito`, 4000, 'var(--Font-Nav2-shadow)', 'white');
     }
   };
 
@@ -169,7 +161,7 @@ export const Cards = ({ uniqueId, productos = [] }) => {
                     <p><span className="text-[var(--Font-Nav-shadow)]">$</span> {(parseFloat(producto.precio_producto) || 0).toLocaleString()} <span className="text-[var(--main-color-sub)] text-[12px]">Cop</span></p>
                     <p className="text-[10px] text-[var(--Font-Nav2)]">IVA incluido</p>
                   </div>
-                  <button className="card-btn" onClick={() => handleAddToCart(producto)}>
+                  <button className="card-btn" onClick={() => { handleAddToCart(producto); }}>
                     <FontAwesomeIcon icon={faCartShopping} />
                   </button>
                 </div>
