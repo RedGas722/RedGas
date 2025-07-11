@@ -8,25 +8,27 @@ import SpeedDialIcon from '@mui/material/SpeedDialIcon'
 import SpeedDialAction from '@mui/material/SpeedDialAction'
 import { SvgPayPal } from "../../UI/Svg/SvgPayPal"
 import SvgMercadoPago from "../../UI/Svg/SvgMP"
+import { Backdrop, CircularProgress } from '@mui/material';
 import BtnBack from "../../UI/Login_Register/BtnBack"
 import Swal from 'sweetalert2'
 import { jwtDecode } from "jwt-decode"
 import { Buttons } from "../../UI/Login_Register/Buttons"
 
 export const Shopping = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const [open, setOpen] = useState(false)
   const [products, setProducts] = useState([])
   const [totalPrice, setTotalPrice] = useState(0)
-  const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [inputQuantities, setInputQuantities] = useState({}) // Estado para manejar los valores de los inputs
   const token = localStorage.getItem("token")
 
   const fetchProducts = async () => {
+    setIsLoading(true)
     try {
       if (!token) {
         setError("Debes iniciar sesión para ver el carrito");
-        setLoading(false);
+        setIsLoading(false);
         return;
       }
 
@@ -104,19 +106,10 @@ export const Shopping = () => {
       } else {
         setTotalPrice(totalServidor);
       }
-
-
-      // Inicializar los valores de los inputs con las cantidades actuales
-      const initialQuantities = {}
-      productDetails.forEach(product => {
-        initialQuantities[product.id_producto] = product.cantidad
-      })
-      setInputQuantities(initialQuantities)
-
     } catch (err) {
       setError(err.message || "Error desconocido");
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
@@ -133,7 +126,6 @@ export const Shopping = () => {
       if (!res.ok) throw new Error("No se pudo obtener el total del carrito")
 
       const data = await res.json()
-      console.log("Total del servidor:", data.total)
       setTotalPrice(data.total)
     } catch (err) {
       console.error("Error al obtener el total:", err)
@@ -232,30 +224,6 @@ export const Shopping = () => {
     }
   }
 
-  // Función para manejar el cambio en el input
-  const handleInputChange = (productId, value) => {
-    const numericValue = parseInt(value) || 0
-    setInputQuantities(prev => ({
-      ...prev,
-      [productId]: numericValue
-    }))
-  }
-
-  // Función para aplicar la cantidad del input
-  const handleApplyQuantity = (productId) => {
-    const newQuantity = inputQuantities[productId]
-    if (newQuantity && newQuantity > 0) {
-      handleUpdateQuantity(productId, newQuantity)
-    }
-  }
-
-  // Función para manejar Enter en el input
-  const handleInputKeyPress = (e, productId) => {
-    if (e.key === 'Enter') {
-      handleApplyQuantity(productId)
-    }
-  }
-
   const handleClearCart = async () => {
     try {
       if (!token) {
@@ -296,7 +264,7 @@ export const Shopping = () => {
       const body = {
         cantidad: monto.toFixed(0),
         referencia: `ORD-${Date.now()}`,
-        id_producto: productId 
+        id_producto: productId
       }
 
       const res = await fetch("https://redgas.onrender.com/PagoPaypal", {
@@ -343,7 +311,7 @@ export const Shopping = () => {
       const body = {
         cantidad: monto.toFixed(0),
         referencia: `ORD-${Date.now()}`,
-        id_producto: productId 
+        id_producto: productId
       }
 
       const res = await fetch("https://redgas.onrender.com/PagoMP", {
@@ -374,12 +342,11 @@ export const Shopping = () => {
     }
   };
 
-  if (loading) return <p>Cargando productos...</p>
   if (error) return <p>Error: {error}</p>
 
   const actions = [
     {
-      icon: <FontAwesomeIcon icon={faTrash} alt='Agregar' onClick={handleClearCart} className="text-[var(--Font-Nav2)] text-2xl" />,
+      icon: <FontAwesomeIcon icon={faTrash} alt='Agregar' onClick={() => handleClearCart()} className="text-[var(--Font-Nav2)] text-2xl" />,
       name: 'Limpiar carrito'
     },
     {
@@ -444,8 +411,8 @@ export const Shopping = () => {
                     </div>
                     <p className='text-[var(--main-color-sub)] font-bold'>Descripción: <span className="font-normal"> {producto.descripcion_producto || "Sin descripción disponible."} </span> </p>
                     <p className='text-[var(--main-color-sub)]'>Cantidad: {producto.cantidad}</p>
-                    <section className="flex justify-between w-full">
-                      <div className="flex items-center gap-2">
+                    <section className="flex flex-wrap gap-4 justify-between w-full">
+                      <div className="flex items-center flex-wrap gap-2">
                         <input
                           type="number"
                           min={1}
@@ -500,9 +467,9 @@ export const Shopping = () => {
           )
         })}
 
-        <div className="flex flex-col items-center gap-4">
+        <div className="flex flex-col fixed bottom-0 left-2 gap-4">
           {/* Total del carrito */}
-          <p className="text-xl font-semibold text-[var(--main-color)]">
+          <p className="text-2xl font-semibold text-[var(--main-color)]">
             Total: ${totalPrice.toLocaleString("es-CO")}
           </p>
         </div>
@@ -538,6 +505,12 @@ export const Shopping = () => {
           ))}
         </SpeedDial>
       </Box>
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={isLoading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </section>
   )
 }

@@ -273,20 +273,20 @@ export const CostumerMyService = () => {
 
           <div className="z-[2]">
             <h4 className="text-xl font-bold text-[var(--main-color)]">Descripción de tu servicio</h4>
-            <p className="whitespace-pre-line text-[var(--main-color)]">{description}</p>
+            <p className="text-[var(--main-color)] short-description">{description}</p>
           </div>
           {info === false && (
             <div className="z-[2] grid grid-cols-1 grid-rows-2 sm:grid-cols-2 sm:grid-rows-1 justify-center items-center gap-4">
               <Buttons
                 type="submit"
                 nameButton="Eliminar Servicio"
-                Onclick={handleDeleteService}
+                Onclick={() => handleDeleteService()}
                 className="bg-[var(--Font-Nav2)] hover:bg-[var(--Font-Nav2-shadow)] text-white font-semibold py-2 px-4 rounded-xl shadow-md transition duration-300"
               />
               <Buttons
                 type="submit"
                 nameButton="Cambiar Servicio"
-                Onclick={handleChangeService}
+                Onclick={() => handleChangeService()}
                 className="bg-[var(--Font-Nav)] hover:bg-[var(--Font-Nav-shadow)] text-white font-semibold py-2 px-4 rounded-xl shadow-md transition duration-300"
               />
             </div>

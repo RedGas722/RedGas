@@ -65,12 +65,11 @@ export const CostumerServices = () => {
     switch (status) {
       case 'wait':
         Swal.fire({
-          title: 'Cargando...',
-          text: message || 'Estamos validando tu información.',
+          title: title || 'Procesando...',
+          text: message || 'Estamos procesando tu solicitud.',
           allowOutsideClick: false,
           allowEscapeKey: false,
           showConfirmButton: false,
-          timer: 6000,
           timerProgressBar: true,
           didOpen: () => Swal.showLoading(),
         })
@@ -342,9 +341,9 @@ export const CostumerServices = () => {
     <div>
       <div className="z-[2] p-[5px] flex flex-col text-center gap-2 sm:gap-0 sm:flex-row sm:justify-between items-center w-full">
         <BtnBack To='/' />
-        <h2 className="font-bold text-3xl sm:text-4xl text-[var(--Font-Nav)]">Servicios</h2>
+        <h2 className="font-bold text-3xl z-[2] sm:text-4xl text-[var(--Font-Nav)]">Servicios</h2>
       </div>
-      
+
       <section className="h-fit z-[2] flex flex-wrap justify-center text-[var(--main-color)] items-center gap-[40px] !p-[80px_0] bg-[var(--background-color)] MainPageContainer">
         {costumer
           .filter((item, idx) => {
@@ -373,7 +372,12 @@ export const CostumerServices = () => {
                       <p className="text-xl font-bold text-[var(--main-color)]">{item.userName}</p>
                     )}
                     <p className="text-[1rem]">{item.userPhone}</p>
-                    <p className="text-[1rem]">{item.userAddress}</p>
+                    {item.userAddress.length >= 19 && (
+                      <p className="text-[1rem]">{item.userAddress.slice(0, 19) + '...'}</p>
+                    )}
+                    {item.userAddress.length < 19 && (
+                      <p className="text-[1rem]">{item.userAddress}</p>
+                    )}
                   </div>
                 </div>
 

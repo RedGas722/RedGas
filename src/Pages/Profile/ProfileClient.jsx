@@ -38,7 +38,6 @@ export const ProfileClient = () => {
         const { id, name, email, telefono, direccion } = decoded.data;
 
         setCliente({ id, name, email, telefono, direccion });
-        setUserInitials(getUserInitialsFromToken(token));
       } catch (e) {
         console.error("Error al decodificar token:", e);
       }
@@ -119,7 +118,6 @@ export const ProfileClient = () => {
         return;
       }
 
-      // ✅ Si coincide, mostrar modal con contraseña validada
       setPasswordVerificada(passwordInput);
       setMostrarModalActualizar(true);
     } catch (error) {

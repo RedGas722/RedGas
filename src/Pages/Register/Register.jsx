@@ -19,23 +19,22 @@ export const Register = () => {
     const [direccion, setDireccion] = useState('')
     const [telefono, setTelefono] = useState('')
     const [contrasena, setContrasena] = useState('')
-    const [mensaje, setMensaje] = useState('')
     const [passwordConfirm, setPasswordConfirm] = useState('')
     const navigate = useNavigate()
 
     const validateInputs = () => {
-    const errors = []
+        const errors = []
 
-    if (!nombre.trim()) errors.push('El nombre es obligatorio.')
-    if (!apellido.trim()) errors.push('El apellido es obligatorio.')
-    if (!direccion.trim()) errors.push('La dirección es obligatoria.')
-    if (!/^\d{10}$/.test(telefono)) errors.push('El teléfono debe tener exactamente 10 dígitos.')
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) errors.push('El correo electrónico no es válido.')
-    if (contrasena.length < 8) errors.push('La contraseña debe tener al menos 8 caracteres.')
-    if (contrasena !== passwordConfirm) errors.push('Las contraseñas no coinciden.')
+        if (!nombre.trim()) errors.push('El nombre es obligatorio.')
+        if (!apellido.trim()) errors.push('El apellido es obligatorio.')
+        if (!direccion.trim()) errors.push('La dirección es obligatoria.')
+        if (!/^\d{10}$/.test(telefono)) errors.push('El teléfono debe tener exactamente 10 dígitos.')
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) errors.push('El correo electrónico no es válido.')
+        if (contrasena.length < 8) errors.push('La contraseña debe tener al menos 8 caracteres.')
+        if (contrasena !== passwordConfirm) errors.push('Las contraseñas no coinciden.')
 
-    return errors
-}
+        return errors
+    }
 
 
     const handleRegister = async (e) => {
@@ -92,16 +91,13 @@ export const Register = () => {
         switch (status) {
             case 'wait':
                 Swal.fire({
-                    title: 'Procesando...',
+                    title: title || 'Procesando...',
                     text: message || 'Estamos procesando tu solicitud.',
                     allowOutsideClick: false,
                     allowEscapeKey: false,
                     showConfirmButton: false,
-                    timer: 3000,
                     timerProgressBar: true,
-                    didOpen: () => {
-                        Swal.showLoading()
-                    },
+                    didOpen: () => Swal.showLoading(),
                 })
                 break
 
@@ -114,7 +110,8 @@ export const Register = () => {
                     allowEscapeKey: false,
                     allowEnterKey: false,
                     showConfirmButton: false,
-                    timer: 10
+                    timer: 2000,
+                    timerProgressBar: true,
                 })
                 nameInput.value = ''
                 lastNameInput.value = ''
@@ -298,7 +295,7 @@ export const Register = () => {
                     </div>
 
                     <div className="flex flex-col items-center gap-3">
-                        <Buttons type='submit' nameButton="Register"/>
+                        <Buttons type='submit' nameButton="Register" />
                         <Text Have="¿Tienes cuenta?" GoTo="Inicia sesión aquí" nav="/Login" />
                     </div>
                 </form>

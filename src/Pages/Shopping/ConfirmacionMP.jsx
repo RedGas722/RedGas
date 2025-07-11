@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import Header from '../../Layouts/Header/Header';
+import { Buttons } from "../../UI/Login_Register/Buttons";
+import { Backdrop, CircularProgress } from '@mui/material';
 
 export const ConfirmacionMercadoPago = () => {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true);
   const [searchParams] = useSearchParams();
   const [resultado, setResultado] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -15,11 +16,12 @@ export const ConfirmacionMercadoPago = () => {
 
     if (status !== "approved" || !payment_id) {
       setError("Pago no aprobado o sin ID válido");
-      setLoading(false);
+      setIsLoading(false);
       return;
     }
 
     const confirmarPago = async () => {
+      setIsLoading(true);
       try {
         const consulta = await fetch("https://redgas.onrender.com/CapturarPagoMP", {
           method: "POST",
@@ -34,7 +36,7 @@ export const ConfirmacionMercadoPago = () => {
       } catch (err) {
         setError(err.message || "Error desconocido al confirmar el pago");
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     };
 
@@ -43,41 +45,37 @@ export const ConfirmacionMercadoPago = () => {
 
   return (
     <section className="Distribution">
-      <Header />
       <div className="MainPageContainer text-[var(--main-color)] p-8">
-        {loading && <p>Confirmando pago...</p>}
         {error && (
-          <div>
-            <p className="text-red-600 font-semibold mb-4">Error: {error}</p>
-            <div className="mt-10 relative z-[50]">
-              <button
-                className="buttonTL2 NeoSubContainer_outset_TL p-3 text-white font-bold relative z-[50]"
-                onClick={() => navigate('/')}
-              >
-                Volver a la página principal
-              </button>
+          <div className="text-center absolute top-1/2 left-1/2 transform -translate-1/2 NeoContainer_outset_TL p-6 flex flex-col items-center justify-center gap-4">
+            <p className="text-[var(--Font-Nav2)] font-semibold mb-4">Error: {error}</p>
+            <div className="relative z-[50]">
+              <Buttons nameButton='Volver a inicio' Onclick={() => navigate('/')} textColor='var(--main-color)' />
             </div>
           </div>
         )}
 
         {resultado && (
-          <>
-            <h1 className="text-3xl font-bold mb-4">¡Pago aprobado por Mercado Pago!</h1>
-            <p><strong>ID del pago:</strong> {resultado.id}</p>
-            <p><strong>Estado:</strong> {resultado.status}</p>
-            <p><strong>Monto total:</strong> {resultado.transaction_amount} {resultado.currency_id}</p>
-            <p><strong>Pagado por:</strong> {resultado.payer?.email}</p>
-            <div className="mt-10 relative z-[50]">
-              <button
-                className="buttonTL2 NeoSubContainer_outset_TL p-3 text-white font-bold relative z-[50]"
-                onClick={() => navigate('/')}
-              >
-                Volver a la página principal
-              </button>
+          <div className="text-center absolute top-1/2 left-1/2 transform -translate-1/2 NeoContainer_outset_TL p-6 flex flex-col items-center justify-center gap-4">
+            <h1 className="text-3xl font-bold z-[2]">¡Pago aprobado por Mercado Pago!</h1>
+            <div className="flex flex-col items-center justify-center gap-2">
+              <p><strong>ID del pago:</strong> {resultado.id}</p>
+              <p><strong>Estado:</strong> {resultado.status}</p>
+              <p><strong>Monto total:</strong> {resultado.transaction_amount} {resultado.currency_id}</p>
+              <p><strong>Pagado por:</strong> {resultado.payer?.email}</p>
             </div>
-          </>
+            <div className="">
+              <Buttons nameButton='Volver a inicio' Onclick={() => navigate('/')} textColor='var(--main-color)' />
+            </div>
+          </div>
         )}
       </div>
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={isLoading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </section>
   );
 };

@@ -21,7 +21,6 @@ const URL_GET_TECHNICIAN = 'https://redgas.onrender.com/TecnicoServicesGet'
 const URL_DELETE_TECHNICIAN = 'https://redgas.onrender.com/TecnicoServicesDelete'
 const URL_GET_COSTUMER = 'https://redgas.onrender.com/ClienteServicesGet'
 const URL_DELETE_COSTUMER = 'https://redgas.onrender.com/ClienteServicesDelete'
-const URL_REGISTER_SERVICES = 'https://redgas.onrender.com/PedidoServicioRegister'
 const URL_SAVESERVICES = 'https://redgas.onrender.com/ClienteHistorialServicesAdd'
 
 const style = {
@@ -130,32 +129,13 @@ export const Technica = () => {
       cancelButtonText: 'Cancelar',
     })
     if (!confirmed.isConfirmed) return
+    if (descriptionWork.length > 1500 || servicesInfo.length > 1500) {
+      alertSendForm(400, 'Texto demasiado largo', 'Reduce la descripción del técnico o del cliente.');
+      return;
+    }
 
     alertSendForm('wait', 'Finalizando servicio...', 'Estamos procesando tu solicitud')
-    try {
-      const response = await fetch(`${URL_REGISTER_SERVICES}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          id_cliente: costumerId,
-          id_tecnico: technicianId,
-          total: total,
-          descripcion: descriptionWork,
-          estado_pedido: 'Completado'
-        }),
-      })
-
-      if (!response.ok) throw new Error('Error registrando el servicio')
-
-      const data = await response.json()
-      
-      if (!data.get) {
-        handleSaveServices()
-      }
-
-    } catch (err) {
-      alertSendForm(502, 'Error al finalizar servicio', err.message)
-    }
+    handleSaveServices()
   }
 
   const handleSaveServices = async () => {
@@ -170,13 +150,14 @@ export const Technica = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           id: costumerId,
-          descriptionTech: descriptionWork, 
-          totalPrice: total, 
-          state: 'completado', 
-          itemInfo: save }),
+          descriptionTech: descriptionWork,
+          totalPrice: total,
+          state: 'completado',
+          itemInfo: save
+        }),
       })
       if (!resonseSave.ok) throw new Error('Error al guardar el servicio')
-      
+
       const dataSave = await resonseSave.json()
       if (!dataSave.get) {
         handleDeleteServices()
@@ -460,12 +441,12 @@ export const Technica = () => {
                 ))}
               </div>
             </div>
-              {isAccept === false && (
-                <div className="flex flex-wrap justify-center items-center gap-5 ">
-                  <Buttons type="submit" nameButton="Cancelar el servicio" Onclick={handleCancelServices} />
-                  <Buttons type="submit" nameButton="Terminar el servicio" Onclick={() => setIsAccept(true)} />
-                </div>
-              )}
+            {isAccept === false && (
+              <div className="flex flex-wrap justify-center items-center gap-5 ">
+                <Buttons type="submit" nameButton="Cancelar el servicio" Onclick={handleCancelServices} />
+                <Buttons type="submit" nameButton="Terminar el servicio" Onclick={() => setIsAccept(true)} />
+              </div>
+            )}
           </Box>
         </section>
 

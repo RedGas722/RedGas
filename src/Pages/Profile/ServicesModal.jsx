@@ -78,7 +78,7 @@ const ServicesModal = ({ onClose }) => {
   const [historial, setHistorial] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchHistorial = async () => {
+  const fetchFacturasCliente = async () => {
     try {
       const token = localStorage.getItem("token");
       if (!token) throw new Error("No estás autenticado");
