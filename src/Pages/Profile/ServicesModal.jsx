@@ -111,7 +111,7 @@ const ServicesModal = ({ onClose }) => {
 
   return (
     <div className="fixed inset-0 z-50 bg-black/30 backdrop-blur-sm flex justify-center items-center">
-      <div className="w-[90%] md:w-[60%] lg:w-[50%] max-h-[90vh] flex-col gap-4 flex items-center NeoContainer_outset_TL overflow-hidden">
+      <div className="w-[90%] md:w-[60%] lg:w-[50%] max-h-[90vh] flex-col gap-4 flex items-center overflow-auto bg-[var(--background-color)] rounded-[20px]">
         {/* Header */}
         <div className="w-full flex justify-between items-center p-4 border-b border-gray-200">
           <h2 className="font-bold text-3xl text-[var(--main-color)]">Historial</h2>
@@ -151,7 +151,7 @@ const ServicesModal = ({ onClose }) => {
                 return (
                   <div
                     key={index}
-                    className="NeoSubContainer_outset_TL w-full p-4 hover:shadow-lg transition-shadow"
+                    className="border-y-2 border-[var(--main-color)] rounded-[5px] w-full p-4"
                   >
                     {/* Header */}
                     <div className="flex items-center gap-3 mb-2">
