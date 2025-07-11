@@ -10,7 +10,7 @@ const CardSalesBack = ({ venta, productos }) => {
           <p><span className="font-semibold">Producto:</span> {producto?.nombre_producto || 'Desconocido'}</p>
           <p><span className="font-semibold">Factura:</span> # {venta.id_factura}</p>
           <p><span className="font-semibold">Cantidad:</span> {venta.cantidad_producto}</p>
-          <p><span className="font-semibold">Estado:</span> {venta.estado_pedido}</p>
+          <p><span className="font-semibold">Estado:</span> {venta.estado_pedido.split('//')[0]}</p>
         </div>
       </div>
     </div>
