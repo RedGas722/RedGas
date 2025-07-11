@@ -160,10 +160,10 @@ const ServicesModal = ({ onClose }) => {
                         {serviceConfig.title}
                       </h3>
                     </div>
-
+                  
                     {/* Tipo de servicio */}
                     <p className="text-sm italic text-gray-600 mb-3">
-                      {serviceConfig.description}
+                      {parsedItem.description}
                     </p>
 
                     <div className="space-y-3">
@@ -171,7 +171,7 @@ const ServicesModal = ({ onClose }) => {
                       <div>
                         <h4 className="text-sm font-bold text-gray-700 mb-1">Descripción:</h4>
                         <ShortText
-                          text={parsedItem.description || parsedItem.services || "Sin descripción"}
+                          text={parsedItem.servicesInfo || "Sin descripción"}
                           maxLength={150}
                         />
                       </div>
