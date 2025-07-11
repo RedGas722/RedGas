@@ -42,7 +42,6 @@ export const ConfirmacionPayPal = () => {
   }, [searchParams]);
   return (
     <section className="Distribution">
-      <Header />
       <div className="MainPageContainer text-[var(--main-color)] p-8">
         {loading && <p>Confirmando pago con PayPal...</p>}
         {error && <p className="text-red-600 font-semibold">Error: {error}</p>}
