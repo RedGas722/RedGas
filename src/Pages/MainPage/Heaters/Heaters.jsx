@@ -12,7 +12,7 @@ export const HeatersSect = () => {
         const res = await fetch('https://redgas.onrender.com/ProductoGetAllCategoria?nombre_categoria=Calentadores');
         if (!res.ok) throw new Error('Error al obtener productos');
         const data = await res.json();
-        setCalentadores(data.data.data || []);
+        setCalentadores((data.data.data || []).filter(p => p.stock > 0));
       } catch (error) {
         console.error(error)
       }

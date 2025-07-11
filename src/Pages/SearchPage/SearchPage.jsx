@@ -77,7 +77,7 @@ export const SearchPage = () => {
           );
           const data = await res.json();
           const productos = data?.data || [];
-          procesarProductos(productos);
+          procesarProductos((productos || []).filter(p => p.stock > 0));
           setTotalPages(1); // sin paginación
           return;
         }
@@ -90,7 +90,7 @@ export const SearchPage = () => {
           const data = await res.json();
           const productos = data?.data?.data || [];
           setTotalPages(data?.data?.totalPages || 1);
-          procesarProductos(productos);
+          procesarProductos((productos || []).filter(p => p.stock > 0));
           return;
         }
 

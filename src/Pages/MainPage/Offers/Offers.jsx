@@ -12,7 +12,7 @@ export const OffersSect = () => {
         const res = await fetch('https://redgas.onrender.com/ProductoGetAllCategoria?nombre_categoria=Ofertas');
         if (!res.ok) throw new Error('Error al obtener productos');
         const data = await res.json();
-        setOfertas(data.data.data || []);
+        setOfertas((data.data.data || []).filter(p => p.stock > 0));
       } catch (error) {
         console.error(error)
       }

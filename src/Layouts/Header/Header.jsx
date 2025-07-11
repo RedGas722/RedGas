@@ -65,7 +65,7 @@ export const Header = ({ classUser, classNavs }) => {
             try {
                 const res = await fetch("https://redgas.onrender.com/ProductoGetAllNames");
                 const data = await res.json();
-                const productosData = data.data; // [{ id_producto, nombre_producto }]
+                const productosData = data.data; 
                 setProductos(productosData);
             } catch (error) {
                 console.error("Error al cargar nombres de productos:", error);
