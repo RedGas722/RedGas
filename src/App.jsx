@@ -78,7 +78,7 @@ export function AppContent() {
                     {/*Rutas cliente y tecnico*/}
 
                     <Route path="/Shopping" element={
-                        <ProtectedRoute requiredTypes={[2, 4]}>
+                        <ProtectedRoute requiredTypes={[2]}>
                             <Shopping />
                         </ProtectedRoute>
                     } />

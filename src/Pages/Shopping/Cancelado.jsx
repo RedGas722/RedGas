@@ -1,23 +1,20 @@
-import { Header } from '../../Layouts/Header/Header';
 import { useNavigate } from 'react-router-dom';
-
+import { Buttons } from "../../UI/Login_Register/Buttons";
 
 export const Cancelado = () => {
   const navigate = useNavigate();
 
   return (
     <section className="Distribution">
-      <Header />
       <div className="MainPageContainer text-[var(--main-color)] p-8">
-        <h1 className="text-3xl font-bold mb-4">Pago cancelado</h1>
-        <p>El cliente canceló el proceso de pago</p>
-        <div className="mt-15 relative z-[50]">
-          <button
-            className="buttonTL2 NeoSubContainer_outset_TL p-3 text-white font-bold relative z-[50]"
-            onClick={() => navigate('/')}
-          >
-            Volver a la página principal
-          </button>
+        <div className="text-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 NeoContainer_outset_TL p-6 flex flex-col items-center justify-center gap-4">
+          <h1 className="text-3xl font-bold z-[2]">Pago cancelado</h1>
+          <p className="text-[var(--Font-Nav2)] font-semibold">El cliente canceló el proceso de pago.</p>
+          <Buttons
+            nameButton='Volver a inicio'
+            Onclick={() => navigate('/')}
+            textColor='var(--main-color)'
+          />
         </div>
       </div>
     </section>

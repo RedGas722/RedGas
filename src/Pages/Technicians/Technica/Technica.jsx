@@ -158,6 +158,22 @@ export const Technica = () => {
       })
       if (!resonseSave.ok) throw new Error('Error al guardar el servicio')
 
+      const pedido = {
+        id_cliente: costumerId,
+        id_tecnico: technicianId,
+        total,
+        descripcion: descriptionWork,
+        estado_pedido: 'completado'
+      };
+
+      const resPedido = await fetch(`https://redgas.onrender.com/PedidoServicioRegister`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(pedido)
+      });
+
+      if (!resPedido.ok) throw new Error('Error al registrar el pedido de servicio');
+
       const dataSave = await resonseSave.json()
       if (!dataSave.get) {
         handleDeleteServices()

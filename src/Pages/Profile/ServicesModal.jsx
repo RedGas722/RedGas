@@ -106,7 +106,7 @@ const ServicesModal = ({ onClose }) => {
   };
 
   useEffect(() => {
-    fetchHistorial();
+    fetchFacturasCliente();
   }, []);
 
   return (

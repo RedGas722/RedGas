@@ -3,6 +3,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCartShopping } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2';
+import { useState } from "react";
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
+import Buttons from "../Login_Register/Buttons";
 
 async function agregarAlCarrito(item) {
   const token = localStorage.getItem("token");
@@ -29,6 +33,18 @@ async function agregarAlCarrito(item) {
 
 export const CardsGrid = ({ productos = [] }) => {
   const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+
+  const handleOpen = (producto) => {
+    setSelectedProduct(producto);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setSelectedProduct(null);
+  };
 
   const handleAddToCart = async (producto) => {
     const token = localStorage.getItem("token");
@@ -135,9 +151,94 @@ export const CardsGrid = ({ productos = [] }) => {
                 <FontAwesomeIcon icon={faCartShopping} />
               </button>
             </div>
+            <Buttons
+              radius="7"
+              height="auto"
+              nameButton="Ver más..."
+              Onclick={() => handleOpen(producto)}
+            />
           </div>
         </div>
       ))}
+      <Modal open={open} onClose={handleClose} disableScrollLock>
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: 350,
+            bgcolor: 'background.paper',
+            zIndex: '1000',
+            border: '2px solid #19A9A4',
+            boxShadow: 24,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            borderRadius: 4,
+            p: 4,
+          }}
+        >
+          <button
+            onClick={handleClose}
+            style={{
+              position: "absolute",
+              top: 8,
+              right: 8,
+              background: "transparent",
+              border: "none",
+              fontSize: 24,
+              color: "#19A9A4",
+              cursor: "pointer",
+              zIndex: 10,
+            }}
+            aria-label="Cerrar"
+          >
+            &times;
+          </button>
+
+          {selectedProduct && (
+            <div className="card relative !rounded-[25px]">
+              <div className="card-img">
+                <div className="img h-full">
+                  <img
+                    src={
+                      selectedProduct.imagen
+                        ? `data:image/jpeg;base64,${selectedProduct.imagen}`
+                        : "https://via.placeholder.com/150"
+                    }
+                    alt={selectedProduct.nombre_producto || "Producto"}
+                    className="rounded-[20px]"
+                  />
+                </div>
+              </div>
+              <div className="flex gap-1 items-end justify-center">
+                <div className="card-title">{selectedProduct.nombre_producto}</div>
+              </div>
+              <div className="card-subtitle">{selectedProduct.descripcion_producto || "Sin descripción disponible."}</div>
+              <div className="flex gap-1 text-[var(--main-color)] items-start justify-start">
+                <p>Stock:</p>
+                <span>{selectedProduct.stock}</span>
+              </div>
+              <hr className="card-divider" />
+              <div className="card-footer">
+                <div className="card-price">
+                  <p>
+                    <span className="text-[var(--Font-Nav-shadow)]">$</span>{" "}
+                    {(parseFloat(selectedProduct.precio_producto) || 0).toLocaleString()}
+                    <span className="text-[var(--main-color-sub)] text-[12px]"> Cop</span>
+                  </p>
+                </div>
+                <button className="card-btn" onClick={() => handleAddToCart(selectedProduct)}>
+                  <FontAwesomeIcon icon={faCartShopping} />
+                </button>
+              </div>
+            </div>
+          )}
+        </Box>
+      </Modal>
+
     </section>
   );
 };

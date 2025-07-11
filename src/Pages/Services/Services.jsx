@@ -37,7 +37,9 @@ export const ServicesInfo = () => {
             }
 
             const data = await res.json()
-            if (!data.get) {
+            console.log(data)
+            if (!data) {
+               console.log(data)
                alertSendForm(502, 'Error al enviar la información', 'Ocurrió un error al enviar la información. Por favor, intenta nuevamente más tarde.')
                return
             }

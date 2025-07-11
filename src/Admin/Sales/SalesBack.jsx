@@ -81,7 +81,7 @@ export const SalesBack = () => {
 
       <div className="p-[var(--p-admin-sub)] h-full flex flex-col gap-2">
         <h1 className="font-bold text-3xl z-[2] text-[var(--main-color)]">Ventas</h1>
-        <div className='NeoContainer_outset_TL z-[2] flex gap-4 flex-wrap items-end w-fit p-[var(--p-admin-control)]'>
+        <div className='NeoContainer_outset_TL z-[3] flex gap-4 flex-wrap items-end w-fit p-[var(--p-admin-control)]'>
           <div className="relative" ref={contenedorRefProducto}>
             <InputLabel
               radius="10"

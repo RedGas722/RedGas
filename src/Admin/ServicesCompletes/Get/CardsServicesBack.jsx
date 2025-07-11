@@ -3,8 +3,9 @@ import { Buttons } from '../../../UI/Login_Register/Buttons'
 import { Modal, Box, Typography, IconButton } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 
-const CardServicesBack = ({ servicio, clientes }) => {
+const CardServicesBack = ({ servicio, clientes, tecnicos }) => {
   const cliente = clientes.find(c => c.id_cliente === servicio.id_cliente)
+  const tecnico = tecnicos.find(t => t.id_tecnico === servicio.id_tecnico)
   const [open, setOpen] = useState(false)
 
   const handleOpen = () => setOpen(true)
@@ -12,7 +13,7 @@ const CardServicesBack = ({ servicio, clientes }) => {
 
   const descripcion = servicio.descripcion || 'Sin descripción'
   const isTruncated = descripcion.length > 22
-  
+
   return (
     <div className="z-[2] NeoContainer_outset_TL p-4 w-[300px] min-h-[150px] flex flex-col justify-between overflow-hidden">
       <div className="flex flex-col gap-2">
@@ -26,7 +27,7 @@ const CardServicesBack = ({ servicio, clientes }) => {
           </p>
           <p className="font-medium flex items-center gap-1">
             <span className="font-bold text-[15px]">Técnico:</span>
-            <span className="break-words">{servicio.id_tecnico}</span>
+            <span className="break-words">{tecnico?.correo_tecnico || 'Desconocido'}</span>
           </p>
           <p className="font-medium flex items-center gap-1">
             <span className="font-bold text-[15px]">Total:</span>

@@ -14,6 +14,7 @@ export const ServicesCompletedBack = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [serviciosOriginal, setServiciosOriginal] = useState([])
   const [clientes, setClientes] = useState([])
+  const [tecnicos, setTecnicos] = useState([])
   const [refrescar, setRefrescar] = useState(false)
   const [paginaActual, setPaginaActual] = useState(1)
   const [totalPaginas, setTotalPaginas] = useState(1)
@@ -37,7 +38,7 @@ export const ServicesCompletedBack = () => {
       setTotalPaginas(resultado.totalPages)
     } catch (error) {
       console.error(error)
-    }finally {
+    } finally {
       setIsLoading(false);
     }
   }
@@ -52,9 +53,20 @@ export const ServicesCompletedBack = () => {
     }
   }
 
+  const fetchTecnicos = async () => {
+    try {
+      const res = await fetch('https://redgas.onrender.com/TecnicoGetAllEmails') // ← Esta ruta debe devolver [{ id_tecnico, correo_tecnico }]
+      const data = await res.json()
+      setTecnicos(Array.isArray(data.data) ? data.data : [])
+    } catch (error) {
+      console.error('Error al obtener correos de técnicos', error)
+    }
+  }
+
   useEffect(() => {
     fetchServicios(paginaActual)
     fetchClientes()
+    fetchTecnicos()
   }, [paginaActual])
 
   useEffect(() => {
@@ -80,7 +92,7 @@ export const ServicesCompletedBack = () => {
       <div className="p-[var(--p-admin-sub)] h-full flex flex-col gap-2">
         <h1 className="font-bold text-3xl z-[2] text-[var(--main-color)]">Servicios Completados</h1>
 
-        <div className='NeoContainer_outset_TL z-[2] flex gap-4 flex-wrap items-end w-fit p-[var(--p-admin-control)]'>
+        <div className='NeoContainer_outset_TL z-[3] flex gap-4 flex-wrap items-end w-fit p-[var(--p-admin-control)]'>
           <div className="relative" ref={contenedorRefCliente}>
             <InputLabel
               radius="10"
@@ -127,6 +139,7 @@ export const ServicesCompletedBack = () => {
               key={servicio.id_pedidoServicio}
               servicio={servicio}
               clientes={clientes}
+              tecnicos={tecnicos} 
             />
           ))}
         </div>

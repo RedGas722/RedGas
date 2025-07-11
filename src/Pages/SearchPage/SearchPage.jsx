@@ -5,6 +5,10 @@ import { CardsOffersGrid } from "../../UI/Cards/CardsOffers/CardsOffersGrid";
 import CardsGrid from "../../UI/Cards/CardsGrid";
 import { BtnBack } from "../../UI/Login_Register/BtnBack";
 import Paginator from "../../UI/Paginator/Paginator";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 export const SearchPage = () => {
   const location = useLocation();
@@ -14,10 +18,34 @@ export const SearchPage = () => {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+
 
   const queryParams = new URLSearchParams(location.search);
   const query = queryParams.get("q") || "";
   const category = queryParams.get("category") || "";
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        const tipoUsuario = decoded?.data?.tipo_usuario;
+        setIsLoggedIn(true);
+        setIsAdmin(tipoUsuario === 1 || tipoUsuario === 3); // admin o empleado
+      } catch (error) {
+        console.error("Error al decodificar el token:", error);
+        localStorage.removeItem('token');
+        setIsLoggedIn(false);
+        setIsAdmin(false);
+      }
+    } else {
+      setIsLoggedIn(false);
+      setIsAdmin(false);
+    }
+  }, []);
 
   // 🔁 Cargar nombres de productos para el SearchBar
   useEffect(() => {
@@ -140,6 +168,14 @@ export const SearchPage = () => {
           />
         )}
       </div>
+      {isLoggedIn && !isAdmin && (
+        <div
+          onClick={() => navigate('/Shopping')}
+          className="shopCart flex items-center justify-center cursor-pointer w-14 h-14 fixed bottom-2 rounded-[100px] p-[10px] right-5 bg-[var(--Font-Nav)] z-[5]"
+        >
+          <FontAwesomeIcon icon={faCartShopping} className="text-[var(--background-color)] text-2xl" />
+        </div>
+      )}
     </section>
   );
 };
